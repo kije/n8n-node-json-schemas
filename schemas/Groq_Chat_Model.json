@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Groq Chat Model",
+  "description": "Language Model Groq",
+  "x-n8n-node-type": "lmChatGroq",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "model": {
+      "x-title": "Model",
+      "description": "The model which will generate the completion. <a href=\"https://console.groq.com/docs/models\">Learn more</a>.",
+      "default": "llama3-8b-8192",
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "description": "Additional options to add",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "maxTokensToSample": {
+          "x-title": "Maximum Number of Tokens",
+          "description": "The maximum number of tokens to generate in the completion",
+          "default": 4096,
+          "type": "number"
+        },
+        "temperature": {
+          "x-title": "Sampling Temperature",
+          "description": "Controls randomness: Lowering results in less random completions. As the temperature approaches zero, the model will become deterministic and repetitive.",
+          "default": 0.7,
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "x-precision": 1
+        }
+      }
+    }
+  },
+  "x-icon": "file:groq.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "ai_languageModel"
+  ],
+  "x-credentials": [
+    {
+      "name": "groqApi",
+      "required": true
+    }
+  ]
+}

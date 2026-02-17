@@ -1,0 +1,134 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "HubSpot Trigger",
+  "description": "Starts the workflow when HubSpot events occur",
+  "x-n8n-node-type": "hubspotTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "eventsUi": {
+      "x-title": "Events",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "eventValues": {
+          "x-title": "Event",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Name",
+                "default": "contact.creation",
+                "x-required": true,
+                "type": "string",
+                "enum": [
+                  "company.creation",
+                  "company.deletion",
+                  "company.propertyChange",
+                  "contact.creation",
+                  "contact.deletion",
+                  "contact.privacyDeletion",
+                  "contact.propertyChange",
+                  "conversation.creation",
+                  "conversation.deletion",
+                  "conversation.newMessage",
+                  "conversation.privacyDeletion",
+                  "conversation.propertyChange",
+                  "deal.creation",
+                  "deal.deletion",
+                  "deal.propertyChange",
+                  "ticket.creation",
+                  "ticket.deletion",
+                  "ticket.propertyChange"
+                ],
+                "x-enumNames": [
+                  "Company Created",
+                  "Company Deleted",
+                  "Company Property Changed",
+                  "Contact Created",
+                  "Contact Deleted",
+                  "Contact Privacy Deleted",
+                  "Contact Property Changed",
+                  "Conversation Creation",
+                  "Conversation Deletion",
+                  "Conversation New Message",
+                  "Conversation Privacy Deletion",
+                  "Conversation Property Change",
+                  "Deal Created",
+                  "Deal Deleted",
+                  "Deal Property Changed",
+                  "Ticket Created",
+                  "Ticket Deleted",
+                  "Ticket Property Changed"
+                ],
+                "x-enumDescriptions": [
+                  "To get notified if any company is created in a customer's account",
+                  "To get notified if any company is deleted in a customer's account",
+                  "To get notified if a specified property is changed for any company in a customer's account",
+                  "To get notified if any contact is created in a customer's account",
+                  "To get notified if any contact is deleted in a customer's account",
+                  "To get notified if a contact is deleted for privacy compliance reasons",
+                  "To get notified if a specified property is changed for any contact in a customer's account",
+                  "To get notified if a new thread is created in an account",
+                  "To get notified if a thread is archived or soft-deleted in an account",
+                  "To get notified if a new message on a thread has been received",
+                  "To get notified if a thread is permanently deleted in an account",
+                  "To get notified if a property on a thread has been changed",
+                  "To get notified if any deal is created in a customer's account",
+                  "To get notified if any deal is deleted in a customer's account",
+                  "To get notified if a specified property is changed for any deal in a customer's account",
+                  "To get notified if a ticket is created in a customer's account",
+                  "To get notified if any ticket is deleted in a customer's account",
+                  "To get notified if a specified property is changed for any ticket in a customer's account"
+                ]
+              },
+              "property": {
+                "x-title": "Property Name or ID",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "name": [
+                      "deal.propertyChange"
+                    ]
+                  }
+                },
+                "x-required": true,
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "maxConcurrentRequests": {
+          "x-title": "Max Concurrent Requests",
+          "default": 5,
+          "type": "number",
+          "minimum": 5
+        }
+      }
+    }
+  },
+  "x-icon": "file:hubspot.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "hubspotDeveloperApi",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

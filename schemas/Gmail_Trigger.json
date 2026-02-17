@@ -1,0 +1,159 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Gmail Trigger",
+  "description": "Fetches emails from Gmail and starts the workflow on specified polling intervals.",
+  "x-n8n-node-type": "gmailTrigger",
+  "x-n8n-version": [
+    1,
+    1.1,
+    1.2,
+    1.3
+  ],
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "oAuth2",
+      "type": "string",
+      "enum": [
+        "oAuth2",
+        "serviceAccount"
+      ],
+      "x-enumNames": [
+        "OAuth2 (recommended)",
+        "Service Account"
+      ]
+    },
+    "event": {
+      "x-title": "Event",
+      "default": "messageReceived",
+      "type": "string",
+      "enum": [
+        "messageReceived"
+      ],
+      "x-enumNames": [
+        "Message Received"
+      ]
+    },
+    "simple": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "type": "boolean"
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "includeSpamTrash": {
+          "x-title": "Include Spam and Trash",
+          "description": "Whether to include messages from SPAM and TRASH in the results",
+          "default": false,
+          "type": "boolean"
+        },
+        "includeDrafts": {
+          "x-title": "Include Drafts",
+          "description": "Whether to include email drafts in the results",
+          "default": false,
+          "type": "boolean"
+        },
+        "labelIds": {
+          "x-title": "Label Names or IDs",
+          "description": "Only return messages with labels that match all of the specified label IDs. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "q": {
+          "x-title": "Search",
+          "description": "Only return messages matching the specified query",
+          "default": "",
+          "type": "string"
+        },
+        "readStatus": {
+          "x-title": "Read Status",
+          "default": "unread",
+          "type": "string",
+          "enum": [
+            "both",
+            "unread",
+            "read"
+          ],
+          "x-enumNames": [
+            "Unread and read emails",
+            "Unread emails only",
+            "Read emails only"
+          ]
+        },
+        "sender": {
+          "x-title": "Sender",
+          "description": "Sender name or email to filter by",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "hide": {
+          "simple": [
+            true
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "dataPropertyAttachmentsPrefixName": {
+          "x-title": "Attachment Prefix",
+          "description": "Prefix for name of the binary property to which to write the attachment. An index starting with 0 will be added. So if name is 'attachment_' the first attachment is saved to 'attachment_0'.",
+          "default": "attachment_",
+          "type": "string"
+        },
+        "downloadAttachments": {
+          "x-title": "Download Attachments",
+          "description": "Whether the email's attachments will be downloaded",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{\"Gmail Trigger\"}}",
+  "x-icon": "file:gmail.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "googleApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "serviceAccount"
+          ]
+        }
+      }
+    },
+    {
+      "name": "gmailOAuth2",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,459 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "HaloPSA",
+  "description": "Consume HaloPSA API",
+  "x-n8n-node-type": "haloPSA",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "client",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "client",
+        "site",
+        "ticket",
+        "user"
+      ],
+      "x-enumNames": [
+        "Client",
+        "Site",
+        "Ticket",
+        "User"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a user",
+        "Delete a user",
+        "Get a user",
+        "Get many users",
+        "Update a user"
+      ]
+    },
+    "clientName": {
+      "x-title": "Name",
+      "description": "Enter client name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "client"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "emailaddress": {
+          "x-title": "Email",
+          "default": "",
+          "type": "string"
+        },
+        "notes": {
+          "x-title": "Notes",
+          "default": "",
+          "type": "string"
+        },
+        "password": {
+          "x-title": "Password",
+          "description": "Your new password must be at least 8 characters long and contain at least one letter, one number or symbol, one upper case character and one lower case character",
+          "default": "",
+          "type": "string",
+          "format": "password"
+        },
+        "surname": {
+          "x-title": "Surname",
+          "default": "",
+          "type": "string"
+        },
+        "inactive": {
+          "x-title": "User Is Inactive",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "clientId": {
+      "x-title": "Client Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "site"
+          ],
+          "operation": [
+            "create"
+          ],
+          "selectOption": [
+            false
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "simplify": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get",
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 1000
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "activeStatus": {
+          "x-title": "Active Status",
+          "default": "all",
+          "type": "string",
+          "enum": [
+            "active",
+            "all",
+            "inactive"
+          ],
+          "x-enumNames": [
+            "Active Only",
+            "All",
+            "Inactive Only"
+          ],
+          "x-enumDescriptions": [
+            "Whether to include active customers in the response",
+            "Whether to include active and inactive customers in the response",
+            "Whether to include inactive Customers in the response"
+          ]
+        },
+        "search": {
+          "x-title": "Text To Filter By",
+          "description": "Filter users by your search string",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "emailaddress": {
+          "x-title": "Email",
+          "default": "",
+          "type": "string"
+        },
+        "name": {
+          "x-title": "Name",
+          "description": "Enter user name",
+          "default": "",
+          "type": "string"
+        },
+        "notes": {
+          "x-title": "Notes",
+          "default": "",
+          "type": "string"
+        },
+        "password": {
+          "x-title": "Password",
+          "description": "Your new password must be at least 8 characters long and contain at least one letter, one number or symbol, one upper case character and one lower case character",
+          "default": "",
+          "type": "string",
+          "format": "password"
+        },
+        "site_id": {
+          "x-title": "Site Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "surname": {
+          "x-title": "Surname",
+          "default": "",
+          "type": "string"
+        },
+        "inactive": {
+          "x-title": "User Is Inactive",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "ticketType": {
+      "x-title": "Ticket Type Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "summary": {
+      "x-title": "Summary",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "details": {
+      "x-title": "Details",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "ticketId": {
+      "x-title": "Ticket ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "siteName": {
+      "x-title": "Name",
+      "description": "Enter site name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "site"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "selectOption": {
+      "x-title": "Select Client by ID",
+      "description": "Whether client can be selected by ID",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "site"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "siteId": {
+      "x-title": "Site Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "userName": {
+      "x-title": "Name",
+      "description": "Enter user name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "userId": {
+      "x-title": "User ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:halopsa.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "haloPSAApi",
+      "required": true,
+      "testedBy": "haloPSAApiCredentialTest"
+    }
+  ]
+}

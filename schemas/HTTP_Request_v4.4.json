@@ -1,0 +1,1126 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "HTTP Request",
+  "description": "Makes an HTTP request and returns the response data",
+  "x-n8n-node-type": "httpRequest",
+  "x-n8n-version": 4.4,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "curlImport": {
+      "default": "",
+      "type": "string",
+      "x-n8n-type": "curlImport"
+    },
+    "method": {
+      "x-title": "Method",
+      "description": "The request method to use",
+      "default": "GET",
+      "type": "string",
+      "enum": [
+        "DELETE",
+        "GET",
+        "HEAD",
+        "OPTIONS",
+        "PATCH",
+        "POST",
+        "PUT"
+      ],
+      "x-enumNames": [
+        "DELETE",
+        "GET",
+        "HEAD",
+        "OPTIONS",
+        "PATCH",
+        "POST",
+        "PUT"
+      ]
+    },
+    "url": {
+      "x-title": "URL",
+      "description": "The URL to make the request to",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "none",
+      "type": "string",
+      "enum": [
+        "none",
+        "predefinedCredentialType",
+        "genericCredentialType"
+      ],
+      "x-enumNames": [
+        "None",
+        "Predefined Credential Type",
+        "Generic Credential Type"
+      ],
+      "x-enumDescriptions": [
+        "",
+        "We've already implemented auth for many services so that you don't have to set it up manually",
+        "Fully customizable. Choose between basic, header, OAuth2, etc."
+      ]
+    },
+    "nodeCredentialType": {
+      "x-title": "Credential Type",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "authentication": [
+            "predefinedCredentialType"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "credsType": {
+          "type": "string"
+        },
+        "nodeCredentialType": {
+          "type": "string"
+        }
+      }
+    },
+    "genericAuthType": {
+      "x-title": "Generic Auth Type",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "authentication": [
+            "genericCredentialType"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "credsType": {
+          "type": "string"
+        },
+        "nodeCredentialType": {
+          "type": "string"
+        }
+      }
+    },
+    "provideSslCertificates": {
+      "x-title": "SSL Certificates",
+      "default": false,
+      "type": "boolean"
+    },
+    "sslCertificate": {
+      "x-title": "SSL Certificate",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "provideSslCertificates": [
+            true
+          ]
+        }
+      },
+      "type": "string",
+      "x-n8n-type": "credentials"
+    },
+    "sendQuery": {
+      "x-title": "Send Query Parameters",
+      "description": "Whether the request has query params or not",
+      "default": false,
+      "type": "boolean"
+    },
+    "specifyQuery": {
+      "x-title": "Specify Query Parameters",
+      "default": "keypair",
+      "x-displayOptions": {
+        "show": {
+          "sendQuery": [
+            true
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "keypair",
+        "json"
+      ],
+      "x-enumNames": [
+        "Using Fields Below",
+        "Using JSON"
+      ]
+    },
+    "queryParameters": {
+      "x-title": "Query Parameters",
+      "default": {
+        "parameters": [
+          {
+            "name": "",
+            "value": ""
+          }
+        ]
+      },
+      "x-displayOptions": {
+        "show": {
+          "sendQuery": [
+            true
+          ],
+          "specifyQuery": [
+            "keypair"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "parameters": {
+          "x-title": "Query Parameter",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Name",
+                "default": "",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "jsonQuery": {
+      "x-title": "JSON",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "sendQuery": [
+            true
+          ],
+          "specifyQuery": [
+            "json"
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "sendHeaders": {
+      "x-title": "Send Headers",
+      "description": "Whether the request has headers or not",
+      "default": false,
+      "type": "boolean"
+    },
+    "specifyHeaders": {
+      "x-title": "Specify Headers",
+      "default": "keypair",
+      "x-displayOptions": {
+        "show": {
+          "sendHeaders": [
+            true
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "keypair",
+        "json"
+      ],
+      "x-enumNames": [
+        "Using Fields Below",
+        "Using JSON"
+      ]
+    },
+    "headerParameters": {
+      "x-title": "Headers",
+      "default": {
+        "parameters": [
+          {
+            "name": "",
+            "value": ""
+          }
+        ]
+      },
+      "x-displayOptions": {
+        "show": {
+          "sendHeaders": [
+            true
+          ],
+          "specifyHeaders": [
+            "keypair"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "parameters": {
+          "x-title": "Header",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Name",
+                "default": "",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "jsonHeaders": {
+      "x-title": "JSON",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "sendHeaders": [
+            true
+          ],
+          "specifyHeaders": [
+            "json"
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "sendBody": {
+      "x-title": "Send Body",
+      "description": "Whether the request has a body or not",
+      "default": false,
+      "type": "boolean"
+    },
+    "contentType": {
+      "x-title": "Body Content Type",
+      "description": "Content-Type to use to send body parameters",
+      "default": "json",
+      "x-displayOptions": {
+        "show": {
+          "sendBody": [
+            true
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "form-urlencoded",
+        "multipart-form-data",
+        "json",
+        "binaryData",
+        "raw"
+      ],
+      "x-enumNames": [
+        "Form Urlencoded",
+        "Form-Data",
+        "JSON",
+        "n8n Binary File",
+        "Raw"
+      ]
+    },
+    "specifyBody": {
+      "x-title": "Specify Body",
+      "default": "keypair",
+      "x-displayOptions": {
+        "show": {
+          "sendBody": [
+            true
+          ],
+          "contentType": [
+            "form-urlencoded"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "keypair",
+        "string"
+      ],
+      "x-enumNames": [
+        "Using Fields Below",
+        "Using Single Field"
+      ]
+    },
+    "bodyParameters": {
+      "x-title": "Body Fields",
+      "default": {
+        "parameters": [
+          {
+            "name": "",
+            "value": ""
+          }
+        ]
+      },
+      "x-displayOptions": {
+        "show": {
+          "sendBody": [
+            true
+          ],
+          "contentType": [
+            "form-urlencoded"
+          ],
+          "specifyBody": [
+            "keypair"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "parameters": {
+          "x-title": "Field",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Name",
+                "description": "ID of the field to set. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                "default": "",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "Value of the field to set",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "jsonBody": {
+      "x-title": "JSON",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "sendBody": [
+            true
+          ],
+          "contentType": [
+            "json"
+          ],
+          "specifyBody": [
+            "json"
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "body": {
+      "x-title": "Body",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "sendBody": [
+            true
+          ],
+          "contentType": [
+            "raw"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "inputDataFieldName": {
+      "x-title": "Input Data Field Name",
+      "description": "The name of the incoming field containing the binary file data to be processed",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "sendBody": [
+            true
+          ],
+          "contentType": [
+            "binaryData"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "rawContentType": {
+      "x-title": "Content Type",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "sendBody": [
+            true
+          ],
+          "contentType": [
+            "raw"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "batching": {
+          "x-title": "Batching",
+          "default": {
+            "batch": {}
+          },
+          "type": "object",
+          "properties": {
+            "batch": {
+              "x-title": "Batching",
+              "type": "object",
+              "properties": {
+                "batchSize": {
+                  "x-title": "Items per Batch",
+                  "description": "Input will be split in batches to throttle requests. -1 for disabled. 0 will be treated as 1.",
+                  "default": 50,
+                  "type": "number",
+                  "minimum": -1
+                },
+                "batchInterval": {
+                  "x-title": "Batch Interval (ms)",
+                  "description": "Time (in milliseconds) between each batch of requests. 0 for disabled.",
+                  "default": 1000,
+                  "type": "number",
+                  "minimum": 0
+                }
+              }
+            }
+          }
+        },
+        "allowUnauthorizedCerts": {
+          "x-title": "Ignore SSL Issues (Insecure)",
+          "description": "Whether to download the response even if SSL certificate validation is not possible",
+          "default": false,
+          "type": "boolean"
+        },
+        "queryParameterArrays": {
+          "x-title": "Array Format in Query Parameters",
+          "default": "brackets",
+          "x-displayOptions": {
+            "show": {
+              "/sendQuery": [
+                true
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "repeat",
+            "brackets",
+            "indices"
+          ],
+          "x-enumNames": [
+            "No Brackets",
+            "Brackets Only",
+            "Brackets with Indices"
+          ],
+          "x-enumDescriptions": [
+            "e.g. foo=bar&foo=qux",
+            "e.g. foo[]=bar&foo[]=qux",
+            "e.g. foo[0]=bar&foo[1]=qux"
+          ]
+        },
+        "lowercaseHeaders": {
+          "x-title": "Lowercase Headers",
+          "description": "Whether to lowercase header names",
+          "default": true,
+          "type": "boolean"
+        },
+        "redirect": {
+          "x-title": "Redirects",
+          "default": {
+            "redirect": {}
+          },
+          "x-displayOptions": {
+            "hide": {
+              "@version": [
+                1,
+                2,
+                3
+              ]
+            }
+          },
+          "type": "object",
+          "properties": {
+            "redirect": {
+              "x-title": "Redirect",
+              "type": "object",
+              "properties": {
+                "followRedirects": {
+                  "x-title": "Follow Redirects",
+                  "description": "Whether to follow all redirects",
+                  "default": true,
+                  "type": "boolean"
+                },
+                "maxRedirects": {
+                  "x-title": "Max Redirects",
+                  "description": "Max number of redirects to follow",
+                  "default": 21,
+                  "x-displayOptions": {
+                    "show": {
+                      "followRedirects": [
+                        true
+                      ]
+                    }
+                  },
+                  "type": "number"
+                }
+              }
+            }
+          }
+        },
+        "response": {
+          "x-title": "Response",
+          "default": {
+            "response": {}
+          },
+          "type": "object",
+          "properties": {
+            "response": {
+              "x-title": "Response",
+              "type": "object",
+              "properties": {
+                "fullResponse": {
+                  "x-title": "Include Response Headers and Status",
+                  "description": "Whether to return the full response (headers and response status code) data instead of only the body",
+                  "default": false,
+                  "type": "boolean"
+                },
+                "neverError": {
+                  "x-title": "Never Error",
+                  "description": "Whether to succeeds also when status code is not 2xx",
+                  "default": false,
+                  "type": "boolean"
+                },
+                "responseFormat": {
+                  "x-title": "Response Format",
+                  "description": "The format in which the data gets returned from the URL",
+                  "default": "autodetect",
+                  "type": "string",
+                  "enum": [
+                    "autodetect",
+                    "file",
+                    "json",
+                    "text"
+                  ],
+                  "x-enumNames": [
+                    "Autodetect",
+                    "File",
+                    "JSON",
+                    "Text"
+                  ]
+                },
+                "outputPropertyName": {
+                  "x-title": "Put Output in Field",
+                  "description": "Name of the binary property to which to write the data of the read file",
+                  "default": "data",
+                  "x-displayOptions": {
+                    "show": {
+                      "responseFormat": [
+                        "file",
+                        "text"
+                      ]
+                    }
+                  },
+                  "x-required": true,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "pagination": {
+          "x-title": "Pagination",
+          "default": {
+            "pagination": {}
+          },
+          "type": "object",
+          "properties": {
+            "pagination": {
+              "x-title": "Pagination",
+              "type": "object",
+              "properties": {
+                "paginationMode": {
+                  "x-title": "Pagination Mode",
+                  "description": "If pagination should be used",
+                  "default": "updateAParameterInEachRequest",
+                  "type": "string",
+                  "enum": [
+                    "off",
+                    "updateAParameterInEachRequest",
+                    "responseContainsNextURL"
+                  ],
+                  "x-enumNames": [
+                    "Off",
+                    "Update a Parameter in Each Request",
+                    "Response Contains Next URL"
+                  ]
+                },
+                "nextURL": {
+                  "x-title": "Next URL",
+                  "description": "Should evaluate to the URL of the next page. <a href=\"https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.httprequest/#pagination\" target=\"_blank\">More info</a>.",
+                  "default": "",
+                  "x-displayOptions": {
+                    "show": {
+                      "paginationMode": [
+                        "responseContainsNextURL"
+                      ]
+                    }
+                  },
+                  "type": "string"
+                },
+                "parameters": {
+                  "x-title": "Parameters",
+                  "default": {
+                    "parameters": [
+                      {
+                        "type": "qs",
+                        "name": "",
+                        "value": ""
+                      }
+                    ]
+                  },
+                  "x-displayOptions": {
+                    "show": {
+                      "paginationMode": [
+                        "updateAParameterInEachRequest"
+                      ]
+                    }
+                  },
+                  "type": "object",
+                  "properties": {
+                    "parameters": {
+                      "x-title": "Parameter",
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "x-title": "Type",
+                            "description": "Where the parameter should be set",
+                            "default": "qs",
+                            "type": "string",
+                            "enum": [
+                              "body",
+                              "headers",
+                              "qs"
+                            ],
+                            "x-enumNames": [
+                              "Body",
+                              "Header",
+                              "Query"
+                            ]
+                          },
+                          "name": {
+                            "x-title": "Name",
+                            "default": "",
+                            "type": "string"
+                          },
+                          "value": {
+                            "x-title": "Value",
+                            "default": "",
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "paginationCompleteWhen": {
+                  "x-title": "Pagination Complete When",
+                  "description": "When should no further requests be made?",
+                  "default": "responseIsEmpty",
+                  "x-displayOptions": {
+                    "hide": {
+                      "paginationMode": [
+                        "off"
+                      ]
+                    }
+                  },
+                  "type": "string",
+                  "enum": [
+                    "responseIsEmpty",
+                    "receiveSpecificStatusCodes",
+                    "other"
+                  ],
+                  "x-enumNames": [
+                    "Response Is Empty",
+                    "Receive Specific Status Code(s)",
+                    "Other"
+                  ]
+                },
+                "statusCodesWhenComplete": {
+                  "x-title": "Status Code(s) when Complete",
+                  "description": "Accepts comma-separated values",
+                  "default": "",
+                  "x-displayOptions": {
+                    "show": {
+                      "paginationCompleteWhen": [
+                        "receiveSpecificStatusCodes"
+                      ]
+                    }
+                  },
+                  "type": "string"
+                },
+                "completeExpression": {
+                  "x-title": "Complete Expression",
+                  "description": "Should evaluate to true when pagination is complete. <a href=\"https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.httprequest/#pagination\" target=\"_blank\">More info</a>.",
+                  "default": "",
+                  "x-displayOptions": {
+                    "show": {
+                      "paginationCompleteWhen": [
+                        "other"
+                      ]
+                    }
+                  },
+                  "type": "string"
+                },
+                "limitPagesFetched": {
+                  "x-title": "Limit Pages Fetched",
+                  "description": "Whether the number of requests should be limited",
+                  "default": false,
+                  "x-displayOptions": {
+                    "hide": {
+                      "paginationMode": [
+                        "off"
+                      ]
+                    }
+                  },
+                  "type": "boolean"
+                },
+                "maxRequests": {
+                  "x-title": "Max Pages",
+                  "description": "Maximum amount of request to be make",
+                  "default": 100,
+                  "x-displayOptions": {
+                    "show": {
+                      "limitPagesFetched": [
+                        true
+                      ]
+                    }
+                  },
+                  "type": "number"
+                },
+                "requestInterval": {
+                  "x-title": "Interval Between Requests (ms)",
+                  "description": "Time in milliseconds to wait between requests",
+                  "default": 0,
+                  "x-displayOptions": {
+                    "hide": {
+                      "paginationMode": [
+                        "off"
+                      ]
+                    }
+                  },
+                  "type": "number",
+                  "minimum": 0
+                }
+              }
+            }
+          }
+        },
+        "proxy": {
+          "x-title": "Proxy",
+          "description": "HTTP proxy to use",
+          "default": "",
+          "type": "string"
+        },
+        "timeout": {
+          "x-title": "Timeout",
+          "description": "Time in ms to wait for the server to send response headers (and start the response body) before aborting the request",
+          "default": 10000,
+          "type": "number",
+          "minimum": 1
+        },
+        "sendCredentialsOnCrossOriginRedirect": {
+          "x-title": "Send Credentials on Cross-Origin Redirect",
+          "description": "Whether to send credentials, like the \"Authorization\" header, on redirects to a different origin",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "optimizeResponse": {
+      "x-title": "Optimize Response",
+      "description": "Whether the optimize the tool response to reduce amount of data passed to the LLM that could lead to better result and reduce cost",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "@tool": [
+            true
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "responseType": {
+      "x-title": "Expected Response Type",
+      "default": "json",
+      "x-displayOptions": {
+        "show": {
+          "optimizeResponse": [
+            true
+          ],
+          "@tool": [
+            true
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "json",
+        "html",
+        "text"
+      ],
+      "x-enumNames": [
+        "JSON",
+        "HTML",
+        "Text"
+      ]
+    },
+    "dataField": {
+      "x-title": "Field Containing Data",
+      "description": "Specify the name of the field in the response containing the data",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "optimizeResponse": [
+            true
+          ],
+          "responseType": [
+            "json"
+          ],
+          "@tool": [
+            true
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "fieldsToInclude": {
+      "x-title": "Include Fields",
+      "description": "What fields response object should include",
+      "default": "all",
+      "x-displayOptions": {
+        "show": {
+          "optimizeResponse": [
+            true
+          ],
+          "responseType": [
+            "json"
+          ],
+          "@tool": [
+            true
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "all",
+        "selected",
+        "except"
+      ],
+      "x-enumNames": [
+        "All",
+        "Selected",
+        "Except"
+      ],
+      "x-enumDescriptions": [
+        "Include all fields",
+        "Include only fields specified below",
+        "Exclude fields specified below"
+      ]
+    },
+    "fields": {
+      "x-title": "Fields",
+      "description": "Comma-separated list of the field names. Supports dot notation. You can drag the selected fields from the input panel.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "optimizeResponse": [
+            true
+          ],
+          "responseType": [
+            "json"
+          ],
+          "@tool": [
+            true
+          ]
+        },
+        "hide": {
+          "fieldsToInclude": [
+            "all"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "cssSelector": {
+      "x-title": "Selector (CSS)",
+      "description": "Select specific element(e.g. body) or multiple elements(e.g. div) of chosen type in the response HTML.",
+      "default": "body",
+      "x-displayOptions": {
+        "show": {
+          "optimizeResponse": [
+            true
+          ],
+          "responseType": [
+            "html"
+          ],
+          "@tool": [
+            true
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "onlyContent": {
+      "x-title": "Return Only Content",
+      "description": "Whether to return only content of html elements, stripping html tags and attributes",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "optimizeResponse": [
+            true
+          ],
+          "responseType": [
+            "html"
+          ],
+          "@tool": [
+            true
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "elementsToOmit": {
+      "x-title": "Elements To Omit",
+      "description": "Comma-separated list of selectors that would be excluded when extracting content",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "optimizeResponse": [
+            true
+          ],
+          "responseType": [
+            "html"
+          ],
+          "onlyContent": [
+            true
+          ],
+          "@tool": [
+            true
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "truncateResponse": {
+      "x-title": "Truncate Response",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "optimizeResponse": [
+            true
+          ],
+          "responseType": [
+            "text",
+            "html"
+          ],
+          "@tool": [
+            true
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "maxLength": {
+      "x-title": "Max Response Characters",
+      "default": 1000,
+      "x-displayOptions": {
+        "show": {
+          "optimizeResponse": [
+            true
+          ],
+          "responseType": [
+            "text",
+            "html"
+          ],
+          "truncateResponse": [
+            true
+          ],
+          "@tool": [
+            true
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    }
+  },
+  "x-subtitle": "={{$parameter[\"method\"] + \": \" + $parameter[\"url\"]}}",
+  "x-icon": {
+    "light": "file:httprequest.svg",
+    "dark": "file:httprequest.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "httpSslAuth",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "provideSslCertificates": [
+            true
+          ]
+        }
+      }
+    }
+  ]
+}

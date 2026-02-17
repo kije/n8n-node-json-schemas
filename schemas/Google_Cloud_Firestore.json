@@ -1,0 +1,267 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Cloud Firestore",
+  "description": "Interact with Google Firebase - Cloud Firestore API",
+  "x-n8n-node-type": "googleFirebaseCloudFirestore",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "googleFirebaseCloudFirestoreOAuth2Api",
+      "type": "string",
+      "enum": [
+        "googleFirebaseCloudFirestoreOAuth2Api",
+        "serviceAccount"
+      ],
+      "x-enumNames": [
+        "OAuth2 (recommended)",
+        "Service Account"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "document",
+      "type": "string",
+      "enum": [
+        "document",
+        "collection"
+      ],
+      "x-enumNames": [
+        "Document",
+        "Collection"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "collection"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Get Many"
+      ],
+      "x-enumDescriptions": [
+        "Get many root collections"
+      ]
+    },
+    "projectId": {
+      "x-title": "Project Name or ID",
+      "description": "As displayed in firebase console URL. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "collection"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "database": {
+      "x-title": "Database",
+      "description": "Usually the provided default value will work",
+      "default": "(default)",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "collection"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "collection": {
+      "x-title": "Collection",
+      "description": "Collection name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "documentId": {
+      "x-title": "Document ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "columns": {
+      "x-title": "Columns /Attributes",
+      "description": "Columns to insert",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "simple": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "query"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "collection"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "collection"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "updateKey": {
+      "x-title": "Update Key",
+      "description": "Name of the field in an input item that contains the document ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "query": {
+      "x-title": "Query JSON",
+      "description": "JSON query to execute",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "query"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"resource\"] + \": \" + $parameter[\"operation\"]}}",
+  "x-icon": "file:googleFirebaseCloudFirestore.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "googleFirebaseCloudFirestoreOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "googleFirebaseCloudFirestoreOAuth2Api"
+          ]
+        }
+      }
+    },
+    {
+      "name": "googleApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "serviceAccount"
+          ]
+        }
+      }
+    }
+  ]
+}

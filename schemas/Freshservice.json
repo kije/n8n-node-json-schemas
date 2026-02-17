@@ -1,0 +1,1044 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Freshservice",
+  "description": "Consume the Freshservice API",
+  "x-n8n-node-type": "freshservice",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "agent",
+      "type": "string",
+      "enum": [
+        "agent",
+        "agentGroup",
+        "agentRole",
+        "announcement",
+        "assetType",
+        "change",
+        "department",
+        "location",
+        "problem",
+        "product",
+        "release",
+        "requester",
+        "requesterGroup",
+        "software",
+        "ticket"
+      ],
+      "x-enumNames": [
+        "Agent",
+        "Agent Group",
+        "Agent Role",
+        "Announcement",
+        "Asset Type",
+        "Change",
+        "Department",
+        "Location",
+        "Problem",
+        "Product",
+        "Release",
+        "Requester",
+        "Requester Group",
+        "Software",
+        "Ticket"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a ticket",
+        "Delete a ticket",
+        "Retrieve a ticket",
+        "Retrieve many tickets",
+        "Update a ticket"
+      ]
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "Email address of the ticket author",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "firstName": {
+      "x-title": "First Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "requester"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "roles": {
+      "x-title": "Roles",
+      "description": "Role to assign to the agent",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "agent"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "roleProperties": {
+          "x-title": "Role Properties",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "role": {
+                "x-title": "Role Name or ID",
+                "description": "Name of the role to assign to the agent. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                "default": "",
+                "x-required": true,
+                "type": "string"
+              },
+              "assignment_scope": {
+                "x-title": "Scope",
+                "description": "Scope in which the agent may use the permissions granted by the role",
+                "default": "specified_groups",
+                "x-required": true,
+                "type": "string",
+                "enum": [
+                  "entire_helpdesk",
+                  "member_groups",
+                  "specified_groups",
+                  "assigned_items"
+                ],
+                "x-enumNames": [
+                  "Entire Helpdesk",
+                  "Member Groups",
+                  "Specified Groups",
+                  "Assigned Items"
+                ]
+              },
+              "groups": {
+                "x-title": "Group Names or IDs",
+                "description": "Groups in which the permissions granted by the role apply. Required only when Scope is Specified Groups - ignored otherwise. Choose from the list or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                "default": [],
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "cc_emails": {
+          "x-title": "CC Emails",
+          "description": "Comma-separated email addresses to add in the CC field of the ticket email",
+          "default": "",
+          "type": "string"
+        },
+        "department_id": {
+          "x-title": "Department Name or ID",
+          "description": "ID of the department to which this ticket belongs. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "group_id": {
+          "x-title": "Group Name or ID",
+          "description": "ID of the group to which the ticket has been assigned. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "impact": {
+          "x-title": "Impact",
+          "default": 1,
+          "type": "string",
+          "enum": [
+            1,
+            2,
+            3
+          ],
+          "x-enumNames": [
+            "Low",
+            "Medium",
+            "High"
+          ]
+        },
+        "name": {
+          "x-title": "Name",
+          "description": "Name of the ticket author",
+          "default": "",
+          "type": "string"
+        },
+        "requester_id": {
+          "x-title": "Requester Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "agentId": {
+      "x-title": "Agent ID",
+      "description": "ID of the agent to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "agent"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "agent_id": {
+          "x-title": "Agent Name or ID",
+          "description": "ID of the agent to whom the tickets have been assigned. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "group_id": {
+          "x-title": "Group Name or ID",
+          "description": "ID of the group to which the tickets have been assigned. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "impact": {
+          "x-title": "Impact",
+          "default": 1,
+          "type": "string",
+          "enum": [
+            1,
+            2,
+            3
+          ],
+          "x-enumNames": [
+            "Low",
+            "Medium",
+            "High"
+          ]
+        },
+        "priority": {
+          "x-title": "Priority",
+          "default": 1,
+          "type": "string",
+          "enum": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "x-enumNames": [
+            "Low",
+            "Medium",
+            "High",
+            "Urgent"
+          ]
+        },
+        "status": {
+          "x-title": "Status",
+          "default": 2,
+          "type": "string",
+          "enum": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "x-enumNames": [
+            "Open",
+            "Pending",
+            "Resolved",
+            "Closed"
+          ]
+        },
+        "created_at": {
+          "x-title": "Created On",
+          "description": "Date when the ticket was created",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "due_by": {
+          "x-title": "Due By",
+          "description": "Date when the ticket is due to be resolved",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "department_id": {
+          "x-title": "Department Name or ID",
+          "description": "ID of the department to which this ticket has been assigned. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "description": {
+          "x-title": "Description",
+          "description": "HTML supported",
+          "default": "",
+          "type": "string"
+        },
+        "email": {
+          "x-title": "Email",
+          "description": "Email address of the ticket author",
+          "default": "",
+          "type": "string"
+        },
+        "group_id": {
+          "x-title": "Group Name or ID",
+          "description": "ID of the group to which the ticket has been assigned. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "impact": {
+          "x-title": "Impact",
+          "default": 1,
+          "type": "string",
+          "enum": [
+            1,
+            2,
+            3
+          ],
+          "x-enumNames": [
+            "Low",
+            "Medium",
+            "High"
+          ]
+        },
+        "name": {
+          "x-title": "Name",
+          "description": "Name of the ticket author",
+          "default": "",
+          "type": "string"
+        },
+        "phone": {
+          "x-title": "Phone",
+          "default": "",
+          "type": "string"
+        },
+        "priority": {
+          "x-title": "Priority",
+          "description": "Priority of the ticket",
+          "default": 1,
+          "type": "string",
+          "enum": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "x-enumNames": [
+            "Low",
+            "Medium",
+            "High",
+            "Urgent"
+          ]
+        },
+        "status": {
+          "x-title": "Status",
+          "default": 2,
+          "type": "string",
+          "enum": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "x-enumNames": [
+            "Open",
+            "Pending",
+            "Resolved",
+            "Closed"
+          ]
+        },
+        "subject": {
+          "x-title": "Subject",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "name": {
+      "x-title": "Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "software"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "agentGroupId": {
+      "x-title": "Agent Group ID",
+      "description": "ID of the agent group to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "agentGroup"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "agentRoleId": {
+      "x-title": "Agent Role ID",
+      "description": "ID of the agent role to retrieve",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "agentRole"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "title": {
+      "x-title": "Title",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "announcement"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "bodyHtml": {
+      "x-title": "Body",
+      "description": "HTML supported",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "announcement"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "visibility": {
+      "x-title": "Visibility",
+      "default": "everyone",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "announcement"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "agents_only",
+        "grouped_visibility",
+        "everyone"
+      ],
+      "x-enumNames": [
+        "Agents Only",
+        "Agents and Groups",
+        "Everyone"
+      ]
+    },
+    "visibleFrom": {
+      "x-title": "Visible From",
+      "description": "Timestamp at which announcement becomes active",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "announcement"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "announcementId": {
+      "x-title": "Announcement ID",
+      "description": "ID of the announcement to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "announcement"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "assetTypeId": {
+      "x-title": "Asset Type Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "product"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "requesterId": {
+      "x-title": "Requester ID",
+      "description": "ID of the requester to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "requester"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "subject": {
+      "x-title": "Subject",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "plannedStartDate": {
+      "x-title": "Planned Start Date",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "release"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "plannedEndDate": {
+      "x-title": "Planned End Date",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "release"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "changeId": {
+      "x-title": "Change ID",
+      "description": "ID of the change to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "change"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "departmentId": {
+      "x-title": "Department ID",
+      "description": "ID of the department to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "department"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "locationId": {
+      "x-title": "Location ID",
+      "description": "ID of the location to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "location"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "dueBy": {
+      "x-title": "Due By",
+      "description": "Date when the problem is due to be solved",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "problem"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string",
+      "format": "date-time"
+    },
+    "problemId": {
+      "x-title": "Problem ID",
+      "description": "ID of the problem to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "problem"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "productId": {
+      "x-title": "Product ID",
+      "description": "ID of the product to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "product"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "releaseType": {
+      "x-title": "Release Type",
+      "default": 1,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "release"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "x-enumNames": [
+        "Minor",
+        "Standard",
+        "Major",
+        "Emergency"
+      ]
+    },
+    "priority": {
+      "x-title": "Priority",
+      "default": 1,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "x-enumNames": [
+        "Low",
+        "Medium",
+        "High",
+        "Urgent"
+      ]
+    },
+    "status": {
+      "x-title": "Status",
+      "default": 2,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "x-enumNames": [
+        "Open",
+        "Pending",
+        "Resolved",
+        "Closed"
+      ]
+    },
+    "releaseId": {
+      "x-title": "Release ID",
+      "description": "ID of the release to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "release"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "primaryEmail": {
+      "x-title": "Primary Email",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "requester"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "requesterGroupId": {
+      "x-title": "Requester Group ID",
+      "description": "ID of the requester group to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "requesterGroup"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "applicationType": {
+      "x-title": "Application Type",
+      "default": "desktop",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "software"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "desktop",
+        "mobile",
+        "saas"
+      ],
+      "x-enumNames": [
+        "Desktop",
+        "Mobile",
+        "SaaS"
+      ]
+    },
+    "softwareId": {
+      "x-title": "Software ID",
+      "description": "ID of the software application to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "software"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "description": {
+      "x-title": "Description",
+      "description": "HTML supported",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "ticketId": {
+      "x-title": "Ticket ID",
+      "description": "ID of the ticket to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:freshservice.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "freshserviceApi",
+      "required": true
+    }
+  ]
+}

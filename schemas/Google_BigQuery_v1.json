@@ -1,0 +1,237 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google BigQuery",
+  "description": "Consume Google BigQuery API",
+  "x-n8n-node-type": "googleBigQuery",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "oAuth2",
+      "type": "string",
+      "enum": [
+        "oAuth2",
+        "serviceAccount"
+      ],
+      "x-enumNames": [
+        "OAuth2 (recommended)",
+        "Service Account"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "record",
+      "type": "string",
+      "enum": [
+        "record"
+      ],
+      "x-enumNames": [
+        "Record"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "record"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Get Many"
+      ],
+      "x-enumDescriptions": [
+        "Create a new record",
+        "Retrieve many records"
+      ]
+    },
+    "projectId": {
+      "x-title": "Project Name or ID",
+      "description": "ID of the project to retrieve all rows from. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "record"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "datasetId": {
+      "x-title": "Dataset Name or ID",
+      "description": "ID of the dataset to retrieve all rows from. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "record"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "tableId": {
+      "x-title": "Table Name or ID",
+      "description": "ID of the table to retrieve all rows from. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "record"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "columns": {
+      "x-title": "Columns",
+      "description": "Comma-separated list of the item properties to use as columns",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "record"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "record"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "selectedFields": {
+          "x-title": "Fields",
+          "description": "Subset of fields to return, supports select into sub fields. Example: <code>selectedFields = \"a,e.d.f\"</code>",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "record"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "record"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "simple": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "record"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:googleBigQuery.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "googleApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "serviceAccount"
+          ]
+        }
+      }
+    },
+    {
+      "name": "googleBigQueryOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

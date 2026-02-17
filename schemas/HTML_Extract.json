@@ -1,0 +1,133 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "HTML Extract",
+  "description": "Extracts data from HTML",
+  "x-n8n-node-type": "htmlExtract",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "sourceData": {
+      "x-title": "Source Data",
+      "description": "If HTML should be read from binary or JSON data",
+      "default": "json",
+      "type": "string",
+      "enum": [
+        "binary",
+        "json"
+      ],
+      "x-enumNames": [
+        "Binary",
+        "JSON"
+      ]
+    },
+    "dataPropertyName": {
+      "x-title": "JSON Property",
+      "description": "Name of the JSON property in which the HTML to extract the data from can be found. The property can either contain a string or an array of strings.",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "sourceData": [
+            "json"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "extractionValues": {
+      "x-title": "Extraction Values",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "x-title": "Key",
+                "description": "The key under which the extracted value should be saved",
+                "default": "",
+                "type": "string"
+              },
+              "cssSelector": {
+                "x-title": "CSS Selector",
+                "description": "The CSS selector to use",
+                "default": "",
+                "type": "string"
+              },
+              "returnValue": {
+                "x-title": "Return Value",
+                "description": "What kind of data should be returned",
+                "default": "text",
+                "type": "string",
+                "enum": [
+                  "attribute",
+                  "html",
+                  "text",
+                  "value"
+                ],
+                "x-enumNames": [
+                  "Attribute",
+                  "HTML",
+                  "Text",
+                  "Value"
+                ],
+                "x-enumDescriptions": [
+                  "Get an attribute value like \"class\" from an element",
+                  "Get the HTML the element contains",
+                  "Get only the text content of the element",
+                  "Get value of an input, select or textarea"
+                ]
+              },
+              "attribute": {
+                "x-title": "Attribute",
+                "description": "The name of the attribute to return the value off",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "returnValue": [
+                      "attribute"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "returnArray": {
+                "x-title": "Return Array",
+                "description": "Whether to return the values as an array so if multiple ones get found they also get returned separately. If not set all will be returned as a single string.",
+                "default": false,
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "trimValues": {
+          "x-title": "Trim Values",
+          "description": "Whether to remove automatically all spaces and newlines from the beginning and end of the values",
+          "default": true,
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"sourceData\"] + \": \" + $parameter[\"dataPropertyName\"]}}",
+  "x-icon": "fa:cut",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

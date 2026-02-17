@@ -1,0 +1,558 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Sheets ",
+  "description": "Read, update and write data to Google Sheets",
+  "x-n8n-node-type": "googleSheets",
+  "x-n8n-version": 2,
+  "x-n8n-group": [
+    "input",
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "oAuth2",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            2
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "oAuth2",
+        "serviceAccount"
+      ],
+      "x-enumNames": [
+        "OAuth2 (recommended)",
+        "Service Account"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "sheet",
+      "type": "string",
+      "enum": [
+        "spreadsheet",
+        "sheet"
+      ],
+      "x-enumNames": [
+        "Spreadsheet",
+        "Sheet"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "spreadsheet"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create"
+      ],
+      "x-enumNames": [
+        "Create"
+      ],
+      "x-enumDescriptions": [
+        "Create a spreadsheet"
+      ]
+    },
+    "sheetId": {
+      "x-title": "Spreadsheet ID",
+      "description": "The ID of the Google Spreadsheet. Found as part of the sheet URL https://docs.google.com/spreadsheets/d/{ID}/.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "range": {
+      "x-title": "Range",
+      "description": "The table range to read from or to append data to. See the Google <a href=\"https://developers.google.com/sheets/api/guides/values#writing\">documentation</a> for the details. If it contains multiple sheets it can also be added like this: \"MySheet!A:F\"",
+      "default": "A:F",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ]
+        },
+        "hide": {
+          "operation": [
+            "create",
+            "delete",
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "toDelete": {
+      "x-title": "To Delete",
+      "description": "Deletes columns and rows from a sheet",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "columns": {
+          "x-title": "Columns",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "sheetId": {
+                "x-title": "Sheet Name or ID",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": "",
+                "x-required": true,
+                "type": "string",
+                "enum": [],
+                "x-enumNames": []
+              },
+              "startIndex": {
+                "x-title": "Start Index",
+                "description": "The start index (0 based and inclusive) of column to delete",
+                "default": 0,
+                "type": "number",
+                "minimum": 0
+              },
+              "amount": {
+                "x-title": "Amount",
+                "description": "Number of columns to delete",
+                "default": 1,
+                "type": "number",
+                "minimum": 1
+              }
+            }
+          }
+        },
+        "rows": {
+          "x-title": "Rows",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "sheetId": {
+                "x-title": "Sheet Name or ID",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": "",
+                "x-required": true,
+                "type": "string",
+                "enum": [],
+                "x-enumNames": []
+              },
+              "startIndex": {
+                "x-title": "Start Index",
+                "description": "The start index (0 based and inclusive) of row to delete",
+                "default": 0,
+                "type": "number",
+                "minimum": 0
+              },
+              "amount": {
+                "x-title": "Amount",
+                "description": "Number of rows to delete",
+                "default": 1,
+                "type": "number",
+                "minimum": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "rawData": {
+      "x-title": "RAW Data",
+      "description": "Whether the data supplied is RAW instead of parsed into keys",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "update",
+            "upsert"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "dataProperty": {
+      "x-title": "Data Property",
+      "description": "The name of the property from which to read the RAW data",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "update",
+            "upsert"
+          ],
+          "rawData": [
+            true
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "dataStartRow": {
+      "x-title": "Data Start Row",
+      "description": "Index of the first row which contains the actual data and not the keys. Starts with 0.",
+      "default": 1,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ]
+        },
+        "hide": {
+          "operation": [
+            "append",
+            "create",
+            "clear",
+            "delete",
+            "remove"
+          ],
+          "rawData": [
+            true
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "keyRow": {
+      "x-title": "Key Row",
+      "description": "Index of the row which contains the keys. Starts at 0. The incoming node data is matched to the keys for assignment. The matching is case sensitive.",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ]
+        },
+        "hide": {
+          "operation": [
+            "clear",
+            "create",
+            "delete",
+            "remove"
+          ],
+          "rawData": [
+            true
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 0
+    },
+    "lookupColumn": {
+      "x-title": "Lookup Column",
+      "description": "The name of the column in which to look for value",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "lookup"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "lookupValue": {
+      "x-title": "Lookup Value",
+      "description": "The value to look for in column",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "lookup"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "key": {
+      "x-title": "Key",
+      "description": "The name of the key to identify which data should be updated in the sheet",
+      "default": "id",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "update",
+            "upsert"
+          ],
+          "rawData": [
+            false
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "gridProperties": {
+          "x-title": "Grid Properties",
+          "description": "The type of the sheet",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "columnCount": {
+              "x-title": "Column Count",
+              "description": "The number of columns in the grid",
+              "default": 0,
+              "type": "number"
+            },
+            "columnGroupControlAfter": {
+              "x-title": "Column Group Control After",
+              "description": "Whether the column grouping control toggle is shown after the group",
+              "default": false,
+              "type": "boolean"
+            },
+            "frozenColumnCount": {
+              "x-title": "Frozen Column Count",
+              "description": "The number of columns that are frozen in the grid",
+              "default": 0,
+              "type": "number"
+            },
+            "frozenRowCount": {
+              "x-title": "Frozen Row Count",
+              "description": "The number of rows that are frozen in the grid",
+              "default": 0,
+              "type": "number"
+            },
+            "hideGridlines": {
+              "x-title": "Hide Gridlines",
+              "description": "Whether the grid isn't showing gridlines in the UI",
+              "default": false,
+              "type": "boolean"
+            },
+            "rowCount": {
+              "x-title": "Row Count",
+              "description": "The number of rows in the grid",
+              "default": 0,
+              "type": "number"
+            },
+            "rowGroupControlAfter": {
+              "x-title": "Row Group Control After",
+              "description": "Whether the row grouping control toggle is shown after the group",
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        },
+        "hidden": {
+          "x-title": "Hidden",
+          "description": "Whether the sheet is hidden in the UI, false if it's visible",
+          "default": false,
+          "type": "boolean"
+        },
+        "rightToLeft": {
+          "x-title": "Right To Left",
+          "description": "Whether the sheet is an RTL sheet instead of an LTR sheet",
+          "default": false,
+          "type": "boolean"
+        },
+        "sheetId": {
+          "x-title": "Sheet ID",
+          "description": "The ID of the sheet. Must be non-negative. This field cannot be changed once set.",
+          "default": 0,
+          "type": "number"
+        },
+        "index": {
+          "x-title": "Sheet Index",
+          "description": "The index of the sheet within the spreadsheet",
+          "default": 0,
+          "type": "number"
+        },
+        "tabColor": {
+          "x-title": "Tab Color",
+          "description": "The color of the tab in the UI",
+          "default": "0aa55c",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$",
+          "x-format": "color"
+        },
+        "title": {
+          "x-title": "Title",
+          "description": "The Sheet name",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "The title of the spreadsheet",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "spreadsheet"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "sheetsUi": {
+      "x-title": "Sheets",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "spreadsheet"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "sheetValues": {
+          "x-title": "Sheet",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "propertiesUi": {
+                "x-title": "Sheet Properties",
+                "default": {},
+                "type": "object",
+                "properties": {
+                  "hidden": {
+                    "x-title": "Hidden",
+                    "description": "Whether the Sheet should be hidden in the UI",
+                    "default": false,
+                    "type": "boolean"
+                  },
+                  "title": {
+                    "x-title": "Title",
+                    "description": "Title of the property to create",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "simple": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "id": {
+      "x-title": "Sheet ID",
+      "description": "The ID of the sheet to delete",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:googleSheets.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "googleApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "serviceAccount"
+          ]
+        }
+      },
+      "testedBy": "googleApiCredentialTest"
+    },
+    {
+      "name": "googleSheetsOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

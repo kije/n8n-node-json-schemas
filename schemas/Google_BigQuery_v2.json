@@ -1,0 +1,383 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google BigQuery",
+  "description": "Consume Google BigQuery API",
+  "x-n8n-node-type": "googleBigQuery",
+  "x-n8n-version": 2,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "oAuth2",
+      "type": "string",
+      "enum": [
+        "oAuth2",
+        "serviceAccount"
+      ],
+      "x-enumNames": [
+        "OAuth2 (recommended)",
+        "Service Account"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "database",
+      "type": "string"
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "executeQuery",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "executeQuery",
+        "insert"
+      ],
+      "x-enumNames": [
+        "Execute Query",
+        "Insert"
+      ],
+      "x-enumDescriptions": [
+        "Execute a SQL query",
+        "Insert rows in a table"
+      ]
+    },
+    "projectId": {
+      "x-title": "Project",
+      "description": "Projects to which you have been granted any project role",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "executeQuery",
+            "insert"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "By URL",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        }
+      ]
+    },
+    "datasetId": {
+      "x-title": "Dataset",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "insert"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        }
+      ]
+    },
+    "tableId": {
+      "x-title": "Table",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "insert"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        }
+      ]
+    },
+    "sqlQuery": {
+      "x-title": "SQL Query",
+      "description": "SQL query to execute, you can find more information about Legacy SQL syntax <a href=\"https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax\" target=\"_blank\">here</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "/options.useLegacySql": [
+            true
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "executeQuery"
+          ]
+        }
+      },
+      "type": "string",
+      "x-editor": "sqlEditor"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "insert"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "batchSize": {
+          "x-title": "Batch Size",
+          "default": 100,
+          "type": "number",
+          "minimum": 1
+        },
+        "ignoreUnknownValues": {
+          "x-title": "Ignore Unknown Values",
+          "description": "Whether to gnore row values that do not match the schema",
+          "default": false,
+          "type": "boolean"
+        },
+        "skipInvalidRows": {
+          "x-title": "Skip Invalid Rows",
+          "description": "Whether to skip rows with values that do not match the schema",
+          "default": false,
+          "type": "boolean"
+        },
+        "templateSuffix": {
+          "x-title": "Template Suffix",
+          "description": "Create a new table based on the destination table and insert rows into the new table. The new table will be named <code>{destinationTable}{templateSuffix}</code>",
+          "default": "",
+          "type": "string"
+        },
+        "traceId": {
+          "x-title": "Trace ID",
+          "description": "Unique ID for the request, for debugging only. It is case-sensitive, limited to up to 36 ASCII characters. A UUID is recommended.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "dataMode": {
+      "x-title": "Data Mode",
+      "description": "Whether to insert the input data this node receives in the new row",
+      "default": "autoMap",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "insert"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "autoMap",
+        "define"
+      ],
+      "x-enumNames": [
+        "Auto-Map Input Data",
+        "Map Each Field Below"
+      ],
+      "x-enumDescriptions": [
+        "Use when node input properties match destination field names",
+        "Set the value for each destination field"
+      ]
+    },
+    "fieldsUi": {
+      "x-title": "Fields to Send",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "dataMode": [
+            "define"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "insert"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Field",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "fieldId": {
+                "x-title": "Field Name or ID",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": "",
+                "type": "string"
+              },
+              "fieldValue": {
+                "x-title": "Field Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"]}}",
+  "x-icon": "file:googleBigQuery.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "googleApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "serviceAccount"
+          ]
+        }
+      }
+    },
+    {
+      "name": "googleBigQueryOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

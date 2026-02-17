@@ -1,0 +1,725 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Gemini",
+  "description": "Interact with Google Gemini AI models",
+  "x-n8n-node-type": "googleGemini",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "text",
+      "type": "string",
+      "enum": [
+        "audio",
+        "document",
+        "fileSearch",
+        "image",
+        "file",
+        "text",
+        "video"
+      ],
+      "x-enumNames": [
+        "Audio",
+        "Document",
+        "File Search",
+        "Image",
+        "Media File",
+        "Text",
+        "Video"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "generate",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "analyze",
+        "generate",
+        "download"
+      ],
+      "x-enumNames": [
+        "Analyze Video",
+        "Generate a Video",
+        "Download Video"
+      ],
+      "x-enumDescriptions": [
+        "Take in videos and answer questions about them",
+        "Creates a video from a text prompt",
+        "Download a generated video from the Google Gemini API using a URL"
+      ]
+    },
+    "modelId": {
+      "x-title": "Model",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "generate"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "text": {
+      "x-title": "Text Input",
+      "default": "What's in this video?",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "analyze"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "type": "string",
+      "x-rows": 2
+    },
+    "inputType": {
+      "x-title": "Input Type",
+      "default": "url",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "analyze"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "url",
+        "binary"
+      ],
+      "x-enumNames": [
+        "Video URL(s)",
+        "Binary File(s)"
+      ]
+    },
+    "audioUrls": {
+      "x-title": "URL(s)",
+      "description": "URL(s) of the audio(s) to transcribe, multiple URLs can be added separated by comma",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "inputType": [
+            "url"
+          ],
+          "operation": [
+            "transcribe"
+          ],
+          "resource": [
+            "audio"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "binaryPropertyName": {
+      "x-title": "Input Data Field Name(s)",
+      "description": "Name of the binary field(s) which contains the video(s), seperate multiple field names with commas",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "inputType": [
+            "binary"
+          ],
+          "operation": [
+            "analyze"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "simplify": {
+      "x-title": "Simplify Output",
+      "description": "Whether to simplify the response or not",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "analyze"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "generate"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "sampleCount": {
+          "x-title": "Number of Videos",
+          "description": "How many videos to generate",
+          "default": 1,
+          "type": "number",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "durationSeconds": {
+          "x-title": "Duration (Seconds)",
+          "description": "Length of the generated video in seconds. Supported only by certain models.",
+          "default": 8,
+          "type": "number",
+          "minimum": 5,
+          "maximum": 8
+        },
+        "aspectRatio": {
+          "x-title": "Aspect Ratio",
+          "default": "16:9",
+          "type": "string",
+          "enum": [
+            "16:9",
+            "9:16"
+          ],
+          "x-enumNames": [
+            "Widescreen (16:9)",
+            "Portrait (9:16)"
+          ],
+          "x-enumDescriptions": [
+            "Most common aspect ratio for televisions and monitors",
+            "Popular for short-form videos like YouTube Shorts"
+          ]
+        },
+        "personGeneration": {
+          "x-title": "Person Generation",
+          "default": "dont_allow",
+          "type": "string",
+          "enum": [
+            "dont_allow",
+            "allow_adult",
+            "allow_all"
+          ],
+          "x-enumNames": [
+            "Don't Allow",
+            "Allow Adult",
+            "Allow All"
+          ],
+          "x-enumDescriptions": [
+            "Prevent generation of people in the video",
+            "Allow generation of adult people in the video",
+            "Allow generation of all people in the video"
+          ]
+        },
+        "binaryPropertyOutput": {
+          "x-title": "Put Output in Field",
+          "default": "data",
+          "type": "string"
+        }
+      }
+    },
+    "documentUrls": {
+      "x-title": "URL(s)",
+      "description": "URL(s) of the document(s) to analyze, multiple URLs can be added separated by comma",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "inputType": [
+            "url"
+          ],
+          "operation": [
+            "analyze"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "fileUrl": {
+      "x-title": "URL",
+      "description": "URL of the file to upload",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "inputType": [
+            "url"
+          ],
+          "operation": [
+            "uploadToStore"
+          ],
+          "resource": [
+            "fileSearch"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "displayName": {
+      "x-title": "File Display Name",
+      "description": "A human-readable name for the file (will be visible in citations)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "uploadToStore"
+          ],
+          "resource": [
+            "fileSearch"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "fileSearchStoreName": {
+      "x-title": "File Search Store Name",
+      "description": "The full name of the File Search store to upload to (format: fileSearchStores/...)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "uploadToStore"
+          ],
+          "resource": [
+            "fileSearch"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "force": {
+      "x-title": "Force Delete",
+      "description": "Whether to delete related Documents and objects. If false, deletion will fail if the store contains any Documents.",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "deleteStore"
+          ],
+          "resource": [
+            "fileSearch"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "pageSize": {
+      "x-title": "Page Size",
+      "description": "Maximum number of File Search stores to return per page (max 20)",
+      "default": 10,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "listStores"
+          ],
+          "resource": [
+            "fileSearch"
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 20
+    },
+    "pageToken": {
+      "x-title": "Page Token",
+      "description": "Token from a previous page to retrieve the next page of results",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "listStores"
+          ],
+          "resource": [
+            "fileSearch"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "imageUrls": {
+      "x-title": "URL(s)",
+      "description": "URL(s) of the image(s) to analyze, multiple URLs can be added separated by comma",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "inputType": [
+            "url"
+          ],
+          "operation": [
+            "analyze"
+          ],
+          "resource": [
+            "image"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "prompt": {
+      "x-title": "Prompt",
+      "description": "A text description of the desired video",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "generate"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "type": "string",
+      "x-rows": 2
+    },
+    "images": {
+      "x-title": "Images",
+      "description": "Add one or more binary fields to include images with your prompt",
+      "default": {
+        "values": [
+          {
+            "binaryPropertyName": "data"
+          }
+        ]
+      },
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "edit"
+          ],
+          "resource": [
+            "image"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Image",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "binaryPropertyName": {
+                "x-title": "Binary Field Name",
+                "description": "The name of the binary field containing the image data",
+                "default": "data",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "messages": {
+      "x-title": "Messages",
+      "default": {
+        "values": [
+          {
+            "content": ""
+          }
+        ]
+      },
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "message"
+          ],
+          "resource": [
+            "text"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "content": {
+                "x-title": "Prompt",
+                "description": "The content of the message to be send",
+                "default": "",
+                "type": "string",
+                "x-rows": 2
+              },
+              "role": {
+                "x-title": "Role",
+                "description": "Role in shaping the model's response, it tells the model how it should behave and interact with the user",
+                "default": "user",
+                "type": "string",
+                "enum": [
+                  "user",
+                  "model"
+                ],
+                "x-enumNames": [
+                  "User",
+                  "Model"
+                ],
+                "x-enumDescriptions": [
+                  "Send a message as a user and get a response from the model",
+                  "Tell the model to adopt a specific tone or personality"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "jsonOutput": {
+      "x-title": "Output Content as JSON",
+      "description": "Whether to attempt to return the response in JSON format",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "message"
+          ],
+          "resource": [
+            "text"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "builtInTools": {
+      "x-title": "Built-in Tools",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.1
+              }
+            }
+          ],
+          "operation": [
+            "message"
+          ],
+          "resource": [
+            "text"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "googleSearch": {
+          "x-title": "Google Search",
+          "description": "Whether to allow the model to search the web using Google Search to get real-time information",
+          "default": true,
+          "type": "boolean"
+        },
+        "googleMaps": {
+          "x-title": "Google Maps",
+          "default": {
+            "latitude": "",
+            "longitude": ""
+          },
+          "type": "object",
+          "properties": {
+            "latitude": {
+              "x-title": "Latitude",
+              "description": "The latitude coordinate for location-based queries",
+              "default": "",
+              "type": "number",
+              "x-precision": 6
+            },
+            "longitude": {
+              "x-title": "Longitude",
+              "description": "The longitude coordinate for location-based queries",
+              "default": "",
+              "type": "number",
+              "x-precision": 6
+            }
+          }
+        },
+        "urlContext": {
+          "x-title": "URL Context",
+          "description": "Whether to allow the model to read and analyze content from specific URLs",
+          "default": true,
+          "type": "boolean"
+        },
+        "fileSearch": {
+          "x-title": "File Search",
+          "default": {
+            "fileSearchStoreNames": "[]"
+          },
+          "type": "object",
+          "properties": {
+            "fileSearchStoreNames": {
+              "x-title": "File Search Store Names",
+              "description": "The file search store names to use for the file search. File search stores are managed via Google AI Studio.",
+              "default": "[]",
+              "x-required": true,
+              "oneOf": [
+                {
+                  "type": "string",
+                  "description": "JSON string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "array"
+                }
+              ]
+            },
+            "metadataFilter": {
+              "x-title": "Metadata Filter",
+              "description": "Use metadata filter to search within a subset of documents. Example: author=\"Robert Graves\".",
+              "default": "",
+              "type": "string"
+            }
+          }
+        },
+        "codeExecution": {
+          "x-title": "Code Execution",
+          "description": "Whether to allow the model to execute code it generates to produce a response. Supported only by certain models.",
+          "default": true,
+          "type": "boolean"
+        }
+      }
+    },
+    "videoUrls": {
+      "x-title": "URL(s)",
+      "description": "URL(s) of the video(s) to analyze, multiple URLs can be added separated by comma",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "inputType": [
+            "url"
+          ],
+          "operation": [
+            "analyze"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "url": {
+      "x-title": "URL",
+      "description": "The URL from Google Gemini API to download the video from",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "download"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "returnAs": {
+      "x-title": "Return As",
+      "description": "Whether to return the video as a binary file or a URL that can be used to download the video later",
+      "default": "video",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "generate"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "video",
+        "url"
+      ],
+      "x-enumNames": [
+        "Video",
+        "URL"
+      ]
+    }
+  },
+  "x-subtitle": "={{ $parameter[\"operation\"] + \": \" + $parameter[\"resource\"] }}",
+  "x-icon": "file:gemini.svg",
+  "x-inputs": "={{\n\t\t(() => {\n\t\t\tconst resource = $parameter.resource;\n\t  \tconst operation = $parameter.operation;\n\t\t\tif (resource === 'text' && operation === 'message') {\n\t\t\t\treturn [{ type: 'main' }, { type: 'ai_tool', displayName: 'Tools' }];\n\t\t\t}\n\n\t\t\treturn ['main'];\n\t\t})()\n\t}}",
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "googlePalmApi",
+      "required": true
+    }
+  ]
+}

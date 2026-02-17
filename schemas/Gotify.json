@@ -1,0 +1,189 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Gotify",
+  "description": "Consume Gotify API",
+  "x-n8n-node-type": "gotify",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "message",
+      "type": "string",
+      "enum": [
+        "message"
+      ],
+      "x-enumNames": [
+        "Message"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get Many"
+      ]
+    },
+    "message": {
+      "x-title": "Message",
+      "description": "The message to send, If using Markdown add the Content Type option",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "priority": {
+          "x-title": "Priority",
+          "description": "The priority of the message",
+          "default": 1,
+          "type": "number"
+        },
+        "title": {
+          "x-title": "Title",
+          "description": "The title of the message",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "contentType": {
+          "x-title": "Content Type",
+          "description": "The message content type",
+          "default": "text/plain",
+          "type": "string",
+          "enum": [
+            "text/plain",
+            "text/markdown"
+          ],
+          "x-enumNames": [
+            "Plain",
+            "Markdown"
+          ]
+        }
+      }
+    },
+    "messageId": {
+      "x-title": "Message ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 20,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:gotify.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "gotifyApi",
+      "required": true
+    }
+  ]
+}

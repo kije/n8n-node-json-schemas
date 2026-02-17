@@ -1,0 +1,267 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Github Trigger",
+  "description": "Starts the workflow when Github events occur",
+  "x-n8n-node-type": "githubTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "accessToken",
+      "type": "string",
+      "enum": [
+        "accessToken",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "Access Token",
+        "OAuth2"
+      ]
+    },
+    "owner": {
+      "x-title": "Repository Owner",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "name"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "Repository Owner",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "Link",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "displayName": "By Name",
+          "type": "string"
+        }
+      ]
+    },
+    "repository": {
+      "x-title": "Repository Name",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "name"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "Repository Name",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "Link",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "displayName": "By Name",
+          "type": "string"
+        }
+      ]
+    },
+    "events": {
+      "x-title": "Events",
+      "description": "The events to listen to",
+      "default": [],
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "*",
+          "check_run",
+          "check_suite",
+          "commit_comment",
+          "create",
+          "delete",
+          "deploy_key",
+          "deployment",
+          "deployment_status",
+          "fork",
+          "github_app_authorization",
+          "gollum",
+          "installation",
+          "installation_repositories",
+          "issue_comment",
+          "issues",
+          "label",
+          "marketplace_purchase",
+          "member",
+          "membership",
+          "meta",
+          "milestone",
+          "org_block",
+          "organization",
+          "page_build",
+          "project",
+          "project_card",
+          "project_column",
+          "public",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push",
+          "release",
+          "repository",
+          "repository_import",
+          "repository_vulnerability_alert",
+          "security_advisory",
+          "star",
+          "status",
+          "team",
+          "team_add",
+          "watch"
+        ]
+      },
+      "x-enumNames": [
+        "*",
+        "Check Run",
+        "Check Suite",
+        "Commit Comment",
+        "Create",
+        "Delete",
+        "Deploy Key",
+        "Deployment",
+        "Deployment Status",
+        "Fork",
+        "Github App Authorization",
+        "Gollum",
+        "Installation",
+        "Installation Repositories",
+        "Issue Comment",
+        "Issues",
+        "Label",
+        "Marketplace Purchase",
+        "Member",
+        "Membership",
+        "Meta",
+        "Milestone",
+        "Org Block",
+        "Organization",
+        "Page Build",
+        "Project",
+        "Project Card",
+        "Project Column",
+        "Public",
+        "Pull Request",
+        "Pull Request Review",
+        "Pull Request Review Comment",
+        "Push",
+        "Release",
+        "Repository",
+        "Repository Import",
+        "Repository Vulnerability Alert",
+        "Security Advisory",
+        "Star",
+        "Status",
+        "Team",
+        "Team Add",
+        "Watch"
+      ]
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "insecureSSL": {
+          "x-title": "Insecure SSL",
+          "description": "Whether the SSL certificate of the n8n host be verified by GitHub when delivering payloads",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"owner\"] + \"/\" + $parameter[\"repository\"] + \": \" + $parameter[\"events\"].join(\", \")}}",
+  "x-icon": {
+    "light": "file:github.svg",
+    "dark": "file:github.dark.svg"
+  },
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "githubApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "accessToken"
+          ]
+        }
+      }
+    },
+    {
+      "name": "githubOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "x-webhooks": "true"
+}

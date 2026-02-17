@@ -1,0 +1,192 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Vertex Chat Model",
+  "description": "Chat Model Google Vertex",
+  "x-n8n-node-type": "lmChatGoogleVertex",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "projectId": {
+      "x-title": "Project ID",
+      "description": "Select or enter your Google Cloud project ID",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "modelName": {
+      "x-title": "Model Name",
+      "description": "The model which will generate the completion. <a href=\"https://cloud.google.com/vertex-ai/generative-ai/docs/learn/models\">Learn more</a>.",
+      "default": "gemini-2.5-flash",
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "description": "Additional options to add",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "maxOutputTokens": {
+          "x-title": "Maximum Number of Tokens",
+          "description": "The maximum number of tokens to generate in the completion",
+          "default": 2048,
+          "type": "number"
+        },
+        "temperature": {
+          "x-title": "Sampling Temperature",
+          "description": "Controls randomness: Lowering results in less random completions. As the temperature approaches zero, the model will become deterministic and repetitive.",
+          "default": 0.4,
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "x-precision": 1
+        },
+        "topK": {
+          "x-title": "Top K",
+          "description": "Used to remove \"long tail\" low probability responses. Defaults to -1, which disables it.",
+          "default": 32,
+          "type": "number",
+          "minimum": -1,
+          "maximum": 40,
+          "x-precision": 1
+        },
+        "topP": {
+          "x-title": "Top P",
+          "description": "Controls diversity via nucleus sampling: 0.5 means half of all likelihood-weighted options are considered. We generally recommend altering this or temperature but not both.",
+          "default": 1,
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "x-precision": 1
+        },
+        "safetySettings": {
+          "x-title": "Safety Settings",
+          "default": {
+            "values": {
+              "category": "HARM_CATEGORY_HARASSMENT",
+              "threshold": "HARM_BLOCK_THRESHOLD_UNSPECIFIED"
+            }
+          },
+          "type": "object",
+          "properties": {
+            "values": {
+              "x-title": "Values",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "x-title": "Safety Category",
+                    "description": "The category of harmful content to block",
+                    "default": "HARM_CATEGORY_UNSPECIFIED",
+                    "type": "string",
+                    "enum": [
+                      "HARM_CATEGORY_HARASSMENT",
+                      "HARM_CATEGORY_HATE_SPEECH",
+                      "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                      "HARM_CATEGORY_DANGEROUS_CONTENT"
+                    ],
+                    "x-enumNames": [
+                      "HARM_CATEGORY_HARASSMENT",
+                      "HARM_CATEGORY_HATE_SPEECH",
+                      "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                      "HARM_CATEGORY_DANGEROUS_CONTENT"
+                    ],
+                    "x-enumDescriptions": [
+                      "Harassment content",
+                      "Hate speech and content",
+                      "Sexually explicit content",
+                      "Dangerous content"
+                    ]
+                  },
+                  "threshold": {
+                    "x-title": "Safety Threshold",
+                    "description": "The threshold of harmful content to block",
+                    "default": "HARM_BLOCK_THRESHOLD_UNSPECIFIED",
+                    "type": "string",
+                    "enum": [
+                      "HARM_BLOCK_THRESHOLD_UNSPECIFIED",
+                      "BLOCK_LOW_AND_ABOVE",
+                      "BLOCK_MEDIUM_AND_ABOVE",
+                      "BLOCK_ONLY_HIGH",
+                      "BLOCK_NONE"
+                    ],
+                    "x-enumNames": [
+                      "HARM_BLOCK_THRESHOLD_UNSPECIFIED",
+                      "BLOCK_LOW_AND_ABOVE",
+                      "BLOCK_MEDIUM_AND_ABOVE",
+                      "BLOCK_ONLY_HIGH",
+                      "BLOCK_NONE"
+                    ],
+                    "x-enumDescriptions": [
+                      "Threshold is unspecified",
+                      "Content with NEGLIGIBLE will be allowed",
+                      "Content with NEGLIGIBLE and LOW will be allowed",
+                      "Content with NEGLIGIBLE, LOW, and MEDIUM will be allowed",
+                      "All content will be allowed"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "thinkingBudget": {
+          "x-title": "Thinking Budget",
+          "description": "Controls reasoning tokens for thinking models. Set to 0 to disable automatic thinking. Set to -1 for dynamic thinking. Leave empty for auto mode.",
+          "type": "number",
+          "minimum": -1,
+          "x-precision": 0
+        }
+      }
+    }
+  },
+  "x-icon": "file:google.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "ai_languageModel"
+  ],
+  "x-credentials": [
+    {
+      "name": "googleApi",
+      "required": true
+    }
+  ]
+}

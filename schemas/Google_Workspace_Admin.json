@@ -1,0 +1,1173 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Workspace Admin",
+  "description": "Consume Google Workspace Admin API",
+  "x-n8n-node-type": "gSuiteAdmin",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "user",
+      "type": "string",
+      "enum": [
+        "device",
+        "group",
+        "user"
+      ],
+      "x-enumNames": [
+        "ChromeOS Device",
+        "Group",
+        "User"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "addToGroup",
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "removeFromGroup",
+        "update"
+      ],
+      "x-enumNames": [
+        "Add to Group",
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Remove From Group",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Add an existing user to a group",
+        "Create a user",
+        "Delete a user",
+        "Get a user",
+        "Get many users",
+        "Remove a user from a group",
+        "Update a user"
+      ]
+    },
+    "deviceId": {
+      "x-title": "Device",
+      "description": "Select the device you want to retrieve",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get",
+            "update",
+            "changeStatus"
+          ],
+          "resource": [
+            "device"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "deviceId"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "deviceId",
+          "displayName": "By ID",
+          "type": "string"
+        }
+      ]
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "user"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "projection": {
+      "x-title": "Custom Fields",
+      "description": "What subset of fields to fetch for this user",
+      "default": "basic",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "basic",
+        "custom",
+        "full"
+      ],
+      "x-enumNames": [
+        "Don't Include",
+        "Custom",
+        "Include All"
+      ],
+      "x-enumDescriptions": [
+        "Do not include any custom fields for the user",
+        "Include custom fields from schemas requested in Custom Schema Names or IDs",
+        "Include all fields associated with this user"
+      ]
+    },
+    "includeChildOrgunits": {
+      "x-title": "Include Children",
+      "description": "Whether to include devices from organizational units below your specified organizational unit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "device"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "filter": {
+      "x-title": "Filter",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "customer": {
+          "x-title": "Customer",
+          "description": "The unique ID for the customer's Google Workspace account",
+          "default": "",
+          "type": "string"
+        },
+        "domain": {
+          "x-title": "Domain",
+          "description": "The domain name. Use this field to get groups from a specific domain.",
+          "default": "",
+          "type": "string"
+        },
+        "query": {
+          "x-title": "Query",
+          "description": "Query string to filter the results. Follow Google Admin SDK documentation. <a href=\"https://developers.google.com/admin-sdk/directory/v1/guides/search-users#examples\" target=\"_blank\">More info</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "showDeleted": {
+          "x-title": "Show Deleted",
+          "description": "Whether retrieve the list of deleted users",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "sort": {
+      "x-title": "Sort",
+      "description": "Define sorting rules for the results",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "sortRules": {
+          "x-title": "Sort Rules",
+          "type": "object",
+          "properties": {
+            "orderBy": {
+              "x-title": "Order By",
+              "description": "Field to sort the results by",
+              "default": "",
+              "type": "string",
+              "enum": [
+                "email",
+                "familyName",
+                "givenName"
+              ],
+              "x-enumNames": [
+                "Email",
+                "Family Name",
+                "Given Name"
+              ]
+            },
+            "sortOrder": {
+              "x-title": "Sort Order",
+              "description": "Sort order direction",
+              "default": "ASCENDING",
+              "type": "string",
+              "enum": [
+                "ASCENDING",
+                "DESCENDING"
+              ],
+              "x-enumNames": [
+                "Ascending",
+                "Descending"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "updateOptions": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "device"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "orgUnitPath": {
+          "x-title": "Move to Organizational Unit Name or ID",
+          "description": "The full path to the organizational unit. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "string"
+        },
+        "annotatedUser": {
+          "x-title": "Annotated User",
+          "description": "The annotated user of the device",
+          "default": "",
+          "type": "string"
+        },
+        "annotatedLocation": {
+          "x-title": "Annotated Location",
+          "description": "The annotated location of the device",
+          "default": "",
+          "type": "string"
+        },
+        "annotatedAssetId": {
+          "x-title": "Annotated Asset ID",
+          "description": "The annotated asset ID of a device",
+          "default": "",
+          "type": "string"
+        },
+        "notes": {
+          "x-title": "Notes",
+          "description": "Add notes to a device",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "action": {
+      "x-title": "Status",
+      "description": "Set the status of a device",
+      "default": "reenable",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "changeStatus"
+          ],
+          "resource": [
+            "device"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "reenable",
+        "disable"
+      ],
+      "x-enumNames": [
+        "Enabled",
+        "Disabled"
+      ],
+      "x-enumDescriptions": [
+        "Re-enable a disabled chromebook",
+        "Disable a chromebook"
+      ]
+    },
+    "groupId": {
+      "x-title": "Group",
+      "description": "Select the group to perform the operation on",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "addToGroup",
+            "removeFromGroup"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "groupId"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From list",
+          "type": "list"
+        },
+        {
+          "name": "groupId",
+          "displayName": "By ID",
+          "type": "string"
+        }
+      ]
+    },
+    "name": {
+      "x-title": "Group Name",
+      "description": "The group's display name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "group"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "email": {
+      "x-title": "Group Email",
+      "description": "The group's email address. If your account has multiple domains, select the appropriate domain for the email address. The email must be unique",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "group"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "changePasswordAtNextLogin": {
+          "x-title": "Change Password at Next Login",
+          "description": "Whether the user is forced to change their password at next login",
+          "default": false,
+          "type": "boolean"
+        },
+        "phoneUi": {
+          "x-title": "Phones",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "phoneValues": {
+              "x-title": "Phone",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "x-title": "Type",
+                    "description": "The type of phone number",
+                    "default": "work",
+                    "type": "string",
+                    "enum": [
+                      "assistant",
+                      "callback",
+                      "car",
+                      "company_main",
+                      "custom",
+                      "grand_central",
+                      "home",
+                      "home_fax",
+                      "isdn",
+                      "main",
+                      "mobile",
+                      "other",
+                      "other_fax",
+                      "pager",
+                      "radio",
+                      "telex",
+                      "tty_tdd",
+                      "work",
+                      "work_fax",
+                      "work_mobile",
+                      "work_pager"
+                    ],
+                    "x-enumNames": [
+                      "Assistant",
+                      "Callback",
+                      "Car",
+                      "Company Main",
+                      "Custom",
+                      "Grand Central",
+                      "Home",
+                      "Home Fax",
+                      "ISDN",
+                      "Main",
+                      "Mobile",
+                      "Other",
+                      "Other Fax",
+                      "Pager",
+                      "Radio",
+                      "Telex",
+                      "TTY TDD",
+                      "Work",
+                      "Work Fax",
+                      "Work Mobile",
+                      "Work Pager"
+                    ]
+                  },
+                  "value": {
+                    "x-title": "Phone Number",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "primary": {
+                    "x-title": "Primary",
+                    "description": "Whether this is the user's primary phone number",
+                    "default": false,
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "emailUi": {
+          "x-title": "Secondary Emails",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "emailValues": {
+              "x-title": "Email",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "x-title": "Type",
+                    "description": "The type of the email account",
+                    "default": "work",
+                    "type": "string",
+                    "enum": [
+                      "home",
+                      "work",
+                      "other"
+                    ],
+                    "x-enumNames": [
+                      "Home",
+                      "Work",
+                      "Other"
+                    ]
+                  },
+                  "address": {
+                    "x-title": "Email",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "roles": {
+          "x-title": "Roles",
+          "description": "Select the roles you want to assign to the user",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "directorySyncAdmin",
+              "groupsAdmin",
+              "groupsEditor",
+              "groupsReader",
+              "helpDeskAdmin",
+              "inventoryReportingAdmin",
+              "mobileAdmin",
+              "servicesAdmin",
+              "storageAdmin",
+              "superAdmin",
+              "userManagement"
+            ]
+          },
+          "x-enumNames": [
+            "Directory Sync Admin",
+            "Groups Admin",
+            "Groups Editor",
+            "Groups Reader",
+            "Help Desk Admin",
+            "Inventory Reporting Admin",
+            "Mobile Admin",
+            "Services Admin",
+            "Storage Admin",
+            "Super Admin",
+            "User Management"
+          ]
+        },
+        "customFields": {
+          "x-title": "Custom Fields",
+          "description": "Allows editing and adding of custom fields",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "fieldValues": {
+              "x-title": "Field",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "schemaName": {
+                    "x-title": "Schema Name or ID",
+                    "description": "Select the schema to use for custom fields. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "fieldName": {
+                    "x-title": "Field Name or ID",
+                    "description": "Enter a field name from the selected schema",
+                    "default": "",
+                    "x-required": true,
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "Provide a value for the selected field",
+                    "default": "",
+                    "x-required": true,
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "archived": {
+          "x-title": "Archived",
+          "description": "Whether user is archived",
+          "default": false,
+          "type": "boolean"
+        },
+        "suspendUi": {
+          "x-title": "Suspend",
+          "description": "Whether to set the user as suspended. If set to OFF, the user will be reactivated. If not added, the status will remain unchanged.",
+          "default": false,
+          "type": "boolean"
+        },
+        "changePasswordAtNextLogin": {
+          "x-title": "Change Password at Next Login",
+          "description": "Whether the user is forced to change their password at next login",
+          "default": false,
+          "type": "boolean"
+        },
+        "firstName": {
+          "x-title": "First Name",
+          "default": "",
+          "type": "string"
+        },
+        "lastName": {
+          "x-title": "Last Name",
+          "default": "",
+          "type": "string"
+        },
+        "password": {
+          "x-title": "Password",
+          "description": "Stores the password for the user account. A minimum of 8 characters is required. The maximum length is 100 characters.",
+          "default": "",
+          "type": "string",
+          "format": "password"
+        },
+        "phoneUi": {
+          "x-title": "Phones",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "phoneValues": {
+              "x-title": "Phone",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "x-title": "Type",
+                    "description": "The type of phone number",
+                    "default": "work",
+                    "type": "string",
+                    "enum": [
+                      "assistant",
+                      "callback",
+                      "car",
+                      "company_main",
+                      "custom",
+                      "grand_central",
+                      "home",
+                      "home_fax",
+                      "isdn",
+                      "main",
+                      "mobile",
+                      "other",
+                      "other_fax",
+                      "pager",
+                      "radio",
+                      "telex",
+                      "tty_tdd",
+                      "work",
+                      "work_fax",
+                      "work_mobile",
+                      "work_pager"
+                    ],
+                    "x-enumNames": [
+                      "Assistant",
+                      "Callback",
+                      "Car",
+                      "Company Main",
+                      "Custom",
+                      "Grand Central",
+                      "Home",
+                      "Home Fax",
+                      "ISDN",
+                      "Main",
+                      "Mobile",
+                      "Other",
+                      "Other Fax",
+                      "Pager",
+                      "Radio",
+                      "Telex",
+                      "TTY TDD",
+                      "Work",
+                      "Work Fax",
+                      "Work Mobile",
+                      "Work Pager"
+                    ]
+                  },
+                  "value": {
+                    "x-title": "Phone Number",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "primary": {
+                    "x-title": "Primary",
+                    "description": "Whether this is the user's primary phone number. A user may only have one primary phone number.",
+                    "default": false,
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "primaryEmail": {
+          "x-title": "Primary Email",
+          "description": "The user's primary email address. This property is required in a request to create a user account. The primaryEmail must be unique and cannot be an alias of another user.",
+          "default": "",
+          "type": "string"
+        },
+        "emailUi": {
+          "x-title": "Secondary Emails",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "emailValues": {
+              "x-title": "Email",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "x-title": "Type",
+                    "description": "The type of the email account",
+                    "default": "work",
+                    "type": "string",
+                    "enum": [
+                      "home",
+                      "work",
+                      "other"
+                    ],
+                    "x-enumNames": [
+                      "Home",
+                      "Work",
+                      "Other"
+                    ]
+                  },
+                  "address": {
+                    "x-title": "Email",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "roles": {
+          "x-title": "Roles",
+          "description": "Select the roles you want to assign to the user",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "directorySyncAdmin",
+              "groupsAdmin",
+              "groupsEditor",
+              "groupsReader",
+              "helpDeskAdmin",
+              "inventoryReportingAdmin",
+              "mobileAdmin",
+              "servicesAdmin",
+              "storageAdmin",
+              "superAdmin",
+              "userManagement"
+            ]
+          },
+          "x-enumNames": [
+            "Directory Sync Admin",
+            "Groups Admin",
+            "Groups Editor",
+            "Groups Reader",
+            "Help Desk Admin",
+            "Inventory Reporting Admin",
+            "Mobile Admin",
+            "Services Admin",
+            "Storage Admin",
+            "Super Admin",
+            "User Management"
+          ]
+        },
+        "customFields": {
+          "x-title": "Custom Fields",
+          "description": "Allows editing and adding of custom fields",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "fieldValues": {
+              "x-title": "Field",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "schemaName": {
+                    "x-title": "Schema Name or ID",
+                    "description": "Select the schema to use for custom fields. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "fieldName": {
+                    "x-title": "Field Name or ID",
+                    "description": "Enter a field name from the selected schema",
+                    "default": "",
+                    "x-required": true,
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "Provide a value for the selected field",
+                    "default": "",
+                    "x-required": true,
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "userId": {
+      "x-title": "User",
+      "description": "Select the user to perform the operation on",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "addToGroup",
+            "delete",
+            "get",
+            "removeFromGroup",
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "userEmail",
+            "userId"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From list",
+          "type": "list"
+        },
+        {
+          "name": "userEmail",
+          "displayName": "By Email",
+          "type": "string"
+        },
+        {
+          "name": "userId",
+          "displayName": "By ID",
+          "type": "string"
+        }
+      ]
+    },
+    "firstName": {
+      "x-title": "First Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "lastName": {
+      "x-title": "Last Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "password": {
+      "x-title": "Password",
+      "description": "Stores the password for the user account. A minimum of 8 characters is required. The maximum length is 100 characters.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "password"
+    },
+    "username": {
+      "x-title": "Username",
+      "description": "The username that will be set to the user. Example: If you domain is example.com and you set the username to n.smith then the user's final email address will be n.smith@example.com.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "domain": {
+      "x-title": "Domain Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "output": {
+      "x-title": "Output",
+      "default": "simplified",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "simplified",
+        "raw",
+        "select"
+      ],
+      "x-enumNames": [
+        "Simplified",
+        "Raw",
+        "Select Included Fields"
+      ],
+      "x-enumDescriptions": [
+        "Only return specific fields: kind, ID, primaryEmail, name (with subfields), isAdmin, lastLoginTime, creationTime, and suspended",
+        "Return all fields from the API response",
+        "Choose specific fields to include"
+      ]
+    },
+    "fields": {
+      "x-title": "Fields",
+      "description": "Fields to include in the response when \"Select Included Fields\" is chosen",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "output": [
+            "select"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "creationTime",
+          "isAdmin",
+          "kind",
+          "lastLoginTime",
+          "name",
+          "primaryEmail",
+          "suspended"
+        ]
+      },
+      "x-enumNames": [
+        "Creation Time",
+        "Is Admin",
+        "Kind",
+        "Last Login Time",
+        "Name",
+        "Primary Email",
+        "Suspended"
+      ]
+    },
+    "customFieldMask": {
+      "x-title": "Custom Schema Names or IDs",
+      "description": "A comma-separated list of schema names. All fields from these schemas are fetched. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "user"
+          ],
+          "/projection": [
+            "custom"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:gSuiteAdmin.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "gSuiteAdminOAuth2Api",
+      "required": true
+    }
+  ]
+}

@@ -1,0 +1,265 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "HTML",
+  "description": "Work with HTML",
+  "x-n8n-node-type": "html",
+  "x-n8n-version": [
+    1,
+    1.1,
+    1.2
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "operation": {
+      "x-title": "Operation",
+      "default": "generateHtmlTemplate",
+      "type": "string",
+      "enum": [
+        "generateHtmlTemplate",
+        "extractHtmlContent",
+        "convertToHtmlTable"
+      ],
+      "x-enumNames": [
+        "Generate HTML Template",
+        "Extract HTML Content",
+        "Convert to HTML Table"
+      ]
+    },
+    "html": {
+      "x-title": "HTML Template",
+      "description": "HTML template to render",
+      "default": "<!DOCTYPE html>\n\n<html>\n<head>\n  <meta charset=\"UTF-8\" />\n  <title>My HTML document</title>\n</head>\n<body>\n  <div class=\"container\">\n    <h1>This is an H1 heading</h1>\n    <h2>This is an H2 heading</h2>\n    <p>This is a paragraph</p>\n  </div>\n</body>\n</html>\n\n<style>\n.container {\n  background-color: #ffffff;\n  text-align: center;\n  padding: 16px;\n  border-radius: 8px;\n}\n\nh1 {\n  color: #ff6d5a;\n  font-size: 24px;\n  font-weight: bold;\n  padding: 8px;\n}\n\nh2 {\n  color: #909399;\n  font-size: 18px;\n  font-weight: bold;\n  padding: 8px;\n}\n</style>\n\n<script>\nconsole.log(\"Hello World!\");\n</script>",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "generateHtmlTemplate"
+          ]
+        }
+      },
+      "type": "string",
+      "x-editor": "htmlEditor"
+    },
+    "sourceData": {
+      "x-title": "Source Data",
+      "description": "If HTML should be read from binary or JSON data",
+      "default": "json",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "extractHtmlContent"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "binary",
+        "json"
+      ],
+      "x-enumNames": [
+        "Binary",
+        "JSON"
+      ]
+    },
+    "dataPropertyName": {
+      "x-title": "JSON Property",
+      "description": "Name of the JSON property in which the HTML to extract the data from can be found. The property can either contain a string or an array of strings.",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "extractHtmlContent"
+          ],
+          "sourceData": [
+            "json"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "extractionValues": {
+      "x-title": "Extraction Values",
+      "default": {
+        "values": [
+          {
+            "key": "",
+            "cssSelector": "",
+            "returnValue": "text",
+            "returnArray": false
+          }
+        ]
+      },
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "extractHtmlContent"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gt": 1
+              }
+            }
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "x-title": "Key",
+                "description": "The key under which the extracted value should be saved",
+                "default": "",
+                "type": "string"
+              },
+              "cssSelector": {
+                "x-title": "CSS Selector",
+                "description": "The CSS selector to use",
+                "default": "",
+                "type": "string"
+              },
+              "returnValue": {
+                "x-title": "Return Value",
+                "description": "What kind of data should be returned",
+                "default": "text",
+                "type": "string",
+                "enum": [
+                  "attribute",
+                  "html",
+                  "text",
+                  "value"
+                ],
+                "x-enumNames": [
+                  "Attribute",
+                  "HTML",
+                  "Text",
+                  "Value"
+                ],
+                "x-enumDescriptions": [
+                  "Get an attribute value like \"class\" from an element",
+                  "Get the HTML the element contains",
+                  "Get only the text content of the element",
+                  "Get value of an input, select or textarea"
+                ]
+              },
+              "attribute": {
+                "x-title": "Attribute",
+                "description": "The name of the attribute to return the value off",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "returnValue": [
+                      "attribute"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "skipSelectors": {
+                "x-title": "Skip Selectors",
+                "description": "Comma-separated list of selectors to skip in the text extraction",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "returnValue": [
+                      "text"
+                    ],
+                    "@version": [
+                      {
+                        "_cnd": {
+                          "gt": 1.1
+                        }
+                      }
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "returnArray": {
+                "x-title": "Return Array",
+                "description": "Whether to return the values as an array so if multiple ones get found they also get returned separately. If not set all will be returned as a single string.",
+                "default": false,
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "convertToHtmlTable"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "capitalize": {
+          "x-title": "Capitalize Headers",
+          "description": "Whether to capitalize the headers",
+          "default": false,
+          "type": "boolean"
+        },
+        "customStyling": {
+          "x-title": "Custom Styling",
+          "description": "Whether to use custom styling",
+          "default": false,
+          "type": "boolean"
+        },
+        "caption": {
+          "x-title": "Caption",
+          "description": "Caption to add to the table",
+          "default": "",
+          "type": "string"
+        },
+        "tableAttributes": {
+          "x-title": "Table Attributes",
+          "description": "Attributes to attach to the table",
+          "default": "",
+          "type": "string"
+        },
+        "headerAttributes": {
+          "x-title": "Header Attributes",
+          "description": "Attributes to attach to the table header",
+          "default": "",
+          "type": "string"
+        },
+        "rowAttributes": {
+          "x-title": "Row Attributes",
+          "description": "Attributes to attach to the table row",
+          "default": "",
+          "type": "string"
+        },
+        "cellAttributes": {
+          "x-title": "Cell Attributes",
+          "description": "Attributes to attach to the table cell",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{ $parameter[\"operation\"] }}",
+  "x-icon": {
+    "light": "file:html.svg",
+    "dark": "file:html.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

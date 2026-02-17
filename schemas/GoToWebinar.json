@@ -1,0 +1,575 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "GoToWebinar",
+  "description": "Consume the GoToWebinar API",
+  "x-n8n-node-type": "goToWebinar",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "attendee",
+      "type": "string",
+      "enum": [
+        "attendee",
+        "coorganizer",
+        "panelist",
+        "registrant",
+        "session",
+        "webinar"
+      ],
+      "x-enumNames": [
+        "Attendee",
+        "Co-Organizer",
+        "Panelist",
+        "Registrant",
+        "Session",
+        "Webinar"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "webinar"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Get",
+        "Get Many",
+        "Update"
+      ]
+    },
+    "webinarKey": {
+      "x-title": "Webinar Key",
+      "description": "Key of the webinar to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "webinar"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "sessionKey": {
+      "x-title": "Session Key",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "get",
+            "getDetails"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "registrantKey": {
+      "x-title": "Registrant Key",
+      "description": "Key of the registrant to retrieve",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "registrant"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "details": {
+      "x-title": "Details",
+      "default": "performance",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "getDetails"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "performance",
+        "polls",
+        "questions",
+        "surveys"
+      ],
+      "x-enumNames": [
+        "Performance",
+        "Polls",
+        "Questions",
+        "Surveys"
+      ],
+      "x-enumDescriptions": [
+        "Performance details for a webinar session",
+        "Questions and answers for polls from a webinar session",
+        "Questions and answers for a past webinar session",
+        "Surveys for a past webinar session"
+      ]
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "webinar"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 10,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "webinar"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "isExternal": {
+      "x-title": "Is External",
+      "description": "Whether the co-organizer has no GoToWebinar account",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "coorganizer"
+          ],
+          "operation": [
+            "reinvite"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "organizerKey": {
+      "x-title": "Organizer Key",
+      "description": "The co-organizer's organizer key for the webinar",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "coorganizer"
+          ],
+          "operation": [
+            "create"
+          ],
+          "isExternal": [
+            false
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "givenName": {
+      "x-title": "Given Name",
+      "description": "The co-organizer's given name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "coorganizer"
+          ],
+          "operation": [
+            "create"
+          ],
+          "isExternal": [
+            true
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "Email address of the registrant to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "registrant"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "coorganizerKey": {
+      "x-title": "Co-Organizer Key",
+      "description": "Key of the co-organizer to reinvite",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "coorganizer"
+          ],
+          "operation": [
+            "reinvite"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "Name of the panelist to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "panelist"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "panelistKey": {
+      "x-title": "Panelist Key",
+      "description": "Key of the panelist to reinvite",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "panelist"
+          ],
+          "operation": [
+            "reinvite"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "firstName": {
+      "x-title": "First Name",
+      "description": "First name of the registrant to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "registrant"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "lastName": {
+      "x-title": "Last Name",
+      "description": "Last name of the registrant to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "registrant"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "webinar"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "times": {
+          "x-title": "Time Range",
+          "default": {},
+          "x-required": true,
+          "type": "object",
+          "properties": {
+            "timesProperties": {
+              "x-title": "Times Properties",
+              "type": "object",
+              "properties": {
+                "fromTime": {
+                  "x-title": "Start Time",
+                  "description": "Start of the datetime range for the webinar",
+                  "default": "",
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "toTime": {
+                  "x-title": "End Time",
+                  "description": "End of the datetime range for the webinar",
+                  "default": "",
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "subject": {
+      "x-title": "Subject",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "webinar"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "times": {
+      "x-title": "Time Range",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "webinar"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "timesProperties": {
+          "x-title": "Times Properties",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "startTime": {
+                "x-title": "Start Time",
+                "default": "",
+                "x-required": true,
+                "type": "string",
+                "format": "date-time"
+              },
+              "endTime": {
+                "x-title": "End Time",
+                "default": "",
+                "x-required": true,
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      }
+    },
+    "notifyParticipants": {
+      "x-title": "Notify Participants",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "webinar"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "webinar"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "description": {
+          "x-title": "Description",
+          "default": "",
+          "type": "string"
+        },
+        "experienceType": {
+          "x-title": "Experience Type",
+          "default": "CLASSIC",
+          "type": "string",
+          "enum": [
+            "CLASSIC",
+            "BROADCAST",
+            "SIMULIVE"
+          ],
+          "x-enumNames": [
+            "Classic",
+            "Broadcast",
+            "Simulive"
+          ]
+        },
+        "isOnDemand": {
+          "x-title": "Is On-Demand",
+          "description": "Whether the webinar may be watched anytime",
+          "default": false,
+          "type": "boolean"
+        },
+        "isPasswordProtected": {
+          "x-title": "Is Password Protected",
+          "description": "Whether the webinar requires a password for attendees to join",
+          "default": false,
+          "type": "boolean"
+        },
+        "times": {
+          "x-title": "Times",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "timesProperties": {
+              "x-title": "Times Properties",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "startTime": {
+                    "x-title": "Start Time",
+                    "default": "",
+                    "x-required": true,
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "endTime": {
+                    "x-title": "End Time",
+                    "default": "",
+                    "x-required": true,
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "subject": {
+          "x-title": "Subject",
+          "description": "Name or topic of the webinar",
+          "default": "",
+          "type": "string"
+        },
+        "timezone": {
+          "x-title": "Timezone Name or ID",
+          "description": "Timezone where the webinar is to take place. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "type": {
+          "x-title": "Webinar Type",
+          "default": "single_session",
+          "type": "string",
+          "enum": [
+            "single_session",
+            "series",
+            "sequence"
+          ],
+          "x-enumNames": [
+            "Single Session",
+            "Series",
+            "Sequence"
+          ],
+          "x-enumDescriptions": [
+            "Webinar with one single meeting",
+            "Webinar with multiple meetings times where attendees choose only one to attend",
+            "Webinar with multiple meeting times where attendees are expected to be the same for all sessions"
+          ]
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:gotowebinar.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "goToWebinarOAuth2Api",
+      "required": true
+    }
+  ]
+}

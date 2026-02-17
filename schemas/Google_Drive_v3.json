@@ -1,0 +1,847 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Drive",
+  "description": "Access data on Google Drive",
+  "x-n8n-node-type": "googleDrive",
+  "x-n8n-version": 3,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "oAuth2",
+      "type": "string",
+      "enum": [
+        "oAuth2",
+        "serviceAccount"
+      ],
+      "x-enumNames": [
+        "OAuth2 (recommended)",
+        "Service Account"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "file",
+      "type": "string",
+      "enum": [
+        "file",
+        "fileFolder",
+        "folder",
+        "drive"
+      ],
+      "x-enumNames": [
+        "File",
+        "File/Folder",
+        "Folder",
+        "Shared Drive"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "deleteFolder",
+        "share"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Share"
+      ],
+      "x-enumDescriptions": [
+        "Create a folder",
+        "Permanently delete a folder",
+        "Add sharing permissions to a folder"
+      ]
+    },
+    "name": {
+      "x-title": "Folder Name",
+      "description": "The name of the new folder. If not set, 'Untitled' will be used.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "share"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "emailMessage": {
+          "x-title": "Email Message",
+          "description": "A plain text custom message to include in the notification email",
+          "default": "",
+          "type": "string",
+          "x-rows": 2
+        },
+        "moveToNewOwnersRoot": {
+          "x-title": "Move To New Owners Root",
+          "description": "<p>This parameter only takes effect if the item is not in a shared drive and the request is attempting to transfer the ownership of the item.</p><p>When set to true, the item is moved to the new owner's My Drive root folder and all prior parents removed.</p>",
+          "default": false,
+          "type": "boolean"
+        },
+        "sendNotificationEmail": {
+          "x-title": "Send Notification Email",
+          "description": "Whether to send a notification email when sharing to users or groups",
+          "default": false,
+          "type": "boolean"
+        },
+        "transferOwnership": {
+          "x-title": "Transfer Ownership",
+          "description": "Whether to transfer ownership to the specified user and downgrade the current owner to a writer",
+          "default": false,
+          "type": "boolean"
+        },
+        "useDomainAdminAccess": {
+          "x-title": "Use Domain Admin Access",
+          "description": "Whether to perform the operation as domain administrator, i.e. if you are an administrator of the domain to which the shared drive belongs, you will be granted access automatically.",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "driveId": {
+      "x-title": "Parent Drive",
+      "description": "The drive where to create the new folder",
+      "default": {
+        "mode": "list",
+        "value": "My Drive"
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "Drive",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "Link",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "fileFolder"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "returnAll": [
+            false
+          ],
+          "resource": [
+            "fileFolder"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "fileId": {
+      "x-title": "File to Update",
+      "description": "The file to update",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "File",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "Link",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "sameFolder": {
+      "x-title": "Copy In The Same Folder",
+      "description": "Whether to copy the file in the same folder as the original file",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "copy"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "folderId": {
+      "x-title": "Parent Folder",
+      "description": "The parent folder where to create the new folder",
+      "default": {
+        "mode": "list",
+        "value": "root",
+        "cachedResultName": "/ (Root folder)"
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "Folder",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "Link",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "content": {
+      "x-title": "File Content",
+      "description": "The text to create the file with",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "createFromText"
+          ]
+        }
+      },
+      "type": "string",
+      "x-rows": 2
+    },
+    "permissionsUi": {
+      "x-title": "Permissions",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "share"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "permissionsValues": {
+          "x-title": "Permission",
+          "type": "object",
+          "properties": {
+            "role": {
+              "x-title": "Role",
+              "description": "Defines what users can do with the file or folder",
+              "default": "",
+              "type": "string",
+              "enum": [
+                "commenter",
+                "fileOrganizer",
+                "organizer",
+                "owner",
+                "reader",
+                "writer"
+              ],
+              "x-enumNames": [
+                "Commenter",
+                "File Organizer",
+                "Organizer",
+                "Owner",
+                "Reader",
+                "Writer"
+              ]
+            },
+            "type": {
+              "x-title": "Type",
+              "description": "The scope of the permission. A permission with type=user applies to a specific user whereas a permission with type=domain applies to everyone in a specific domain.",
+              "default": "",
+              "type": "string",
+              "enum": [
+                "user",
+                "group",
+                "domain",
+                "anyone"
+              ],
+              "x-enumNames": [
+                "User",
+                "Group",
+                "Domain",
+                "Anyone"
+              ]
+            },
+            "emailAddress": {
+              "x-title": "Email Address",
+              "description": "The email address of the user or group to which this permission refers",
+              "default": "",
+              "x-displayOptions": {
+                "show": {
+                  "type": [
+                    "user",
+                    "group"
+                  ]
+                }
+              },
+              "type": "string"
+            },
+            "domain": {
+              "x-title": "Domain",
+              "description": "The domain to which this permission refers",
+              "default": "",
+              "x-displayOptions": {
+                "show": {
+                  "type": [
+                    "domain"
+                  ]
+                }
+              },
+              "type": "string"
+            },
+            "allowFileDiscovery": {
+              "x-title": "Allow File Discovery",
+              "description": "Whether to allow the file to be discovered through search",
+              "default": false,
+              "x-displayOptions": {
+                "show": {
+                  "type": [
+                    "domain",
+                    "anyone"
+                  ]
+                }
+              },
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "changeFileContent": {
+      "x-title": "Change File Content",
+      "description": "Whether to send a new binary data to update the file",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "inputDataFieldName": {
+      "x-title": "Input Data Field Name",
+      "description": "Find the name of input field containing the binary data to update the file in the Input panel on the left, in the Binary tab",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "newUpdatedFileName": {
+      "x-title": "New Updated File Name",
+      "description": "If not specified, the file name will not be changed",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "searchMethod": {
+      "x-title": "Search Method",
+      "description": "Whether to search for the file/folder name or use a query string",
+      "default": "name",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "fileFolder"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "name",
+        "query"
+      ],
+      "x-enumNames": [
+        "Search File/Folder Name",
+        "Advanced Search"
+      ]
+    },
+    "queryString": {
+      "x-title": "Query String",
+      "description": "Use the Google query strings syntax to search for a specific set of files or folders. <a href=\"https://developers.google.com/drive/api/v3/search-files\" target=\"_blank\">Learn more</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "searchMethod": [
+            "query"
+          ],
+          "resource": [
+            "fileFolder"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "filter": {
+      "x-title": "Filter",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "fileFolder"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "driveId": {
+          "x-title": "Drive",
+          "description": "The drive you want to search in. By default, the personal \"My Drive\" is used.",
+          "default": {
+            "mode": "list",
+            "value": "My Drive"
+          },
+          "type": "object",
+          "properties": {
+            "__rl": {
+              "type": "boolean",
+              "const": true
+            },
+            "mode": {
+              "type": "string",
+              "enum": [
+                "list",
+                "url",
+                "id"
+              ]
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "mode",
+            "value"
+          ],
+          "x-modes": [
+            {
+              "name": "list",
+              "displayName": "Drive",
+              "type": "list"
+            },
+            {
+              "name": "url",
+              "displayName": "Link",
+              "type": "string"
+            },
+            {
+              "name": "id",
+              "displayName": "ID",
+              "type": "string"
+            }
+          ]
+        },
+        "folderId": {
+          "x-title": "Folder",
+          "description": "The folder you want to search in. By default, the root folder of the drive is used. If you select a folder other than the root folder, only the direct children will be included.",
+          "default": {
+            "mode": "list",
+            "value": "root",
+            "cachedResultName": "/ (Root folder)"
+          },
+          "type": "object",
+          "properties": {
+            "__rl": {
+              "type": "boolean",
+              "const": true
+            },
+            "mode": {
+              "type": "string",
+              "enum": [
+                "list",
+                "url",
+                "id"
+              ]
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "mode",
+            "value"
+          ],
+          "x-modes": [
+            {
+              "name": "list",
+              "displayName": "Folder",
+              "type": "list"
+            },
+            {
+              "name": "url",
+              "displayName": "Link",
+              "type": "string"
+            },
+            {
+              "name": "id",
+              "displayName": "ID",
+              "type": "string"
+            }
+          ]
+        },
+        "whatToSearch": {
+          "x-title": "What to Search",
+          "default": "all",
+          "type": "string",
+          "enum": [
+            "all",
+            "files",
+            "folders"
+          ],
+          "x-enumNames": [
+            "Files and Folders",
+            "Files",
+            "Folders"
+          ]
+        },
+        "fileTypes": {
+          "x-title": "File Types",
+          "description": "Return only items corresponding to the selected MIME types",
+          "default": [],
+          "x-displayOptions": {
+            "show": {
+              "whatToSearch": [
+                "files"
+              ]
+            }
+          },
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "*",
+              "application/vnd.google-apps.drive-sdk",
+              "application/vnd.google-apps.audio",
+              "application/vnd.google-apps.script",
+              "application/vnd.google-apps.document",
+              "application/vnd.google-apps.drawing",
+              "application/vnd.google-apps.form",
+              "application/vnd.google-apps.fusiontable",
+              "application/vnd.google-apps.map",
+              "application/vnd.google-apps.spreadsheet",
+              "application/vnd.google-apps.sites",
+              "application/vnd.google-apps.presentation",
+              "application/vnd.google-apps.photo",
+              "application/vnd.google-apps.unknown",
+              "application/vnd.google-apps.video"
+            ]
+          },
+          "x-enumNames": [
+            "All",
+            "3rd Party Shortcut",
+            "Audio",
+            "Google Apps Scripts",
+            "Google Docs",
+            "Google Drawing",
+            "Google Forms",
+            "Google Fusion Tables",
+            "Google My Maps",
+            "Google Sheets",
+            "Google Sites",
+            "Google Slides",
+            "Photo",
+            "Unknown",
+            "Video"
+          ]
+        },
+        "includeTrashed": {
+          "x-title": "Include Trashed Items",
+          "description": "Whether to return also items in the Drive's bin",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "folderNoRootId": {
+      "x-title": "Folder",
+      "description": "The folder to share",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "share"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "Folder",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "Link",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:googleDrive.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "googleApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "serviceAccount"
+          ]
+        }
+      }
+    },
+    {
+      "name": "googleDriveOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

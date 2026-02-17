@@ -1,0 +1,828 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "GitLab",
+  "description": "Retrieve data from GitLab API",
+  "x-n8n-node-type": "gitlab",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "accessToken",
+      "type": "string",
+      "enum": [
+        "accessToken",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "Access Token",
+        "OAuth2"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "issue",
+      "type": "string",
+      "enum": [
+        "file",
+        "issue",
+        "release",
+        "repository",
+        "user"
+      ],
+      "x-enumNames": [
+        "File",
+        "Issue",
+        "Release",
+        "Repository",
+        "User"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "edit",
+        "get",
+        "list"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Edit",
+        "Get",
+        "List"
+      ],
+      "x-enumDescriptions": [
+        "Create a new file in repository",
+        "Delete a file in repository",
+        "Edit a file in repository",
+        "Get the data of a single file",
+        "List contents of a folder"
+      ]
+    },
+    "owner": {
+      "x-title": "Project Owner",
+      "description": "User, group or namespace of the project",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "repository": {
+      "x-title": "Project Name",
+      "description": "The name of the project",
+      "default": "",
+      "x-displayOptions": {
+        "hide": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getRepositories"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "The title of the issue",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "issue"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "body": {
+      "x-title": "Body",
+      "description": "The body of the comment",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "createComment"
+          ],
+          "resource": [
+            "issue"
+          ]
+        }
+      },
+      "type": "string",
+      "x-rows": 5
+    },
+    "due_date": {
+      "x-title": "Due Date",
+      "description": "Due Date for issue",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "issue"
+          ]
+        }
+      },
+      "type": "string",
+      "format": "date-time"
+    },
+    "labels": {
+      "x-title": "Labels",
+      "default": {
+        "label": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "issue"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "label": {
+          "x-title": "Label",
+          "description": "Label to add to issue",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "assignee_ids": {
+      "x-title": "Assignees",
+      "default": {
+        "assignee": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "issue"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "assignee": {
+          "x-title": "Assignee",
+          "description": "User ID to assign issue to",
+          "default": 0,
+          "type": "number"
+        }
+      }
+    },
+    "issueNumber": {
+      "x-title": "Issue Number",
+      "description": "The number of the issue to lock",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "lock"
+          ],
+          "resource": [
+            "issue"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "editFields": {
+      "x-title": "Edit Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "edit"
+          ],
+          "resource": [
+            "issue"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "title": {
+          "x-title": "Title",
+          "description": "The title of the issue",
+          "default": "",
+          "type": "string"
+        },
+        "description": {
+          "x-title": "Body",
+          "description": "The body of the issue",
+          "default": "",
+          "type": "string",
+          "x-rows": 5
+        },
+        "state": {
+          "x-title": "State",
+          "description": "The state to set",
+          "default": "open",
+          "type": "string",
+          "enum": [
+            "closed",
+            "open"
+          ],
+          "x-enumNames": [
+            "Closed",
+            "Open"
+          ],
+          "x-enumDescriptions": [
+            "Set the state to \"closed\"",
+            "Set the state to \"open\""
+          ]
+        },
+        "labels": {
+          "x-title": "Labels",
+          "default": {
+            "label": ""
+          },
+          "type": "object",
+          "properties": {
+            "label": {
+              "x-title": "Label",
+              "description": "Label to add to issue",
+              "default": "",
+              "type": "string"
+            }
+          }
+        },
+        "assignee_ids": {
+          "x-title": "Assignees",
+          "default": {
+            "assignee": ""
+          },
+          "type": "object",
+          "properties": {
+            "assignee": {
+              "x-title": "Assignees",
+              "description": "User to assign issue too",
+              "default": "",
+              "type": "string"
+            }
+          }
+        },
+        "due_date": {
+          "x-title": "Due Date",
+          "description": "Due Date for issue",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "lockReason": {
+      "x-title": "Lock Reason",
+      "description": "The reason to lock the issue",
+      "default": "resolved",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "lock"
+          ],
+          "resource": [
+            "issue"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "off-topic",
+        "too heated",
+        "resolved",
+        "spam"
+      ],
+      "x-enumNames": [
+        "Off-Topic",
+        "Too Heated",
+        "Resolved",
+        "Spam"
+      ],
+      "x-enumDescriptions": [
+        "The issue is Off-Topic",
+        "The discussion is too heated",
+        "The issue got resolved",
+        "The issue is spam"
+      ]
+    },
+    "releaseTag": {
+      "x-title": "Tag",
+      "description": "The tag of the release",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "release"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "release"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "name": {
+          "x-title": "Name",
+          "description": "The release name",
+          "default": "",
+          "type": "string"
+        },
+        "description": {
+          "x-title": "Description",
+          "description": "The description of the release. You can use Markdown.",
+          "default": "",
+          "type": "string"
+        },
+        "milestones": {
+          "x-title": "Milestones",
+          "description": "The title of each milestone to associate with the release (provide a titles list spearated with comma)",
+          "default": "",
+          "type": "string"
+        },
+        "released_at": {
+          "x-title": "Released At",
+          "description": "The date when the release is/was ready",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "projectId": {
+      "x-title": "Project ID",
+      "description": "The ID or URL-encoded path of the project",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "release"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "tag_name": {
+      "x-title": "Tag Name",
+      "description": "The Git tag the release is associated with",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "release"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "release",
+            "file",
+            "repository"
+          ],
+          "operation": [
+            "getAll",
+            "list",
+            "getIssues"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 20,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "release",
+            "file",
+            "repository"
+          ],
+          "operation": [
+            "getAll",
+            "list",
+            "getIssues"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "getRepositoryIssuesFilters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getIssues"
+          ],
+          "resource": [
+            "repository"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "assignee_username": {
+          "x-title": "Assignee",
+          "description": "Return only issues which are assigned to a specific user",
+          "default": "",
+          "type": "string"
+        },
+        "author_username": {
+          "x-title": "Creator",
+          "description": "Return only issues which were created by a specific user",
+          "default": "",
+          "type": "string"
+        },
+        "search": {
+          "x-title": "Search",
+          "description": "Search issues against their title and description",
+          "default": "",
+          "type": "string"
+        },
+        "labels": {
+          "x-title": "Labels",
+          "description": "Return only issues with the given labels. Multiple lables can be separated by comma.",
+          "default": "",
+          "type": "string"
+        },
+        "updated_after": {
+          "x-title": "Updated After",
+          "description": "Return only issues updated at or after this time",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "state": {
+          "x-title": "State",
+          "description": "The state to filter by",
+          "default": "opened",
+          "type": "string",
+          "enum": [
+            "",
+            "closed",
+            "opened"
+          ],
+          "x-enumNames": [
+            "All",
+            "Closed",
+            "Open"
+          ],
+          "x-enumDescriptions": [
+            "Returns issues with any state",
+            "Return issues with \"closed\" state",
+            "Return issues with \"open\" state"
+          ]
+        },
+        "order_by": {
+          "x-title": "Sort",
+          "description": "The order the issues should be returned in",
+          "default": "created_at",
+          "type": "string",
+          "enum": [
+            "created_at",
+            "updated_at",
+            "priority"
+          ],
+          "x-enumNames": [
+            "Created At",
+            "Updated At",
+            "Priority"
+          ],
+          "x-enumDescriptions": [
+            "Sort by created date",
+            "Sort by updated date",
+            "Sort by priority"
+          ]
+        },
+        "sort": {
+          "x-title": "Direction",
+          "description": "The sort order",
+          "default": "desc",
+          "type": "string",
+          "enum": [
+            "asc",
+            "desc"
+          ],
+          "x-enumNames": [
+            "Ascending",
+            "Descending"
+          ],
+          "x-enumDescriptions": [
+            "Sort in ascending order",
+            "Sort in descending order"
+          ]
+        }
+      }
+    },
+    "filePath": {
+      "x-title": "Path",
+      "description": "The path of the folder to list",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "list"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "page": {
+      "x-title": "Page",
+      "description": "Page of results to display",
+      "default": 1,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "list"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 1000
+    },
+    "additionalParameters": {
+      "x-title": "Additional Parameters",
+      "description": "Additional fields to add",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "delete",
+            "edit"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "branchStart": {
+          "x-title": "Start Branch",
+          "type": "object",
+          "properties": {
+            "branchStart": {
+              "x-title": "Start Branch",
+              "description": "Name of the base branch to create the new branch from",
+              "default": "",
+              "type": "string"
+            }
+          }
+        },
+        "author": {
+          "x-title": "Author",
+          "type": "object",
+          "properties": {
+            "name": {
+              "x-title": "Name",
+              "description": "The name of the author of the commit",
+              "default": "",
+              "type": "string"
+            },
+            "email": {
+              "x-title": "Email",
+              "description": "The email of the author of the commit",
+              "default": "",
+              "type": "string"
+            }
+          }
+        },
+        "encoding": {
+          "x-title": "Encoding",
+          "type": "object",
+          "properties": {
+            "encoding": {
+              "x-title": "Encoding",
+              "description": "Change encoding to base64. Default is text.",
+              "default": "text",
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "asBinaryProperty": {
+      "x-title": "As Binary Property",
+      "description": "Whether to set the data of the file as binary property instead of returning the raw API response",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "binaryPropertyName": {
+      "x-title": "Input Binary Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "binaryData": [
+            true
+          ],
+          "operation": [
+            "create",
+            "edit"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "binaryData": {
+      "x-title": "Binary File",
+      "description": "Whether the data to upload should be taken from binary field",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "edit"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "fileContent": {
+      "x-title": "File Content",
+      "description": "The text content of the file",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "binaryData": [
+            false
+          ],
+          "operation": [
+            "create",
+            "edit"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "commitMessage": {
+      "x-title": "Commit Message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "delete",
+            "edit"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "branch": {
+      "x-title": "Branch",
+      "description": "Name of the new branch to create. The commit is added to this branch.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "delete",
+            "edit"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:gitlab.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "gitlabApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "accessToken"
+          ]
+        }
+      }
+    },
+    {
+      "name": "gitlabOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

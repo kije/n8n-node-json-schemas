@@ -1,0 +1,498 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "GetResponse",
+  "description": "Consume GetResponse API",
+  "x-n8n-node-type": "getResponse",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "apiKey",
+      "type": "string",
+      "enum": [
+        "apiKey",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "API Key",
+        "OAuth2"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "contact",
+      "type": "string",
+      "enum": [
+        "contact"
+      ],
+      "x-enumNames": [
+        "Contact"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a new contact",
+        "Delete a contact",
+        "Get a contact",
+        "Get many contacts",
+        "Update contact properties"
+      ]
+    },
+    "email": {
+      "x-title": "Email",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "campaignId": {
+      "x-title": "Campaign Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "customFieldsUi": {
+          "x-title": "Custom Fields",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "customFieldValues": {
+              "x-title": "Custom Field",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "customFieldId": {
+                    "x-title": "Field Name or ID",
+                    "description": "The end user specified key of the user defined data. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "The end user specified value of the user defined data",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "dayOfCycle": {
+          "x-title": "Day Of Cycle",
+          "description": "The day on which the contact is in the Autoresponder cycle. null indicates the contacts is not in the cycle.",
+          "default": "",
+          "type": "string"
+        },
+        "ipAddress": {
+          "x-title": "IP Address",
+          "description": "The contact's IP address. IPv4 and IPv6 formats are accepted.",
+          "default": "",
+          "type": "string"
+        },
+        "name": {
+          "x-title": "Name",
+          "default": "",
+          "type": "string"
+        },
+        "note": {
+          "x-title": "Note",
+          "default": "",
+          "type": "string"
+        },
+        "scoring": {
+          "x-title": "Scoring",
+          "description": "Contact scoring, pass null to remove the score from a contact",
+          "default": "",
+          "type": "number",
+          "minimum": 0
+        },
+        "tags": {
+          "x-title": "Tag Names or IDs",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "contactId": {
+      "x-title": "Contact ID",
+      "description": "Unique identifier for a particular contact",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "campaignId": {
+          "x-title": "Campaign ID",
+          "description": "Search contacts by campaign ID",
+          "default": "",
+          "type": "string"
+        },
+        "changeOnFrom": {
+          "x-title": "Change On From",
+          "description": "Search contacts edited from this date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "changeOnTo": {
+          "x-title": "Change On To",
+          "description": "Search contacts edited to this date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdOnFrom": {
+          "x-title": "Created On From",
+          "description": "Count data from this date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdOnTo": {
+          "x-title": "Created On To",
+          "description": "Count data from this date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "exactMatch": {
+          "x-title": "Exact Match",
+          "description": "Whether to search for contacts with the exact value of the email and name provided in the query string. Without this flag, matching is done via a standard 'like' comparison, which may sometimes be slow.",
+          "default": false,
+          "type": "boolean"
+        },
+        "fields": {
+          "x-title": "Fields",
+          "description": "List of fields that should be returned. ID is always returned. Fields should be separated by comma",
+          "default": "",
+          "type": "string"
+        },
+        "name": {
+          "x-title": "Name",
+          "description": "Search contacts by name",
+          "default": "",
+          "type": "string"
+        },
+        "origin": {
+          "x-title": "Origin",
+          "description": "Search contacts by origin",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "api",
+            "copy",
+            "email",
+            "forward",
+            "import",
+            "iphone",
+            "landing_page",
+            "leads",
+            "panel",
+            "sale",
+            "survey",
+            "webinar",
+            "www"
+          ],
+          "x-enumNames": [
+            "API",
+            "Copy",
+            "Email",
+            "Forward",
+            "Import",
+            "Iphone",
+            "Landing Page",
+            "Leads",
+            "Panel",
+            "Sale",
+            "Survey",
+            "Webinar",
+            "WWW"
+          ]
+        },
+        "sortBy": {
+          "x-title": "Sort By",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "campaignId",
+            "changedOn",
+            "createdOn",
+            "email"
+          ],
+          "x-enumNames": [
+            "Campaign ID",
+            "Changed On",
+            "Created On",
+            "Email"
+          ]
+        },
+        "sortOrder": {
+          "x-title": "Sort Order",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "ASC",
+            "DESC"
+          ],
+          "x-enumNames": [
+            "ASC",
+            "DESC"
+          ]
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 20,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "campaignId": {
+          "x-title": "Campaign Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "customFieldsUi": {
+          "x-title": "Custom Fields",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "customFieldValues": {
+              "x-title": "Custom Field",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "customFieldId": {
+                    "x-title": "Field Name or ID",
+                    "description": "The end user specified key of the user defined data. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "The end user specified value of the user defined data",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "dayOfCycle": {
+          "x-title": "Day Of Cycle",
+          "description": "The day on which the contact is in the Autoresponder cycle. null indicates the contacts is not in the cycle.",
+          "default": "",
+          "type": "string"
+        },
+        "email": {
+          "x-title": "Email",
+          "default": "",
+          "type": "string"
+        },
+        "ipAddress": {
+          "x-title": "IP Address",
+          "description": "The contact's IP address. IPv4 and IPv6 formats are accepted.",
+          "default": "",
+          "type": "string"
+        },
+        "name": {
+          "x-title": "Name",
+          "default": "",
+          "type": "string"
+        },
+        "note": {
+          "x-title": "Note",
+          "default": "",
+          "type": "string"
+        },
+        "scoring": {
+          "x-title": "Scoring",
+          "description": "Contact scoring, pass null to remove the score from a contact",
+          "default": "",
+          "type": "number",
+          "minimum": 0
+        },
+        "tags": {
+          "x-title": "Tag Names or IDs",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:getResponse.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "getResponseApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "apiKey"
+          ]
+        }
+      }
+    },
+    {
+      "name": "getResponseOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

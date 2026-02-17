@@ -1,0 +1,188 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Analytics",
+  "description": "Use the Google Analytics API",
+  "x-n8n-node-type": "googleAnalytics",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "report",
+      "type": "string",
+      "enum": [
+        "report",
+        "userActivity"
+      ],
+      "x-enumNames": [
+        "Report",
+        "User Activity"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "search",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "userActivity"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "search"
+      ],
+      "x-enumNames": [
+        "Search"
+      ],
+      "x-enumDescriptions": [
+        "Return user activity data"
+      ]
+    },
+    "viewId": {
+      "x-title": "View Name or ID",
+      "description": "The View ID of Google Analytics. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "userActivity"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "userActivity"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "userActivity"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "simple": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "report"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "userActivity"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "activityTypes": {
+          "x-title": "Activity Types",
+          "description": "Type of activites requested",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "ECOMMERCE",
+              "EVENT",
+              "GOAL",
+              "PAGEVIEW",
+              "SCREENVIEW"
+            ]
+          },
+          "x-enumNames": [
+            "Ecommerce",
+            "Event",
+            "Goal",
+            "Pageview",
+            "Screenview"
+          ]
+        }
+      }
+    },
+    "userId": {
+      "x-title": "User ID",
+      "description": "ID of a user",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "userActivity"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:analytics.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "googleAnalyticsOAuth2",
+      "required": true
+    }
+  ]
+}

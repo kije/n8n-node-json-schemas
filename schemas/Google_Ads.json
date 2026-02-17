@@ -1,0 +1,192 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Ads",
+  "description": "Use the Google Ads API",
+  "x-n8n-node-type": "googleAds",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "campaign",
+      "type": "string",
+      "enum": [
+        "campaign"
+      ],
+      "x-enumNames": [
+        "Campaign"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "campaign"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "getAll",
+        "get"
+      ],
+      "x-enumNames": [
+        "Get Many",
+        "Get"
+      ],
+      "x-enumDescriptions": [
+        "Get many campaigns linked to the specified account",
+        "Get a specific campaign"
+      ]
+    },
+    "managerCustomerId": {
+      "x-title": "Manager Customer ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "campaign"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "clientCustomerId": {
+      "x-title": "Client Customer ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "campaign"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "campaignId": {
+      "x-title": "Campaign ID",
+      "description": "ID of the campaign",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "campaign"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalOptions": {
+      "x-title": "Additional Options",
+      "description": "Additional options for fetching campaigns",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "campaign"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "dateRange": {
+          "x-title": "Date Range",
+          "description": "Filters statistics by period",
+          "default": "allTime",
+          "type": "string",
+          "enum": [
+            "allTime",
+            "TODAY",
+            "YESTERDAY",
+            "LAST_7_DAYS",
+            "LAST_BUSINESS_WEEK",
+            "THIS_MONTH",
+            "LAST_MONTH",
+            "LAST_14_DAYS",
+            "LAST_30_DAYS"
+          ],
+          "x-enumNames": [
+            "All Time",
+            "Today",
+            "Yesterday",
+            "Last 7 Days",
+            "Last Business Week",
+            "This Month",
+            "Last Month",
+            "Last 14 Days",
+            "Last 30 Days"
+          ],
+          "x-enumDescriptions": [
+            "Fetch statistics for all period",
+            "Today only",
+            "Yesterday only",
+            "Last 7 days, not including today",
+            "The 5 day business week, Monday through Friday, of the previous business week",
+            "All days in the current month",
+            "All days in the previous month",
+            "The last 14 days not including today",
+            "The last 30 days not including today"
+          ]
+        },
+        "campaignStatus": {
+          "x-title": "Show Campaigns by Status",
+          "description": "Filters campaigns by status",
+          "default": "all",
+          "type": "string",
+          "enum": [
+            "all",
+            "ENABLED",
+            "PAUSED",
+            "REMOVED"
+          ],
+          "x-enumNames": [
+            "All",
+            "Enabled",
+            "Paused",
+            "Removed"
+          ],
+          "x-enumDescriptions": [
+            "Fetch all campaigns regardless of status",
+            "Filter only active campaigns",
+            "Filter only paused campaigns",
+            "Filter only removed campaigns"
+          ]
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:googleAds.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "googleAdsOAuth2Api",
+      "required": true,
+      "testedBy": {
+        "request": {
+          "method": "GET",
+          "url": "/v20/customers:listAccessibleCustomers"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,1066 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Contacts",
+  "description": "Consume Google Contacts API",
+  "x-n8n-node-type": "googleContacts",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "contact",
+      "type": "string",
+      "enum": [
+        "contact"
+      ],
+      "x-enumNames": [
+        "Contact"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a contact",
+        "Delete a contact",
+        "Get a contact",
+        "Retrieve many contacts",
+        "Update a contact"
+      ]
+    },
+    "familyName": {
+      "x-title": "Family Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "givenName": {
+      "x-title": "Given Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "addressesUi": {
+          "x-title": "Addresses",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "addressesValues": {
+              "x-title": "Address",
+              "type": "object",
+              "properties": {
+                "streetAddress": {
+                  "x-title": "Street Address",
+                  "default": "",
+                  "type": "string"
+                },
+                "city": {
+                  "x-title": "City",
+                  "default": "",
+                  "type": "string"
+                },
+                "region": {
+                  "x-title": "Region",
+                  "default": "",
+                  "type": "string"
+                },
+                "countryCode": {
+                  "x-title": "Country Code",
+                  "default": "",
+                  "type": "string"
+                },
+                "postalCode": {
+                  "x-title": "Postal Code",
+                  "default": "",
+                  "type": "string"
+                },
+                "type": {
+                  "x-title": "Type",
+                  "default": "",
+                  "type": "string",
+                  "enum": [
+                    "home",
+                    "work",
+                    "other"
+                  ],
+                  "x-enumNames": [
+                    "Home",
+                    "Work",
+                    "Other"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "birthday": {
+          "x-title": "Birthday",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "companyUi": {
+          "x-title": "Company",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "companyValues": {
+              "x-title": "Company",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "current": {
+                    "x-title": "Current",
+                    "default": false,
+                    "type": "boolean"
+                  },
+                  "domain": {
+                    "x-title": "Domain",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "name": {
+                    "x-title": "Name",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "title": {
+                    "x-title": "Title",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "customFieldsUi": {
+          "x-title": "Custom Fields",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "customFieldsValues": {
+              "x-title": "Custom Field",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "x-title": "Key",
+                    "description": "The end user specified key of the user defined data",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "The end user specified value of the user defined data",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "emailsUi": {
+          "x-title": "Emails",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "emailsValues": {
+              "x-title": "Email",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "x-title": "Type",
+                    "description": "The type of the email address. The type can be custom or one of these predefined values.",
+                    "default": "",
+                    "type": "string",
+                    "enum": [
+                      "home",
+                      "work",
+                      "other"
+                    ],
+                    "x-enumNames": [
+                      "Home",
+                      "Work",
+                      "Other"
+                    ]
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "The email address",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "eventsUi": {
+          "x-title": "Events",
+          "description": "An event related to the person",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "eventsValues": {
+              "x-title": "Event",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "x-title": "Date",
+                    "description": "The date of the event",
+                    "default": "",
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "type": {
+                    "x-title": "Type",
+                    "description": "The type of the event. The type can be custom or one of these predefined values.",
+                    "default": "",
+                    "type": "string",
+                    "enum": [
+                      "anniversary",
+                      "other"
+                    ],
+                    "x-enumNames": [
+                      "Anniversary",
+                      "Other"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "fileAs": {
+          "x-title": "File As",
+          "description": "The name that should be used to sort the person in a list",
+          "default": "",
+          "type": "string"
+        },
+        "group": {
+          "x-title": "Group Names or IDs",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "honorificPrefix": {
+          "x-title": "Honorific Prefix",
+          "default": "",
+          "type": "string"
+        },
+        "honorificSuffix": {
+          "x-title": "Honorific Suffix",
+          "default": "",
+          "type": "string"
+        },
+        "middleName": {
+          "x-title": "Middle Name",
+          "default": "",
+          "type": "string"
+        },
+        "biographies": {
+          "x-title": "Notes",
+          "default": "",
+          "type": "string"
+        },
+        "phoneUi": {
+          "x-title": "Phone",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "phoneValues": {
+              "x-title": "Phone",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "x-title": "Type",
+                    "default": "",
+                    "type": "string",
+                    "enum": [
+                      "googleVoice",
+                      "home",
+                      "homeFax",
+                      "main",
+                      "mobile",
+                      "other",
+                      "otherFax",
+                      "pager",
+                      "work",
+                      "workFax",
+                      "workMobile",
+                      "workPager"
+                    ],
+                    "x-enumNames": [
+                      "Google Voice",
+                      "Home",
+                      "Home Fax",
+                      "Main",
+                      "Mobile",
+                      "Other",
+                      "Other Fax",
+                      "Pager",
+                      "Work",
+                      "Work Fax",
+                      "Work Mobile",
+                      "Work Pager"
+                    ]
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "The phone number",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "relationsUi": {
+          "x-title": "Relations",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "relationsValues": {
+              "x-title": "Relation",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "person": {
+                    "x-title": "Person",
+                    "description": "The name of the other person this relation refers to",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "type": {
+                    "x-title": "Type",
+                    "description": "The person's relation to the other person. The type can be custom or one of these predefined values.",
+                    "default": "",
+                    "type": "string",
+                    "enum": [
+                      "assistant",
+                      "brother",
+                      "child",
+                      "domesticPartner",
+                      "father",
+                      "friend",
+                      "manager",
+                      "mother",
+                      "parent",
+                      "referredBy",
+                      "relative",
+                      "sister",
+                      "spouse"
+                    ],
+                    "x-enumNames": [
+                      "Assistant",
+                      "Brother",
+                      "Child",
+                      "Domestic Partner",
+                      "Father",
+                      "Friend",
+                      "Manager",
+                      "Mother",
+                      "Parent",
+                      "Referred By",
+                      "Relative",
+                      "Sister",
+                      "Spouse"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "contactId": {
+      "x-title": "Contact ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "fields": {
+      "x-title": "Fields",
+      "description": "A field mask to restrict which fields on each person are returned. Multiple fields can be specified by separating them with commas.",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "*",
+          "addresses",
+          "biographies",
+          "birthdays",
+          "coverPhotos",
+          "emailAddresses",
+          "events",
+          "genders",
+          "imClients",
+          "interests",
+          "locales",
+          "memberships",
+          "metadata",
+          "names",
+          "nicknames",
+          "occupations",
+          "organizations",
+          "phoneNumbers",
+          "photos",
+          "relations",
+          "residences",
+          "sipAddresses",
+          "skills",
+          "urls",
+          "userDefined"
+        ]
+      },
+      "x-enumNames": [
+        "*",
+        "Addresses",
+        "Biographies",
+        "Birthdays",
+        "Cover Photos",
+        "Email Addresses",
+        "Events",
+        "Genders",
+        "IM Clients",
+        "Interests",
+        "Locales",
+        "Memberships",
+        "Metadata",
+        "Names",
+        "Nicknames",
+        "Occupations",
+        "Organizations",
+        "Phone Numbers",
+        "Photos",
+        "Relations",
+        "Residences",
+        "Sip Addresses",
+        "Skills",
+        "URLs",
+        "User Defined"
+      ]
+    },
+    "rawData": {
+      "x-title": "RAW Data",
+      "description": "Whether to return the data exactly in the way it got received from the API",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "contact"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "useQuery": {
+      "x-title": "Use Query",
+      "description": "Whether or not to use a query to filter the results",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "query": {
+      "x-title": "Query",
+      "description": "The plain-text query for the request. The query is used to match prefix phrases of the fields on a person. For example, a person with name \"foo name\" matches queries such as \"f\", \"fo\", \"foo\", \"foo n\", \"nam\", etc., but not \"oo n\".",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "contact"
+          ],
+          "useQuery": [
+            true
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "contact"
+          ],
+          "useQuery": [
+            false
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "sortOrder": {
+          "x-title": "Sort Order",
+          "description": "The order of the contacts returned in the result",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "LAST_MODIFIED_ASCENDING",
+            "LAST_MODIFIED_DESCENDING",
+            "FIRST_NAME_ASCENDING",
+            "LAST_NAME_ASCENDING"
+          ],
+          "x-enumNames": [
+            "Last Modified Ascending",
+            "Last Modified Descending",
+            "First Name Ascending",
+            "Last Name Ascending"
+          ],
+          "x-enumDescriptions": [
+            "Sort people by when they were changed; older entries first",
+            "Sort people by when they were changed; newer entries first",
+            "Sort people by first name",
+            "Sort people by last name"
+          ]
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "etag": {
+          "x-title": "Etag",
+          "description": "The etag field in the person is nedded to make sure the contact has not changed since your last read",
+          "default": "",
+          "type": "string"
+        },
+        "familyName": {
+          "x-title": "Family Name",
+          "default": "",
+          "type": "string"
+        },
+        "givenName": {
+          "x-title": "Given Name",
+          "default": "",
+          "type": "string"
+        },
+        "addressesUi": {
+          "x-title": "Addresses",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "addressesValues": {
+              "x-title": "Address",
+              "type": "object",
+              "properties": {
+                "streetAddress": {
+                  "x-title": "Street Address",
+                  "default": "",
+                  "type": "string"
+                },
+                "city": {
+                  "x-title": "City",
+                  "default": "",
+                  "type": "string"
+                },
+                "region": {
+                  "x-title": "Region",
+                  "default": "",
+                  "type": "string"
+                },
+                "countryCode": {
+                  "x-title": "Country Code",
+                  "default": "",
+                  "type": "string"
+                },
+                "postalCode": {
+                  "x-title": "Postal Code",
+                  "default": "",
+                  "type": "string"
+                },
+                "type": {
+                  "x-title": "Type",
+                  "default": "",
+                  "type": "string",
+                  "enum": [
+                    "home",
+                    "work",
+                    "other"
+                  ],
+                  "x-enumNames": [
+                    "Home",
+                    "Work",
+                    "Other"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "birthday": {
+          "x-title": "Birthday",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "companyUi": {
+          "x-title": "Company",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "companyValues": {
+              "x-title": "Company",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "current": {
+                    "x-title": "Current",
+                    "default": false,
+                    "type": "boolean"
+                  },
+                  "domain": {
+                    "x-title": "Domain",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "name": {
+                    "x-title": "Name",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "title": {
+                    "x-title": "Title",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "customFieldsUi": {
+          "x-title": "Custom Fields",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "customFieldsValues": {
+              "x-title": "Custom Field",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "x-title": "Key",
+                    "description": "The end user specified key of the user defined data",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "The end user specified value of the user defined data",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "emailsUi": {
+          "x-title": "Emails",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "emailsValues": {
+              "x-title": "Email",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "x-title": "Type",
+                    "description": "The type of the email address. The type can be custom or one of these predefined values.",
+                    "default": "",
+                    "type": "string",
+                    "enum": [
+                      "home",
+                      "work",
+                      "other"
+                    ],
+                    "x-enumNames": [
+                      "Home",
+                      "Work",
+                      "Other"
+                    ]
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "The email address",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "eventsUi": {
+          "x-title": "Events",
+          "description": "An event related to the person",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "eventsValues": {
+              "x-title": "Event",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "x-title": "Date",
+                    "description": "The date of the event",
+                    "default": "",
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "type": {
+                    "x-title": "Type",
+                    "description": "The type of the event. The type can be custom or one of these predefined values.",
+                    "default": "",
+                    "type": "string",
+                    "enum": [
+                      "anniversary",
+                      "other"
+                    ],
+                    "x-enumNames": [
+                      "Anniversary",
+                      "Other"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "fileAs": {
+          "x-title": "File As",
+          "description": "The name that should be used to sort the person in a list",
+          "default": "",
+          "type": "string"
+        },
+        "group": {
+          "x-title": "Group Names or IDs",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "honorificPrefix": {
+          "x-title": "Honorific Prefix",
+          "default": "",
+          "type": "string"
+        },
+        "honorificSuffix": {
+          "x-title": "Honorific Suffix",
+          "default": "",
+          "type": "string"
+        },
+        "middleName": {
+          "x-title": "Middle Name",
+          "default": "",
+          "type": "string"
+        },
+        "biographies": {
+          "x-title": "Notes",
+          "default": "",
+          "type": "string"
+        },
+        "phoneUi": {
+          "x-title": "Phone",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "phoneValues": {
+              "x-title": "Phone",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "x-title": "Type",
+                    "default": "",
+                    "type": "string",
+                    "enum": [
+                      "googleVoice",
+                      "home",
+                      "homeFax",
+                      "main",
+                      "mobile",
+                      "other",
+                      "otherFax",
+                      "pager",
+                      "work",
+                      "workFax",
+                      "workMobile",
+                      "workPager"
+                    ],
+                    "x-enumNames": [
+                      "Google Voice",
+                      "Home",
+                      "Home Fax",
+                      "Main",
+                      "Mobile",
+                      "Other",
+                      "Other Fax",
+                      "Pager",
+                      "Work",
+                      "Work Fax",
+                      "Work Mobile",
+                      "Work Pager"
+                    ]
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "The phone number",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "relationsUi": {
+          "x-title": "Relations",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "relationsValues": {
+              "x-title": "Relation",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "person": {
+                    "x-title": "Person",
+                    "description": "The name of the other person this relation refers to",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "type": {
+                    "x-title": "Type",
+                    "description": "The person's relation to the other person. The type can be custom or one of these predefined values.",
+                    "default": "",
+                    "type": "string",
+                    "enum": [
+                      "assistant",
+                      "brother",
+                      "child",
+                      "domesticPartner",
+                      "father",
+                      "friend",
+                      "manager",
+                      "mother",
+                      "parent",
+                      "referredBy",
+                      "relative",
+                      "sister",
+                      "spouse"
+                    ],
+                    "x-enumNames": [
+                      "Assistant",
+                      "Brother",
+                      "Child",
+                      "Domestic Partner",
+                      "Father",
+                      "Friend",
+                      "Manager",
+                      "Mother",
+                      "Parent",
+                      "Referred By",
+                      "Relative",
+                      "Sister",
+                      "Spouse"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:googleContacts.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "googleContactsOAuth2Api",
+      "required": true
+    }
+  ]
+}

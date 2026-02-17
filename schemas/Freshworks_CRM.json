@@ -1,0 +1,944 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Freshworks CRM",
+  "description": "Consume the Freshworks CRM API",
+  "x-n8n-node-type": "freshworksCrm",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "account",
+      "type": "string",
+      "enum": [
+        "account",
+        "appointment",
+        "contact",
+        "deal",
+        "note",
+        "salesActivity",
+        "search",
+        "task"
+      ],
+      "x-enumNames": [
+        "Account",
+        "Appointment",
+        "Contact",
+        "Deal",
+        "Note",
+        "Sales Activity",
+        "Search",
+        "Task"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a task",
+        "Delete a task",
+        "Retrieve a task",
+        "Retrieve many tasks",
+        "Update a task"
+      ]
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "Name of the deal",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "creater_id": {
+          "x-title": "Creator Name or ID",
+          "description": "ID of the user who created the task. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "outcome_id": {
+          "x-title": "Outcome Name or ID",
+          "description": "ID of the outcome of the task. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "task_type_id": {
+          "x-title": "Task Type ID",
+          "description": "ID of the type of task",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "accountId": {
+      "x-title": "Account ID",
+      "description": "ID of the account to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "account"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "view": {
+      "x-title": "View Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "creater_id": {
+          "x-title": "Creator Name or ID",
+          "description": "ID of the user who created the sales activity. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "dueDate": {
+          "x-title": "Due Date",
+          "description": "Timestamp that denotes when the task is due to be completed",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "outcome_id": {
+          "x-title": "Outcome Name or ID",
+          "description": "ID of the outcome of the task. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "owner_id": {
+          "x-title": "Owner Name or ID",
+          "description": "ID of the user to whom the task is assigned. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "targetable_id": {
+          "x-title": "Target ID",
+          "description": "ID of the entity for which the task is updated. The type of entity is selected in \"Target Type\".",
+          "default": "",
+          "type": "string"
+        },
+        "targetable_type": {
+          "x-title": "Target Type",
+          "description": "Type of the entity for which the task is updated",
+          "default": "Contact",
+          "type": "string",
+          "enum": [
+            "Contact",
+            "Deal",
+            "SalesAccount"
+          ],
+          "x-enumNames": [
+            "Contact",
+            "Deal",
+            "SalesAccount"
+          ]
+        },
+        "task_type_id": {
+          "x-title": "Task Type ID",
+          "description": "ID of the type of task",
+          "default": "",
+          "type": "string"
+        },
+        "title": {
+          "x-title": "Title",
+          "description": "Title of the task",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "Title of the task",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "fromDate": {
+      "x-title": "Start Date",
+      "description": "Timestamp that denotes the start of appointment. Start date if this is an all-day appointment.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "appointment"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "endDate": {
+      "x-title": "End Date",
+      "description": "Timestamp that denotes the end of appointment. End date if this is an all-day appointment.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "appointment"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "attendees": {
+      "x-title": "Attendees",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "appointment"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "attendee": {
+          "x-title": "Attendee",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "x-title": "Type",
+                "default": "contact",
+                "type": "string",
+                "enum": [
+                  "contact",
+                  "user"
+                ],
+                "x-enumNames": [
+                  "Contact",
+                  "User"
+                ]
+              },
+              "userId": {
+                "x-title": "User Name or ID",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "user"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "contactId": {
+                "x-title": "Contact ID",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "contact"
+                    ]
+                  }
+                },
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "appointmentId": {
+      "x-title": "Appointment ID",
+      "description": "ID of the appointment to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "appointment"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "include": {
+          "x-title": "Include",
+          "default": "owner",
+          "type": "string",
+          "enum": [
+            "owner",
+            "targetable",
+            "users"
+          ],
+          "x-enumNames": [
+            "Owner",
+            "Target",
+            "Users"
+          ]
+        },
+        "filter": {
+          "x-title": "Status",
+          "default": "open",
+          "type": "string",
+          "enum": [
+            "completed",
+            "due_today",
+            "due_tomorrow",
+            "open",
+            "overdue"
+          ],
+          "x-enumNames": [
+            "Completed",
+            "Due Today",
+            "Due Tomorrow",
+            "Open",
+            "Overdue"
+          ]
+        }
+      }
+    },
+    "firstName": {
+      "x-title": "First Name",
+      "description": "First name of the contact",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "lastName": {
+      "x-title": "Last Name",
+      "description": "Last name of the contact",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "emails": {
+      "x-title": "Email Address",
+      "description": "Email addresses of the contact",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "contactId": {
+      "x-title": "Contact ID",
+      "description": "ID of the contact to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "amount": {
+      "x-title": "Amount",
+      "description": "Value of the deal",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "dealId": {
+      "x-title": "Deal ID",
+      "description": "ID of the deal to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "description": {
+      "x-title": "Content",
+      "description": "Content of the note",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "note"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-rows": 5
+    },
+    "targetableType": {
+      "x-title": "Target Type",
+      "description": "Type of the entity for which the task is updated",
+      "default": "Contact",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "Contact",
+        "Deal",
+        "SalesAccount"
+      ],
+      "x-enumNames": [
+        "Contact",
+        "Deal",
+        "SalesAccount"
+      ]
+    },
+    "targetable_id": {
+      "x-title": "Target ID",
+      "description": "ID of the entity for which the task is created. The type of entity is selected in \"Target Type\".",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "noteId": {
+      "x-title": "Note ID",
+      "description": "ID of the note to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "note"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "sales_activity_type_id": {
+      "x-title": "Sales Activity Type Name or ID",
+      "description": "ID of a sales activity type for which the sales activity is created. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "salesActivity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "ownerId": {
+      "x-title": "Owner Name or ID",
+      "description": "ID of the user to whom the task is assigned. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "from_date": {
+      "x-title": "Start Date",
+      "description": "Timestamp that denotes the end of sales activity",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "salesActivity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "end_date": {
+      "x-title": "End Date",
+      "description": "Timestamp that denotes the end of sales activity",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "salesActivity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "salesActivityId": {
+      "x-title": "Sales Activity ID",
+      "description": "ID of the salesActivity to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "salesActivity"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "query": {
+      "x-title": "Search Term",
+      "description": "Enter a term that will be used for searching entities",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "search"
+          ],
+          "operation": [
+            "query"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "entities": {
+      "x-title": "Search on Entities",
+      "description": "Enter a term that will be used for searching entities",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "search"
+          ],
+          "operation": [
+            "query"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "contact",
+          "deal",
+          "sales_account",
+          "user"
+        ]
+      },
+      "x-enumNames": [
+        "Contact",
+        "Deal",
+        "Sales Account",
+        "User"
+      ]
+    },
+    "searchField": {
+      "x-title": "Search Field",
+      "description": "Field against which the entities have to be searched",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "search"
+          ],
+          "operation": [
+            "lookup"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "email",
+        "name",
+        "customField"
+      ],
+      "x-enumNames": [
+        "Email",
+        "Name",
+        "Custom Field"
+      ],
+      "x-enumDescriptions": [
+        "",
+        "",
+        "Only allowed custom fields of type \"Text field\", \"Number\", \"Dropdown\" or \"Radio button\""
+      ]
+    },
+    "customFieldName": {
+      "x-title": "Custom Field Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "search"
+          ],
+          "operation": [
+            "lookup"
+          ],
+          "searchField": [
+            "customField"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "customFieldValue": {
+      "x-title": "Custom Field Value",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "search"
+          ],
+          "operation": [
+            "lookup"
+          ],
+          "searchField": [
+            "customField"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "fieldValue": {
+      "x-title": "Field Value",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "search"
+          ],
+          "operation": [
+            "lookup"
+          ],
+          "searchField": [
+            "email",
+            "name"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "search"
+          ],
+          "operation": [
+            "lookup"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "entities": {
+          "x-title": "Entities",
+          "description": "Use 'entities' to query against related entities. You can include multiple entities at once, provided the field is available in both entities or else you'd receive an error response.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "contact",
+              "deal",
+              "sales_account"
+            ]
+          },
+          "x-enumNames": [
+            "Contact",
+            "Deal",
+            "Sales Account"
+          ]
+        }
+      }
+    },
+    "dueDate": {
+      "x-title": "Due Date",
+      "description": "Timestamp that denotes when the task is due to be completed",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "taskId": {
+      "x-title": "Task ID",
+      "description": "ID of the task to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:freshworksCrm.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "freshworksCrmApi",
+      "required": true
+    }
+  ]
+}

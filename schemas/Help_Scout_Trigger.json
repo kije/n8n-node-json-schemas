@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Help Scout Trigger",
+  "description": "Starts the workflow when Help Scout events occur",
+  "x-n8n-node-type": "helpScoutTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "events": {
+      "x-title": "Events",
+      "default": [],
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "convo.assigned",
+          "convo.created",
+          "convo.deleted",
+          "convo.merged",
+          "convo.moved",
+          "convo.status",
+          "convo.tags",
+          "convo.agent.reply.created",
+          "convo.customer.reply.created",
+          "convo.note.created",
+          "customer.created",
+          "satisfaction.ratings"
+        ]
+      },
+      "x-enumNames": [
+        "Conversation - Assigned",
+        "Conversation - Created",
+        "Conversation - Deleted",
+        "Conversation - Merged",
+        "Conversation - Moved",
+        "Conversation - Status",
+        "Conversation - Tags",
+        "Conversation Agent Reply - Created",
+        "Conversation Customer Reply - Created",
+        "Conversation Note - Created",
+        "Customer - Created",
+        "Rating - Received"
+      ]
+    }
+  },
+  "x-icon": "file:helpScout.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "helpScoutOAuth2Api",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

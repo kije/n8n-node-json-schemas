@@ -1,0 +1,296 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Tasks",
+  "description": "Consume Google Tasks API",
+  "x-n8n-node-type": "googleTasks",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "task",
+      "type": "string",
+      "enum": [
+        "task"
+      ],
+      "x-enumNames": [
+        "Task"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Add a task to tasklist",
+        "Delete a task",
+        "Retrieve a task",
+        "Retrieve many tasks from a tasklist",
+        "Update a task"
+      ]
+    },
+    "task": {
+      "x-title": "TaskList Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "Title of the task",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "completedMax": {
+          "x-title": "Completed Max",
+          "description": "Upper bound for a task completion date (as a RFC 3339 timestamp) to filter by",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "completedMin": {
+          "x-title": "Completed Min",
+          "description": "Lower bound for a task completion date (as a RFC 3339 timestamp) to filter by",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "dueMin": {
+          "x-title": "Due Min",
+          "description": "Lower bound for a task due date (as a RFC 3339 timestamp) to filter by",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "dueMax": {
+          "x-title": "Due Max",
+          "description": "Upper bound for a task due date (as a RFC 3339 timestamp) to filter by",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "showCompleted": {
+          "x-title": "Show Completed",
+          "description": "Whether completed tasks are returned in the result. <strong>Show Hidden</strong> must also be True to show tasks completed in first party clients such as the web UI or Google's mobile apps.",
+          "default": true,
+          "type": "boolean"
+        },
+        "showDeleted": {
+          "x-title": "Show Deleted",
+          "description": "Whether deleted tasks are returned in the result",
+          "default": false,
+          "type": "boolean"
+        },
+        "showHidden": {
+          "x-title": "Show Hidden",
+          "description": "Whether hidden tasks are returned in the result",
+          "default": false,
+          "type": "boolean"
+        },
+        "updatedMin": {
+          "x-title": "Updated Min",
+          "description": "Lower bound for a task last modification time (as a RFC 3339 timestamp) to filter by",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "taskId": {
+      "x-title": "Task ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 20,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "task"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "completed": {
+          "x-title": "Completion Date",
+          "description": "Completion date of the task (as a RFC 3339 timestamp). This field is omitted if the task has not been completed.",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "deleted": {
+          "x-title": "Deleted",
+          "description": "Whether the task has been deleted",
+          "default": false,
+          "type": "boolean"
+        },
+        "dueDate": {
+          "x-title": "Due Date",
+          "description": "Due date of the task",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "notes": {
+          "x-title": "Notes",
+          "description": "Additional Notes",
+          "default": "",
+          "type": "string"
+        },
+        "previous": {
+          "x-title": "Previous",
+          "description": "Previous sibling task identifier. If the task is created at the first position among its siblings, this parameter is omitted.",
+          "default": "",
+          "type": "string"
+        },
+        "status": {
+          "x-title": "Status",
+          "description": "Current status of the task",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "needsAction",
+            "completed"
+          ],
+          "x-enumNames": [
+            "Needs Update",
+            "Completed"
+          ]
+        },
+        "title": {
+          "x-title": "Title",
+          "description": "Title of the task",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:googleTasks.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "googleTasksOAuth2Api",
+      "required": true
+    }
+  ]
+}

@@ -1,0 +1,661 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Ghost",
+  "description": "Consume Ghost API",
+  "x-n8n-node-type": "ghost",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "source": {
+      "x-title": "Source",
+      "description": "Pick where your data comes from, Content or Admin API",
+      "default": "contentApi",
+      "type": "string",
+      "enum": [
+        "adminApi",
+        "contentApi"
+      ],
+      "x-enumNames": [
+        "Admin API",
+        "Content API"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "post",
+      "type": "string",
+      "enum": [
+        "post"
+      ],
+      "x-enumNames": [
+        "Post"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "adminApi"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a post",
+        "Delete a post",
+        "Get a post",
+        "Get many posts",
+        "Update a post"
+      ]
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "Post's title",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "adminApi"
+          ],
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "contentFormat": {
+      "x-title": "Content Format",
+      "description": "The format of the post",
+      "default": "html",
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "adminApi"
+          ],
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "html",
+        "mobileDoc",
+        "lexical"
+      ],
+      "x-enumNames": [
+        "HTML",
+        "Mobile Doc",
+        "Lexical"
+      ]
+    },
+    "content": {
+      "x-title": "Content (JSON)",
+      "description": "Lexical is the JSON format returned by the Ghost Default editor",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "adminApi"
+          ],
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ],
+          "contentFormat": [
+            "lexical"
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "adminApi"
+          ],
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "authors": {
+          "x-title": "Author Names or IDs",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "canonical_url": {
+          "x-title": "Cannonical URL",
+          "default": "",
+          "type": "string"
+        },
+        "codeinjection_foot": {
+          "x-title": "Code Injection Foot",
+          "description": "The Code Injection allows you inject a small snippet into your Ghost site",
+          "default": "",
+          "type": "string"
+        },
+        "codeinjection_head": {
+          "x-title": "Code Injection Head",
+          "description": "The Code Injection allows you inject a small snippet into your Ghost site",
+          "default": "",
+          "type": "string"
+        },
+        "featured": {
+          "x-title": "Featured",
+          "default": false,
+          "type": "boolean"
+        },
+        "meta_description": {
+          "x-title": "Meta Description",
+          "default": "",
+          "type": "string"
+        },
+        "meta_title": {
+          "x-title": "Meta Title",
+          "default": "",
+          "type": "string"
+        },
+        "og_description": {
+          "x-title": "Open Graph Description",
+          "default": "",
+          "type": "string"
+        },
+        "og_image": {
+          "x-title": "Open Graph Image",
+          "description": "URL of the image",
+          "default": "",
+          "type": "string"
+        },
+        "og_title": {
+          "x-title": "Open Graph Title",
+          "default": "",
+          "type": "string"
+        },
+        "published_at": {
+          "x-title": "Published At",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "slug": {
+          "x-title": "Slug",
+          "default": "",
+          "type": "string"
+        },
+        "status": {
+          "x-title": "Status",
+          "default": "draft",
+          "type": "string",
+          "enum": [
+            "draft",
+            "published",
+            "scheduled"
+          ],
+          "x-enumNames": [
+            "Draft",
+            "Published",
+            "Scheduled"
+          ]
+        },
+        "tags": {
+          "x-title": "Tag Names or IDs",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "twitter_description": {
+          "x-title": "Twitter Description",
+          "default": "",
+          "type": "string"
+        },
+        "twitter_image": {
+          "x-title": "Twitter Image",
+          "description": "URL of the image",
+          "default": "",
+          "type": "string"
+        },
+        "twitter_title": {
+          "x-title": "Twitter Title",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "postId": {
+      "x-title": "Post ID",
+      "description": "The ID of the post to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "adminApi"
+          ],
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "by": {
+      "x-title": "By",
+      "description": "Get the post either by slug or ID",
+      "default": "id",
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "contentApi",
+            "adminApi"
+          ],
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "id",
+        "slug"
+      ],
+      "x-enumNames": [
+        "ID",
+        "Slug"
+      ]
+    },
+    "identifier": {
+      "x-title": "Identifier",
+      "description": "The ID or slug of the post to get",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "contentApi",
+            "adminApi"
+          ],
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "adminApi"
+          ],
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "include": {
+          "x-title": "Include",
+          "description": "Tells the API to return additional data related to the resource you have requested",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "authors",
+              "tags"
+            ]
+          },
+          "x-enumNames": [
+            "Authors",
+            "Tags"
+          ]
+        },
+        "fields": {
+          "x-title": "Fields",
+          "description": "Limit the fields returned in the response object. E.g. for posts fields=title,url.",
+          "default": "",
+          "type": "string"
+        },
+        "formats": {
+          "x-title": "Formats",
+          "default": [
+            "mobiledoc"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "html",
+              "mobiledoc",
+              "lexical"
+            ]
+          },
+          "x-enumNames": [
+            "HTML",
+            "Mobile Doc",
+            "Lexical"
+          ]
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "contentApi",
+            "adminApi"
+          ],
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "adminApi",
+            "contentApi"
+          ],
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "adminApi"
+          ],
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "authors": {
+          "x-title": "Author Names or IDs",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "canonical_url": {
+          "x-title": "Cannonical URL",
+          "default": "",
+          "type": "string"
+        },
+        "codeinjection_foot": {
+          "x-title": "Code Injection Foot",
+          "default": "",
+          "type": "string"
+        },
+        "codeinjection_head": {
+          "x-title": "Code Injection Head",
+          "default": "",
+          "type": "string"
+        },
+        "content": {
+          "x-title": "Content",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/contentFormat": [
+                "html"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "contentJson": {
+          "x-title": "Content (JSON)",
+          "description": "Lexical is the JSON format returned by the Ghost Default editor",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/contentFormat": [
+                "lexical"
+              ]
+            }
+          },
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "featured": {
+          "x-title": "Featured",
+          "default": false,
+          "type": "boolean"
+        },
+        "meta_description": {
+          "x-title": "Meta Description",
+          "default": "",
+          "type": "string"
+        },
+        "meta_title": {
+          "x-title": "Meta Title",
+          "default": "",
+          "type": "string"
+        },
+        "og_description": {
+          "x-title": "Open Graph Description",
+          "default": "",
+          "type": "string"
+        },
+        "og_image": {
+          "x-title": "Open Graph Image",
+          "description": "URL of the image",
+          "default": "",
+          "type": "string"
+        },
+        "og_title": {
+          "x-title": "Open Graph Title",
+          "default": "",
+          "type": "string"
+        },
+        "published_at": {
+          "x-title": "Published At",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "slug": {
+          "x-title": "Slug",
+          "default": "",
+          "type": "string"
+        },
+        "status": {
+          "x-title": "Status",
+          "default": "draft",
+          "type": "string",
+          "enum": [
+            "draft",
+            "published",
+            "scheduled"
+          ],
+          "x-enumNames": [
+            "Draft",
+            "Published",
+            "Scheduled"
+          ]
+        },
+        "tags": {
+          "x-title": "Tag Names or IDs",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "title": {
+          "x-title": "Title",
+          "description": "Post's title",
+          "default": "",
+          "type": "string"
+        },
+        "twitter_description": {
+          "x-title": "Twitter Description",
+          "default": "",
+          "type": "string"
+        },
+        "twitter_image": {
+          "x-title": "Twitter Image",
+          "description": "URL of the image",
+          "default": "",
+          "type": "string"
+        },
+        "twitter_title": {
+          "x-title": "Twitter Title",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:ghost.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "ghostAdminApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "source": [
+            "adminApi"
+          ]
+        }
+      }
+    },
+    {
+      "name": "ghostContentApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "source": [
+            "contentApi"
+          ]
+        }
+      }
+    }
+  ]
+}

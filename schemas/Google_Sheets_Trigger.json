@@ -1,0 +1,325 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Sheets Trigger",
+  "description": "Starts the workflow when Google Sheets events occur",
+  "x-n8n-node-type": "googleSheetsTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "triggerOAuth2",
+      "type": "string"
+    },
+    "documentId": {
+      "x-title": "Document",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "By URL",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        }
+      ]
+    },
+    "sheetName": {
+      "x-title": "Sheet",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "By URL",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        }
+      ]
+    },
+    "event": {
+      "x-title": "Trigger On",
+      "description": "It will be triggered also by newly created columns (if the 'Columns to Watch' option is not set)",
+      "default": "anyUpdate",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "rowAdded",
+        "rowUpdate",
+        "anyUpdate"
+      ],
+      "x-enumNames": [
+        "Row Added",
+        "Row Updated",
+        "Row Added or Updated"
+      ]
+    },
+    "includeInOutput": {
+      "x-title": "Include in Output",
+      "description": "This option will be effective only when automatically executing the workflow",
+      "default": "new",
+      "x-displayOptions": {
+        "hide": {
+          "event": [
+            "rowAdded"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "new",
+        "old",
+        "both"
+      ],
+      "x-enumNames": [
+        "New Version",
+        "Old Version",
+        "Both Versions"
+      ]
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "columnsToWatch": {
+          "x-title": "Columns to Watch",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "x-displayOptions": {
+            "show": {
+              "/event": [
+                "anyUpdate",
+                "rowUpdate"
+              ]
+            }
+          },
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dataLocationOnSheet": {
+          "x-title": "Data Location on Sheet",
+          "default": {
+            "values": {
+              "rangeDefinition": "specifyRangeA1"
+            }
+          },
+          "type": "object",
+          "properties": {
+            "values": {
+              "x-title": "Values",
+              "type": "object",
+              "properties": {
+                "rangeDefinition": {
+                  "x-title": "Range Definition",
+                  "default": "",
+                  "type": "string",
+                  "enum": [
+                    "specifyRangeA1",
+                    "specifyRange"
+                  ],
+                  "x-enumNames": [
+                    "Specify Range (A1 Notation)",
+                    "Specify Range (Rows)"
+                  ],
+                  "x-enumDescriptions": [
+                    "Manually specify the data range",
+                    "Manually specify the data range"
+                  ]
+                },
+                "headerRow": {
+                  "x-title": "Header Row",
+                  "description": "Index of the row which contains the keys. Starts at 1. The incoming node data is matched to the keys for assignment. The matching is case sensitive.",
+                  "default": 1,
+                  "x-displayOptions": {
+                    "show": {
+                      "rangeDefinition": [
+                        "specifyRange"
+                      ]
+                    }
+                  },
+                  "type": "number",
+                  "minimum": 1
+                },
+                "firstDataRow": {
+                  "x-title": "First Data Row",
+                  "description": "Index of the first row which contains the actual data and not the keys. Starts with 1.",
+                  "default": 2,
+                  "x-displayOptions": {
+                    "show": {
+                      "rangeDefinition": [
+                        "specifyRange"
+                      ]
+                    }
+                  },
+                  "type": "number",
+                  "minimum": 1
+                },
+                "range": {
+                  "x-title": "Range",
+                  "description": "The table range to read from or to append data to. See the Google <a href=\"https://developers.google.com/sheets/api/guides/values#writing\">documentation</a> for the details.",
+                  "default": "",
+                  "x-displayOptions": {
+                    "show": {
+                      "rangeDefinition": [
+                        "specifyRangeA1"
+                      ]
+                    }
+                  },
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "valueRender": {
+          "x-title": "Value Render",
+          "description": "Determines how values will be rendered in the output. <a href=\"https://developers.google.com/sheets/api/reference/rest/v4/ValueRenderOption\" target=\"_blank\">More info</a>.",
+          "default": "UNFORMATTED_VALUE",
+          "x-displayOptions": {
+            "hide": {
+              "/event": [
+                "anyUpdate",
+                "rowUpdate"
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "UNFORMATTED_VALUE",
+            "FORMATTED_VALUE",
+            "FORMULA"
+          ],
+          "x-enumNames": [
+            "Unformatted",
+            "Formatted",
+            "Formula"
+          ],
+          "x-enumDescriptions": [
+            "Values will be calculated, but not formatted in the reply",
+            "Values will be formatted and calculated according to the cell's formatting (based on the spreadsheet's locale)",
+            "Values will not be calculated. The reply will include the formulas."
+          ]
+        },
+        "dateTimeRenderOption": {
+          "x-title": "DateTime Render",
+          "description": "Determines how dates should be rendered in the output.  <a href=\"https://developers.google.com/sheets/api/reference/rest/v4/DateTimeRenderOption\" target=\"_blank\">More info</a>.",
+          "default": "SERIAL_NUMBER",
+          "x-displayOptions": {
+            "hide": {
+              "/event": [
+                "anyUpdate",
+                "rowUpdate"
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "SERIAL_NUMBER",
+            "FORMATTED_STRING"
+          ],
+          "x-enumNames": [
+            "Serial Number",
+            "Formatted String"
+          ],
+          "x-enumDescriptions": [
+            "Fields will be returned as doubles in \"serial number\" format (as popularized by Lotus 1-2-3)",
+            "Fields will be rendered as strings in their given number format (which depends on the spreadsheet locale)"
+          ]
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{($parameter[\"event\"])}}",
+  "x-icon": "file:googleSheets.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "googleSheetsTriggerOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "triggerOAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

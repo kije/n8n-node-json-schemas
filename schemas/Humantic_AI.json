@@ -1,0 +1,169 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Humantic AI",
+  "description": "Consume Humantic AI API",
+  "x-n8n-node-type": "humanticAi",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "profile",
+      "type": "string",
+      "enum": [
+        "profile"
+      ],
+      "x-enumNames": [
+        "Profile"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "profile"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "get",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Get",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a profile",
+        "Retrieve a profile",
+        "Update a profile"
+      ]
+    },
+    "userId": {
+      "x-title": "User ID",
+      "description": "This value is the same as the User ID that was provided when the analysis was created. Currently only supported for profiles created using LinkedIn URL.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "profile"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "sendResume": {
+      "x-title": "Send Resume",
+      "description": "Whether to send a resume for a resume of the user",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "profile"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "binaryPropertyName": {
+      "x-title": "Input Binary Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "profile"
+          ],
+          "sendResume": [
+            true
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "profile"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "persona": {
+          "x-title": "Persona",
+          "description": "Fetch the Humantic profile of the user for a particular persona type. Multiple persona values can be supported using comma as a delimiter.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "sales",
+              "hiring"
+            ]
+          },
+          "x-enumNames": [
+            "Sales",
+            "Hiring"
+          ]
+        }
+      }
+    },
+    "text": {
+      "x-title": "Text",
+      "description": "Additional text written by the user",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "profile"
+          ],
+          "sendResume": [
+            false
+          ]
+        }
+      },
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:humanticai.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "humanticAiApi",
+      "required": true
+    }
+  ]
+}

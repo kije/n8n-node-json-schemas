@@ -1,0 +1,754 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Drive",
+  "description": "Access data on Google Drive",
+  "x-n8n-node-type": "googleDrive",
+  "x-n8n-version": 2,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "oAuth2",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            2
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "oAuth2",
+        "serviceAccount"
+      ],
+      "x-enumNames": [
+        "OAuth2 (recommended)",
+        "Service Account"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "file",
+      "type": "string",
+      "enum": [
+        "drive",
+        "file",
+        "folder"
+      ],
+      "x-enumNames": [
+        "Drive",
+        "File",
+        "Folder"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "drive"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "list",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "List",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a drive",
+        "Delete a drive",
+        "Get a drive",
+        "List all drives",
+        "Update a drive"
+      ]
+    },
+    "fileId": {
+      "x-title": "Folder",
+      "description": "The ID of the folder",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "delete",
+            "share"
+          ],
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "Folder",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "Link",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "binaryPropertyName": {
+      "x-title": "Input Binary Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ],
+          "binaryData": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "appPropertiesUi": {
+          "x-title": "APP Properties",
+          "description": "A collection of arbitrary key-value pairs which are private to the requesting app",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "appPropertyValues": {
+              "x-title": "APP Property",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "x-title": "Key",
+                    "description": "Name of the key to add",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "Value to set for the key",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "propertiesUi": {
+          "x-title": "Properties",
+          "description": "A collection of arbitrary key-value pairs which are visible to all apps",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "propertyValues": {
+              "x-title": "Property",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "x-title": "Key",
+                    "description": "Name of the key to add",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "Value to set for the key",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "useQueryString": {
+      "x-title": "Use Query String",
+      "description": "Whether a query string should be used to filter results",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "list"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "queryString": {
+      "x-title": "Query String",
+      "description": "Query to use to return only specific files",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "list"
+          ],
+          "useQueryString": [
+            true
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "list"
+          ],
+          "resource": [
+            "drive"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 200
+    },
+    "queryFilters": {
+      "x-title": "Filters",
+      "description": "Filters to use to return only specific files",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "list"
+          ],
+          "useQueryString": [
+            false
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "name": {
+          "x-title": "Name",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "operation": {
+                "x-title": "Operation",
+                "default": "contains",
+                "type": "string",
+                "enum": [
+                  "contains",
+                  "is",
+                  "isNot"
+                ],
+                "x-enumNames": [
+                  "Contains",
+                  "Is",
+                  "Is Not"
+                ]
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "The value for operation",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "mimeType": {
+          "x-title": "Mime Type",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "mimeType": {
+                "x-title": "Mime Type",
+                "description": "The Mime-Type of the files to return",
+                "default": "application/vnd.google-apps.file",
+                "type": "string",
+                "enum": [
+                  "application/vnd.google-apps.drive-sdk",
+                  "application/vnd.google-apps.audio",
+                  "custom",
+                  "application/vnd.google-apps.script",
+                  "application/vnd.google-apps.document",
+                  "application/vnd.google-apps.drawing",
+                  "application/vnd.google-apps.file",
+                  "application/vnd.google-apps.folder",
+                  "application/vnd.google-apps.form",
+                  "application/vnd.google-apps.fusiontable",
+                  "application/vnd.google-apps.map",
+                  "application/vnd.google-apps.spreadsheet",
+                  "application/vnd.google-apps.site",
+                  "application/vnd.google-apps.presentation",
+                  "application/vnd.google-apps.photo",
+                  "application/vnd.google-apps.unknown",
+                  "application/vnd.google-apps.video"
+                ],
+                "x-enumNames": [
+                  "3rd Party Shortcut",
+                  "Audio",
+                  "Custom Mime Type",
+                  "Google Apps Scripts",
+                  "Google Docs",
+                  "Google Drawing",
+                  "Google Drive File",
+                  "Google Drive Folder",
+                  "Google Forms",
+                  "Google Fusion Tables",
+                  "Google My Maps",
+                  "Google Sheets",
+                  "Google Sites",
+                  "Google Slides",
+                  "Photo",
+                  "Unknown",
+                  "Video"
+                ]
+              },
+              "customMimeType": {
+                "x-title": "Custom Mime Type",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "mimeType": [
+                      "custom"
+                    ]
+                  }
+                },
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "permissionsUi": {
+      "x-title": "Permissions",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file",
+            "folder"
+          ],
+          "operation": [
+            "share"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "permissionsValues": {
+          "x-title": "Permission",
+          "type": "object",
+          "properties": {
+            "role": {
+              "x-title": "Role",
+              "default": "",
+              "type": "string",
+              "enum": [
+                "commenter",
+                "fileOrganizer",
+                "organizer",
+                "owner",
+                "reader",
+                "writer"
+              ],
+              "x-enumNames": [
+                "Commenter",
+                "File Organizer",
+                "Organizer",
+                "Owner",
+                "Reader",
+                "Writer"
+              ]
+            },
+            "type": {
+              "x-title": "Type",
+              "description": "Information about the different types can be found <a href=\"https://developers.google.com/drive/api/v3/ref-roles\">here</a>",
+              "default": "",
+              "type": "string",
+              "enum": [
+                "user",
+                "group",
+                "domain",
+                "anyone"
+              ],
+              "x-enumNames": [
+                "User",
+                "Group",
+                "Domain",
+                "Anyone"
+              ]
+            },
+            "emailAddress": {
+              "x-title": "Email Address",
+              "description": "The email address of the user or group to which this permission refers",
+              "default": "",
+              "x-displayOptions": {
+                "show": {
+                  "type": [
+                    "user",
+                    "group"
+                  ]
+                }
+              },
+              "type": "string"
+            },
+            "domain": {
+              "x-title": "Domain",
+              "description": "The domain to which this permission refers",
+              "default": "",
+              "x-displayOptions": {
+                "show": {
+                  "type": [
+                    "domain"
+                  ]
+                }
+              },
+              "type": "string"
+            },
+            "allowFileDiscovery": {
+              "x-title": "Allow File Discovery",
+              "description": "Whether the permission allows the file to be discovered through search",
+              "default": false,
+              "x-displayOptions": {
+                "show": {
+                  "type": [
+                    "domain",
+                    "anyone"
+                  ]
+                }
+              },
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "binaryData": {
+      "x-title": "Binary File",
+      "description": "Whether the data to upload should be taken from binary field",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "fileContent": {
+      "x-title": "File Content",
+      "description": "The text content of the file to upload",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ],
+          "binaryData": [
+            false
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "fileName": {
+          "x-title": "File Name",
+          "description": "The name of the file",
+          "default": "",
+          "type": "string"
+        },
+        "keepRevisionForever": {
+          "x-title": "Keep Revision Forever",
+          "description": "Whether to set the 'keepForever' field in the new head revision. This is only applicable to files with binary content in Google Drive. Only 200 revisions for the file can be kept forever. If the limit is reached, try deleting pinned revisions.",
+          "default": false,
+          "type": "boolean"
+        },
+        "trashed": {
+          "x-title": "Move to Trash",
+          "description": "Whether to move a file to the trash. Only the owner may trash a file.",
+          "default": false,
+          "type": "boolean"
+        },
+        "ocrLanguage": {
+          "x-title": "OCR Language",
+          "description": "A language hint for OCR processing during image import (ISO 639-1 code)",
+          "default": "",
+          "type": "string"
+        },
+        "parentId": {
+          "x-title": "Parent ID",
+          "description": "The ID of the parent to set",
+          "default": "",
+          "type": "string"
+        },
+        "useContentAsIndexableText": {
+          "x-title": "Use Content As Indexable Text",
+          "description": "Whether to use the uploaded content as indexable text",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "The name of this shared drive",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "drive"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "resolveData": {
+      "x-title": "Resolve Data",
+      "description": "By default the response only contain the ID of the file. If this option gets activated, it will resolve the data automatically.",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "parents": {
+      "x-title": "Parents",
+      "description": "The IDs of the parent folders which contain the file",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "driveId": {
+      "x-title": "Drive",
+      "description": "The ID of the drive",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "delete",
+            "get",
+            "update"
+          ],
+          "resource": [
+            "drive"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "Drive",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "Link",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "list"
+          ],
+          "resource": [
+            "drive"
+          ]
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:googleDrive.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "googleApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "serviceAccount"
+          ]
+        }
+      }
+    },
+    {
+      "name": "googleDriveOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

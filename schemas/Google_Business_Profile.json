@@ -1,0 +1,632 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Business Profile",
+  "description": "Consume Google Business Profile API",
+  "x-n8n-node-type": "googleBusinessProfile",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "post",
+      "type": "string",
+      "enum": [
+        "post",
+        "review"
+      ],
+      "x-enumNames": [
+        "Post",
+        "Review"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "review"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "delete",
+        "get",
+        "getAll",
+        "reply"
+      ],
+      "x-enumNames": [
+        "Delete Reply",
+        "Get",
+        "Get Many",
+        "Reply"
+      ],
+      "x-enumDescriptions": [
+        "Delete a reply to a review",
+        "Retrieve details of a specific review on Google Business Profile",
+        "Retrieve multiple reviews",
+        "Reply to a review"
+      ]
+    },
+    "account": {
+      "x-title": "Account",
+      "description": "The Google Business Profile account",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "review"
+          ],
+          "operation": [
+            "reply"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "name"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From list",
+          "type": "list"
+        },
+        {
+          "name": "name",
+          "displayName": "By name",
+          "type": "string"
+        }
+      ]
+    },
+    "location": {
+      "x-title": "Location",
+      "description": "The specific location or business associated with the account",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "review"
+          ],
+          "operation": [
+            "reply"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "name"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From list",
+          "type": "list"
+        },
+        {
+          "name": "name",
+          "displayName": "By name",
+          "type": "string"
+        }
+      ]
+    },
+    "postType": {
+      "x-title": "Post Type",
+      "description": "The type of post to create (standard, event, offer, or alert)",
+      "default": "STANDARD",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "STANDARD",
+        "EVENT",
+        "OFFER",
+        "ALERT"
+      ],
+      "x-enumNames": [
+        "Standard",
+        "Event",
+        "Offer",
+        "Alert"
+      ]
+    },
+    "summary": {
+      "x-title": "Summary",
+      "description": "The main text of the post",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "E.g. 20% off in store or online.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ],
+          "postType": [
+            "OFFER"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "startDateTime": {
+      "x-title": "Start Date and Time",
+      "description": "The start date and time of the event",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ],
+          "postType": [
+            "EVENT"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "endDateTime": {
+      "x-title": "End Date and Time",
+      "description": "The end date and time of the event",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ],
+          "postType": [
+            "EVENT"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "startDate": {
+      "x-title": "Start Date",
+      "description": "The start date of the offer",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ],
+          "postType": [
+            "OFFER"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "endDate": {
+      "x-title": "End Date",
+      "description": "The end date of the offer",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ],
+          "postType": [
+            "OFFER"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "alertType": {
+      "x-title": "Alert Type",
+      "description": "The sub-type of the alert",
+      "default": "COVID_19",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ],
+          "postType": [
+            "ALERT"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "COVID_19"
+      ],
+      "x-enumNames": [
+        "Covid 19"
+      ],
+      "x-enumDescriptions": [
+        "This alert is related to the 2019 Coronavirus Disease pandemic"
+      ]
+    },
+    "additionalOptions": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "summary": {
+          "x-title": "Summary",
+          "description": "The main text of the post",
+          "default": "",
+          "type": "string"
+        },
+        "languageCode": {
+          "x-title": "Language",
+          "description": "The language code of the post content. <a href=\"https://cloud.google.com/translate/docs/languages\" target=\"_blank\">More info</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "callToActionType": {
+          "x-title": "Call to Action Type",
+          "description": "The type of call to action",
+          "default": "ACTION_TYPE_UNSPECIFIED",
+          "type": "string",
+          "enum": [
+            "ACTION_TYPE_UNSPECIFIED",
+            "BOOK",
+            "GET_OFFER",
+            "LEARN_MORE",
+            "ORDER",
+            "SHOP",
+            "SIGN_UP"
+          ],
+          "x-enumNames": [
+            "Action Type Unspecified",
+            "Book",
+            "Get Offer",
+            "Learn More",
+            "Order",
+            "Shop",
+            "Sign Up"
+          ],
+          "x-enumDescriptions": [
+            "Type unspecified",
+            "This post wants a user to book an appointment/table/etc",
+            "Deprecated. Use OFFER in LocalPostTopicType to create a post with offer content.",
+            "This post wants a user to learn more (at their website)",
+            "This post wants a user to order something",
+            "This post wants a user to browse a product catalog",
+            "This post wants a user to register/sign up/join something"
+          ]
+        },
+        "url": {
+          "x-title": "Call to Action Url",
+          "description": "The URL that users are sent to when clicking through the promotion",
+          "default": "",
+          "type": "string"
+        },
+        "startDateTime": {
+          "x-title": "Start Date and Time",
+          "description": "The start date and time of the event",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "endDateTime": {
+          "x-title": "End Date and Time",
+          "description": "The end date and time of the event",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "title": {
+          "x-title": "Title",
+          "description": "E.g. 20% off in store or online.",
+          "default": "",
+          "type": "string"
+        },
+        "startDate": {
+          "x-title": "Start Date",
+          "description": "The start date of the offer",
+          "default": "",
+          "type": "string"
+        },
+        "endDate": {
+          "x-title": "End Date",
+          "description": "The end date of the offer",
+          "default": "",
+          "type": "string"
+        },
+        "couponCode": {
+          "x-title": "Coupon Code",
+          "description": "The coupon code for the offer",
+          "default": "",
+          "type": "string"
+        },
+        "redeemOnlineUrl": {
+          "x-title": "Redeem Online Url",
+          "description": "Link to redeem the offer",
+          "default": "",
+          "type": "string"
+        },
+        "termsConditions": {
+          "x-title": "Terms and Conditions",
+          "description": "The terms and conditions of the offer",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "post": {
+      "x-title": "Post",
+      "description": "Select the post to retrieve its details",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "name"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From list",
+          "type": "list"
+        },
+        {
+          "name": "name",
+          "displayName": "By name",
+          "type": "string"
+        }
+      ]
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "review"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 20,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "review"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number",
+      "minimum": 1
+    },
+    "review": {
+      "x-title": "Review",
+      "description": "Select the review to retrieve its details",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "review"
+          ],
+          "operation": [
+            "reply"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id",
+            "name"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From list",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "displayName": "By name",
+          "type": "string"
+        }
+      ]
+    },
+    "reply": {
+      "x-title": "Reply",
+      "description": "The body of the reply (up to 4096 characters)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "review"
+          ],
+          "operation": [
+            "reply"
+          ]
+        }
+      },
+      "type": "string",
+      "x-rows": 5
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:googleBusinessProfile.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "googleBusinessProfileOAuth2Api",
+      "required": true
+    }
+  ]
+}

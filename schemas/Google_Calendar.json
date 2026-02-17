@@ -1,0 +1,1052 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Calendar",
+  "description": "Consume Google Calendar API",
+  "x-n8n-node-type": "googleCalendar",
+  "x-n8n-version": [
+    1,
+    1.1,
+    1.2,
+    1.3
+  ],
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "event",
+      "type": "string",
+      "enum": [
+        "calendar",
+        "event"
+      ],
+      "x-enumNames": [
+        "Calendar",
+        "Event"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Add a event to calendar",
+        "Delete an event",
+        "Retrieve an event",
+        "Retrieve many events from a calendar",
+        "Update an event"
+      ]
+    },
+    "calendar": {
+      "x-title": "Calendar",
+      "description": "Google Calendar to operate on",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "Calendar",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "timeMin": {
+      "x-title": "After",
+      "description": "At least some part of the event must be after this time, use <a href=\"https://docs.n8n.io/code/cookbook/luxon/\" target=\"_blank\">expression</a> to set a date, or switch to fixed mode to choose date from widget",
+      "default": "={{ $now }}",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.3
+              }
+            }
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "type": "string",
+      "format": "date-time"
+    },
+    "timeMax": {
+      "x-title": "Before",
+      "description": "At least some part of the event must be before this time, use <a href=\"https://docs.n8n.io/code/cookbook/luxon/\" target=\"_blank\">expression</a> to set a date, or switch to fixed mode to choose date from widget",
+      "default": "={{ $now.plus({ week: 1 }) }}",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.3
+              }
+            }
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "type": "string",
+      "format": "date-time"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "timeMin": {
+          "x-title": "After",
+          "description": "At least some part of the event must be after this time, use <a href=\"https://docs.n8n.io/code/cookbook/luxon/\" target=\"_blank\">expression</a> to set a date, or switch to fixed mode to choose date from widget",
+          "default": "",
+          "x-displayOptions": {
+            "hide": {
+              "@version": [
+                {
+                  "_cnd": {
+                    "gte": 1.3
+                  }
+                }
+              ]
+            }
+          },
+          "type": "string",
+          "format": "date-time"
+        },
+        "timeMax": {
+          "x-title": "Before",
+          "description": "At least some part of the event must be before this time, use <a href=\"https://docs.n8n.io/code/cookbook/luxon/\" target=\"_blank\">expression</a> to set a date, or switch to fixed mode to choose date from widget",
+          "default": "",
+          "x-displayOptions": {
+            "hide": {
+              "@version": [
+                {
+                  "_cnd": {
+                    "gte": 1.3
+                  }
+                }
+              ]
+            }
+          },
+          "type": "string",
+          "format": "date-time"
+        },
+        "singleEvents": {
+          "x-title": "Expand Events",
+          "description": "Whether to expand recurring events into instances and only return single one-off events and instances of recurring events, but not the underlying recurring events themselves",
+          "default": false,
+          "x-displayOptions": {
+            "hide": {
+              "@version": [
+                {
+                  "_cnd": {
+                    "gte": 1.3
+                  }
+                }
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "fields": {
+          "x-title": "Fields",
+          "description": "Specify fields to return, by default a predefined by Google set of commonly used fields would be returned. To return all fields, use '*', <a href='https://developers.google.com/calendar/api/guides/performance#partial' target='_blank'>More info</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "iCalUID": {
+          "x-title": "iCalUID",
+          "description": "Specifies event ID in the iCalendar format to be included in the response",
+          "default": "",
+          "type": "string"
+        },
+        "maxAttendees": {
+          "x-title": "Max Attendees",
+          "description": "The maximum number of attendees to include in the response. If there are more than the specified number of attendees, only the participant is returned.",
+          "default": 0,
+          "type": "number"
+        },
+        "orderBy": {
+          "x-title": "Order By",
+          "description": "The order of the events returned in the result",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "startTime",
+            "updated"
+          ],
+          "x-enumNames": [
+            "Start Time",
+            "Updated"
+          ],
+          "x-enumDescriptions": [
+            "Order by the start date/time (ascending). This is only available when querying single events (i.e. the parameter singleEvents is True).",
+            "Order by last modification time (ascending)"
+          ]
+        },
+        "query": {
+          "x-title": "Query",
+          "description": "Free text search terms to find events that match these terms in any field, except for extended properties",
+          "default": "",
+          "type": "string"
+        },
+        "recurringEventHandling": {
+          "x-title": "Recurring Event Handling",
+          "default": "expand",
+          "x-displayOptions": {
+            "show": {
+              "@version": [
+                {
+                  "_cnd": {
+                    "gte": 1.3
+                  }
+                }
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "expand",
+            "first",
+            "next"
+          ],
+          "x-enumNames": [
+            "All Occurrences",
+            "First Occurrence",
+            "Next Occurrence"
+          ],
+          "x-enumDescriptions": [
+            "Return all instances of recurring event for specified time range",
+            "Return event with specified recurrence rule",
+            "Return next instance of recurring event"
+          ]
+        },
+        "showDeleted": {
+          "x-title": "Show Deleted",
+          "description": "Whether to include deleted events (with status equals \"cancelled\") in the result",
+          "default": false,
+          "type": "boolean"
+        },
+        "showHiddenInvitations": {
+          "x-title": "Show Hidden Invitations",
+          "description": "Whether to include hidden invitations in the result",
+          "default": false,
+          "type": "boolean"
+        },
+        "timeZone": {
+          "x-title": "Timezone",
+          "description": "Time zone used in the response. The default is the time zone of the calendar.",
+          "default": {
+            "mode": "list",
+            "value": ""
+          },
+          "type": "object",
+          "properties": {
+            "__rl": {
+              "type": "boolean",
+              "const": true
+            },
+            "mode": {
+              "type": "string",
+              "enum": [
+                "list",
+                "id"
+              ]
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "mode",
+            "value"
+          ],
+          "x-modes": [
+            {
+              "name": "list",
+              "displayName": "Timezone",
+              "type": "list"
+            },
+            {
+              "name": "id",
+              "displayName": "ID",
+              "type": "string"
+            }
+          ]
+        },
+        "updatedMin": {
+          "x-title": "Updated Min",
+          "description": "Lower bound for an event's last modification time (as a RFC3339 timestamp) to filter by. When specified, entries deleted since this time will always be included regardless of showDeleted.",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "start": {
+      "x-title": "Start",
+      "description": "Start time of the event, use <a href=\"https://docs.n8n.io/code/cookbook/luxon/\" target=\"_blank\">expression</a> to set a date, or switch to fixed mode to choose date from widget",
+      "default": "={{ $now }}",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "event"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.3
+              }
+            }
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "end": {
+      "x-title": "End",
+      "description": "End time of the event, use <a href=\"https://docs.n8n.io/code/cookbook/luxon/\" target=\"_blank\">expression</a> to set a date, or switch to fixed mode to choose date from widget",
+      "default": "={{ $now.plus(1, 'hour') }}",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "event"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.3
+              }
+            }
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "useDefaultReminders": {
+      "x-title": "Use Default Reminders",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "allday": {
+          "x-title": "All Day",
+          "description": "Whether the event is all day or not",
+          "default": "no",
+          "type": "string",
+          "enum": [
+            "yes",
+            "no"
+          ],
+          "x-enumNames": [
+            "Yes",
+            "No"
+          ]
+        },
+        "attendees": {
+          "x-title": "Attendees",
+          "description": "The attendees of the event. Multiple ones can be separated by comma.",
+          "default": "",
+          "type": "string"
+        },
+        "color": {
+          "x-title": "Color Name or ID",
+          "description": "The color of the event. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "conferenceDataUi": {
+          "x-title": "Conference Data",
+          "description": "Creates a conference link (Hangouts, Meet etc) and attaches it to the event",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "conferenceDataValues": {
+              "x-title": "Conference Link",
+              "type": "object",
+              "properties": {
+                "conferenceSolution": {
+                  "x-title": "Type Name or ID",
+                  "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                  "default": "",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": {
+          "x-title": "Description",
+          "default": "",
+          "type": "string"
+        },
+        "guestsCanInviteOthers": {
+          "x-title": "Guests Can Invite Others",
+          "description": "Whether attendees other than the organizer can invite others to the event",
+          "default": true,
+          "type": "boolean"
+        },
+        "guestsCanModify": {
+          "x-title": "Guests Can Modify",
+          "description": "Whether attendees other than the organizer can modify the event",
+          "default": false,
+          "type": "boolean"
+        },
+        "guestsCanSeeOtherGuests": {
+          "x-title": "Guests Can See Other Guests",
+          "description": "Whether attendees other than the organizer can see who the event's attendees are",
+          "default": true,
+          "type": "boolean"
+        },
+        "id": {
+          "x-title": "ID",
+          "description": "Opaque identifier of the event",
+          "default": "",
+          "type": "string"
+        },
+        "location": {
+          "x-title": "Location",
+          "description": "Geographic location of the event as free-form text",
+          "default": "",
+          "type": "string"
+        },
+        "maxAttendees": {
+          "x-title": "Max Attendees",
+          "description": "The maximum number of attendees to include in the response. If there are more than the specified number of attendees, only the participant is returned.",
+          "default": 0,
+          "type": "number"
+        },
+        "repeatFrecuency": {
+          "x-title": "Repeat Frequency",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "Daily",
+            "weekly",
+            "monthly",
+            "yearly"
+          ],
+          "x-enumNames": [
+            "Daily",
+            "Weekly",
+            "Monthly",
+            "Yearly"
+          ]
+        },
+        "repeatHowManyTimes": {
+          "x-title": "Repeat How Many Times?",
+          "default": 1,
+          "type": "number",
+          "minimum": 1
+        },
+        "repeatUntil": {
+          "x-title": "Repeat Until",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "rrule": {
+          "x-title": "RRULE",
+          "description": "Recurrence rule. When set, the parameters Repeat Frequency, Repeat How Many Times and Repeat Until are ignored.",
+          "default": "",
+          "type": "string"
+        },
+        "sendUpdates": {
+          "x-title": "Send Updates",
+          "description": "Whether to send notifications about the creation of the new event",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "all",
+            "externalOnly",
+            "none"
+          ],
+          "x-enumNames": [
+            "All",
+            "External Only",
+            "None"
+          ],
+          "x-enumDescriptions": [
+            "Notifications are sent to all guests",
+            "Notifications are sent to non-Google Calendar guests only",
+            "No notifications are sent. This value should only be used for migration use case."
+          ]
+        },
+        "showMeAs": {
+          "x-title": "Show Me As",
+          "description": "Whether the event blocks time on the calendar",
+          "default": "opaque",
+          "type": "string",
+          "enum": [
+            "transparent",
+            "opaque"
+          ],
+          "x-enumNames": [
+            "Available",
+            "Busy"
+          ],
+          "x-enumDescriptions": [
+            "The event does not block time on the calendar",
+            "The event does block time on the calendar"
+          ]
+        },
+        "summary": {
+          "x-title": "Summary",
+          "description": "Title of the event",
+          "default": "",
+          "type": "string"
+        },
+        "visibility": {
+          "x-title": "Visibility",
+          "description": "Visibility of the event",
+          "default": "default",
+          "type": "string",
+          "enum": [
+            "confidential",
+            "default",
+            "private",
+            "public"
+          ],
+          "x-enumNames": [
+            "Confidential",
+            "Default",
+            "Private",
+            "Public"
+          ],
+          "x-enumDescriptions": [
+            "The event is private. This value is provided for compatibility reasons.",
+            "Uses the default visibility for events on the calendar",
+            "The event is private and only event attendees may view event details",
+            "The event is public and event details are visible to all readers of the calendar"
+          ]
+        }
+      }
+    },
+    "remindersUi": {
+      "x-title": "Reminders",
+      "description": "If the event doesn't use the default reminders, this lists the reminders specific to the event",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "update"
+          ],
+          "useDefaultReminders": [
+            false
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "remindersValues": {
+          "x-title": "Reminder",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "method": {
+                "x-title": "Method",
+                "default": "",
+                "type": "string",
+                "enum": [
+                  "email",
+                  "popup"
+                ],
+                "x-enumNames": [
+                  "Email",
+                  "Popup"
+                ]
+              },
+              "minutes": {
+                "x-title": "Minutes Before",
+                "default": 0,
+                "type": "number",
+                "minimum": 0,
+                "maximum": 40320
+              }
+            }
+          }
+        }
+      }
+    },
+    "eventId": {
+      "x-title": "Event ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "event"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "modifyTarget": {
+      "x-title": "Modify",
+      "default": "instance",
+      "x-displayOptions": {
+        "show": {
+          "@tool": [
+            false
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.3
+              }
+            }
+          ],
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "update"
+          ],
+          "eventId": [
+            {
+              "_cnd": {
+                "includes": "_"
+              }
+            }
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "instance",
+        "event"
+      ],
+      "x-enumNames": [
+        "Recurring Event Instance",
+        "Recurring Event"
+      ]
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "allday": {
+          "x-title": "All Day",
+          "description": "Whether the event is all day or not",
+          "default": "no",
+          "type": "string",
+          "enum": [
+            "yes",
+            "no"
+          ],
+          "x-enumNames": [
+            "Yes",
+            "No"
+          ]
+        },
+        "attendeesUi": {
+          "x-title": "Attendees",
+          "default": {
+            "values": {
+              "mode": "add",
+              "attendees": []
+            }
+          },
+          "x-displayOptions": {
+            "show": {
+              "@version": [
+                {
+                  "_cnd": {
+                    "gte": 1.2
+                  }
+                }
+              ]
+            }
+          },
+          "type": "object",
+          "properties": {
+            "values": {
+              "x-title": "Values",
+              "type": "object",
+              "properties": {
+                "mode": {
+                  "x-title": "Mode",
+                  "default": "add",
+                  "type": "string",
+                  "enum": [
+                    "add",
+                    "replace"
+                  ],
+                  "x-enumNames": [
+                    "Add Attendees Below [Default]",
+                    "Replace Attendees with Those Below"
+                  ]
+                },
+                "attendees": {
+                  "x-title": "Attendees",
+                  "description": "The attendees of the event. Multiple ones can be separated by comma.",
+                  "default": "",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "attendees": {
+          "x-title": "Attendees",
+          "description": "The attendees of the event. Multiple ones can be separated by comma.",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "@version": [
+                1,
+                1.1
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "color": {
+          "x-title": "Color Name or ID",
+          "description": "The color of the event. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "description": {
+          "x-title": "Description",
+          "default": "",
+          "type": "string"
+        },
+        "end": {
+          "x-title": "End",
+          "description": "End time of the event",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "guestsCanInviteOthers": {
+          "x-title": "Guests Can Invite Others",
+          "description": "Whether attendees other than the organizer can invite others to the event",
+          "default": true,
+          "type": "boolean"
+        },
+        "guestsCanModify": {
+          "x-title": "Guests Can Modify",
+          "description": "Whether attendees other than the organizer can modify the event",
+          "default": false,
+          "type": "boolean"
+        },
+        "guestsCanSeeOtherGuests": {
+          "x-title": "Guests Can See Other Guests",
+          "description": "Whether attendees other than the organizer can see who the event's attendees are",
+          "default": true,
+          "type": "boolean"
+        },
+        "id": {
+          "x-title": "ID",
+          "description": "Opaque identifier of the event",
+          "default": "",
+          "type": "string"
+        },
+        "location": {
+          "x-title": "Location",
+          "description": "Geographic location of the event as free-form text",
+          "default": "",
+          "type": "string"
+        },
+        "maxAttendees": {
+          "x-title": "Max Attendees",
+          "description": "The maximum number of attendees to include in the response. If there are more than the specified number of attendees, only the participant is returned.",
+          "default": 0,
+          "type": "number"
+        },
+        "repeatFrecuency": {
+          "x-title": "Repeat Frequency",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "Daily",
+            "weekly",
+            "monthly",
+            "yearly"
+          ],
+          "x-enumNames": [
+            "Daily",
+            "Weekly",
+            "Monthly",
+            "Yearly"
+          ]
+        },
+        "repeatHowManyTimes": {
+          "x-title": "Repeat How Many Times?",
+          "default": 1,
+          "type": "number",
+          "minimum": 1
+        },
+        "repeatUntil": {
+          "x-title": "Repeat Until",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "rrule": {
+          "x-title": "RRULE",
+          "description": "Recurrence rule. When set, the parameters Repeat Frequency, Repeat How Many Times and Repeat Until are ignored.",
+          "default": "",
+          "type": "string"
+        },
+        "sendUpdates": {
+          "x-title": "Send Updates",
+          "description": "Whether to send notifications about the creation of the new event",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "all",
+            "externalOnly",
+            "none"
+          ],
+          "x-enumNames": [
+            "All",
+            "External Only",
+            "None"
+          ],
+          "x-enumDescriptions": [
+            "Notifications are sent to all guests",
+            "Notifications are sent to non-Google Calendar guests only",
+            "No notifications are sent. This value should only be used for migration use case."
+          ]
+        },
+        "showMeAs": {
+          "x-title": "Show Me As",
+          "description": "Whether the event blocks time on the calendar",
+          "default": "opaque",
+          "type": "string",
+          "enum": [
+            "transparent",
+            "opaque"
+          ],
+          "x-enumNames": [
+            "Available",
+            "Busy"
+          ],
+          "x-enumDescriptions": [
+            "The event does not block time on the calendar",
+            "The event does block time on the calendar"
+          ]
+        },
+        "start": {
+          "x-title": "Start",
+          "description": "Start time of the event",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "summary": {
+          "x-title": "Summary",
+          "description": "Title of the event",
+          "default": "",
+          "type": "string"
+        },
+        "visibility": {
+          "x-title": "Visibility",
+          "description": "Visibility of the event",
+          "default": "default",
+          "type": "string",
+          "enum": [
+            "confidential",
+            "default",
+            "public",
+            "private"
+          ],
+          "x-enumNames": [
+            "Confidential",
+            "Default",
+            "Public",
+            "Private"
+          ],
+          "x-enumDescriptions": [
+            "The event is private. This value is provided for compatibility reasons.",
+            "Uses the default visibility for events on the calendar",
+            "The event is public and event details are visible to all readers of the calendar",
+            "The event is private and only event attendees may view event details"
+          ]
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:googleCalendar.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "googleCalendarOAuth2Api",
+      "required": true
+    }
+  ]
+}

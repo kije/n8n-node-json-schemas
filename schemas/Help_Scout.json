@@ -1,0 +1,931 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Help Scout",
+  "description": "Consume Help Scout API",
+  "x-n8n-node-type": "helpScout",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "conversation",
+      "type": "string",
+      "enum": [
+        "conversation",
+        "customer",
+        "mailbox",
+        "thread"
+      ],
+      "x-enumNames": [
+        "Conversation",
+        "Customer",
+        "Mailbox",
+        "Thread"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "thread"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Get Many"
+      ],
+      "x-enumDescriptions": [
+        "Create a new chat thread",
+        "Get many chat threads"
+      ]
+    },
+    "mailboxId": {
+      "x-title": "Mailbox ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "mailbox"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "status": {
+      "x-title": "Status",
+      "description": "Conversation status",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "conversation"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "active",
+        "closed",
+        "pending"
+      ],
+      "x-enumNames": [
+        "Active",
+        "Closed",
+        "Pending"
+      ]
+    },
+    "subject": {
+      "x-title": "Subject",
+      "description": "Conversation’s subject",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "conversation"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "type": {
+      "x-title": "Type",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "thread"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "chat",
+        "customer",
+        "note",
+        "phone",
+        "reply"
+      ],
+      "x-enumNames": [
+        "Chat",
+        "Customer",
+        "Note",
+        "Phone",
+        "Reply"
+      ]
+    },
+    "resolveData": {
+      "x-title": "Resolve Data",
+      "description": "By default the response only contain the ID to resource. If this option gets activated, it will resolve the data automatically.",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "customer"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "thread"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "createdAt": {
+          "x-title": "Created At",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "customerEmail": {
+          "x-title": "Customer Email",
+          "default": "",
+          "type": "string"
+        },
+        "customerId": {
+          "x-title": "Customer ID",
+          "default": 0,
+          "type": "number"
+        },
+        "draft": {
+          "x-title": "Draft",
+          "description": "Whether a draft reply is created",
+          "default": false,
+          "x-displayOptions": {
+            "show": {
+              "/type": [
+                "note"
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "imported": {
+          "x-title": "Imported",
+          "description": "Whether no outgoing emails or notifications will be generated",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "threadsUi": {
+      "x-title": "Threads",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "conversation"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "threadsValues": {
+          "x-title": "Thread",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "x-title": "Type",
+                "default": "",
+                "type": "string",
+                "enum": [
+                  "chat",
+                  "customer",
+                  "note",
+                  "phone",
+                  "reply"
+                ],
+                "x-enumNames": [
+                  "Chat",
+                  "Customer",
+                  "Note",
+                  "Phone",
+                  "Reply"
+                ]
+              },
+              "text": {
+                "x-title": "Text",
+                "description": "The message text",
+                "default": "",
+                "type": "string"
+              },
+              "bcc": {
+                "x-title": "Bcc",
+                "description": "Email addresses",
+                "default": [],
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "customer"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "cc": {
+                "x-title": "Cc",
+                "description": "Email addresses",
+                "default": [],
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "customer"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "draft": {
+                "x-title": "Draft",
+                "description": "Whether true, a draft reply is created",
+                "default": false,
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "reply"
+                    ]
+                  }
+                },
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "conversationId": {
+      "x-title": "Conversation ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "thread"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "thread"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "thread"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customer"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "x-title": "First Name",
+          "description": "Filters customers by first name",
+          "default": "",
+          "type": "string"
+        },
+        "lastName": {
+          "x-title": "Last Name",
+          "description": "Filters customers by last name",
+          "default": "",
+          "type": "string"
+        },
+        "mailbox": {
+          "x-title": "Mailbox ID",
+          "description": "Filters customers from a specific mailbox",
+          "default": "",
+          "type": "string"
+        },
+        "modifiedSince": {
+          "x-title": "Modified Since",
+          "description": "Returns only customers that were modified after this date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "sortField": {
+          "x-title": "Sort Field",
+          "description": "Sorts the result by specified field",
+          "default": "score",
+          "type": "string",
+          "enum": [
+            "score",
+            "firstName",
+            "lastName",
+            "modifiedAt"
+          ],
+          "x-enumNames": [
+            "Score",
+            "First Name",
+            "Last Name",
+            "Modified At"
+          ]
+        },
+        "sortOrder": {
+          "x-title": "Sort Order",
+          "default": "desc",
+          "type": "string",
+          "enum": [
+            "asc",
+            "desc"
+          ],
+          "x-enumNames": [
+            "ASC",
+            "DESC"
+          ]
+        },
+        "query": {
+          "x-title": "Query",
+          "description": "Advanced search <a href=\"https://developer.helpscout.com/mailbox-api/endpoints/customers/list/#query\">Examples</a>",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "addressUi": {
+      "x-title": "Address",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "customer"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "addressValue": {
+          "x-title": "Address",
+          "type": "object",
+          "properties": {
+            "line1": {
+              "x-title": "Line 1",
+              "default": "",
+              "type": "string"
+            },
+            "line2": {
+              "x-title": "Line 2",
+              "default": "",
+              "type": "string"
+            },
+            "city": {
+              "x-title": "City",
+              "default": "",
+              "type": "string"
+            },
+            "state": {
+              "x-title": "State",
+              "default": "",
+              "type": "string"
+            },
+            "country": {
+              "x-title": "Country Name or ID",
+              "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+              "default": "",
+              "type": "string"
+            },
+            "postalCode": {
+              "x-title": "Postal Code",
+              "default": "",
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "chatsUi": {
+      "x-title": "Chat Handles",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "customer"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "chatsValues": {
+          "x-title": "Chat Handle",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "x-title": "Type",
+                "description": "Chat type",
+                "default": "",
+                "type": "string",
+                "enum": [
+                  "aim",
+                  "gtalk",
+                  "icq",
+                  "msn",
+                  "other",
+                  "qq",
+                  "skype",
+                  "xmpp",
+                  "yahoo"
+                ],
+                "x-enumNames": [
+                  "AIM",
+                  "Google Talk",
+                  "ICQ",
+                  "MSN",
+                  "Other",
+                  "QQ",
+                  "Skype",
+                  "XMPP",
+                  "Yahoo"
+                ]
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "Chat handle",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "emailsUi": {
+      "x-title": "Emails",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "customer"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "emailsValues": {
+          "x-title": "Email",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "x-title": "Type",
+                "description": "Location for this email address",
+                "default": "",
+                "type": "string",
+                "enum": [
+                  "home",
+                  "other",
+                  "work"
+                ],
+                "x-enumNames": [
+                  "Home",
+                  "Other",
+                  "Work"
+                ]
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "Email",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "phonesUi": {
+      "x-title": "Phones",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "customer"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "phonesValues": {
+          "x-title": "Email",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "x-title": "Type",
+                "description": "Location for this phone",
+                "default": "",
+                "type": "string",
+                "enum": [
+                  "fax",
+                  "home",
+                  "other",
+                  "pager",
+                  "work"
+                ],
+                "x-enumNames": [
+                  "Fax",
+                  "Home",
+                  "Other",
+                  "Pager",
+                  "Work"
+                ]
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "Phone",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "socialProfilesUi": {
+      "x-title": "Social Profiles",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "customer"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "socialProfilesValues": {
+          "x-title": "Social Profile",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "x-title": "Type",
+                "description": "Type of social profile",
+                "default": "",
+                "type": "string",
+                "enum": [
+                  "aboutMe",
+                  "facebook",
+                  "flickr",
+                  "forsquare",
+                  "google",
+                  "googleplus",
+                  "linkedin",
+                  "other",
+                  "quora",
+                  "tungleme",
+                  "twitter",
+                  "youtube"
+                ],
+                "x-enumNames": [
+                  "About Me",
+                  "Facebook",
+                  "Flickr",
+                  "Forsquare",
+                  "Google",
+                  "Google Plus",
+                  "Linkedin",
+                  "Other",
+                  "Quora",
+                  "Tungleme",
+                  "Twitter",
+                  "Youtube"
+                ]
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "Social Profile handle (URL for example)",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "websitesUi": {
+      "x-title": "Websites",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "customer"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "websitesValues": {
+          "x-title": "Website",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "x-title": "Value",
+                "description": "Website URL",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "customerId": {
+      "x-title": "Customer ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "customer"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "customer"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "age": {
+          "x-title": "Age",
+          "description": "Customer’s age",
+          "default": 1,
+          "type": "number",
+          "minimum": 1
+        },
+        "firstName": {
+          "x-title": "First Name",
+          "description": "First name of the customer. When defined it must be between 1 and 40 characters.",
+          "default": "",
+          "type": "string"
+        },
+        "gender": {
+          "x-title": "Gender",
+          "description": "Gender of this customer",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "female",
+            "male",
+            "unknown"
+          ],
+          "x-enumNames": [
+            "Female",
+            "Male",
+            "Unknown"
+          ]
+        },
+        "jobTitle": {
+          "x-title": "Job Title",
+          "description": "Job title. Max length 60 characters.",
+          "default": "",
+          "type": "string"
+        },
+        "lastName": {
+          "x-title": "Last Name",
+          "description": "Last name of the customer",
+          "default": "",
+          "type": "string"
+        },
+        "location": {
+          "x-title": "Location",
+          "description": "Location of the customer",
+          "default": "",
+          "type": "string"
+        },
+        "background": {
+          "x-title": "Notes",
+          "default": "",
+          "type": "string"
+        },
+        "organization": {
+          "x-title": "Organization",
+          "default": "",
+          "type": "string"
+        },
+        "photoUrl": {
+          "x-title": "Photo Url",
+          "description": "URL of the customer’s photo",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "text": {
+      "x-title": "Text",
+      "description": "The chat text",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "thread"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "attachmentsUi": {
+      "x-title": "Attachments",
+      "description": "Array of supported attachments to add to the message",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "thread"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "attachmentsValues": {
+          "x-title": "Attachments Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "fileName": {
+                "x-title": "FileName",
+                "description": "Attachment’s file name",
+                "default": "",
+                "type": "string"
+              },
+              "mimeType": {
+                "x-title": "Mime Type",
+                "description": "Attachment’s mime type",
+                "default": "",
+                "type": "string"
+              },
+              "data": {
+                "x-title": "Data",
+                "description": "Base64-encoded stream of data",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "attachmentsBinary": {
+          "x-title": "Attachments Binary",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "property": {
+                "x-title": "Property",
+                "description": "Name of the binary properties which contain data which should be added to email as attachment",
+                "default": "data",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:helpScout.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "helpScoutOAuth2Api",
+      "required": true
+    }
+  ]
+}

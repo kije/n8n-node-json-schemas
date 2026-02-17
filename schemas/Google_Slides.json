@@ -1,0 +1,310 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Slides",
+  "description": "Consume the Google Slides API",
+  "x-n8n-node-type": "googleSlides",
+  "x-n8n-version": [
+    1,
+    2
+  ],
+  "x-n8n-group": [
+    "input",
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "oAuth2",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            2
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "oAuth2",
+        "serviceAccount"
+      ],
+      "x-enumNames": [
+        "OAuth2 (recommended)",
+        "Service Account"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "presentation",
+      "type": "string",
+      "enum": [
+        "page",
+        "presentation"
+      ],
+      "x-enumNames": [
+        "Page",
+        "Presentation"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "page"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "get",
+        "getThumbnail"
+      ],
+      "x-enumNames": [
+        "Get",
+        "Get Thumbnail"
+      ],
+      "x-enumDescriptions": [
+        "Get a page",
+        "Get a thumbnail"
+      ]
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "Title of the presentation to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "presentation"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "presentationId": {
+      "x-title": "Presentation ID",
+      "description": "ID of the presentation to retrieve. Found in the presentation URL: <code>https://docs.google.com/presentation/d/PRESENTATION_ID/edit</code>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "presentation",
+            "page"
+          ],
+          "operation": [
+            "get",
+            "getThumbnail",
+            "getSlides",
+            "replaceText"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getSlides"
+          ],
+          "resource": [
+            "presentation"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getSlides"
+          ],
+          "resource": [
+            "presentation"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "pageObjectId": {
+      "x-title": "Page Object ID",
+      "description": "ID of the page object to retrieve",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "page"
+          ],
+          "operation": [
+            "get",
+            "getThumbnail"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "textUi": {
+      "x-title": "Texts To Replace",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "presentation"
+          ],
+          "operation": [
+            "replaceText"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "textValues": {
+          "x-title": "Text",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "matchCase": {
+                "x-title": "Match Case",
+                "description": "Whether the search should respect case. True : the search is case sensitive. False : the search is case insensitive.",
+                "default": false,
+                "type": "boolean"
+              },
+              "pageObjectIds": {
+                "x-title": "Slide Names or IDs",
+                "description": "If non-empty, limits the matches to slide elements only on the given slides. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                "default": [],
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "text": {
+                "x-title": "Search For",
+                "description": "The text to search for in the slide",
+                "default": "",
+                "type": "string"
+              },
+              "replaceText": {
+                "x-title": "Replace With",
+                "description": "The text that will replace the matched text",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "replaceText"
+          ],
+          "resource": [
+            "presentation"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "revisionId": {
+          "x-title": "Revision ID",
+          "description": "The revision ID of the presentation required for the write request. If specified and the requiredRevisionId doesn't exactly match the presentation's current revisionId, the request will not be processed and will return a 400 bad request error.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "download": {
+      "x-title": "Download",
+      "description": "Name of the binary property to which to write the data of the read page",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "page"
+          ],
+          "operation": [
+            "getThumbnail"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "binaryProperty": {
+      "x-title": "Put Output File in Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "page"
+          ],
+          "operation": [
+            "getThumbnail"
+          ],
+          "download": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:googleslides.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "googleApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "serviceAccount"
+          ]
+        }
+      }
+    },
+    {
+      "name": "googleSlidesOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

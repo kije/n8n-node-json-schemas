@@ -1,0 +1,741 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Analytics",
+  "description": "Use the Google Analytics API",
+  "x-n8n-node-type": "googleAnalytics",
+  "x-n8n-version": 2,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "report",
+      "type": "string",
+      "enum": [
+        "report",
+        "userActivity"
+      ],
+      "x-enumNames": [
+        "Report",
+        "User Activity"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "search",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "userActivity"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "search"
+      ],
+      "x-enumNames": [
+        "Search"
+      ],
+      "x-enumDescriptions": [
+        "Return user activity data"
+      ]
+    },
+    "propertyType": {
+      "x-title": "Property Type",
+      "description": "Google Analytics 4 is the latest version. Universal Analytics is an older version that is not fully functional after the end of June 2023.",
+      "default": "ga4",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "ga4",
+        "universal"
+      ],
+      "x-enumNames": [
+        "Google Analytics 4",
+        "Universal Analytics"
+      ]
+    },
+    "propertyId": {
+      "x-title": "Property",
+      "description": "The Property of Google Analytics",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "ga4"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "By URL",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        }
+      ]
+    },
+    "dateRange": {
+      "x-title": "Date Range",
+      "default": "last7days",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "universal"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "last7days",
+        "last30days",
+        "today",
+        "yesterday",
+        "lastCalendarWeek",
+        "lastCalendarMonth",
+        "custom"
+      ],
+      "x-enumNames": [
+        "Last 7 Days",
+        "Last 30 Days",
+        "Today",
+        "Yesterday",
+        "Last Complete Calendar Week",
+        "Last Complete Calendar Month",
+        "Custom"
+      ]
+    },
+    "startDate": {
+      "x-title": "Start",
+      "default": "2026-02-09T00:00:00.000+01:00",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "universal"
+          ],
+          "dateRange": [
+            "custom"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "endDate": {
+      "x-title": "End",
+      "default": "2026-02-16T00:00:00.000+01:00",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "universal"
+          ],
+          "dateRange": [
+            "custom"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "metricsGA4": {
+      "x-title": "Metrics",
+      "description": "The quantitative measurements of a report. For example, the metric eventCount is the total number of events. Requests are allowed up to 10 metrics.",
+      "default": {
+        "metricValues": [
+          {
+            "listName": "totalUsers"
+          }
+        ]
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "ga4"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "metricValues": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "listName": {
+                "x-title": "Metric",
+                "default": "totalUsers",
+                "type": "string",
+                "enum": [
+                  "active1DayUsers",
+                  "active28DayUsers",
+                  "active7DayUsers",
+                  "checkouts",
+                  "eventCount",
+                  "screenPageViews",
+                  "userEngagementDuration",
+                  "sessions",
+                  "sessionsPerUser",
+                  "totalUsers",
+                  "other",
+                  "custom"
+                ],
+                "x-enumNames": [
+                  "1 Day Active Users",
+                  "28 Day Active Users",
+                  "7 Day Active Users",
+                  "Checkouts",
+                  "Events",
+                  "Page Views",
+                  "Session Duration",
+                  "Sessions",
+                  "Sessions per User",
+                  "Total Users",
+                  "Other metrics…",
+                  "Custom metric…"
+                ]
+              },
+              "name": {
+                "x-title": "Name",
+                "default": "custom_metric",
+                "x-displayOptions": {
+                  "show": {
+                    "listName": [
+                      "custom"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "expression": {
+                "x-title": "Expression",
+                "description": "A mathematical expression for derived metrics. For example, the metric Event count per user is eventCount/totalUsers.",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "listName": [
+                      "custom"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "invisible": {
+                "x-title": "Invisible",
+                "description": "Whether a metric is invisible in the report response. If a metric is invisible, the metric will not produce a column in the response, but can be used in metricFilter, orderBys, or a metric expression.",
+                "default": false,
+                "x-displayOptions": {
+                  "show": {
+                    "listName": [
+                      "custom"
+                    ]
+                  }
+                },
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "dimensionsGA4": {
+      "x-title": "Dimensions to split by",
+      "description": "Dimensions are attributes of your data. For example, the dimension city indicates the city from which an event originates. Dimension values in report responses are strings; for example, the city could be \"Paris\" or \"New York\". Requests are allowed up to 9 dimensions.",
+      "default": {
+        "dimensionValues": [
+          {
+            "listName": "date"
+          }
+        ]
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "ga4"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "dimensionValues": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "listName": {
+                "x-title": "Dimension",
+                "default": "date",
+                "type": "string",
+                "enum": [
+                  "browser",
+                  "campaignName",
+                  "city",
+                  "country",
+                  "date",
+                  "deviceCategory",
+                  "itemName",
+                  "language",
+                  "pageLocation",
+                  "sourceMedium",
+                  "other"
+                ],
+                "x-enumNames": [
+                  "Browser",
+                  "Campaign",
+                  "City",
+                  "Country",
+                  "Date",
+                  "Device Category",
+                  "Item Name",
+                  "Language",
+                  "Page Location",
+                  "Source / Medium",
+                  "Other dimensions…"
+                ]
+              },
+              "name": {
+                "x-title": "Name or ID",
+                "description": "The name of the dimension. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                "default": "date",
+                "x-displayOptions": {
+                  "show": {
+                    "listName": [
+                      "other"
+                    ]
+                  }
+                },
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "userActivity"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "userActivity"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "simple": {
+      "x-title": "Simplify Output",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "report"
+          ],
+          "propertyType": [
+            "universal"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "userActivity"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "activityTypes": {
+          "x-title": "Activity Types",
+          "description": "Type of activites requested",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "ECOMMERCE",
+              "EVENT",
+              "GOAL",
+              "PAGEVIEW",
+              "SCREENVIEW"
+            ]
+          },
+          "x-enumNames": [
+            "Ecommerce",
+            "Event",
+            "Goal",
+            "Pageview",
+            "Screenview"
+          ]
+        }
+      }
+    },
+    "viewId": {
+      "x-title": "View Name or ID",
+      "description": "The view from Google Analytics. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "userActivity"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "metricsUA": {
+      "x-title": "Metrics",
+      "description": "Metrics in the request",
+      "default": {
+        "metricValues": [
+          {
+            "listName": "ga:users"
+          }
+        ]
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "universal"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "metricValues": {
+          "x-title": "Metric",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "listName": {
+                "x-title": "Metric",
+                "default": "ga:users",
+                "type": "string",
+                "enum": [
+                  "ga:productCheckouts",
+                  "ga:totalEvents",
+                  "ga:pageviews",
+                  "ga:sessionDuration",
+                  "ga:sessions",
+                  "ga:sessionsPerUser",
+                  "ga:users",
+                  "other",
+                  "custom"
+                ],
+                "x-enumNames": [
+                  "Checkouts",
+                  "Events",
+                  "Page Views",
+                  "Session Duration",
+                  "Sessions",
+                  "Sessions per User",
+                  "Total Users",
+                  "Other metrics…",
+                  "Custom metric…"
+                ]
+              },
+              "name": {
+                "x-title": "Name",
+                "default": "custom_metric",
+                "x-displayOptions": {
+                  "show": {
+                    "listName": [
+                      "custom"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "expression": {
+                "x-title": "Expression",
+                "description": "Learn more about Google Analytics <a href=\"https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet#Metric\">metric expressions</a>",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "listName": [
+                      "custom"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "formattingType": {
+                "x-title": "Formatting Type",
+                "description": "Specifies how the metric expression should be formatted",
+                "default": "INTEGER",
+                "x-displayOptions": {
+                  "show": {
+                    "listName": [
+                      "custom"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "CURRENCY",
+                  "FLOAT",
+                  "INTEGER",
+                  "PERCENT",
+                  "TIME"
+                ],
+                "x-enumNames": [
+                  "Currency",
+                  "Float",
+                  "Integer",
+                  "Percent",
+                  "Time"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "dimensionsUA": {
+      "x-title": "Dimensions to split by",
+      "description": "Dimensions are attributes of your data. For example, the dimension ga:city indicates the city, for example, \"Paris\" or \"New York\", from which a session originates.",
+      "default": {
+        "dimensionValues": [
+          {
+            "listName": "ga:date"
+          }
+        ]
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ],
+          "propertyType": [
+            "universal"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "dimensionValues": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "listName": {
+                "x-title": "Dimension",
+                "default": "ga:date",
+                "type": "string",
+                "enum": [
+                  "ga:browser",
+                  "ga:campaign",
+                  "ga:city",
+                  "ga:country",
+                  "ga:date",
+                  "ga:deviceCategory",
+                  "ga:productName",
+                  "ga:language",
+                  "ga:pagePath",
+                  "ga:sourceMedium",
+                  "other"
+                ],
+                "x-enumNames": [
+                  "Browser",
+                  "Campaign",
+                  "City",
+                  "Country",
+                  "Date",
+                  "Device Category",
+                  "Item Name",
+                  "Language",
+                  "Page",
+                  "Source / Medium",
+                  "Other dimensions…"
+                ]
+              },
+              "name": {
+                "x-title": "Name or ID",
+                "description": "Name of the dimension to fetch, for example ga:browser. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                "default": "ga:date",
+                "x-displayOptions": {
+                  "show": {
+                    "listName": [
+                      "other"
+                    ]
+                  }
+                },
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "userId": {
+      "x-title": "User ID",
+      "description": "ID of a user",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "userActivity"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:analytics.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "googleAnalyticsOAuth2",
+      "required": true
+    }
+  ]
+}

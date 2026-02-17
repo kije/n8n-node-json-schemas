@@ -1,0 +1,133 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Perspective",
+  "description": "Consume Google Perspective API",
+  "x-n8n-node-type": "googlePerspective",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "operation": {
+      "x-title": "Operation",
+      "default": "analyzeComment",
+      "type": "string",
+      "enum": [
+        "analyzeComment"
+      ],
+      "x-enumNames": [
+        "Analyze Comment"
+      ]
+    },
+    "text": {
+      "x-title": "Text",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "analyzeComment"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "requestedAttributesUi": {
+      "x-title": "Attributes to Analyze",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "analyzeComment"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "requestedAttributesValues": {
+          "x-title": "Properties",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "attributeName": {
+                "x-title": "Attribute Name",
+                "description": "Attribute to analyze in the text. Details <a href=\"https://developers.perspectiveapi.com/s/about-the-api-attributes-and-languages\">here</a>.",
+                "default": "flirtation",
+                "type": "string",
+                "enum": [
+                  "flirtation",
+                  "identity_attack",
+                  "insult",
+                  "profanity",
+                  "severe_toxicity",
+                  "sexually_explicit",
+                  "threat",
+                  "toxicity"
+                ],
+                "x-enumNames": [
+                  "Flirtation",
+                  "Identity Attack",
+                  "Insult",
+                  "Profanity",
+                  "Severe Toxicity",
+                  "Sexually Explicit",
+                  "Threat",
+                  "Toxicity"
+                ]
+              },
+              "scoreThreshold": {
+                "x-title": "Score Threshold",
+                "description": "Score above which to return results. At zero, all scores are returned.",
+                "default": 0,
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "x-precision": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "analyzeComment"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "languages": {
+          "x-title": "Language Name or ID",
+          "description": "Languages of the text input. If unspecified, the API will auto-detect the comment language. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"]}}",
+  "x-icon": {
+    "light": "file:googlePerspective.svg",
+    "dark": "file:googlePerspective.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "googlePerspectiveOAuth2Api",
+      "required": true
+    }
+  ]
+}

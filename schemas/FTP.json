@@ -1,0 +1,207 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "FTP",
+  "description": "Transfer files via FTP or SFTP",
+  "x-n8n-node-type": "ftp",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "protocol": {
+      "x-title": "Protocol",
+      "description": "File transfer protocol",
+      "default": "ftp",
+      "type": "string",
+      "enum": [
+        "ftp",
+        "sftp"
+      ],
+      "x-enumNames": [
+        "FTP",
+        "SFTP"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "download",
+      "type": "string",
+      "enum": [
+        "delete",
+        "download",
+        "list",
+        "rename",
+        "upload"
+      ],
+      "x-enumNames": [
+        "Delete",
+        "Download",
+        "List",
+        "Rename",
+        "Upload"
+      ],
+      "x-enumDescriptions": [
+        "Delete a file/folder",
+        "Download a file",
+        "List folder content",
+        "Rename/move oldPath to newPath",
+        "Upload a file"
+      ]
+    },
+    "path": {
+      "x-title": "Path",
+      "description": "Path of directory to list contents of",
+      "default": "/",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "list"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "list"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "timeout": {
+          "x-title": "Timeout",
+          "description": "Connection timeout in milliseconds",
+          "default": 10000,
+          "type": "number",
+          "minimum": 1
+        }
+      }
+    },
+    "binaryPropertyName": {
+      "x-title": "Input Binary Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "binaryData": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "oldPath": {
+      "x-title": "Old Path",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "rename"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "newPath": {
+      "x-title": "New Path",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "rename"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "binaryData": {
+      "x-title": "Binary File",
+      "description": "The text content of the file to upload",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "fileContent": {
+      "x-title": "File Content",
+      "description": "The text content of the file to upload",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "binaryData": [
+            false
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "recursive": {
+      "x-title": "Recursive",
+      "description": "Whether to return object representing all directories / objects recursively found within SFTP server",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "list"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"protocol\"] + \": \" + $parameter[\"operation\"]}}",
+  "x-icon": "fa:server",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "ftp",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "protocol": [
+            "ftp"
+          ]
+        }
+      },
+      "testedBy": "ftpConnectionTest"
+    },
+    {
+      "name": "sftp",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "protocol": [
+            "sftp"
+          ]
+        }
+      },
+      "testedBy": "sftpConnectionTest"
+    }
+  ]
+}

@@ -1,0 +1,546 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "HTTP Request",
+  "description": "Makes an HTTP request and returns the response data",
+  "x-n8n-node-type": "httpRequest",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "description": "The way to authenticate",
+      "default": "none",
+      "type": "string",
+      "enum": [
+        "basicAuth",
+        "digestAuth",
+        "headerAuth",
+        "none",
+        "oAuth1",
+        "oAuth2",
+        "queryAuth"
+      ],
+      "x-enumNames": [
+        "Basic Auth",
+        "Digest Auth",
+        "Header Auth",
+        "None",
+        "OAuth1",
+        "OAuth2",
+        "Query Auth"
+      ]
+    },
+    "requestMethod": {
+      "x-title": "Request Method",
+      "description": "The request method to use",
+      "default": "GET",
+      "type": "string",
+      "enum": [
+        "DELETE",
+        "GET",
+        "HEAD",
+        "OPTIONS",
+        "PATCH",
+        "POST",
+        "PUT"
+      ],
+      "x-enumNames": [
+        "DELETE",
+        "GET",
+        "HEAD",
+        "OPTIONS",
+        "PATCH",
+        "POST",
+        "PUT"
+      ]
+    },
+    "url": {
+      "x-title": "URL",
+      "description": "The URL to make the request to",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "allowUnauthorizedCerts": {
+      "x-title": "Ignore SSL Issues (Insecure)",
+      "description": "Whether to download the response even if SSL certificate validation is not possible",
+      "default": false,
+      "type": "boolean"
+    },
+    "responseFormat": {
+      "x-title": "Response Format",
+      "description": "The format in which the data gets returned from the URL",
+      "default": "json",
+      "type": "string",
+      "enum": [
+        "file",
+        "json",
+        "string"
+      ],
+      "x-enumNames": [
+        "File",
+        "JSON",
+        "String"
+      ]
+    },
+    "dataPropertyName": {
+      "x-title": "Put Output File in Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "responseFormat": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "jsonParameters": {
+      "x-title": "JSON/RAW Parameters",
+      "description": "Whether the query and/or body parameter should be set via the value-key pair UI or JSON/RAW",
+      "default": false,
+      "type": "boolean"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "batchInterval": {
+          "x-title": "Batch Interval",
+          "description": "Time (in milliseconds) between each batch of requests. 0 for disabled.",
+          "default": 1000,
+          "type": "number",
+          "minimum": 0
+        },
+        "batchSize": {
+          "x-title": "Batch Size",
+          "description": "Input will be split in batches to throttle requests. -1 for disabled. 0 will be treated as 1.",
+          "default": 50,
+          "type": "number",
+          "minimum": -1
+        },
+        "bodyContentType": {
+          "x-title": "Body Content Type",
+          "description": "Content-Type to use to send body parameters",
+          "default": "json",
+          "x-displayOptions": {
+            "show": {
+              "/requestMethod": [
+                "PATCH",
+                "POST",
+                "PUT"
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "json",
+            "raw",
+            "multipart-form-data",
+            "form-urlencoded"
+          ],
+          "x-enumNames": [
+            "JSON",
+            "RAW/Custom",
+            "Form-Data Multipart",
+            "Form Urlencoded"
+          ]
+        },
+        "fullResponse": {
+          "x-title": "Full Response",
+          "description": "Whether to return the full response data instead of only the body",
+          "default": false,
+          "type": "boolean"
+        },
+        "followAllRedirects": {
+          "x-title": "Follow All Redirects",
+          "description": "Whether to follow All HTTP 3xx redirects",
+          "default": false,
+          "type": "boolean"
+        },
+        "followRedirect": {
+          "x-title": "Follow GET/HEAD Redirect",
+          "description": "Whether to follow GET or HEAD HTTP 3xx redirects",
+          "default": true,
+          "type": "boolean"
+        },
+        "ignoreResponseCode": {
+          "x-title": "Ignore Response Code",
+          "description": "Whether to succeeds also when status code is not 2xx",
+          "default": false,
+          "type": "boolean"
+        },
+        "bodyContentCustomMimeType": {
+          "x-title": "MIME Type",
+          "description": "Specify the mime type for raw/custom body type",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/requestMethod": [
+                "PATCH",
+                "POST",
+                "PUT"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "proxy": {
+          "x-title": "Proxy",
+          "description": "HTTP proxy to use",
+          "default": "",
+          "type": "string"
+        },
+        "splitIntoItems": {
+          "x-title": "Split Into Items",
+          "description": "Whether to output each element of an array as own item",
+          "default": false,
+          "x-displayOptions": {
+            "show": {
+              "/responseFormat": [
+                "json"
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "timeout": {
+          "x-title": "Timeout",
+          "description": "Time in ms to wait for the server to send response headers (and start the response body) before aborting the request",
+          "default": 10000,
+          "type": "number",
+          "minimum": 1
+        },
+        "useQueryString": {
+          "x-title": "Use Querystring",
+          "description": "Whether you need arrays to be serialized as foo=bar&foo=baz instead of the default foo[0]=bar&foo[1]=baz",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "sendBinaryData": {
+      "x-title": "Send Binary File",
+      "description": "Whether binary data should be send as body",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "jsonParameters": [
+            true
+          ],
+          "requestMethod": [
+            "PATCH",
+            "POST",
+            "PUT"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "binaryPropertyName": {
+      "x-title": "Input Binary Field",
+      "description": "For Form-Data Multipart, they can be provided in the format: <code>\"sendKey1:binaryProperty1,sendKey2:binaryProperty2</code>",
+      "default": "data",
+      "x-displayOptions": {
+        "hide": {
+          "sendBinaryData": [
+            false
+          ]
+        },
+        "show": {
+          "jsonParameters": [
+            true
+          ],
+          "requestMethod": [
+            "PATCH",
+            "POST",
+            "PUT"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "bodyParametersJson": {
+      "x-title": "Body Parameters",
+      "description": "Body parameters as JSON or RAW",
+      "default": "",
+      "x-displayOptions": {
+        "hide": {
+          "sendBinaryData": [
+            true
+          ]
+        },
+        "show": {
+          "jsonParameters": [
+            true
+          ],
+          "requestMethod": [
+            "PATCH",
+            "POST",
+            "PUT",
+            "DELETE"
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "bodyParametersUi": {
+      "x-title": "Body Parameters",
+      "description": "The body parameter to send",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "jsonParameters": [
+            false
+          ],
+          "requestMethod": [
+            "PATCH",
+            "POST",
+            "PUT",
+            "DELETE"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "parameter": {
+          "x-title": "Parameter",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Name",
+                "description": "Name of the parameter",
+                "default": "",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "Value of the parameter",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "headerParametersJson": {
+      "x-title": "Headers",
+      "description": "Header parameters as JSON or RAW",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "headerParametersUi": {
+      "x-title": "Headers",
+      "description": "The headers to send",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "parameter": {
+          "x-title": "Header",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Name",
+                "description": "Name of the header",
+                "default": "",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "Value to set for the header",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "queryParametersJson": {
+      "x-title": "Query Parameters",
+      "description": "Query parameters as JSON (flat object)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "queryParametersUi": {
+      "x-title": "Query Parameters",
+      "description": "The query parameter to send",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "parameter": {
+          "x-title": "Parameter",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Name",
+                "description": "Name of the parameter",
+                "default": "",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "Value of the parameter",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"requestMethod\"] + \": \" + $parameter[\"url\"]}}",
+  "x-icon": {
+    "light": "file:httprequest.svg",
+    "dark": "file:httprequest.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "httpBasicAuth",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "basicAuth"
+          ]
+        }
+      }
+    },
+    {
+      "name": "httpDigestAuth",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "digestAuth"
+          ]
+        }
+      }
+    },
+    {
+      "name": "httpHeaderAuth",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "headerAuth"
+          ]
+        }
+      }
+    },
+    {
+      "name": "httpQueryAuth",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "queryAuth"
+          ]
+        }
+      }
+    },
+    {
+      "name": "oAuth1Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth1"
+          ]
+        }
+      }
+    },
+    {
+      "name": "oAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

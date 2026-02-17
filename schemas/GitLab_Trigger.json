@@ -1,0 +1,111 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "GitLab Trigger",
+  "description": "Starts the workflow when GitLab events occur",
+  "x-n8n-node-type": "gitlabTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "accessToken",
+      "type": "string",
+      "enum": [
+        "accessToken",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "Access Token",
+        "OAuth2"
+      ]
+    },
+    "owner": {
+      "x-title": "Repository Owner",
+      "description": "Owner of the repository",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "repository": {
+      "x-title": "Repository Name",
+      "description": "The name of the repository",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "events": {
+      "x-title": "Events",
+      "description": "The events to listen to",
+      "default": [],
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "note",
+          "confidential_issues",
+          "confidential_note",
+          "deployment",
+          "issues",
+          "job",
+          "merge_requests",
+          "pipeline",
+          "push",
+          "releases",
+          "tag_push",
+          "wiki_page",
+          "*"
+        ]
+      },
+      "x-enumNames": [
+        "Comment",
+        "Confidential Issues",
+        "Confidential Comments",
+        "Deployments",
+        "Issue",
+        "Job",
+        "Merge Request",
+        "Pipeline",
+        "Push",
+        "Release",
+        "Tag",
+        "Wiki Page",
+        "*"
+      ]
+    }
+  },
+  "x-subtitle": "={{$parameter[\"owner\"] + \"/\" + $parameter[\"repository\"] + \": \" + $parameter[\"events\"].join(\", \")}}",
+  "x-icon": "file:gitlab.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "gitlabApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "accessToken"
+          ]
+        }
+      }
+    },
+    {
+      "name": "gitlabOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "x-webhooks": "true"
+}

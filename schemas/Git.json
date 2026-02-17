@@ -1,0 +1,331 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Git",
+  "description": "Control git.",
+  "x-n8n-node-type": "git",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "description": "The way to authenticate",
+      "default": "none",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "clone",
+            "push"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "gitPassword",
+        "none"
+      ],
+      "x-enumNames": [
+        "Authenticate",
+        "None"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "log",
+      "type": "string",
+      "enum": [
+        "add",
+        "addConfig",
+        "clone",
+        "commit",
+        "fetch",
+        "listConfig",
+        "log",
+        "pull",
+        "push",
+        "pushTags",
+        "reflog",
+        "status",
+        "switchBranch",
+        "tag",
+        "userSetup"
+      ],
+      "x-enumNames": [
+        "Add",
+        "Add Config",
+        "Clone",
+        "Commit",
+        "Fetch",
+        "List Config",
+        "Log",
+        "Pull",
+        "Push",
+        "Push Tags",
+        "Reflog",
+        "Status",
+        "Switch Branch",
+        "Tag",
+        "User Setup"
+      ],
+      "x-enumDescriptions": [
+        "Add a file or folder to commit",
+        "Add configuration property",
+        "Clone a repository",
+        "Commit files or folders to git",
+        "Fetch from remote repository",
+        "Return current configuration",
+        "Return git commit history",
+        "Pull from remote repository",
+        "Push to remote repository",
+        "Push Tags to remote repository",
+        "Return reference log",
+        "Return status of current repository",
+        "Switch to a different branch",
+        "Create a new tag",
+        "Set the user"
+      ]
+    },
+    "repositoryPath": {
+      "x-title": "New Repository Path",
+      "description": "Local path to which the git repository should be cloned into",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "clone"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "pathsToAdd": {
+      "x-title": "Paths to Add",
+      "description": "Comma-separated list of paths (absolute or relative to Repository Path) of files or folders to add",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "add"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "key": {
+      "x-title": "Key",
+      "description": "Name of the key to set",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "addConfig"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "lt": 1.1
+              }
+            }
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "value": {
+      "x-title": "Value",
+      "description": "Value of the key to set",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "addConfig"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "switchBranch"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "createBranch": {
+          "x-title": "Create Branch If Not Exists",
+          "description": "Whether to create the branch if it does not exist",
+          "default": true,
+          "type": "boolean"
+        },
+        "startPoint": {
+          "x-title": "Start Point",
+          "description": "The commit/branch/tag to create the new branch from. If not set, creates from current HEAD.",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "createBranch": [
+                true
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "force": {
+          "x-title": "Force Switch",
+          "description": "Whether to force the branch switch, discarding any local changes",
+          "default": false,
+          "type": "boolean"
+        },
+        "setUpstream": {
+          "x-title": "Set Upstream",
+          "description": "Whether to set up tracking to a remote branch when creating a new branch",
+          "default": false,
+          "x-displayOptions": {
+            "show": {
+              "createBranch": [
+                true
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "remoteName": {
+          "x-title": "Remote Name",
+          "description": "The name of the remote to track",
+          "default": "origin",
+          "x-displayOptions": {
+            "show": {
+              "createBranch": [
+                true
+              ],
+              "setUpstream": [
+                true
+              ]
+            }
+          },
+          "type": "string"
+        }
+      }
+    },
+    "sourceRepository": {
+      "x-title": "Source Repository",
+      "description": "The URL or path of the repository to clone",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "clone"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "message": {
+      "x-title": "Message",
+      "description": "The commit message to use",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "commit"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "reflog"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "reflog"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "branchName": {
+      "x-title": "Branch Name",
+      "description": "The name of the branch to switch to",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "switchBranch"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "The name of the tag to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "tag"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-icon": "file:git.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "gitPassword",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "gitPassword"
+          ]
+        }
+      }
+    }
+  ]
+}

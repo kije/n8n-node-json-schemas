@@ -1,0 +1,650 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Harvest",
+  "description": "Access data on Harvest",
+  "x-n8n-node-type": "harvest",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "accessToken",
+      "type": "string",
+      "enum": [
+        "accessToken",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "Access Token",
+        "OAuth2"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "task",
+      "type": "string",
+      "enum": [
+        "client",
+        "company",
+        "contact",
+        "estimate",
+        "expense",
+        "invoice",
+        "project",
+        "task",
+        "timeEntry",
+        "user"
+      ],
+      "x-enumNames": [
+        "Client",
+        "Company",
+        "Contact",
+        "Estimate",
+        "Expense",
+        "Invoice",
+        "Project",
+        "Task",
+        "Time Entry",
+        "User"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "me",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "me",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Me",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a user",
+        "Delete a user",
+        "Get data of a user",
+        "Get data of many users",
+        "Get data of authenticated user",
+        "Update a user"
+      ]
+    },
+    "accountId": {
+      "x-title": "Account Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "is_active": {
+          "x-title": "Is Active",
+          "description": "Whether to only return active users and false to return inactive users",
+          "default": true,
+          "type": "boolean"
+        },
+        "updated_since": {
+          "x-title": "Updated Since",
+          "description": "Only return users belonging to the user with the given ID",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "page": {
+          "x-title": "Page",
+          "description": "The page number to use in pagination",
+          "default": 1,
+          "type": "number",
+          "minimum": 1
+        }
+      }
+    },
+    "id": {
+      "x-title": "Time Entry ID",
+      "description": "The ID of the time entry to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "The name of the task",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "can_create_invoices": {
+          "x-title": "Can Create Invoices",
+          "description": "Whether the user can create invoices. Only applicable to Project Managers.",
+          "default": false,
+          "type": "boolean"
+        },
+        "can_create_projects": {
+          "x-title": "Can Create Projects",
+          "description": "Whether the user can create projects. Only applicable to Project Managers.",
+          "default": false,
+          "type": "boolean"
+        },
+        "can_see_rates": {
+          "x-title": "Can See Rates",
+          "description": "Whether the user can see billable rates on projects. Only applicable to Project Managers.",
+          "default": false,
+          "type": "boolean"
+        },
+        "cost_rate": {
+          "x-title": "Cost Rate",
+          "description": "The cost rate to use for this user when calculating a project’s costs vs billable amount",
+          "default": 0,
+          "type": "number",
+          "minimum": 0
+        },
+        "default_hourly_rate": {
+          "x-title": "Default Hourly Rate",
+          "description": "The billable rate to use for this user when they are added to a project",
+          "default": "0",
+          "type": "string"
+        },
+        "has_access_to_all_future_projects": {
+          "x-title": "Has Access To All Future Projects",
+          "description": "Whether the user should be automatically added to future projects",
+          "default": false,
+          "type": "boolean"
+        },
+        "is_active": {
+          "x-title": "Is Active",
+          "description": "Whether the user is active or archived",
+          "default": true,
+          "type": "boolean"
+        },
+        "is_admin": {
+          "x-title": "Is Admin",
+          "description": "Whether the user has Admin permissions",
+          "default": false,
+          "type": "boolean"
+        },
+        "is_contractor": {
+          "x-title": "Is Contractor",
+          "description": "Whether the user is a contractor or an employee",
+          "default": false,
+          "type": "boolean"
+        },
+        "is_project_manager": {
+          "x-title": "Is Project Manager",
+          "description": "Whether the user has Project Manager permissions",
+          "default": false,
+          "type": "boolean"
+        },
+        "roles": {
+          "x-title": "Roles",
+          "description": "The role names assigned to this person",
+          "default": "",
+          "type": "string"
+        },
+        "timezone": {
+          "x-title": "Timezone",
+          "description": "The user’s timezone. Defaults to the company’s timezone. See a list of <a href=\"/api-v2/introduction/overview/supported-timezones/\">supported time zones</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "weekly_capacity": {
+          "x-title": "Weekly Capacity",
+          "description": "The number of hours per week this person is available to work in seconds. Defaults to <code class=\"language-plaintext highlighter-rouge\">126000</code> seconds (35 hours).",
+          "default": 126000,
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "can_create_invoices": {
+          "x-title": "Can Create Invoices",
+          "description": "Whether the user can create invoices. Only applicable to Project Managers.",
+          "default": false,
+          "type": "boolean"
+        },
+        "can_create_projects": {
+          "x-title": "Can Create Projects",
+          "description": "Whether the user can create projects. Only applicable to Project Managers.",
+          "default": false,
+          "type": "boolean"
+        },
+        "can_see_rates": {
+          "x-title": "Can See Rates",
+          "description": "Whether the user can see billable rates on projects. Only applicable to Project Managers.",
+          "default": false,
+          "type": "boolean"
+        },
+        "cost_rate": {
+          "x-title": "Cost Rate",
+          "description": "The cost rate to use for this user when calculating a project’s costs vs billable amount",
+          "default": 0,
+          "type": "number",
+          "minimum": 0
+        },
+        "default_hourly_rate": {
+          "x-title": "Default Hourly Rate",
+          "description": "The billable rate to use for this user when they are added to a project",
+          "default": "0",
+          "type": "string"
+        },
+        "email": {
+          "x-title": "Email",
+          "description": "The user email",
+          "default": "",
+          "type": "string"
+        },
+        "first_name": {
+          "x-title": "First Name",
+          "description": "The user first name",
+          "default": "",
+          "type": "string"
+        },
+        "has_access_to_all_future_projects": {
+          "x-title": "Has Access To All Future Projects",
+          "description": "Whether the user should be automatically added to future projects",
+          "default": false,
+          "type": "boolean"
+        },
+        "is_active": {
+          "x-title": "Is Active",
+          "description": "Whether the user is active or archived",
+          "default": true,
+          "type": "boolean"
+        },
+        "is_admin": {
+          "x-title": "Is Admin",
+          "description": "Whether the user has Admin permissions",
+          "default": false,
+          "type": "boolean"
+        },
+        "is_contractor": {
+          "x-title": "Is Contractor",
+          "description": "Whether the user is a contractor or an employee",
+          "default": false,
+          "type": "boolean"
+        },
+        "is_project_manager": {
+          "x-title": "Is Project Manager",
+          "description": "Whether the user has Project Manager permissions",
+          "default": false,
+          "type": "boolean"
+        },
+        "last_name": {
+          "x-title": "Last Name",
+          "description": "The user last name",
+          "default": "",
+          "type": "string"
+        },
+        "roles": {
+          "x-title": "Roles",
+          "description": "The role names assigned to this person",
+          "default": "",
+          "type": "string"
+        },
+        "timezone": {
+          "x-title": "Timezone",
+          "description": "The user’s timezone. Defaults to the company’s timezone. See a list of <a href=\"/api-v2/introduction/overview/supported-timezones/\">supported time zones</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "weekly_capacity": {
+          "x-title": "Weekly Capacity",
+          "description": "The number of hours per week this person is available to work in seconds. Defaults to <code class=\"language-plaintext highlighter-rouge\">126000</code> seconds (35 hours).",
+          "default": 126000,
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "firstName": {
+      "x-title": "First Name",
+      "description": "The first name of the user",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "clientId": {
+      "x-title": "Client ID",
+      "description": "The ID of the client to associate this project with",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "project"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "projectId": {
+      "x-title": "Project ID",
+      "description": "The ID of the project to associate with the time entry",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "createByStartEnd"
+          ],
+          "resource": [
+            "timeEntry"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "expenseCategoryId": {
+      "x-title": "Expense Category ID",
+      "description": "The ID of the expense category this expense is being tracked against",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "expense"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "spentDate": {
+      "x-title": "Spent Date",
+      "description": "The ISO 8601 formatted date the time entry was spent",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "createByStartEnd"
+          ],
+          "resource": [
+            "timeEntry"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "isBillable": {
+      "x-title": "Is Billable",
+      "description": "Whether the project is billable or not",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "project"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "billBy": {
+      "x-title": "Bill By",
+      "description": "The method by which the project is invoiced",
+      "default": "none",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "project"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "none",
+        "People",
+        "Project",
+        "Tasks"
+      ],
+      "x-enumNames": [
+        "None",
+        "People",
+        "Project",
+        "Tasks"
+      ]
+    },
+    "budgetBy": {
+      "x-title": "Budget By",
+      "description": "The email of the user or \"none\"",
+      "default": "none",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "project"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "taskId": {
+      "x-title": "Task ID",
+      "description": "The ID of the task to associate with the time entry",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "createByStartEnd"
+          ],
+          "resource": [
+            "timeEntry"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "lastName": {
+      "x-title": "Last Name",
+      "description": "The last name of the user",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "The email of the user",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:harvest.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "harvestApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "accessToken"
+          ]
+        }
+      }
+    },
+    {
+      "name": "harvestOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

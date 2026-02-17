@@ -1,0 +1,271 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Grist",
+  "description": "Consume the Grist API",
+  "x-n8n-node-type": "grist",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create Row",
+        "Delete Row",
+        "Get Many Rows",
+        "Update Row"
+      ],
+      "x-enumDescriptions": [
+        "Create rows in a table",
+        "Delete rows from a table",
+        "Read rows from a table",
+        "Update rows in a table"
+      ]
+    },
+    "docId": {
+      "x-title": "Document ID",
+      "description": "In your document, click your profile icon, then Document Settings, then copy the value under \"This document's ID\"",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "tableId": {
+      "x-title": "Table ID",
+      "description": "ID of table to operate on. If unsure, look at the Code View.",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "rowId": {
+      "x-title": "Row ID",
+      "description": "ID of the row to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "additionalOptions": {
+      "x-title": "Additional Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "filter": {
+          "x-title": "Filter",
+          "description": "Only return rows matching all of the given filters. For complex filters, create a formula column and filter for the value \"true\".",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "filterProperties": {
+              "x-title": "Filter Properties",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "x-title": "Column Name or ID",
+                    "description": "Column to apply the filter in. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                    "default": "",
+                    "x-required": true,
+                    "type": "string"
+                  },
+                  "values": {
+                    "x-title": "Values",
+                    "description": "Comma-separated list of values to search for in the filtered column",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "sort": {
+          "x-title": "Sort Order",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "sortProperties": {
+              "x-title": "Sort Properties",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "x-title": "Column Name or ID",
+                    "description": "Column to sort on. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                    "default": "",
+                    "x-required": true,
+                    "type": "string"
+                  },
+                  "direction": {
+                    "x-title": "Direction",
+                    "description": "Direction to sort in",
+                    "default": "asc",
+                    "type": "string",
+                    "enum": [
+                      "asc",
+                      "desc"
+                    ],
+                    "x-enumNames": [
+                      "Ascending",
+                      "Descending"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "dataToSend": {
+      "x-title": "Data to Send",
+      "description": "Whether to insert the input data this node receives in the new row",
+      "default": "defineInNode",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "update"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "autoMapInputs",
+        "defineInNode"
+      ],
+      "x-enumNames": [
+        "Auto-Map Input Data to Columns",
+        "Define Below for Each Column"
+      ],
+      "x-enumDescriptions": [
+        "Use when node input properties match destination column names",
+        "Set the value for each destination column"
+      ]
+    },
+    "inputsToIgnore": {
+      "x-title": "Inputs to Ignore",
+      "description": "List of input properties to avoid sending, separated by commas. Leave empty to send all properties.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "update"
+          ],
+          "dataToSend": [
+            "autoMapInputs"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "fieldsToSend": {
+      "x-title": "Fields to Send",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "update"
+          ],
+          "dataToSend": [
+            "defineInNode"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "properties": {
+          "x-title": "Properties",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "fieldId": {
+                "x-title": "Column Name or ID",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": "",
+                "type": "string"
+              },
+              "fieldValue": {
+                "x-title": "Field Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"]}}",
+  "x-icon": "file:grist.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "gristApi",
+      "required": true,
+      "testedBy": "gristApiTest"
+    }
+  ]
+}

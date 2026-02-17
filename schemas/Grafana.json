@@ -1,0 +1,288 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Grafana",
+  "description": "Consume the Grafana API",
+  "x-n8n-node-type": "grafana",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "dashboard",
+      "type": "string",
+      "enum": [
+        "dashboard",
+        "team",
+        "teamMember",
+        "user"
+      ],
+      "x-enumNames": [
+        "Dashboard",
+        "Team",
+        "Team Member",
+        "User"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "delete",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Delete",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Delete a user from the current organization",
+        "Retrieve many users in the current organization",
+        "Update a user in the current organization"
+      ]
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "Title of the dashboard to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "dashboard"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "team"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "email": {
+          "x-title": "Email",
+          "description": "Email of the team to create",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "dashboardUidOrUrl": {
+      "x-title": "Dashboard UID or URL",
+      "description": "Unique alphabetic identifier or URL of the dashboard to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "dashboard"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "team"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "name": {
+          "x-title": "Name",
+          "description": "Name of the team to filter by",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "role": {
+          "x-title": "Role",
+          "description": "New role for the user",
+          "default": "Admin",
+          "type": "string",
+          "enum": [
+            "Admin",
+            "Editor",
+            "Viewer"
+          ],
+          "x-enumNames": [
+            "Admin",
+            "Editor",
+            "Viewer"
+          ]
+        }
+      }
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "Name of the team to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "team"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "teamId": {
+      "x-title": "Team Name or ID",
+      "description": "Team to retrieve all members from. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "teamMember"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "userId": {
+      "x-title": "User ID",
+      "description": "ID of the user to delete",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "memberId": {
+      "x-title": "User Name or ID",
+      "description": "User to remove from the team. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "teamMember"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:grafana.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "grafanaApi",
+      "required": true
+    }
+  ]
+}

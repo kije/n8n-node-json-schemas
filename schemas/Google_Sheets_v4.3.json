@@ -1,0 +1,800 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Sheets",
+  "description": "Read, update and write data to Google Sheets",
+  "x-n8n-node-type": "googleSheets",
+  "x-n8n-version": 4.3,
+  "x-n8n-group": [
+    "input",
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "oAuth2",
+      "type": "string",
+      "enum": [
+        "serviceAccount",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "Service Account",
+        "OAuth2 (recommended)"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "sheet",
+      "type": "string",
+      "enum": [
+        "spreadsheet",
+        "sheet"
+      ],
+      "x-enumNames": [
+        "Document",
+        "Sheet Within Document"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "spreadsheet"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "deleteSpreadsheet"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete"
+      ],
+      "x-enumDescriptions": [
+        "Create a spreadsheet",
+        "Delete a spreadsheet"
+      ]
+    },
+    "documentId": {
+      "x-title": "Document",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "spreadsheet"
+          ],
+          "operation": [
+            "deleteSpreadsheet"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "By URL",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        }
+      ]
+    },
+    "sheetName": {
+      "x-title": "Sheet",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "append",
+            "appendOrUpdate",
+            "clear",
+            "delete",
+            "read",
+            "remove",
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id",
+            "name"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "By URL",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "displayName": "By Name",
+          "type": "string"
+        }
+      ]
+    },
+    "dataMode": {
+      "x-title": "Data Mode",
+      "description": "Whether to insert the input data this node receives in the new row",
+      "default": "defineBelow",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "appendOrUpdate"
+          ],
+          "@version": [
+            3
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "autoMapInputData",
+        "defineBelow",
+        "nothing"
+      ],
+      "x-enumNames": [
+        "Auto-Map Input Data to Columns",
+        "Map Each Column Below",
+        "Nothing"
+      ],
+      "x-enumDescriptions": [
+        "Use when node input properties match destination column names",
+        "Set the value for each destination column",
+        "Do not send anything"
+      ]
+    },
+    "fieldsUi": {
+      "x-title": "Values to Send",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "appendOrUpdate"
+          ],
+          "dataMode": [
+            "defineBelow"
+          ],
+          "@version": [
+            3
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Field",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "column": {
+                "x-title": "Column",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": "",
+                "type": "string"
+              },
+              "columnName": {
+                "x-title": "Column Name",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "column": [
+                      "newColumn"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "fieldValue": {
+                "x-title": "Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "columns": {
+      "x-title": "Columns",
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "appendOrUpdate"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "between": {
+                  "from": 4,
+                  "to": 4.6
+                }
+              }
+            }
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-n8n-type": "resourceMapper"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "spreadsheet"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "locale": {
+          "x-title": "Locale",
+          "description": "The locale of the spreadsheet in one of the following formats:\n\t\t\t\t<ul>\n\t\t\t\t\t<li>en (639-1)</li>\n\t\t\t\t\t<li>fil (639-2 if no 639-1 format exists)</li>\n\t\t\t\t\t<li>en_US (combination of ISO language an country)</li>\n\t\t\t\t<ul>",
+          "default": "",
+          "type": "string"
+        },
+        "autoRecalc": {
+          "x-title": "Recalculation Interval",
+          "description": "Cell recalculation interval options",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "",
+            "ON_CHANGE",
+            "MINUTE",
+            "HOUR"
+          ],
+          "x-enumNames": [
+            "Default",
+            "On Change",
+            "Minute",
+            "Hour"
+          ],
+          "x-enumDescriptions": [
+            "Default value",
+            "Volatile functions are updated on every change",
+            "Volatile functions are updated on every change and every minute",
+            "Volatile functions are updated on every change and hourly"
+          ]
+        }
+      }
+    },
+    "clear": {
+      "x-title": "Clear",
+      "description": "What to clear",
+      "default": "wholeSheet",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "clear"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "wholeSheet",
+        "specificRows",
+        "specificColumns",
+        "specificRange"
+      ],
+      "x-enumNames": [
+        "Whole Sheet",
+        "Specific Rows",
+        "Specific Columns",
+        "Specific Range"
+      ]
+    },
+    "keepFirstRow": {
+      "x-title": "Keep First Row",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "clear"
+          ],
+          "clear": [
+            "wholeSheet"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "startIndex": {
+      "x-title": "Start Column",
+      "description": "The column to delete",
+      "default": "A",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "delete"
+          ],
+          "toDelete": [
+            "columns"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "rowsToDelete": {
+      "x-title": "Number of Rows to Delete",
+      "default": 1,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "clear"
+          ],
+          "clear": [
+            "specificRows"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "columnsToDelete": {
+      "x-title": "Number of Columns to Delete",
+      "default": 1,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "clear"
+          ],
+          "clear": [
+            "specificColumns"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "range": {
+      "x-title": "Range",
+      "description": "The table range to read from or to append data to. See the Google <a href=\"https://developers.google.com/sheets/api/guides/values#writing\">documentation</a> for the details. If it contains multiple sheets it can also be added like this: \"MySheet!A:F\"",
+      "default": "A:F",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "clear"
+          ],
+          "clear": [
+            "specificRange"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "The title of the spreadsheet",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "spreadsheet"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "toDelete": {
+      "x-title": "To Delete",
+      "description": "What to delete",
+      "default": "rows",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "delete"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "rows",
+        "columns"
+      ],
+      "x-enumNames": [
+        "Rows",
+        "Columns"
+      ],
+      "x-enumDescriptions": [
+        "Rows to delete",
+        "Columns to delete"
+      ]
+    },
+    "numberToDelete": {
+      "x-title": "Number of Columns to Delete",
+      "default": 1,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "delete"
+          ],
+          "toDelete": [
+            "columns"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "filtersUI": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "read"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Filter",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "lookupColumn": {
+                "x-title": "Column",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": "",
+                "type": "string"
+              },
+              "lookupValue": {
+                "x-title": "Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "combineFilters": {
+      "x-title": "Combine Filters",
+      "description": "How to combine the conditions defined in \"Filters\": AND requires all conditions to be true, OR requires at least one condition to be true",
+      "default": "AND",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 4.3
+              }
+            }
+          ],
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "read"
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "AND",
+        "OR"
+      ],
+      "x-enumNames": [
+        "AND",
+        "OR"
+      ],
+      "x-enumDescriptions": [
+        "Only rows that meet all the conditions are selected",
+        "Rows that meet at least one condition are selected"
+      ]
+    },
+    "columnToMatchOn": {
+      "x-title": "Column to match on",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "appendOrUpdate"
+          ],
+          "@version": [
+            3
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "valueToMatchOn": {
+      "x-title": "Value of Column to Match On",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sheet"
+          ],
+          "operation": [
+            "appendOrUpdate"
+          ],
+          "dataMode": [
+            "defineBelow"
+          ],
+          "@version": [
+            3
+          ]
+        },
+        "hide": {
+          "sheetName": [
+            ""
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "sheetsUi": {
+      "x-title": "Sheets",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "spreadsheet"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "sheetValues": {
+          "x-title": "Sheet",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "x-title": "Title",
+                "description": "Title of the property to create",
+                "default": "",
+                "type": "string"
+              },
+              "hidden": {
+                "x-title": "Hidden",
+                "description": "Whether the Sheet should be hidden in the UI",
+                "default": false,
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:googleSheets.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "googleApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "serviceAccount"
+          ]
+        }
+      },
+      "testedBy": "googleApiCredentialTest"
+    },
+    {
+      "name": "googleSheetsOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

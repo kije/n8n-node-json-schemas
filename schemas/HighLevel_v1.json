@@ -1,0 +1,507 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "HighLevel",
+  "description": "Consume HighLevel API v1",
+  "x-n8n-node-type": "highLevel",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "contact",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "contact",
+        "opportunity",
+        "task"
+      ],
+      "x-enumNames": [
+        "Contact",
+        "Opportunity",
+        "Task"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ]
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "Lookup Contact by Email. If Email is not found it will try to find a contact by phone.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "lookup"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "phone": {
+      "x-title": "Phone",
+      "description": "Lookup Contact by Phone. It will first try to find a contact by Email and than by Phone.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "lookup"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "assignedTo": {
+          "x-title": "Assigned To",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "description": {
+          "x-title": "Description",
+          "default": "",
+          "type": "string"
+        },
+        "status": {
+          "x-title": "Status",
+          "default": "incompleted",
+          "type": "string",
+          "enum": [
+            "incompleted",
+            "completed"
+          ],
+          "x-enumNames": [
+            "Incompleted",
+            "Completed"
+          ]
+        }
+      }
+    },
+    "contactId": {
+      "x-title": "Contact ID",
+      "description": "Contact the task belongs to",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "assignedTo": {
+          "x-title": "Assigned To",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "description": {
+          "x-title": "Description",
+          "default": "",
+          "type": "string"
+        },
+        "dueDate": {
+          "x-title": "Due Date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "x-title": "Status",
+          "default": "incompleted",
+          "type": "string",
+          "enum": [
+            "incompleted",
+            "completed"
+          ],
+          "x-enumNames": [
+            "Incompleted",
+            "Completed"
+          ]
+        },
+        "title": {
+          "x-title": "Title",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 20,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "assignedTo": {
+          "x-title": "Assigned To",
+          "description": "Choose staff member from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "campaignId": {
+          "x-title": "Campaign ID",
+          "default": "",
+          "type": "string"
+        },
+        "endDate": {
+          "x-title": "End Date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "stageId": {
+          "x-title": "Stage Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "startDate": {
+          "x-title": "Start Date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "x-title": "Status",
+          "default": "open",
+          "type": "string",
+          "enum": [
+            "open",
+            "won",
+            "lost",
+            "abandoned"
+          ],
+          "x-enumNames": [
+            "Open",
+            "Won",
+            "Lost",
+            "Abandoned"
+          ]
+        },
+        "query": {
+          "x-title": "Query",
+          "description": "Query will search on these fields: Name, Phone, Email, Tags, and Company Name",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "order": {
+          "x-title": "Order",
+          "default": "desc",
+          "type": "string",
+          "enum": [
+            "desc",
+            "asc"
+          ],
+          "x-enumNames": [
+            "Descending",
+            "Ascending"
+          ]
+        },
+        "sortBy": {
+          "x-title": "Sort By",
+          "default": "date_added",
+          "type": "string",
+          "enum": [
+            "date_added",
+            "date_updated"
+          ],
+          "x-enumNames": [
+            "Date Added",
+            "Date Updated"
+          ]
+        }
+      }
+    },
+    "pipelineId": {
+      "x-title": "Pipeline Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "create",
+            "delete",
+            "get",
+            "getAll",
+            "update"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "stageId": {
+      "x-title": "Stage Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "contactIdentifier": {
+      "x-title": "Contact Identifier",
+      "description": "Either Email, Phone or Contact ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "title": {
+      "x-title": "Title",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "status": {
+      "x-title": "Status",
+      "default": "open",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "open",
+        "won",
+        "lost",
+        "abandoned"
+      ],
+      "x-enumNames": [
+        "Open",
+        "Won",
+        "Lost",
+        "Abandoned"
+      ]
+    },
+    "opportunityId": {
+      "x-title": "Opportunity ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "dueDate": {
+      "x-title": "Due Date",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "taskId": {
+      "x-title": "Task ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:highLevel.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "highLevelApi",
+      "required": true
+    }
+  ]
+}

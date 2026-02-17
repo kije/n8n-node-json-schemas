@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Cloud Realtime Database",
+  "description": "Interact with Google Firebase - Realtime Database API",
+  "x-n8n-node-type": "googleFirebaseRealtimeDatabase",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "projectId": {
+      "x-title": "Project Name or ID",
+      "description": "As displayed in firebase console URL. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "push",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Push",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Write data to a database",
+        "Delete data from a database",
+        "Get a record from a database",
+        "Append to a list of data",
+        "Update item on a database"
+      ]
+    },
+    "path": {
+      "x-title": "Object Path",
+      "description": "Object path on database. Do not append .json.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "attributes": {
+      "x-title": "Columns / Attributes",
+      "description": "Attributes to save",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "push",
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"]}}",
+  "x-icon": "file:googleFirebaseRealtimeDatabase.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "googleFirebaseRealtimeDatabaseOAuth2Api"
+    }
+  ]
+}

@@ -1,0 +1,253 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Books",
+  "description": "Read data from Google Books",
+  "x-n8n-node-type": "googleBooks",
+  "x-n8n-version": [
+    1,
+    2
+  ],
+  "x-n8n-group": [
+    "input",
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "oAuth2",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            2
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "oAuth2",
+        "serviceAccount"
+      ],
+      "x-enumNames": [
+        "OAuth2 (recommended)",
+        "Service Account"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "bookshelf",
+      "type": "string",
+      "enum": [
+        "bookshelf",
+        "bookshelfVolume",
+        "volume"
+      ],
+      "x-enumNames": [
+        "Bookshelf",
+        "Bookshelf Volume",
+        "Volume"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "volume"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "get",
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Get",
+        "Get Many"
+      ],
+      "x-enumDescriptions": [
+        "Get a volume resource based on ID",
+        "Get many volumes filtered by query"
+      ]
+    },
+    "myLibrary": {
+      "x-title": "My Library",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get",
+            "getAll"
+          ],
+          "resource": [
+            "bookshelf",
+            "bookshelfVolume"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "searchQuery": {
+      "x-title": "Search Query",
+      "description": "Full-text search query string",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "volume"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "userId": {
+      "x-title": "User ID",
+      "description": "ID of user",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get",
+            "getAll"
+          ],
+          "resource": [
+            "bookshelf",
+            "bookshelfVolume"
+          ]
+        },
+        "hide": {
+          "myLibrary": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "shelfId": {
+      "x-title": "Bookshelf ID",
+      "description": "ID of the bookshelf",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "bookshelfVolume"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "volumeId": {
+      "x-title": "Volume ID",
+      "description": "ID of the volume",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "add",
+            "move",
+            "remove",
+            "get"
+          ],
+          "resource": [
+            "bookshelfVolume",
+            "volume"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "volumePosition": {
+      "x-title": "Volume Position",
+      "description": "Position on shelf to move the item (0 puts the item before the current first item, 1 puts it between the first and the second and so on)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "move"
+          ],
+          "resource": [
+            "bookshelfVolume"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 40,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 40
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:googlebooks.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "googleApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "serviceAccount"
+          ]
+        }
+      }
+    },
+    {
+      "name": "googleBooksOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

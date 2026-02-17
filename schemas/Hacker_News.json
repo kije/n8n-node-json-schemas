@@ -1,0 +1,175 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Hacker News",
+  "description": "Consume Hacker News API",
+  "x-n8n-node-type": "hackerNews",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "article",
+      "type": "string",
+      "enum": [
+        "all",
+        "article",
+        "user"
+      ],
+      "x-enumNames": [
+        "All",
+        "Article",
+        "User"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "get"
+      ],
+      "x-enumNames": [
+        "Get"
+      ],
+      "x-enumDescriptions": [
+        "Get a Hacker News user"
+      ]
+    },
+    "articleId": {
+      "x-title": "Article ID",
+      "description": "The ID of the Hacker News article to be returned",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "article"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "username": {
+      "x-title": "Username",
+      "description": "The Hacker News user to be returned",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "all"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "all"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "all"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "keyword": {
+          "x-title": "Keyword",
+          "description": "The keyword for filtering the results of the query",
+          "default": "",
+          "type": "string"
+        },
+        "tags": {
+          "x-title": "Tags",
+          "description": "Tags for filtering the results of the query",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "ask_hn",
+              "comment",
+              "front_page",
+              "poll",
+              "show_hn",
+              "story"
+            ]
+          },
+          "x-enumNames": [
+            "Ask HN",
+            "Comment",
+            "Front Page",
+            "Poll",
+            "Show HN",
+            "Story"
+          ]
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:hackernews.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

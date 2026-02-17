@@ -1,0 +1,706 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Docs",
+  "description": "Consume Google Docs API.",
+  "x-n8n-node-type": "googleDocs",
+  "x-n8n-version": [
+    1,
+    2
+  ],
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "oAuth2",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            2
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "oAuth2",
+        "serviceAccount"
+      ],
+      "x-enumNames": [
+        "OAuth2 (recommended)",
+        "Service Account"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "document",
+      "type": "string",
+      "enum": [
+        "document"
+      ],
+      "x-enumNames": [
+        "Document"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "get",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Get",
+        "Update"
+      ]
+    },
+    "driveId": {
+      "x-title": "Drive Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "myDrive",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "folderId": {
+      "x-title": "Folder Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "title": {
+      "x-title": "Title",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "documentURL": {
+      "x-title": "Doc ID or URL",
+      "description": "The ID in the document URL (or just paste the whole URL)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "simple": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "actionsUi": {
+      "x-title": "Actions",
+      "description": "Actions applied to update the document",
+      "default": {
+        "actionFields": [
+          {
+            "object": "text",
+            "action": "insert",
+            "locationChoice": "endOfSegmentLocation",
+            "index": 0,
+            "text": ""
+          }
+        ]
+      },
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "actionFields": {
+          "x-title": "Action Fields",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "object": {
+                "x-title": "Object",
+                "description": "The update object",
+                "default": "text",
+                "type": "string",
+                "enum": [
+                  "footer",
+                  "header",
+                  "namedRange",
+                  "pageBreak",
+                  "paragraphBullets",
+                  "positionedObject",
+                  "table",
+                  "tableColumn",
+                  "tableRow",
+                  "text"
+                ],
+                "x-enumNames": [
+                  "Footer",
+                  "Header",
+                  "Named Range",
+                  "Page Break",
+                  "Paragraph Bullets",
+                  "Positioned Object",
+                  "Table",
+                  "Table Column",
+                  "Table Row",
+                  "Text"
+                ]
+              },
+              "action": {
+                "x-title": "Action",
+                "description": "The update action",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "object": [
+                      "positionedObject"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "delete"
+                ],
+                "x-enumNames": [
+                  "Delete"
+                ]
+              },
+              "insertSegment": {
+                "x-title": "Insert Segment",
+                "description": "The location where to create the object",
+                "default": "body",
+                "x-displayOptions": {
+                  "show": {
+                    "object": [
+                      "paragraphBullets",
+                      "tableColumn",
+                      "tableRow"
+                    ],
+                    "action": [
+                      "delete"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "header",
+                  "body",
+                  "footer"
+                ],
+                "x-enumNames": [
+                  "Header",
+                  "Body",
+                  "Footer"
+                ]
+              },
+              "segmentId": {
+                "x-title": "Segment ID",
+                "description": "The ID of the header, footer or footnote. The <code>Document → Get</code> operation lists all segment IDs (make sure you disable the <code>simple</code> toggle).",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "object": [
+                      "paragraphBullets",
+                      "tableColumn",
+                      "tableRow"
+                    ],
+                    "action": [
+                      "delete"
+                    ]
+                  },
+                  "hide": {
+                    "insertSegment": [
+                      "body"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "index": {
+                "x-title": "Index",
+                "description": "The zero-based index, relative to the beginning of the specified segment (use index + 1 to refer to a table)",
+                "default": 1,
+                "x-displayOptions": {
+                  "show": {
+                    "object": [
+                      "tableColumn",
+                      "tableRow"
+                    ]
+                  }
+                },
+                "type": "number",
+                "minimum": 1
+              },
+              "name": {
+                "x-title": "Name",
+                "description": "The name of the Named Range. Names do not need to be unique.",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "object": [
+                      "namedRange"
+                    ],
+                    "action": [
+                      "create"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "startIndex": {
+                "x-title": "Start Index",
+                "description": "The zero-based start index of this range",
+                "default": 0,
+                "x-displayOptions": {
+                  "show": {
+                    "object": [
+                      "paragraphBullets"
+                    ]
+                  }
+                },
+                "type": "number"
+              },
+              "endIndex": {
+                "x-title": "End Index",
+                "description": "The zero-based end index of this range",
+                "default": 0,
+                "x-displayOptions": {
+                  "show": {
+                    "object": [
+                      "paragraphBullets"
+                    ]
+                  }
+                },
+                "type": "number"
+              },
+              "bulletPreset": {
+                "x-title": "Style",
+                "description": "The Preset pattern of bullet glyphs for list",
+                "default": "BULLET_DISC_CIRCLE_SQUARE",
+                "x-displayOptions": {
+                  "show": {
+                    "object": [
+                      "paragraphBullets"
+                    ],
+                    "action": [
+                      "create"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "BULLET_DISC_CIRCLE_SQUARE",
+                  "BULLET_CHECKBOX",
+                  "NUMBERED_DECIMAL_NESTED"
+                ],
+                "x-enumNames": [
+                  "Bullet List",
+                  "Checkbox List",
+                  "Numbered List"
+                ],
+                "x-enumDescriptions": [
+                  "A bulleted list with a <code>DISC</code>, <code>CIRCLE</code> and <code>SQUARE</code> bullet glyph for the first 3 list nesting levels",
+                  "A bulleted list with CHECKBOX bullet glyphs for all list nesting levels",
+                  "A numbered list with <code>DECIMAL</code> numeric glyphs separated by periods, where each nesting level uses the previous nesting level's glyph as a prefix. For example: 1., 1.1., 2., 2.2 ."
+                ]
+              },
+              "footerId": {
+                "x-title": "Footer ID",
+                "description": "The ID of the footer to delete. To retrieve it, use the <code>get document</code> where you can find under <code>footers</code> attribute.",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "object": [
+                      "footer"
+                    ],
+                    "action": [
+                      "delete"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "headerId": {
+                "x-title": "Header ID",
+                "description": "The ID of the header to delete. To retrieve it, use the <code>get document</code> where you can find under <code>headers</code> attribute.",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "object": [
+                      "header"
+                    ],
+                    "action": [
+                      "delete"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "namedRangeReference": {
+                "x-title": "Specify Range By",
+                "description": "The value determines which range or ranges to delete",
+                "default": "namedRangeId",
+                "x-displayOptions": {
+                  "show": {
+                    "object": [
+                      "namedRange"
+                    ],
+                    "action": [
+                      "delete"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "namedRangeId",
+                  "name"
+                ],
+                "x-enumNames": [
+                  "ID",
+                  "Name"
+                ]
+              },
+              "value": {
+                "x-title": "Name",
+                "description": "The name of the range",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "object": [
+                      "namedRange"
+                    ],
+                    "action": [
+                      "delete"
+                    ],
+                    "namedRangeReference": [
+                      "name"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "objectId": {
+                "x-title": "Object ID",
+                "description": "The ID of the positioned object to delete (An object that is tied to a paragraph and positioned relative to its beginning), See the Google <a href=\"https://developers.google.com/docs/api/reference/rest/v1/documents#positionedobject\" target=\"_blank\">documentation</a>",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "object": [
+                      "positionedObject"
+                    ],
+                    "action": [
+                      "delete"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "locationChoice": {
+                "x-title": "Insert Location",
+                "description": "The location where the text will be inserted",
+                "default": "endOfSegmentLocation",
+                "x-displayOptions": {
+                  "show": {
+                    "object": [
+                      "text"
+                    ],
+                    "action": [
+                      "insert"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "endOfSegmentLocation",
+                  "location"
+                ],
+                "x-enumNames": [
+                  "At End of Specific Position",
+                  "At Index"
+                ],
+                "x-enumDescriptions": [
+                  "Inserts the text at the end of a header, footer, footnote, or document body",
+                  ""
+                ]
+              },
+              "rows": {
+                "x-title": "Rows",
+                "description": "The number of rows in the table",
+                "default": 0,
+                "x-displayOptions": {
+                  "show": {
+                    "object": [
+                      "table"
+                    ],
+                    "action": [
+                      "insert"
+                    ]
+                  }
+                },
+                "type": "number"
+              },
+              "columns": {
+                "x-title": "Columns",
+                "description": "The number of columns in the table",
+                "default": 0,
+                "x-displayOptions": {
+                  "show": {
+                    "object": [
+                      "table"
+                    ],
+                    "action": [
+                      "insert"
+                    ]
+                  }
+                },
+                "type": "number"
+              },
+              "text": {
+                "x-title": "Old Text",
+                "description": "The text to search for in the document",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "object": [
+                      "text"
+                    ],
+                    "action": [
+                      "replaceAll"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "replaceText": {
+                "x-title": "New Text",
+                "description": "The text that will replace the matched text",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "object": [
+                      "text"
+                    ],
+                    "action": [
+                      "replaceAll"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "matchCase": {
+                "x-title": "Match Case",
+                "description": "Whether the search should respect case sensitivity",
+                "default": false,
+                "x-displayOptions": {
+                  "show": {
+                    "object": [
+                      "text"
+                    ],
+                    "action": [
+                      "replaceAll"
+                    ]
+                  }
+                },
+                "type": "boolean"
+              },
+              "insertPosition": {
+                "x-title": "Insert Position",
+                "default": true,
+                "x-displayOptions": {
+                  "show": {
+                    "object": [
+                      "tableColumn",
+                      "tableRow"
+                    ],
+                    "action": [
+                      "insert"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  false,
+                  true
+                ],
+                "x-enumNames": [
+                  "Before Content at Index",
+                  "After Content at Index"
+                ]
+              },
+              "rowIndex": {
+                "x-title": "Row Index",
+                "description": "The zero-based row index",
+                "default": 0,
+                "x-displayOptions": {
+                  "show": {
+                    "object": [
+                      "tableColumn",
+                      "tableRow"
+                    ]
+                  }
+                },
+                "type": "number"
+              },
+              "columnIndex": {
+                "x-title": "Column Index",
+                "description": "The zero-based column index",
+                "default": 0,
+                "x-displayOptions": {
+                  "show": {
+                    "object": [
+                      "tableColumn",
+                      "tableRow"
+                    ]
+                  }
+                },
+                "type": "number"
+              }
+            }
+          }
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "writeControlObject": {
+          "x-title": "Write Control Object",
+          "type": "object",
+          "properties": {
+            "control": {
+              "x-title": "Revision Mode",
+              "description": "Determines how the changes are applied to the revision",
+              "default": "requiredRevisionId",
+              "type": "string",
+              "enum": [
+                "targetRevisionId",
+                "requiredRevisionId"
+              ],
+              "x-enumNames": [
+                "Target",
+                "Required"
+              ],
+              "x-enumDescriptions": [
+                "Apply changes to the latest revision. Otherwise changes will not be processed.",
+                "Apply changes to the provided revision while incorporating other collaborators' changes. This mode is used for the recent revision, Otherwise changes will not be processed."
+              ]
+            },
+            "value": {
+              "x-title": "Revision ID",
+              "default": "",
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:googleDocs.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "googleApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "serviceAccount"
+          ]
+        }
+      }
+    },
+    {
+      "name": "googleDocsOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

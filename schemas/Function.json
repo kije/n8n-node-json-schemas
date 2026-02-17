@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Function",
+  "description": "Run custom function code which gets executed once and allows you to add, remove, change and replace items",
+  "x-n8n-node-type": "function",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "functionCode": {
+      "x-title": "JavaScript Code",
+      "description": "The JavaScript code to execute",
+      "default": "// Code here will run only once, no matter how many input items there are.\n// More info and help:https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.function/\n// Tip: You can use luxon for dates and $jmespath for querying JSON structures\n\n// Loop over inputs and add a new field called 'myNewField' to the JSON of each one\nfor (item of items) {\n  item.json.myNewField = 1;\n}\n\n// You can write logs to the browser console\nconsole.log('Done!');\n\nreturn items;",
+      "type": "string",
+      "x-rows": 10,
+      "x-editor": "jsEditor"
+    }
+  },
+  "x-icon": "fa:code",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

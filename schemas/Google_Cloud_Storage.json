@@ -1,0 +1,1134 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Cloud Storage",
+  "description": "Use the Google Cloud Storage API",
+  "x-n8n-node-type": "googleCloudStorage",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "bucket",
+      "type": "string",
+      "enum": [
+        "bucket",
+        "object"
+      ],
+      "x-enumNames": [
+        "Bucket",
+        "Object"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "object"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create an object",
+        "Delete an object",
+        "Get object data or metadata",
+        "Retrieve a list of objects",
+        "Update an object's metadata"
+      ]
+    },
+    "projectId": {
+      "x-title": "Project ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "bucket"
+          ],
+          "operation": [
+            "create",
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "bucketName": {
+      "x-title": "Bucket Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "object"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "prefix": {
+      "x-title": "Prefix",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "bucket"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "projection": {
+      "x-title": "Projection",
+      "default": "noAcl",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "object"
+          ],
+          "operation": [
+            "get",
+            "getAll"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "full",
+        "noAcl"
+      ],
+      "x-enumNames": [
+        "All Properties",
+        "No ACL"
+      ]
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "object"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "getFilters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "bucket"
+          ],
+          "operation": [
+            "delete",
+            "get",
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "ifMetagenerationMatch": {
+          "x-title": "Metageneration Match",
+          "description": "Only return data if the metageneration value of the Bucket matches the sent value",
+          "default": 0,
+          "type": "number"
+        },
+        "ifMetagenerationNotMatch": {
+          "x-title": "Metageneration Exclude",
+          "description": "Only return data if the metageneration value of the Bucket does not match the sent value",
+          "default": 0,
+          "type": "number"
+        }
+      }
+    },
+    "createAcl": {
+      "x-title": "Predefined Access Control",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "bucket"
+          ],
+          "operation": [
+            "create",
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "predefinedAcl": {
+          "x-title": "Predefined ACL",
+          "default": "authenticatedRead",
+          "type": "string",
+          "enum": [
+            "authenticatedRead",
+            "private",
+            "projectPrivate",
+            "publicRead",
+            "publicReadWrite"
+          ],
+          "x-enumNames": [
+            "Authenticated Read",
+            "Private",
+            "Project Private",
+            "Public Read",
+            "Public Read/Write"
+          ]
+        },
+        "predefinedDefaultObjectAcl": {
+          "x-title": "Predefined Default Object ACL",
+          "default": "authenticatedRead",
+          "type": "string",
+          "enum": [
+            "authenticatedRead",
+            "bucketOwnerFullControl",
+            "bucketOwnerRead",
+            "private",
+            "projectPrivate",
+            "publicRead"
+          ],
+          "x-enumNames": [
+            "Authenticated Read",
+            "Bucket Owner Full Control",
+            "Bucket Owner Read",
+            "Private",
+            "Project Private",
+            "Public Read"
+          ]
+        }
+      }
+    },
+    "createBody": {
+      "x-title": "Additional Parameters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "bucket"
+          ],
+          "operation": [
+            "create",
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "acl": {
+          "x-title": "Access Control",
+          "default": "[]",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "billing": {
+          "x-title": "Billing",
+          "default": "{}",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "cors": {
+          "x-title": "CORS",
+          "default": "[]",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "customPlacementConfig": {
+          "x-title": "Custom Placement Config",
+          "default": "{}",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "dataLocations": {
+          "x-title": "Data Locations",
+          "default": "[]",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "defaultEventBasedHold": {
+          "x-title": "Default Event Based Hold",
+          "default": true,
+          "type": "boolean"
+        },
+        "defaultObjectAcl": {
+          "x-title": "Default Object ACL",
+          "default": "[]",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "encryption": {
+          "x-title": "Encryption",
+          "default": "{}",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "iamConfiguration": {
+          "x-title": "IAM Configuration",
+          "default": "{}",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "labels": {
+          "x-title": "Labels",
+          "default": "{}",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "lifecycle": {
+          "x-title": "Lifecycle",
+          "default": "{}",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "location": {
+          "x-title": "Location",
+          "default": "US",
+          "type": "string"
+        },
+        "logging": {
+          "x-title": "Logging",
+          "default": "{}",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "retentionPolicy": {
+          "x-title": "Retention Policy",
+          "default": "{}",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "rpo": {
+          "x-title": "Recovery Point Objective",
+          "default": "DEFAULT",
+          "type": "string"
+        },
+        "storageClass": {
+          "x-title": "Storage Class",
+          "default": "STANDARD",
+          "type": "string"
+        },
+        "versioning": {
+          "x-title": "Versioning",
+          "default": "{}",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "website": {
+          "x-title": "Website",
+          "default": "{}",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        }
+      }
+    },
+    "objectName": {
+      "x-title": "Object Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "object"
+          ],
+          "operation": [
+            "create",
+            "delete",
+            "get",
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "updateProjection": {
+      "x-title": "Projection",
+      "default": "full",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "object"
+          ],
+          "operation": [
+            "create",
+            "update"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "full",
+        "noAcl"
+      ],
+      "x-enumNames": [
+        "All Properties",
+        "No ACL"
+      ]
+    },
+    "alt": {
+      "x-title": "Return Data",
+      "default": "json",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "object"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "json",
+        "media"
+      ],
+      "x-enumNames": [
+        "Metadata",
+        "Object Data"
+      ]
+    },
+    "createFromBinary": {
+      "x-title": "Use Input Binary Field",
+      "description": "Whether the data for creating a file should come from a binary field",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "object"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "createBinaryPropertyName": {
+      "x-title": "Input Binary Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "object"
+          ],
+          "operation": [
+            "create"
+          ],
+          "createFromBinary": [
+            true
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "createContent": {
+      "x-title": "File Content",
+      "description": "Content of the file to be uploaded",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "object"
+          ],
+          "operation": [
+            "create"
+          ],
+          "createFromBinary": [
+            false
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "binaryPropertyName": {
+      "x-title": "Put Output File in Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "object"
+          ],
+          "operation": [
+            "get"
+          ],
+          "alt": [
+            "media"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "maxResults": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "object"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 1000
+    },
+    "createData": {
+      "x-title": "Create Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "object"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "acl": {
+          "x-title": "Access Control List",
+          "default": "[]",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "cacheControl": {
+          "x-title": "Cache Control",
+          "default": "",
+          "type": "string"
+        },
+        "contentDisposition": {
+          "x-title": "Content Disposition",
+          "default": "",
+          "type": "string"
+        },
+        "contentEncoding": {
+          "x-title": "Content Encoding",
+          "default": "",
+          "type": "string"
+        },
+        "contentLanguage": {
+          "x-title": "Content Language",
+          "default": "",
+          "type": "string"
+        },
+        "contentType": {
+          "x-title": "Content Type",
+          "default": "",
+          "type": "string"
+        },
+        "crc32c": {
+          "x-title": "CRC32c Checksum",
+          "default": "",
+          "type": "string"
+        },
+        "customTime": {
+          "x-title": "Custom Time",
+          "default": "",
+          "type": "string"
+        },
+        "eventBasedHold": {
+          "x-title": "Event Based Hold",
+          "default": false,
+          "type": "boolean"
+        },
+        "md5Hash": {
+          "x-title": "MD5 Hash",
+          "default": "",
+          "type": "string"
+        },
+        "metadata": {
+          "x-title": "Metadata",
+          "default": "{}",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "storageClass": {
+          "x-title": "Storage Class",
+          "default": "",
+          "type": "string"
+        },
+        "temporaryHold": {
+          "x-title": "Temporary Hold",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "updateData": {
+      "x-title": "Update Fields",
+      "default": {
+        "acl": "[]"
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "object"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "acl": {
+          "x-title": "Access Control",
+          "default": "[]",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "cacheControl": {
+          "x-title": "Cache Control",
+          "default": "",
+          "type": "string"
+        },
+        "contentDisposition": {
+          "x-title": "Content Disposition",
+          "default": "",
+          "type": "string"
+        },
+        "contentEncoding": {
+          "x-title": "Content Encoding",
+          "default": "",
+          "type": "string"
+        },
+        "contentLanguage": {
+          "x-title": "Content Language",
+          "default": "",
+          "type": "string"
+        },
+        "contentType": {
+          "x-title": "Content Type",
+          "default": "",
+          "type": "string"
+        },
+        "customTime": {
+          "x-title": "Custom Time",
+          "default": "",
+          "type": "string"
+        },
+        "eventBasedHold": {
+          "x-title": "Event Based Hold",
+          "default": false,
+          "type": "boolean"
+        },
+        "metadata": {
+          "x-title": "Metadata",
+          "default": "{}",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "temporaryHold": {
+          "x-title": "Temporary Hold",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "createQuery": {
+      "x-title": "Additional Parameters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "object"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "contentEncoding": {
+          "x-title": "Content Encoding",
+          "default": "",
+          "type": "string"
+        },
+        "generation": {
+          "x-title": "Generation",
+          "default": -1,
+          "type": "number"
+        },
+        "ifGenerationMatch": {
+          "x-title": "Generation Match",
+          "default": -1,
+          "type": "number"
+        },
+        "ifGenerationNotMatch": {
+          "x-title": "Generation Exclude",
+          "default": -1,
+          "type": "number"
+        },
+        "ifMetagenerationMatch": {
+          "x-title": "Metageneration Match",
+          "default": -1,
+          "type": "number"
+        },
+        "ifMetagenerationNotMatch": {
+          "x-title": "Metageneration Exclude",
+          "default": -1,
+          "type": "number"
+        },
+        "kmsKeyName": {
+          "x-title": "KMS Key Name",
+          "default": "",
+          "type": "string"
+        },
+        "predefinedAcl": {
+          "x-title": "Predefined ACL",
+          "default": "authenticatedRead",
+          "type": "string",
+          "enum": [
+            "authenticatedRead",
+            "bucketOwnerFullControl",
+            "bucketOwnerRead",
+            "private",
+            "projectPrivate",
+            "publicRead"
+          ],
+          "x-enumNames": [
+            "Authenticated Read",
+            "Bucket Owner Full Control",
+            "Bucket Owner Read",
+            "Private",
+            "Project Private",
+            "Public Read"
+          ]
+        }
+      }
+    },
+    "getParameters": {
+      "x-title": "Additional Parameters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "object"
+          ],
+          "operation": [
+            "delete",
+            "get"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "generation": {
+          "x-title": "Generation",
+          "default": -1,
+          "type": "number"
+        },
+        "ifGenerationMatch": {
+          "x-title": "Generation Match",
+          "default": -1,
+          "type": "number"
+        },
+        "ifGenerationNotMatch": {
+          "x-title": "Generation Exclude",
+          "default": -1,
+          "type": "number"
+        },
+        "ifMetagenerationMatch": {
+          "x-title": "Metageneration Match",
+          "default": -1,
+          "type": "number"
+        },
+        "ifMetagenerationNotMatch": {
+          "x-title": "Metageneration Exclude",
+          "default": -1,
+          "type": "number"
+        }
+      }
+    },
+    "metagenAndAclQuery": {
+      "x-title": "Additional Parameters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "object"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "generation": {
+          "x-title": "Generation",
+          "default": -1,
+          "type": "number"
+        },
+        "ifGenerationMatch": {
+          "x-title": "Generation Match",
+          "default": -1,
+          "type": "number"
+        },
+        "ifGenerationNotMatch": {
+          "x-title": "Generation Exclude",
+          "default": -1,
+          "type": "number"
+        },
+        "ifMetagenerationMatch": {
+          "x-title": "Metageneration Match",
+          "default": -1,
+          "type": "number"
+        },
+        "ifMetagenerationNotMatch": {
+          "x-title": "Metageneration Exclude",
+          "default": -1,
+          "type": "number"
+        },
+        "predefinedAcl": {
+          "x-title": "Predefined ACL",
+          "default": "authenticatedRead",
+          "type": "string",
+          "enum": [
+            "authenticatedRead",
+            "bucketOwnerFullControl",
+            "bucketOwnerRead",
+            "private",
+            "projectPrivate",
+            "publicRead"
+          ],
+          "x-enumNames": [
+            "Authenticated Read",
+            "Bucket Owner Full Control",
+            "Bucket Owner Read",
+            "Private",
+            "Project Private",
+            "Public Read"
+          ]
+        }
+      }
+    },
+    "encryptionHeaders": {
+      "x-title": "Encryption Headers",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "object"
+          ],
+          "operation": [
+            "create",
+            "get",
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "X-Goog-Encryption-Algorithm": {
+          "x-title": "Encryption Algorithm",
+          "default": "AES256",
+          "type": "string",
+          "enum": [
+            "AES256"
+          ],
+          "x-enumNames": [
+            "AES256"
+          ]
+        },
+        "X-Goog-Encryption-Key": {
+          "x-title": "Encryption Key",
+          "default": "",
+          "type": "string"
+        },
+        "X-Goog-Encryption-Key-Sha256": {
+          "x-title": "Encryption Key Hash",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "listFilters": {
+      "x-title": "Additional Parameters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "object"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "delimiter": {
+          "x-title": "Delimiter",
+          "default": "/",
+          "type": "string"
+        },
+        "endOffset": {
+          "x-title": "End Offset",
+          "default": "",
+          "type": "string"
+        },
+        "includeTrailingDelimiter": {
+          "x-title": "Include Trailing Delimiter",
+          "default": false,
+          "type": "boolean"
+        },
+        "prefix": {
+          "x-title": "Prefix",
+          "default": "",
+          "type": "string"
+        },
+        "startOffset": {
+          "x-title": "Start Offset",
+          "default": "",
+          "type": "string"
+        },
+        "versions": {
+          "x-title": "Versions",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:googleCloudStorage.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "googleCloudStorageOAuth2Api",
+      "required": true,
+      "testedBy": {
+        "request": {
+          "method": "GET",
+          "url": "/b/"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,1231 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "GitHub",
+  "description": "Consume GitHub API",
+  "x-n8n-node-type": "github",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "accessToken",
+      "type": "string",
+      "enum": [
+        "accessToken",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "Access Token",
+        "OAuth2"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "issue",
+      "type": "string",
+      "enum": [
+        "file",
+        "issue",
+        "organization",
+        "release",
+        "repository",
+        "review",
+        "user",
+        "workflow"
+      ],
+      "x-enumNames": [
+        "File",
+        "Issue",
+        "Organization",
+        "Release",
+        "Repository",
+        "Review",
+        "User",
+        "Workflow"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "dispatch",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "workflow"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "disable",
+        "dispatch",
+        "dispatchAndWait",
+        "enable",
+        "get",
+        "getUsage",
+        "list"
+      ],
+      "x-enumNames": [
+        "Disable",
+        "Dispatch",
+        "Dispatch and Wait for Completion",
+        "Enable",
+        "Get",
+        "Get Usage",
+        "List"
+      ],
+      "x-enumDescriptions": [
+        "Disable a workflow",
+        "Dispatch a workflow event",
+        "Dispatch a workflow event and wait for a webhook to be called before proceeding",
+        "Enable a workflow",
+        "Get a workflow",
+        "Get the usage of a workflow",
+        "List workflows"
+      ]
+    },
+    "owner": {
+      "x-title": "Repository Owner",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "hide": {
+          "operation": [
+            "invite",
+            "getUserIssues"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "name"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "Repository Owner",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "Link",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "displayName": "By Name",
+          "type": "string"
+        }
+      ]
+    },
+    "repository": {
+      "x-title": "Repository Name",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "hide": {
+          "resource": [
+            "user",
+            "organization"
+          ],
+          "operation": [
+            "getRepositories"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "name"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "Repository Name",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "Link",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "displayName": "By Name",
+          "type": "string"
+        }
+      ]
+    },
+    "workflowId": {
+      "x-title": "Workflow",
+      "description": "The workflow to dispatch",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "workflow"
+          ],
+          "operation": [
+            "disable",
+            "dispatch",
+            "dispatchAndWait",
+            "get",
+            "getUsage",
+            "enable"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "filename",
+            "name"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "Workflow",
+          "type": "list"
+        },
+        {
+          "name": "filename",
+          "displayName": "By File Name",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "displayName": "By ID",
+          "type": "string"
+        }
+      ]
+    },
+    "ref": {
+      "x-title": "Ref",
+      "description": "The git reference for the workflow dispatch (branch, tag, or commit SHA)",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "workflow"
+          ],
+          "operation": [
+            "dispatch",
+            "dispatchAndWait"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.1
+              }
+            }
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "name"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "name",
+          "displayName": "By Name",
+          "type": "string"
+        }
+      ]
+    },
+    "inputs": {
+      "x-title": "Inputs",
+      "description": "JSON object with input parameters for the workflow",
+      "default": "{}",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "workflow"
+          ],
+          "operation": [
+            "dispatch",
+            "dispatchAndWait"
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "filePath": {
+      "x-title": "Path",
+      "description": "The path of the folder to list",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "list"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "binaryData": {
+      "x-title": "Binary File",
+      "description": "Whether the data to upload should be taken from binary field",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "edit"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "fileContent": {
+      "x-title": "File Content",
+      "description": "The text content of the file",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "binaryData": [
+            false
+          ],
+          "operation": [
+            "create",
+            "edit"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "binaryPropertyName": {
+      "x-title": "Put Output File in Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "asBinaryProperty": [
+            true
+          ],
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "commitMessage": {
+      "x-title": "Commit Message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "delete",
+            "edit"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalParameters": {
+      "x-title": "Additional Parameters",
+      "description": "Additional fields to add",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "reference": {
+          "x-title": "Reference",
+          "description": "The name of the commit/branch/tag. Default: the repository’s default branch (usually master).",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "asBinaryProperty": {
+      "x-title": "As Binary Property",
+      "description": "Whether to set the data of the file as binary property instead of returning the raw API response",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "The title of the issue",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "issue"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "body": {
+      "x-title": "Body",
+      "description": "The body of the review",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "review"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "labels": {
+      "x-title": "Labels",
+      "default": {
+        "label": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "issue"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "label": {
+          "x-title": "Label",
+          "description": "Label to add to issue",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "assignees": {
+      "x-title": "Assignees",
+      "default": {
+        "assignee": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "issue"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "assignee": {
+          "x-title": "Assignee",
+          "description": "User to assign issue too",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "issueNumber": {
+      "x-title": "Issue Number",
+      "description": "The issue number to lock",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "lock"
+          ],
+          "resource": [
+            "issue"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "editFields": {
+      "x-title": "Edit Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "edit"
+          ],
+          "resource": [
+            "issue"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "assignees": {
+          "x-title": "Assignees",
+          "default": {
+            "assignee": ""
+          },
+          "type": "object",
+          "properties": {
+            "assignee": {
+              "x-title": "Assignees",
+              "description": "User to assign issue to",
+              "default": "",
+              "type": "string"
+            }
+          }
+        },
+        "body": {
+          "x-title": "Body",
+          "description": "The body of the issue",
+          "default": "",
+          "type": "string",
+          "x-rows": 5
+        },
+        "labels": {
+          "x-title": "Labels",
+          "default": {
+            "label": ""
+          },
+          "type": "object",
+          "properties": {
+            "label": {
+              "x-title": "Label",
+              "description": "Label to add to issue",
+              "default": "",
+              "type": "string"
+            }
+          }
+        },
+        "state": {
+          "x-title": "State",
+          "description": "The state to set",
+          "default": "open",
+          "type": "string",
+          "enum": [
+            "closed",
+            "open"
+          ],
+          "x-enumNames": [
+            "Closed",
+            "Open"
+          ],
+          "x-enumDescriptions": [
+            "Set the state to \"closed\"",
+            "Set the state to \"open\""
+          ]
+        },
+        "state_reason": {
+          "x-title": "State Reason",
+          "description": "The reason for the state change",
+          "default": "completed",
+          "type": "string",
+          "enum": [
+            "completed",
+            "not_planned",
+            "reopened"
+          ],
+          "x-enumNames": [
+            "Completed",
+            "Not Planned",
+            "Reopened"
+          ],
+          "x-enumDescriptions": [
+            "Issue is completed",
+            "Issue is not planned",
+            "Issue is reopened"
+          ]
+        },
+        "title": {
+          "x-title": "Title",
+          "description": "The title of the issue",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "lockReason": {
+      "x-title": "Lock Reason",
+      "description": "The reason for locking the issue",
+      "default": "resolved",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "lock"
+          ],
+          "resource": [
+            "issue"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "off-topic",
+        "too heated",
+        "resolved",
+        "spam"
+      ],
+      "x-enumNames": [
+        "Off-Topic",
+        "Too Heated",
+        "Resolved",
+        "Spam"
+      ],
+      "x-enumDescriptions": [
+        "The issue is Off-Topic",
+        "The discussion is too heated",
+        "The issue got resolved",
+        "The issue is spam"
+      ]
+    },
+    "releaseTag": {
+      "x-title": "Tag",
+      "description": "The tag of the release",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "release"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "review"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "commitId": {
+          "x-title": "Commit ID",
+          "description": "The SHA of the commit that needs a review, if different from the latest",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "release_id": {
+      "x-title": "Release ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "release"
+          ],
+          "operation": [
+            "get",
+            "delete",
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getUserIssues"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getUserIssues"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "getRepositoryIssuesFilters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getIssues"
+          ],
+          "resource": [
+            "repository"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "assignee": {
+          "x-title": "Assignee",
+          "description": "Return only issues which are assigned to a specific user",
+          "default": "",
+          "type": "string"
+        },
+        "creator": {
+          "x-title": "Creator",
+          "description": "Return only issues which were created by a specific user",
+          "default": "",
+          "type": "string"
+        },
+        "mentioned": {
+          "x-title": "Mentioned",
+          "description": "Return only issues in which a specific user was mentioned",
+          "default": "",
+          "type": "string"
+        },
+        "labels": {
+          "x-title": "Labels",
+          "description": "Return only issues with the given labels. Multiple labels can be separated by comma.",
+          "default": "",
+          "type": "string"
+        },
+        "since": {
+          "x-title": "Updated Since",
+          "description": "Return only issues updated at or after this time",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "state": {
+          "x-title": "State",
+          "description": "The state to set",
+          "default": "open",
+          "type": "string",
+          "enum": [
+            "all",
+            "closed",
+            "open"
+          ],
+          "x-enumNames": [
+            "All",
+            "Closed",
+            "Open"
+          ],
+          "x-enumDescriptions": [
+            "Returns issues with any state",
+            "Return issues with \"closed\" state",
+            "Return issues with \"open\" state"
+          ]
+        },
+        "sort": {
+          "x-title": "Sort",
+          "description": "The order the issues should be returned in",
+          "default": "created",
+          "type": "string",
+          "enum": [
+            "created",
+            "updated",
+            "comments"
+          ],
+          "x-enumNames": [
+            "Created",
+            "Updated",
+            "Comments"
+          ],
+          "x-enumDescriptions": [
+            "Sort by created date",
+            "Sort by updated date",
+            "Sort by comments"
+          ]
+        },
+        "direction": {
+          "x-title": "Direction",
+          "description": "The sort order",
+          "default": "desc",
+          "type": "string",
+          "enum": [
+            "asc",
+            "desc"
+          ],
+          "x-enumNames": [
+            "Ascending",
+            "Descending"
+          ],
+          "x-enumDescriptions": [
+            "Sort in ascending order",
+            "Sort in descending order"
+          ]
+        }
+      }
+    },
+    "getRepositoryPullRequestsFilters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getPullRequests"
+          ],
+          "resource": [
+            "repository"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "state": {
+          "x-title": "State",
+          "description": "The state to set",
+          "default": "open",
+          "type": "string",
+          "enum": [
+            "all",
+            "closed",
+            "open"
+          ],
+          "x-enumNames": [
+            "All",
+            "Closed",
+            "Open"
+          ],
+          "x-enumDescriptions": [
+            "Returns pull requests with any state",
+            "Return pull requests with \"closed\" state",
+            "Return pull requests with \"open\" state"
+          ]
+        },
+        "sort": {
+          "x-title": "Sort",
+          "description": "The order the pull requests should be returned in",
+          "default": "created",
+          "type": "string",
+          "enum": [
+            "created",
+            "updated",
+            "popularity",
+            "long-running"
+          ],
+          "x-enumNames": [
+            "Created",
+            "Updated",
+            "Popularity",
+            "Long-Running"
+          ],
+          "x-enumDescriptions": [
+            "Sort by created date",
+            "Sort by updated date",
+            "Sort by number of comments",
+            "Sort by date created and will limit the results to pull requests that have been open for more than a month and have had activity within the past month"
+          ]
+        },
+        "direction": {
+          "x-title": "Direction",
+          "description": "The sort order",
+          "default": "desc",
+          "type": "string",
+          "enum": [
+            "asc",
+            "desc"
+          ],
+          "x-enumNames": [
+            "Ascending",
+            "Descending"
+          ],
+          "x-enumDescriptions": [
+            "Sort in ascending order",
+            "Sort in descending order"
+          ]
+        }
+      }
+    },
+    "pullRequestNumber": {
+      "x-title": "PR Number",
+      "description": "The number of the pull request to review",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "review"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "reviewId": {
+      "x-title": "Review ID",
+      "description": "ID of the review",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get",
+            "update"
+          ],
+          "resource": [
+            "review"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "event": {
+      "x-title": "Event",
+      "description": "The review action you want to perform",
+      "default": "approve",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "review"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "approve",
+        "requestChanges",
+        "comment",
+        "pending"
+      ],
+      "x-enumNames": [
+        "Approve",
+        "Request Change",
+        "Comment",
+        "Pending"
+      ],
+      "x-enumDescriptions": [
+        "Approve the pull request",
+        "Request code changes",
+        "Add a comment without approval or change requests",
+        "You will need to submit the pull request review when you are ready"
+      ]
+    },
+    "organization": {
+      "x-title": "Organization",
+      "description": "The GitHub organization that the user is being invited to",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "invite"
+          ],
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "The email address of the invited user",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "invite"
+          ],
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "getUserIssuesFilters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getUserIssues"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "mentioned": {
+          "x-title": "Mentioned",
+          "description": "Return only issues in which a specific user was mentioned",
+          "default": "",
+          "type": "string"
+        },
+        "labels": {
+          "x-title": "Labels",
+          "description": "Return only issues with the given labels. Multiple labels can be separated by comma.",
+          "default": "",
+          "type": "string"
+        },
+        "since": {
+          "x-title": "Updated Since",
+          "description": "Return only issues updated at or after this time",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "state": {
+          "x-title": "State",
+          "description": "The state to set",
+          "default": "open",
+          "type": "string",
+          "enum": [
+            "all",
+            "closed",
+            "open"
+          ],
+          "x-enumNames": [
+            "All",
+            "Closed",
+            "Open"
+          ],
+          "x-enumDescriptions": [
+            "Returns issues with any state",
+            "Return issues with \"closed\" state",
+            "Return issues with \"open\" state"
+          ]
+        },
+        "sort": {
+          "x-title": "Sort",
+          "description": "The order the issues should be returned in",
+          "default": "created",
+          "type": "string",
+          "enum": [
+            "created",
+            "updated",
+            "comments"
+          ],
+          "x-enumNames": [
+            "Created",
+            "Updated",
+            "Comments"
+          ],
+          "x-enumDescriptions": [
+            "Sort by created date",
+            "Sort by updated date",
+            "Sort by comments"
+          ]
+        },
+        "direction": {
+          "x-title": "Direction",
+          "description": "The sort order",
+          "default": "desc",
+          "type": "string",
+          "enum": [
+            "asc",
+            "desc"
+          ],
+          "x-enumNames": [
+            "Ascending",
+            "Descending"
+          ],
+          "x-enumDescriptions": [
+            "Sort in ascending order",
+            "Sort in descending order"
+          ]
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": {
+    "light": "file:github.svg",
+    "dark": "file:github.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "githubApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "accessToken"
+          ]
+        }
+      }
+    },
+    {
+      "name": "githubOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "x-webhooks": "true"
+}

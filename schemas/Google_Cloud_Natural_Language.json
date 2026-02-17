@@ -1,0 +1,201 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Cloud Natural Language",
+  "description": "Consume Google Cloud Natural Language API",
+  "x-n8n-node-type": "googleCloudNaturalLanguage",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input",
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "document",
+      "type": "string",
+      "enum": [
+        "document"
+      ],
+      "x-enumNames": [
+        "Document"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "analyzeSentiment",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "analyzeSentiment"
+      ],
+      "x-enumNames": [
+        "Analyze Sentiment"
+      ]
+    },
+    "source": {
+      "x-title": "Source",
+      "description": "The source of the document: a string containing the content or a Google Cloud Storage URI",
+      "default": "content",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "analyzeSentiment"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "content",
+        "gcsContentUri"
+      ],
+      "x-enumNames": [
+        "Content",
+        "Google Cloud Storage URI"
+      ]
+    },
+    "content": {
+      "x-title": "Content",
+      "description": "The content of the input in string format. Cloud audit logging exempt since it is based on user data.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "analyzeSentiment"
+          ],
+          "source": [
+            "content"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "gcsContentUri": {
+      "x-title": "Google Cloud Storage URI",
+      "description": "The Google Cloud Storage URI where the file content is located. This URI must be of the form: <code>gs://bucket_name/object_name</code>. For more details, see <a href=\"https://cloud.google.com/storage/docs/reference-uris.\">reference</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "analyzeSentiment"
+          ],
+          "source": [
+            "gcsContentUri"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "analyzeSentiment"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "documentType": {
+          "x-title": "Document Type",
+          "description": "The type of input document",
+          "default": "PLAIN_TEXT",
+          "type": "string",
+          "enum": [
+            "HTML",
+            "PLAIN_TEXT"
+          ],
+          "x-enumNames": [
+            "HTML",
+            "Plain Text"
+          ]
+        },
+        "encodingType": {
+          "x-title": "Encoding Type",
+          "description": "The encoding type used by the API to calculate sentence offsets",
+          "default": "UTF16",
+          "type": "string",
+          "enum": [
+            "NONE",
+            "UTF8",
+            "UTF16",
+            "UTF32"
+          ],
+          "x-enumNames": [
+            "None",
+            "UTF-8",
+            "UTF-16",
+            "UTF-32"
+          ]
+        },
+        "language": {
+          "x-title": "Language",
+          "description": "The language of the document (if not specified, the language is automatically detected). Both ISO and BCP-47 language codes are accepted.",
+          "default": "en",
+          "type": "string",
+          "enum": [
+            "ar",
+            "zh",
+            "zh-Hant",
+            "nl",
+            "en",
+            "fr",
+            "de",
+            "id",
+            "it",
+            "ja",
+            "ko",
+            "pt",
+            "es",
+            "th",
+            "tr",
+            "vi"
+          ],
+          "x-enumNames": [
+            "Arabic",
+            "Chinese (Simplified)",
+            "Chinese (Traditional)",
+            "Dutch",
+            "English",
+            "French",
+            "German",
+            "Indonesian",
+            "Italian",
+            "Japanese",
+            "Korean",
+            "Portuguese (Brazilian & Continental)",
+            "Spanish",
+            "Thai",
+            "Turkish",
+            "Vietnamese"
+          ]
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:googlecloudnaturallanguage.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "googleCloudNaturalLanguageOAuth2Api",
+      "required": true
+    }
+  ]
+}

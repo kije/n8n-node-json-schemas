@@ -1,0 +1,100 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Calendar Trigger",
+  "description": "Starts the workflow when Google Calendar events occur",
+  "x-n8n-node-type": "googleCalendarTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "calendarId": {
+      "x-title": "Calendar",
+      "description": "Google Calendar to operate on",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "Calendar",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "triggerOn": {
+      "x-title": "Trigger On",
+      "default": "",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "eventCancelled",
+        "eventCreated",
+        "eventEnded",
+        "eventStarted",
+        "eventUpdated"
+      ],
+      "x-enumNames": [
+        "Event Cancelled",
+        "Event Created",
+        "Event Ended",
+        "Event Started",
+        "Event Updated"
+      ]
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "matchTerm": {
+          "x-title": "Match Term",
+          "description": "Free text search terms to filter events that match these terms in any field, except for extended properties",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"triggerOn\"]}}",
+  "x-icon": "file:googleCalendar.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "googleCalendarOAuth2Api",
+      "required": true
+    }
+  ]
+}

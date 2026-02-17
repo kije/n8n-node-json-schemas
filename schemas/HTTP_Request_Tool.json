@@ -1,0 +1,673 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "HTTP Request Tool",
+  "description": "Makes an HTTP request and returns the response data",
+  "x-n8n-node-type": "toolHttpRequest",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "toolDescription": {
+      "x-title": "Description",
+      "description": "Explain to LLM what this tool does, better description would allow LLM to produce expected result",
+      "default": "",
+      "type": "string",
+      "x-rows": 3
+    },
+    "method": {
+      "x-title": "Method",
+      "default": "GET",
+      "type": "string",
+      "enum": [
+        "DELETE",
+        "GET",
+        "PATCH",
+        "POST",
+        "PUT"
+      ],
+      "x-enumNames": [
+        "DELETE",
+        "GET",
+        "PATCH",
+        "POST",
+        "PUT"
+      ]
+    },
+    "url": {
+      "x-title": "URL",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "authentication": {
+      "x-title": "Authentication",
+      "description": "Select the type of authentication to use if needed, authentication would be done by n8n and your credentials will not be shared with the LLM",
+      "default": "none",
+      "type": "string",
+      "enum": [
+        "none",
+        "predefinedCredentialType",
+        "genericCredentialType"
+      ],
+      "x-enumNames": [
+        "None",
+        "Predefined Credential Type",
+        "Generic Credential Type"
+      ],
+      "x-enumDescriptions": [
+        "",
+        "We've already implemented auth for many services so that you don't have to set it up manually",
+        "Fully customizable. Choose between basic, header, OAuth2, etc."
+      ]
+    },
+    "nodeCredentialType": {
+      "x-title": "Credential Type",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "authentication": [
+            "predefinedCredentialType"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "credsType": {
+          "type": "string"
+        },
+        "nodeCredentialType": {
+          "type": "string"
+        }
+      }
+    },
+    "genericAuthType": {
+      "x-title": "Generic Auth Type",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "authentication": [
+            "genericCredentialType"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "credsType": {
+          "type": "string"
+        },
+        "nodeCredentialType": {
+          "type": "string"
+        }
+      }
+    },
+    "sendQuery": {
+      "x-title": "Send Query Parameters",
+      "description": "Whether the request has query params or not",
+      "default": false,
+      "type": "boolean"
+    },
+    "specifyQuery": {
+      "x-title": "Specify Query Parameters",
+      "default": "keypair",
+      "x-displayOptions": {
+        "show": {
+          "sendQuery": [
+            true
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "keypair",
+        "json",
+        "model"
+      ],
+      "x-enumNames": [
+        "Using Fields Below",
+        "Using JSON Below",
+        "Let Model Specify Entire Body"
+      ]
+    },
+    "parametersQuery": {
+      "x-title": "Query Parameters",
+      "default": {
+        "values": [
+          {
+            "name": ""
+          }
+        ]
+      },
+      "x-displayOptions": {
+        "show": {
+          "sendQuery": [
+            true
+          ],
+          "specifyQuery": [
+            "keypair"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Name",
+                "default": "",
+                "type": "string"
+              },
+              "valueProvider": {
+                "x-title": "Value Provided",
+                "default": "modelRequired",
+                "type": "string",
+                "enum": [
+                  "modelRequired",
+                  "modelOptional",
+                  "fieldValue"
+                ],
+                "x-enumNames": [
+                  "By Model (and is required)",
+                  "By Model (but is optional)",
+                  "Using Field Below"
+                ]
+              },
+              "value": {
+                "x-title": "Value",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "valueProvider": [
+                      "fieldValue"
+                    ]
+                  }
+                },
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "jsonQuery": {
+      "x-title": "JSON",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "sendQuery": [
+            true
+          ],
+          "specifyQuery": [
+            "json"
+          ]
+        }
+      },
+      "type": "string",
+      "x-rows": 5
+    },
+    "sendHeaders": {
+      "x-title": "Send Headers",
+      "description": "Whether the request has headers or not",
+      "default": false,
+      "type": "boolean"
+    },
+    "specifyHeaders": {
+      "x-title": "Specify Headers",
+      "default": "keypair",
+      "x-displayOptions": {
+        "show": {
+          "sendHeaders": [
+            true
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "keypair",
+        "json",
+        "model"
+      ],
+      "x-enumNames": [
+        "Using Fields Below",
+        "Using JSON Below",
+        "Let Model Specify Entire Body"
+      ]
+    },
+    "parametersHeaders": {
+      "x-title": "Header Parameters",
+      "default": {
+        "values": [
+          {
+            "name": ""
+          }
+        ]
+      },
+      "x-displayOptions": {
+        "show": {
+          "sendHeaders": [
+            true
+          ],
+          "specifyHeaders": [
+            "keypair"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Name",
+                "default": "",
+                "type": "string"
+              },
+              "valueProvider": {
+                "x-title": "Value Provided",
+                "default": "modelRequired",
+                "type": "string",
+                "enum": [
+                  "modelRequired",
+                  "modelOptional",
+                  "fieldValue"
+                ],
+                "x-enumNames": [
+                  "By Model (and is required)",
+                  "By Model (but is optional)",
+                  "Using Field Below"
+                ]
+              },
+              "value": {
+                "x-title": "Value",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "valueProvider": [
+                      "fieldValue"
+                    ]
+                  }
+                },
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "jsonHeaders": {
+      "x-title": "JSON",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "sendHeaders": [
+            true
+          ],
+          "specifyHeaders": [
+            "json"
+          ]
+        }
+      },
+      "type": "string",
+      "x-rows": 5
+    },
+    "sendBody": {
+      "x-title": "Send Body",
+      "description": "Whether the request has body or not",
+      "default": false,
+      "type": "boolean"
+    },
+    "specifyBody": {
+      "x-title": "Specify Body",
+      "default": "keypair",
+      "x-displayOptions": {
+        "show": {
+          "sendBody": [
+            true
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "keypair",
+        "json",
+        "model"
+      ],
+      "x-enumNames": [
+        "Using Fields Below",
+        "Using JSON Below",
+        "Let Model Specify Entire Body"
+      ]
+    },
+    "parametersBody": {
+      "x-title": "Body Parameters",
+      "default": {
+        "values": [
+          {
+            "name": ""
+          }
+        ]
+      },
+      "x-displayOptions": {
+        "show": {
+          "sendBody": [
+            true
+          ],
+          "specifyBody": [
+            "keypair"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Name",
+                "default": "",
+                "type": "string"
+              },
+              "valueProvider": {
+                "x-title": "Value Provided",
+                "default": "modelRequired",
+                "type": "string",
+                "enum": [
+                  "modelRequired",
+                  "modelOptional",
+                  "fieldValue"
+                ],
+                "x-enumNames": [
+                  "By Model (and is required)",
+                  "By Model (but is optional)",
+                  "Using Field Below"
+                ]
+              },
+              "value": {
+                "x-title": "Value",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "valueProvider": [
+                      "fieldValue"
+                    ]
+                  }
+                },
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "jsonBody": {
+      "x-title": "JSON",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "sendBody": [
+            true
+          ],
+          "specifyBody": [
+            "json"
+          ]
+        }
+      },
+      "type": "string",
+      "x-rows": 5
+    },
+    "placeholderDefinitions": {
+      "x-title": "Placeholder Definitions",
+      "default": [],
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Placeholder Name",
+                "default": "",
+                "type": "string"
+              },
+              "description": {
+                "x-title": "Description",
+                "default": "",
+                "type": "string"
+              },
+              "type": {
+                "x-title": "Type",
+                "default": "not specified",
+                "type": "string",
+                "enum": [
+                  "not specified",
+                  "string",
+                  "number",
+                  "boolean",
+                  "json"
+                ],
+                "x-enumNames": [
+                  "Not Specified (Default)",
+                  "String",
+                  "Number",
+                  "Boolean",
+                  "JSON"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "optimizeResponse": {
+      "x-title": "Optimize Response",
+      "description": "Whether the optimize the tool response to reduce amount of data passed to the LLM that could lead to better result and reduce cost",
+      "default": false,
+      "type": "boolean"
+    },
+    "responseType": {
+      "x-title": "Expected Response Type",
+      "default": "json",
+      "x-displayOptions": {
+        "show": {
+          "optimizeResponse": [
+            true
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "json",
+        "html",
+        "text"
+      ],
+      "x-enumNames": [
+        "JSON",
+        "HTML",
+        "Text"
+      ]
+    },
+    "dataField": {
+      "x-title": "Field Containing Data",
+      "description": "Specify the name of the field in the response containing the data",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "optimizeResponse": [
+            true
+          ],
+          "responseType": [
+            "json"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "fieldsToInclude": {
+      "x-title": "Include Fields",
+      "description": "What fields response object should include",
+      "default": "all",
+      "x-displayOptions": {
+        "show": {
+          "optimizeResponse": [
+            true
+          ],
+          "responseType": [
+            "json"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "all",
+        "selected",
+        "except"
+      ],
+      "x-enumNames": [
+        "All",
+        "Selected",
+        "Except"
+      ],
+      "x-enumDescriptions": [
+        "Include all fields",
+        "Include only fields specified below",
+        "Exclude fields specified below"
+      ]
+    },
+    "fields": {
+      "x-title": "Fields",
+      "description": "Comma-separated list of the field names. Supports dot notation. You can drag the selected fields from the input panel.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "optimizeResponse": [
+            true
+          ],
+          "responseType": [
+            "json"
+          ]
+        },
+        "hide": {
+          "fieldsToInclude": [
+            "all"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "cssSelector": {
+      "x-title": "Selector (CSS)",
+      "description": "Select specific element(e.g. body) or multiple elements(e.g. div) of chosen type in the response HTML.",
+      "default": "body",
+      "x-displayOptions": {
+        "show": {
+          "optimizeResponse": [
+            true
+          ],
+          "responseType": [
+            "html"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "onlyContent": {
+      "x-title": "Return Only Content",
+      "description": "Whether to return only content of html elements, stripping html tags and attributes",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "optimizeResponse": [
+            true
+          ],
+          "responseType": [
+            "html"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "elementsToOmit": {
+      "x-title": "Elements To Omit",
+      "description": "Comma-separated list of selectors that would be excluded when extracting content",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "optimizeResponse": [
+            true
+          ],
+          "responseType": [
+            "html"
+          ],
+          "onlyContent": [
+            true
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "truncateResponse": {
+      "x-title": "Truncate Response",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "optimizeResponse": [
+            true
+          ],
+          "responseType": [
+            "text",
+            "html"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "maxLength": {
+      "x-title": "Max Response Characters",
+      "default": 1000,
+      "x-displayOptions": {
+        "show": {
+          "optimizeResponse": [
+            true
+          ],
+          "responseType": [
+            "text",
+            "html"
+          ],
+          "truncateResponse": [
+            true
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    }
+  },
+  "x-subtitle": "={{ $parameter.toolDescription }}",
+  "x-icon": {
+    "light": "file:httprequest.svg",
+    "dark": "file:httprequest.dark.svg"
+  },
+  "x-inputs": [],
+  "x-outputs": [
+    "ai_tool"
+  ],
+  "x-credentials": []
+}

@@ -1,0 +1,1020 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "HubSpot",
+  "description": "Consume HubSpot API",
+  "x-n8n-node-type": "hubspot",
+  "x-n8n-version": 2.1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "apiKey",
+      "type": "string",
+      "enum": [
+        "apiKey",
+        "appToken",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "API Key",
+        "APP Token",
+        "OAuth2"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "contact",
+      "type": "string",
+      "enum": [
+        "company",
+        "contact",
+        "contactList",
+        "deal",
+        "engagement",
+        "ticket"
+      ],
+      "x-enumNames": [
+        "Company",
+        "Contact",
+        "Contact List",
+        "Deal",
+        "Engagement",
+        "Ticket"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a ticket",
+        "Delete a ticket",
+        "Get a ticket",
+        "Get many tickets",
+        "Update a ticket"
+      ]
+    },
+    "email": {
+      "x-title": "Email",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contactList"
+          ],
+          "operation": [
+            "add"
+          ],
+          "by": [
+            "email"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "properties": {
+          "x-title": "Ticket Properties to Include",
+          "description": "Whether to include specific Ticket properties in the returned results. Choose from a list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "propertiesWithHistory": {
+          "x-title": "Properties With History",
+          "description": "Works similarly to properties=, but this parameter will include the history for the specified property, instead of just including the current value. Use this parameter when you need the full history of changes to a property's value.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "searchByDomain"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "properties": {
+          "x-title": "Company Properties to Include",
+          "description": "Whether to include specific Company properties in the returned results. Choose from a list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "contactId": {
+      "x-title": "Contact to Delete",
+      "description": "This is not a contact's email but a number like 1485",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "By Id",
+          "type": "string"
+        }
+      ]
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 250
+    },
+    "filterGroupsUi": {
+      "x-title": "Filter Groups",
+      "description": "When multiple filters are provided within a Filter Group, they will be combined using a logical AND operator. When multiple Filter Groups are provided, they will be combined using a logical OR operator. The system supports a maximum of three Filter Groups with up to three filters each. More info <a href=\"https://developers.hubspot.com/docs/api/crm/search\">here</a>",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "filterGroupsValues": {
+          "x-title": "Filter Group",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "filtersUi": {
+                "x-title": "Filters",
+                "description": "Use filters to limit the results to only CRM objects with matching property values. More info <a href=\"https://developers.hubspot.com/docs/api/crm/search\">here</a>.",
+                "default": {},
+                "type": "object",
+                "properties": {
+                  "filterValues": {
+                    "x-title": "Filter",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "propertyName": {
+                          "x-title": "Property Name or ID",
+                          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                          "default": "",
+                          "type": "string"
+                        },
+                        "type": {
+                          "x-title": "Type",
+                          "default": "={{$parameter[\"&propertyName\"].split(\"|\")[1]}}",
+                          "type": "string"
+                        },
+                        "operator": {
+                          "x-title": "Operator",
+                          "default": "EQ",
+                          "x-displayOptions": {
+                            "show": {
+                              "type": [
+                                "number"
+                              ]
+                            }
+                          },
+                          "type": "string",
+                          "enum": [
+                            "CONTAINS_TOKEN",
+                            "EQ",
+                            "GT",
+                            "GTE",
+                            "HAS_PROPERTY",
+                            "NOT_HAS_PROPERTY",
+                            "LT",
+                            "LTE",
+                            "NEQ"
+                          ],
+                          "x-enumNames": [
+                            "Contains Exactly",
+                            "Equal",
+                            "Greater Than",
+                            "Greater Than Or Equal",
+                            "Is Known",
+                            "Is Unknown",
+                            "Less Than",
+                            "Less Than Or Equal",
+                            "Not Equal"
+                          ]
+                        },
+                        "value": {
+                          "x-title": "Value",
+                          "default": "",
+                          "x-displayOptions": {
+                            "hide": {
+                              "operator": [
+                                "HAS_PROPERTY",
+                                "NOT_HAS_PROPERTY"
+                              ]
+                            }
+                          },
+                          "x-required": true,
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "by": {
+      "x-title": "By",
+      "default": "email",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contactList"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "id",
+        "email"
+      ],
+      "x-enumNames": [
+        "Contact ID",
+        "Email"
+      ]
+    },
+    "id": {
+      "x-title": "Contact to Remove",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contactList"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "listId": {
+      "x-title": "List to Remove From",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contactList"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "name": {
+      "x-title": "Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "companyId": {
+      "x-title": "Company to Delete",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "By Id",
+          "type": "string"
+        }
+      ]
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "associatedCompanyIds": {
+          "x-title": "Company Names or IDs",
+          "description": "Whether to include specific Company properties in the returned results. Choose from a list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "associatedContactIds": {
+          "x-title": "Contact Names or IDs",
+          "description": "Whether to include specific Contact properties in the returned results. Choose from a list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "category": {
+          "x-title": "Category Name or ID",
+          "description": "Main reason customer reached out for help. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "closeDate": {
+          "x-title": "Close Date",
+          "description": "The date the ticket was closed. When using expressions, the time should be specified in YYYY-MM-DD hh-mm-ss format.",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "createDate": {
+          "x-title": "Create Date",
+          "description": "The date the ticket was created. When using expressions, the time should be specified in YYYY-MM-DD hh-mm-ss format.",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "description": {
+          "x-title": "Description",
+          "description": "Description of the ticket",
+          "default": "",
+          "type": "string"
+        },
+        "pipelineId": {
+          "x-title": "Pipeline Name or ID",
+          "description": "The ID of the pipeline the ticket is in. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "priority": {
+          "x-title": "Priority Name or ID",
+          "description": "The level of attention needed on the ticket. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "resolution": {
+          "x-title": "Resolution Name or ID",
+          "description": "The action taken to resolve the ticket. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "source": {
+          "x-title": "Source Name or ID",
+          "description": "Channel where ticket was originally submitted. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "stageId": {
+          "x-title": "Stage Name or ID",
+          "description": "The stage ID of the pipeline the ticket is in; depends on Pipeline ID. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "ticketName": {
+          "x-title": "Ticket Name",
+          "default": "",
+          "type": "string"
+        },
+        "ticketOwnerId": {
+          "x-title": "Ticket Owner Name or ID",
+          "description": "The user from your team that the ticket is assigned to. You can assign additional users to a ticket record by creating a custom HubSpot user property. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "domain": {
+      "x-title": "Domain",
+      "description": "The company's website domain to search for, like n8n.io",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "searchByDomain"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "stage": {
+      "x-title": "Deal Stage Name or ID",
+      "description": "The deal stage is required when creating a deal. See the CRM Pipelines API for details on managing pipelines and stages. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [],
+      "x-enumNames": []
+    },
+    "dealId": {
+      "x-title": "Deal to Delete",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "By Id",
+          "type": "string"
+        }
+      ]
+    },
+    "filters": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "getRecentlyCreatedUpdated"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "since": {
+          "x-title": "Since",
+          "description": "Only return deals created after timestamp x. When using expressions, the time should be specified in YYYY-MM-DD hh-mm-ss format.",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "includePropertyVersions": {
+          "x-title": "Include Property Versions",
+          "description": "By default, you will only get data for the most recent version of a property in the \"versions\" data. If you include this parameter, you will get data for all previous versions.",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "type": {
+      "x-title": "Type",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "engagement"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "call",
+        "email",
+        "meeting",
+        "task"
+      ],
+      "x-enumNames": [
+        "Call",
+        "Email",
+        "Meeting",
+        "Task"
+      ]
+    },
+    "dueDate": {
+      "x-title": "Due Date",
+      "description": "The due date for the task",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "engagement"
+          ],
+          "operation": [
+            "create"
+          ],
+          "type": [
+            "task"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 2.2
+              }
+            }
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "metadata": {
+      "x-title": "Metadata",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "engagement"
+          ],
+          "operation": [
+            "create"
+          ],
+          "type": [
+            "call"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "body": {
+          "x-title": "Body",
+          "default": "",
+          "type": "string"
+        },
+        "durationMilliseconds": {
+          "x-title": "Duration Milliseconds",
+          "default": 0,
+          "type": "number"
+        },
+        "fromNumber": {
+          "x-title": "From Number",
+          "default": "",
+          "type": "string"
+        },
+        "recordingUrl": {
+          "x-title": "Recording URL",
+          "default": "",
+          "type": "string"
+        },
+        "status": {
+          "x-title": "Status",
+          "default": "QUEUED",
+          "type": "string",
+          "enum": [
+            "BUSY",
+            "CALLING_CRM_USER",
+            "CANCELED",
+            "COMPLETED",
+            "CONNECTING",
+            "FAILED",
+            "IN_PROGRESS",
+            "NO_ANSWER",
+            "QUEUED",
+            "RINGING"
+          ],
+          "x-enumNames": [
+            "Busy",
+            "Calling CRM User",
+            "Canceled",
+            "Completed",
+            "Connecting",
+            "Failed",
+            "In Progress",
+            "No Answer",
+            "Queued",
+            "Ringing"
+          ]
+        },
+        "toNumber": {
+          "x-title": "To Number",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "engagementId": {
+      "x-title": "Engagement to Delete",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "engagement"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "By Id",
+          "type": "string"
+        }
+      ]
+    },
+    "pipelineId": {
+      "x-title": "Pipeline Name or ID",
+      "description": "The ID of the pipeline the ticket is in. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "stageId": {
+      "x-title": "Stage Name or ID",
+      "description": "The stage ID of the pipeline the ticket is in; depends on Pipeline ID. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "ticketName": {
+      "x-title": "Ticket Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "ticketId": {
+      "x-title": "Ticket to Delete",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "By Id",
+          "type": "string"
+        }
+      ]
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:hubspot.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "hubspotApi",
+      "required": true,
+      "testedBy": "hubspotApiTest",
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "apiKey"
+          ]
+        }
+      }
+    },
+    {
+      "name": "hubspotAppToken",
+      "required": true,
+      "testedBy": "hubspotApiTest",
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "appToken"
+          ]
+        }
+      }
+    },
+    {
+      "name": "hubspotOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

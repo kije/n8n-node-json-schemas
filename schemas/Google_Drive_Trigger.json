@@ -1,0 +1,270 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Drive Trigger",
+  "description": "Starts the workflow when Google Drive events occur",
+  "x-n8n-node-type": "googleDriveTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Credential Type",
+      "default": "oAuth2",
+      "type": "string",
+      "enum": [
+        "oAuth2",
+        "serviceAccount"
+      ],
+      "x-enumNames": [
+        "OAuth2 (recommended)",
+        "Service Account"
+      ]
+    },
+    "triggerOn": {
+      "x-title": "Trigger On",
+      "default": "",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "specificFile",
+        "specificFolder"
+      ],
+      "x-enumNames": [
+        "Changes to a Specific File",
+        "Changes Involving a Specific Folder"
+      ]
+    },
+    "fileToWatch": {
+      "x-title": "File",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "triggerOn": [
+            "specificFile"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "File",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "Link",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "event": {
+      "x-title": "Watch For",
+      "description": "When to trigger this node",
+      "default": "fileCreated",
+      "x-displayOptions": {
+        "show": {
+          "triggerOn": [
+            "anyFileFolder"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "fileCreated",
+        "fileUpdated",
+        "folderCreated",
+        "folderUpdated"
+      ],
+      "x-enumNames": [
+        "File Created",
+        "File Updated",
+        "Folder Created",
+        "Folder Updated"
+      ],
+      "x-enumDescriptions": [
+        "When a file is created in the watched drive",
+        "When a file is updated in the watched drive",
+        "When a folder is created in the watched drive",
+        "When a folder is updated in the watched drive"
+      ]
+    },
+    "folderToWatch": {
+      "x-title": "Folder",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "triggerOn": [
+            "specificFolder"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "Folder",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "Link",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "driveToWatch": {
+      "x-title": "Drive To Watch",
+      "description": "The drive to monitor. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "root",
+      "x-displayOptions": {
+        "show": {
+          "triggerOn": [
+            "anyFileFolder"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "event": [
+            "fileCreated",
+            "fileUpdated"
+          ]
+        },
+        "hide": {
+          "triggerOn": [
+            "specificFile"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "fileType": {
+          "x-title": "File Type",
+          "description": "Triggers only when the file is this type",
+          "default": "all",
+          "type": "string",
+          "enum": [
+            "all",
+            "application/vnd.google-apps.audio",
+            "application/vnd.google-apps.document",
+            "application/vnd.google-apps.drawing",
+            "application/vnd.google-apps.presentation",
+            "application/vnd.google-apps.spreadsheet",
+            "application/vnd.google-apps.photo",
+            "application/vnd.google-apps.video"
+          ],
+          "x-enumNames": [
+            "[All]",
+            "Audio",
+            "Google Docs",
+            "Google Drawings",
+            "Google Slides",
+            "Google Spreadsheets",
+            "Photos and Images",
+            "Videos"
+          ]
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"event\"]}}",
+  "x-icon": "file:googleDrive.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "googleApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "serviceAccount"
+          ]
+        }
+      }
+    },
+    {
+      "name": "googleDriveOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

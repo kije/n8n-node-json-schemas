@@ -1,0 +1,965 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Gmail",
+  "description": "Consume the Gmail API",
+  "x-n8n-node-type": "gmail",
+  "x-n8n-version": 2,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "oAuth2",
+      "type": "string",
+      "enum": [
+        "oAuth2",
+        "serviceAccount"
+      ],
+      "x-enumNames": [
+        "OAuth2 (recommended)",
+        "Service Account"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "message",
+      "type": "string",
+      "enum": [
+        "message",
+        "label",
+        "draft",
+        "thread"
+      ],
+      "x-enumNames": [
+        "Message",
+        "Label",
+        "Draft",
+        "Thread"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "thread"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "addLabels",
+        "delete",
+        "get",
+        "getAll",
+        "removeLabels",
+        "reply",
+        "trash",
+        "untrash"
+      ],
+      "x-enumNames": [
+        "Add Label",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Remove Label",
+        "Reply",
+        "Trash",
+        "Untrash"
+      ]
+    },
+    "messageId": {
+      "x-title": "Message Snippet or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "thread"
+          ],
+          "operation": [
+            "reply"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "subject": {
+      "x-title": "Subject",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "emailType": {
+      "x-title": "Email Type",
+      "default": "text",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "thread"
+          ],
+          "operation": [
+            "reply"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "text",
+        "html"
+      ],
+      "x-enumNames": [
+        "Text",
+        "HTML"
+      ]
+    },
+    "message": {
+      "x-title": "Message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "thread"
+          ],
+          "operation": [
+            "reply"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "thread"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "returnOnlyMessages": {
+          "x-title": "Return Only Messages",
+          "description": "Whether to return only thread messages",
+          "default": true,
+          "type": "boolean"
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "thread"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "thread"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "Label Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "label"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "labelId": {
+      "x-title": "Label ID",
+      "description": "The ID of the label",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "label"
+          ],
+          "operation": [
+            "get",
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "sendTo": {
+      "x-title": "To",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "simple": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "thread"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "thread"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "includeSpamTrash": {
+          "x-title": "Include Spam and Trash",
+          "description": "Whether to include threads from SPAM and TRASH in the results",
+          "default": false,
+          "type": "boolean"
+        },
+        "labelIds": {
+          "x-title": "Label ID Names or IDs",
+          "description": "Only return threads with labels that match all of the specified label IDs. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "q": {
+          "x-title": "Search",
+          "description": "Only return messages matching the specified query",
+          "default": "",
+          "type": "string"
+        },
+        "readStatus": {
+          "x-title": "Read Status",
+          "default": "unread",
+          "type": "string",
+          "enum": [
+            "both",
+            "unread",
+            "read"
+          ],
+          "x-enumNames": [
+            "Unread and read emails",
+            "Unread emails only",
+            "Read emails only"
+          ]
+        },
+        "receivedAfter": {
+          "x-title": "Received After",
+          "description": "Get all emails received after the specified date. In an expression you can set date using string in ISO format or a timestamp in miliseconds.",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "receivedBefore": {
+          "x-title": "Received Before",
+          "description": "Get all emails received before the specified date. In an expression you can set date using string in ISO format or a timestamp in miliseconds.",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "labelIds": {
+      "x-title": "Label Names or IDs",
+      "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "thread"
+          ],
+          "operation": [
+            "addLabels",
+            "removeLabels"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "responseType": {
+      "x-title": "Response Type",
+      "default": "approval",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "approval",
+        "freeText",
+        "customForm"
+      ],
+      "x-enumNames": [
+        "Approval",
+        "Free Text",
+        "Custom Form"
+      ],
+      "x-enumDescriptions": [
+        "User can approve/disapprove from within the message",
+        "User can submit a response via a form",
+        "User can submit a response via a custom form"
+      ]
+    },
+    "defineForm": {
+      "x-title": "Define Form",
+      "default": "fields",
+      "x-displayOptions": {
+        "show": {
+          "responseType": [
+            "customForm"
+          ],
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "fields",
+        "json"
+      ],
+      "x-enumNames": [
+        "Using Fields Below",
+        "Using JSON"
+      ]
+    },
+    "jsonOutput": {
+      "x-title": "Form Fields",
+      "default": "[\n  {\n    \"fieldLabel\": \"Name\",\n    \"placeholder\": \"enter your name\",\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Age\",\n    \"fieldType\": \"number\",\n    \"placeholder\": \"enter your age\"\n  },\n  {\n    \"fieldLabel\": \"Email\",\n    \"fieldType\": \"email\",\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Textarea\",\n    \"fieldType\": \"textarea\"\n  },\n  {\n    \"fieldLabel\": \"Dropdown Options\",\n    \"fieldType\": \"dropdown\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    },\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Checkboxes\",\n    \"fieldType\": \"checkbox\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    }\n  },\n  {\n    \"fieldLabel\": \"Radio\",\n    \"fieldType\": \"radio\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    }\n  },\n  {\n    \"fieldLabel\": \"Email\",\n    \"fieldType\": \"email\",\n    \"placeholder\": \"me@mail.con\"\n  },\n  {\n    \"fieldLabel\": \"File\",\n    \"fieldType\": \"file\",\n    \"multipleFiles\": true,\n    \"acceptFileTypes\": \".jpg, .png\"\n  },\n  {\n    \"fieldLabel\": \"Number\",\n    \"fieldType\": \"number\"\n  },\n  {\n    \"fieldLabel\": \"Password\",\n    \"fieldType\": \"password\"\n  }\n]\n",
+      "x-displayOptions": {
+        "show": {
+          "defineForm": [
+            "json"
+          ],
+          "responseType": [
+            "customForm"
+          ],
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "formFields": {
+      "x-title": "Form Elements",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 2.5
+              }
+            }
+          ],
+          "defineForm": [
+            "fields"
+          ],
+          "responseType": [
+            "customForm"
+          ],
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "fieldName": {
+                "x-title": "Custom Field Name",
+                "description": "The name of the field, used in input attributes and referenced by the workflow",
+                "default": "",
+                "x-displayOptions": {
+                  "hide": {
+                    "fieldType": [
+                      "html"
+                    ]
+                  },
+                  "show": {
+                    "@version": [
+                      {
+                        "_cnd": {
+                          "gte": 2.5
+                        }
+                      }
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "fieldLabel": {
+                "x-title": "Field Name",
+                "description": "Label that appears above the input field",
+                "default": "",
+                "x-displayOptions": {
+                  "hide": {
+                    "fieldType": [
+                      "hiddenField",
+                      "html"
+                    ]
+                  },
+                  "show": {
+                    "@version": [
+                      {
+                        "_cnd": {
+                          "lt": 2.4
+                        }
+                      }
+                    ]
+                  }
+                },
+                "x-required": true,
+                "type": "string"
+              },
+              "fieldType": {
+                "x-title": "Element Type",
+                "description": "The type of field to add to the form",
+                "default": "text",
+                "x-required": true,
+                "type": "string",
+                "enum": [
+                  "checkbox",
+                  "html",
+                  "date",
+                  "dropdown",
+                  "email",
+                  "file",
+                  "hiddenField",
+                  "number",
+                  "password",
+                  "radio",
+                  "text",
+                  "textarea"
+                ],
+                "x-enumNames": [
+                  "Checkboxes",
+                  "Custom HTML",
+                  "Date",
+                  "Dropdown",
+                  "Email",
+                  "File",
+                  "Hidden Field",
+                  "Number",
+                  "Password",
+                  "Radio Buttons",
+                  "Text Input",
+                  "Textarea"
+                ]
+              },
+              "elementName": {
+                "x-title": "Element Name",
+                "description": "Optional field. It can be used to include the html in the output.",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "html"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "placeholder": {
+                "x-title": "Placeholder",
+                "description": "Sample text to display inside the field",
+                "default": "",
+                "x-displayOptions": {
+                  "hide": {
+                    "fieldType": [
+                      "dropdown",
+                      "date",
+                      "file",
+                      "html",
+                      "hiddenField",
+                      "radio",
+                      "checkbox"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "defaultValue": {
+                "x-title": "Default Value",
+                "description": "Default value(s) that will be pre-selected. Must match one or multiple of the option labels. Separate multiple pre-selected options with a comma.",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "checkbox"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "fieldValue": {
+                "x-title": "Field Value",
+                "description": "Input value can be set here or will be passed as a query parameter via Field Name if no value is set",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "hiddenField"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "fieldOptions": {
+                "x-title": "Radio Buttons",
+                "default": {
+                  "values": [
+                    {
+                      "option": ""
+                    }
+                  ]
+                },
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "radio"
+                    ]
+                  }
+                },
+                "x-required": true,
+                "type": "object",
+                "properties": {
+                  "values": {
+                    "x-title": "Values",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "option": {
+                          "x-title": "Radio Button Label",
+                          "default": "",
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "multiselect": {
+                "x-title": "Multiple Choice",
+                "description": "Whether to allow the user to select multiple options from the dropdown list",
+                "default": false,
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "dropdown"
+                    ],
+                    "@version": [
+                      {
+                        "_cnd": {
+                          "lt": 2.3
+                        }
+                      }
+                    ]
+                  }
+                },
+                "type": "boolean"
+              },
+              "limitSelection": {
+                "x-title": "Limit Selection",
+                "default": "unlimited",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "checkbox"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "exact",
+                  "range",
+                  "unlimited"
+                ],
+                "x-enumNames": [
+                  "Exact Number",
+                  "Range",
+                  "Unlimited"
+                ]
+              },
+              "numberOfSelections": {
+                "x-title": "Number of Selections",
+                "default": 1,
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "checkbox"
+                    ],
+                    "limitSelection": [
+                      "exact"
+                    ]
+                  }
+                },
+                "type": "number",
+                "minimum": 1,
+                "x-precision": 0
+              },
+              "minSelections": {
+                "x-title": "Minimum Selections",
+                "default": 0,
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "checkbox"
+                    ],
+                    "limitSelection": [
+                      "range"
+                    ]
+                  }
+                },
+                "type": "number",
+                "minimum": 0,
+                "x-precision": 0
+              },
+              "maxSelections": {
+                "x-title": "Maximum Selections",
+                "default": 1,
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "checkbox"
+                    ],
+                    "limitSelection": [
+                      "range"
+                    ]
+                  }
+                },
+                "type": "number",
+                "minimum": 1,
+                "x-precision": 0
+              },
+              "html": {
+                "x-title": "HTML",
+                "description": "HTML elements to display on the form page",
+                "default": "<!-- Your custom HTML here --->\n\n\n",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "html"
+                    ]
+                  }
+                },
+                "type": "string",
+                "x-editor": "htmlEditor"
+              },
+              "multipleFiles": {
+                "x-title": "Multiple Files",
+                "description": "Whether to allow the user to select multiple files from the file input or just one",
+                "default": true,
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "file"
+                    ]
+                  }
+                },
+                "type": "boolean"
+              },
+              "acceptFileTypes": {
+                "x-title": "Accepted File Types",
+                "description": "Comma-separated list of allowed file extensions",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "file"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "requiredField": {
+                "x-title": "Required Field",
+                "description": "Whether to require the user to enter a value for this field before submitting the form",
+                "default": false,
+                "x-displayOptions": {
+                  "hide": {
+                    "fieldType": [
+                      "html",
+                      "hiddenField"
+                    ]
+                  }
+                },
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "approvalOptions": {
+      "x-title": "Approval Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "responseType": [
+            "approval"
+          ],
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "object",
+          "properties": {
+            "approvalType": {
+              "x-title": "Type of Approval",
+              "default": "single",
+              "type": "string",
+              "enum": [
+                "single",
+                "double"
+              ],
+              "x-enumNames": [
+                "Approve Only",
+                "Approve and Disapprove"
+              ]
+            },
+            "approveLabel": {
+              "x-title": "Approve Button Label",
+              "default": "Approve",
+              "x-displayOptions": {
+                "show": {
+                  "approvalType": [
+                    "single",
+                    "double"
+                  ]
+                }
+              },
+              "type": "string"
+            },
+            "buttonApprovalStyle": {
+              "x-title": "Approve Button Style",
+              "default": "primary",
+              "x-displayOptions": {
+                "show": {
+                  "approvalType": [
+                    "single",
+                    "double"
+                  ]
+                }
+              },
+              "type": "string",
+              "enum": [
+                "primary",
+                "secondary"
+              ],
+              "x-enumNames": [
+                "Primary",
+                "Secondary"
+              ]
+            },
+            "disapproveLabel": {
+              "x-title": "Disapprove Button Label",
+              "default": "Decline",
+              "x-displayOptions": {
+                "show": {
+                  "approvalType": [
+                    "double"
+                  ]
+                }
+              },
+              "type": "string"
+            },
+            "buttonDisapprovalStyle": {
+              "x-title": "Disapprove Button Style",
+              "default": "secondary",
+              "x-displayOptions": {
+                "show": {
+                  "approvalType": [
+                    "double"
+                  ]
+                }
+              },
+              "type": "string",
+              "enum": [
+                "primary",
+                "secondary"
+              ],
+              "x-enumNames": [
+                "Primary",
+                "Secondary"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "threadId": {
+      "x-title": "Thread ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "thread"
+          ],
+          "operation": [
+            "addLabels",
+            "removeLabels"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:gmail.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "googleApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "serviceAccount"
+          ]
+        }
+      }
+    },
+    {
+      "name": "gmailOAuth2",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "x-webhooks": "true"
+}

@@ -1,0 +1,135 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Google Business Profile Trigger",
+  "description": "Fetches reviews from Google Business Profile and starts the workflow on specified polling intervals.",
+  "x-n8n-node-type": "googleBusinessProfileTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "event": {
+      "x-title": "Event",
+      "default": "reviewAdded",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "reviewAdded"
+      ],
+      "x-enumNames": [
+        "Review Added"
+      ]
+    },
+    "account": {
+      "x-title": "Account",
+      "description": "The Google Business Profile account",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "event": [
+            "reviewAdded"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "name"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From list",
+          "type": "list"
+        },
+        {
+          "name": "name",
+          "displayName": "By name",
+          "type": "string"
+        }
+      ]
+    },
+    "location": {
+      "x-title": "Location",
+      "description": "The specific location or business associated with the account",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "event": [
+            "reviewAdded"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "name"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From list",
+          "type": "list"
+        },
+        {
+          "name": "name",
+          "displayName": "By name",
+          "type": "string"
+        }
+      ]
+    }
+  },
+  "x-subtitle": "={{\"Google Business Profile Trigger\"}}",
+  "x-icon": "file:googleBusinessProfile.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "googleBusinessProfileOAuth2Api",
+      "required": true
+    }
+  ]
+}
