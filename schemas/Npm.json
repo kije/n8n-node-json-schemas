@@ -1,0 +1,165 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Npm",
+  "description": "Consume NPM registry API",
+  "x-n8n-node-type": "npm",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "package",
+      "type": "string",
+      "enum": [
+        "package",
+        "distTag"
+      ],
+      "x-enumNames": [
+        "Package",
+        "Distribution Tag"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getMany",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "distTag"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "getMany",
+        "update"
+      ],
+      "x-enumNames": [
+        "Get All",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Returns all the dist-tags for a package",
+        "Update a the dist-tags for a package"
+      ]
+    },
+    "packageName": {
+      "x-title": "Package Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "distTag"
+          ],
+          "operation": [
+            "getMany",
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "packageVersion": {
+      "x-title": "Package Version",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "distTag"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "query": {
+      "x-title": "Query",
+      "description": "The query text used to search for packages",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "package"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 10,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "package"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "offset": {
+      "x-title": "Offset",
+      "description": "Offset to return results from",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "package"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 0
+    },
+    "distTagName": {
+      "x-title": "Distribution Tag Name",
+      "default": "latest",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "distTag"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{ $parameter[\"operation\"] + \": \" + $parameter[\"resource\"] }}",
+  "x-icon": "file:npm.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "npmApi",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OpenThesaurus",
+  "description": "Get synonmns for German words using the OpenThesaurus API",
+  "x-n8n-node-type": "openThesaurus",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "operation": {
+      "x-title": "Operation",
+      "default": "getSynonyms",
+      "type": "string",
+      "enum": [
+        "getSynonyms"
+      ],
+      "x-enumNames": [
+        "Get Synonyms"
+      ],
+      "x-enumDescriptions": [
+        "Get synonyms for a German word in German"
+      ]
+    },
+    "text": {
+      "x-title": "Text",
+      "description": "The word to get synonyms for",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getSynonyms"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getSynonyms"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "baseform": {
+          "x-title": "Baseform",
+          "description": "Specifies the basic form for the search term if it is not already a basic form",
+          "default": false,
+          "type": "boolean"
+        },
+        "similar": {
+          "x-title": "Similar",
+          "description": "This also returns up to five similarly written words for each answer. This is useful to be able to make a suggestion to the user in the event of a possible typing error.",
+          "default": false,
+          "type": "boolean"
+        },
+        "startswith": {
+          "x-title": "Starts With",
+          "description": "Like substring = true, but only finds words that begin with the specified search term",
+          "default": false,
+          "type": "boolean"
+        },
+        "substring": {
+          "x-title": "Substring",
+          "description": "Whether up to ten words are returned for each answer that only contain the search term as a partial word",
+          "default": false,
+          "type": "boolean"
+        },
+        "substringFromResults": {
+          "x-title": "Substring From Results",
+          "description": "Specifies from which entry the partial word hits are to be returned. Only works together with substring = true.",
+          "default": 0,
+          "type": "number"
+        },
+        "substringMaxResults": {
+          "x-title": "Substring Max Results",
+          "description": "Specifies how many partial word hits should be returned in total. Only works together with substring = true.",
+          "default": 10,
+          "type": "number",
+          "maximum": 250
+        },
+        "subsynsets": {
+          "x-title": "Subsynsets",
+          "description": "Whether each synonym group has its (optional) sub-terms supplied",
+          "default": false,
+          "type": "boolean"
+        },
+        "supersynsets": {
+          "x-title": "Supersynsets",
+          "description": "Whether each synonym group is supplied with its (optional) generic terms",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:openthesaurus.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

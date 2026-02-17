@@ -1,0 +1,115 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Model Selector",
+  "description": "Use this node to select one of the connected models to this node based on workflow data",
+  "x-n8n-node-type": "modelSelector",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "numberInputs": {
+      "x-title": "Number of Inputs",
+      "description": "The number of data inputs you want to merge. The node waits for all connected inputs to be executed.",
+      "default": 2,
+      "type": "string",
+      "enum": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "x-enumNames": [
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10"
+      ]
+    },
+    "rules": {
+      "x-title": "Rules",
+      "description": "Rules to map workflow data to specific models",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "rule": {
+          "x-title": "Rule",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "modelIndex": {
+                "x-title": "Model",
+                "description": "Choose model input from the list",
+                "default": 1,
+                "x-required": true,
+                "type": "string"
+              },
+              "conditions": {
+                "x-title": "Conditions",
+                "description": "Conditions that must be met to select this model",
+                "default": {},
+                "type": "object",
+                "properties": {
+                  "conditions": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "leftValue": {
+                          "type": "string"
+                        },
+                        "rightValue": {},
+                        "operator": {
+                          "type": "object"
+                        }
+                      }
+                    }
+                  },
+                  "combinator": {
+                    "type": "string",
+                    "enum": [
+                      "and",
+                      "or"
+                    ],
+                    "default": "and"
+                  },
+                  "options": {
+                    "type": "object",
+                    "properties": {
+                      "caseSensitive": {
+                        "type": "boolean"
+                      },
+                      "leftValue": {
+                        "type": "string"
+                      },
+                      "typeValidation": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-icon": "fa:map-signs",
+  "x-inputs": "={{\n\t\t\t\t((parameters) => {\n\t\t\t\t\tfunction configuredInputs(parameters) {\n    return Array.from({ length: parameters.numberInputs || 2 }, (_, i) => ({\n        type: 'ai_languageModel',\n        displayName: `Model ${(i + 1).toString()}`,\n        required: true,\n        maxConnections: 1,\n    }));\n};\n\t\t\t\t\treturn configuredInputs(parameters)\n\t\t\t\t})($parameter)\n\t\t\t}}",
+  "x-outputs": [
+    "ai_languageModel"
+  ]
+}

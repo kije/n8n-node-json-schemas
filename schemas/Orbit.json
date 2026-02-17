@@ -1,0 +1,699 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Orbit",
+  "description": "Consume Orbit API",
+  "x-n8n-node-type": "orbit",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "member",
+      "type": "string",
+      "enum": [
+        "activity",
+        "member",
+        "note",
+        "post"
+      ],
+      "x-enumNames": [
+        "Activity",
+        "Member",
+        "Note",
+        "Post"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "getAll",
+        "delete"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Get Many",
+        "Delete"
+      ],
+      "x-enumDescriptions": [
+        "Create a post",
+        "Get many posts",
+        "Delete a post"
+      ]
+    },
+    "workspaceId": {
+      "x-title": "Workspace Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "Deprecated",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "memberId": {
+      "x-title": "Member ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "title": {
+      "x-title": "Title",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "publishedAt": {
+          "x-title": "Occurred At",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "post"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "memberId": {
+          "x-title": "Member ID",
+          "description": "When set the post will be filtered by the member ID",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "resolveIdentities": {
+      "x-title": "Resolve Identities",
+      "description": "By default, the response just includes the reference of the identity. When set to true the identities will be resolved automatically.",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "member"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "sort": {
+          "x-title": "Sort By",
+          "description": "Name of the field the response will be sorted by",
+          "default": "",
+          "type": "string"
+        },
+        "direction": {
+          "x-title": "Sort Direction",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "ASC",
+            "DESC"
+          ],
+          "x-enumNames": [
+            "ASC",
+            "DESC"
+          ]
+        }
+      }
+    },
+    "source": {
+      "x-title": "Source",
+      "description": "Set to github, twitter, email, discourse or the source of any identities you've manually created",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "lookup"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "discourse",
+        "email",
+        "github",
+        "twitter"
+      ],
+      "x-enumNames": [
+        "Discourse",
+        "Email",
+        "GitHub",
+        "Twitter"
+      ]
+    },
+    "searchBy": {
+      "x-title": "Search By",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "lookup"
+          ],
+          "source": [
+            "discourse",
+            "github",
+            "twitter"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "username",
+        "id"
+      ],
+      "x-enumNames": [
+        "Username",
+        "ID"
+      ]
+    },
+    "id": {
+      "x-title": "ID",
+      "description": "The username at the source",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "lookup"
+          ],
+          "searchBy": [
+            "id"
+          ],
+          "source": [
+            "discourse",
+            "github",
+            "twitter"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "username": {
+      "x-title": "Username",
+      "description": "The username at the source",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "lookup"
+          ],
+          "searchBy": [
+            "username"
+          ],
+          "source": [
+            "discourse",
+            "github",
+            "twitter"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "The email address",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "lookup"
+          ],
+          "source": [
+            "email"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "host": {
+      "x-title": "Host",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "lookup"
+          ],
+          "source": [
+            "discourse"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "bio": {
+          "x-title": "Bio",
+          "default": "",
+          "type": "string"
+        },
+        "birthday": {
+          "x-title": "Birthday",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "company": {
+          "x-title": "Company",
+          "default": "",
+          "type": "string"
+        },
+        "location": {
+          "x-title": "Location",
+          "default": "",
+          "type": "string"
+        },
+        "name": {
+          "x-title": "Name",
+          "default": "",
+          "type": "string"
+        },
+        "pronouns": {
+          "x-title": "Pronouns",
+          "default": "",
+          "type": "string"
+        },
+        "shippingAddress": {
+          "x-title": "Shipping Address",
+          "default": "",
+          "type": "string"
+        },
+        "slug": {
+          "x-title": "Slug",
+          "default": "",
+          "type": "string"
+        },
+        "tagsToAdd": {
+          "x-title": "Tags to Add",
+          "description": "Adds tags to member; comma-separated string or array",
+          "default": "",
+          "type": "string"
+        },
+        "tagList": {
+          "x-title": "Tag List",
+          "description": "Replaces all tags for the member; comma-separated string or array",
+          "default": "",
+          "type": "string"
+        },
+        "tShirt": {
+          "x-title": "T-Shirt",
+          "default": "",
+          "type": "string"
+        },
+        "teammate": {
+          "x-title": "Teammate",
+          "default": false,
+          "type": "boolean"
+        },
+        "url": {
+          "x-title": "URL",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "identityUi": {
+      "x-title": "Identity",
+      "description": "The identity is used to find the member. If no member exists, a new member will be created and linked to the provided identity.",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "identityValue": {
+          "x-title": "Identity",
+          "type": "object",
+          "properties": {
+            "source": {
+              "x-title": "Source",
+              "description": "Set to github, twitter, email, discourse or the source of any identities you've manually created",
+              "default": "",
+              "type": "string",
+              "enum": [
+                "discourse",
+                "email",
+                "github",
+                "twitter"
+              ],
+              "x-enumNames": [
+                "Discourse",
+                "Email",
+                "GitHub",
+                "Twitter"
+              ]
+            },
+            "searchBy": {
+              "x-title": "Search By",
+              "default": "",
+              "x-displayOptions": {
+                "show": {
+                  "source": [
+                    "discourse",
+                    "github",
+                    "twitter"
+                  ]
+                }
+              },
+              "x-required": true,
+              "type": "string",
+              "enum": [
+                "username",
+                "id"
+              ],
+              "x-enumNames": [
+                "Username",
+                "ID"
+              ]
+            },
+            "id": {
+              "x-title": "ID",
+              "description": "The username at the source",
+              "default": "",
+              "x-displayOptions": {
+                "show": {
+                  "searchBy": [
+                    "id"
+                  ],
+                  "source": [
+                    "discourse",
+                    "github",
+                    "twitter"
+                  ]
+                }
+              },
+              "x-required": true,
+              "type": "string"
+            },
+            "username": {
+              "x-title": "Username",
+              "description": "The username at the source",
+              "default": "",
+              "x-displayOptions": {
+                "show": {
+                  "searchBy": [
+                    "username"
+                  ],
+                  "source": [
+                    "discourse",
+                    "github",
+                    "twitter"
+                  ]
+                }
+              },
+              "x-required": true,
+              "type": "string"
+            },
+            "email": {
+              "x-title": "Email",
+              "default": "",
+              "x-displayOptions": {
+                "show": {
+                  "source": [
+                    "email"
+                  ]
+                }
+              },
+              "x-required": true,
+              "type": "string"
+            },
+            "host": {
+              "x-title": "Host",
+              "default": "",
+              "x-displayOptions": {
+                "show": {
+                  "source": [
+                    "discourse"
+                  ]
+                }
+              },
+              "x-required": true,
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "note": {
+      "x-title": "Note",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "note"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "resolveMember": {
+      "x-title": "Resolve Member",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "note"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "noteId": {
+      "x-title": "Note ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "note"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "url": {
+      "x-title": "URL",
+      "description": "Supply any URL and Orbit will do its best job to parse out a title, description, and image",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "postId": {
+      "x-title": "Post ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": {
+    "light": "file:orbit.svg",
+    "dark": "file:orbit.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "orbitApi",
+      "required": true
+    }
+  ]
+}

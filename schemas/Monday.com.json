@@ -1,0 +1,454 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Monday.com",
+  "description": "Consume Monday.com API",
+  "x-n8n-node-type": "mondayCom",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "accessToken",
+      "type": "string",
+      "enum": [
+        "accessToken",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "Access Token",
+        "OAuth2"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "board",
+      "type": "string",
+      "enum": [
+        "board",
+        "boardColumn",
+        "boardGroup",
+        "boardItem"
+      ],
+      "x-enumNames": [
+        "Board",
+        "Board Column",
+        "Board Group",
+        "Board Item"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "boardItem"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "addUpdate",
+        "changeColumnValue",
+        "changeMultipleColumnValues",
+        "create",
+        "delete",
+        "get",
+        "getByColumnValue",
+        "getAll",
+        "move"
+      ],
+      "x-enumNames": [
+        "Add Update",
+        "Change Column Value",
+        "Change Multiple Column Values",
+        "Create",
+        "Delete",
+        "Get",
+        "Get By Column Value",
+        "Get Many",
+        "Move"
+      ],
+      "x-enumDescriptions": [
+        "Add an update to an item",
+        "Change a column value for a board item",
+        "Change multiple column values for a board item",
+        "Create an item in a board's group",
+        "Delete an item",
+        "Get an item",
+        "Get items by column value",
+        "Get many items",
+        "Move item to group"
+      ]
+    },
+    "boardId": {
+      "x-title": "Board Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "boardItem"
+          ],
+          "operation": [
+            "move"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "The new item's name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "boardItem"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "kind": {
+      "x-title": "Kind",
+      "description": "The board's kind (public / private / share)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "board"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "share",
+        "public",
+        "private"
+      ],
+      "x-enumNames": [
+        "Share",
+        "Public",
+        "Private"
+      ]
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "boardItem"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "columnValues": {
+          "x-title": "Column Values",
+          "description": "The column values of the new item",
+          "default": "",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "boardItem"
+          ],
+          "operation": [
+            "getByColumnValue"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "boardItem"
+          ],
+          "operation": [
+            "getByColumnValue"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "title": {
+      "x-title": "Title",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "boardColumn"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "columnType": {
+      "x-title": "Column Type",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "boardColumn"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "checkbox",
+        "country",
+        "date",
+        "dropdown",
+        "email",
+        "hour",
+        "Link",
+        "longText",
+        "numbers",
+        "people",
+        "person",
+        "phone",
+        "rating",
+        "status",
+        "tags",
+        "team",
+        "text",
+        "timeline",
+        "timezone",
+        "week",
+        "worldClock"
+      ],
+      "x-enumNames": [
+        "Checkbox",
+        "Country",
+        "Date",
+        "Dropdown",
+        "Email",
+        "Hour",
+        "Link",
+        "Long Text",
+        "Numbers",
+        "People",
+        "Person",
+        "Phone",
+        "Rating",
+        "Status",
+        "Tags",
+        "Team",
+        "Text",
+        "Timeline",
+        "Timezone",
+        "Week",
+        "World Clock"
+      ]
+    },
+    "groupId": {
+      "x-title": "Group Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "boardItem"
+          ],
+          "operation": [
+            "move"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "itemId": {
+      "x-title": "Item ID",
+      "description": "The item's ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "move"
+          ],
+          "resource": [
+            "boardItem"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "value": {
+      "x-title": "Value",
+      "description": "The column value in JSON format. Documentation can be found <a href=\"https://monday.com/developers/v2#mutations-section-columns-change-column-value\">here</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "boardItem"
+          ],
+          "operation": [
+            "changeColumnValue"
+          ]
+        }
+      },
+      "x-required": true,
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "columnId": {
+      "x-title": "Column Name or ID",
+      "description": "The column's unique identifier. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "boardItem"
+          ],
+          "operation": [
+            "getByColumnValue"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "columnValues": {
+      "x-title": "Column Values",
+      "description": "The column fields and values in JSON format. Documentation can be found <a href=\"https://monday.com/developers/v2#mutations-section-columns-change-multiple-column-values\">here</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "boardItem"
+          ],
+          "operation": [
+            "changeMultipleColumnValues"
+          ]
+        }
+      },
+      "x-required": true,
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "columnValue": {
+      "x-title": "Column Value",
+      "description": "The column value to search items by",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "boardItem"
+          ],
+          "operation": [
+            "getByColumnValue"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:mondayCom.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "mondayComApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "accessToken"
+          ]
+        }
+      }
+    },
+    {
+      "name": "mondayComOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

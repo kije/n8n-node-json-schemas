@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "No Operation, do nothing",
+  "description": "No Operation",
+  "x-n8n-node-type": "noOp",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "organization"
+  ],
+  "type": "object",
+  "properties": {},
+  "x-icon": "fa:arrow-right",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

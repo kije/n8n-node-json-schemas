@@ -1,0 +1,319 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OpenAI",
+  "description": "Consume Open AI",
+  "x-n8n-node-type": "openAi",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "text",
+      "type": "string",
+      "enum": [
+        "chat",
+        "image",
+        "text"
+      ],
+      "x-enumNames": [
+        "Chat",
+        "Image",
+        "Text"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "complete",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "text"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "complete",
+        "edit",
+        "moderate"
+      ],
+      "x-enumNames": [
+        "Complete",
+        "Edit",
+        "Moderate"
+      ],
+      "x-enumDescriptions": [
+        "Create one or more completions for a given text",
+        "Create an edited version for a given text",
+        "Classify if a text violates OpenAI's content policy"
+      ]
+    },
+    "model": {
+      "x-title": "Model",
+      "description": "The model which will classify the text. <a href=\"https://beta.openai.com/docs/models/overview\">Learn more</a>.",
+      "default": "text-moderation-latest",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "text"
+          ],
+          "operation": [
+            "moderate"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "text-moderation-stable",
+        "text-moderation-latest"
+      ],
+      "x-enumNames": [
+        "text-moderation-stable",
+        "text-moderation-latest"
+      ]
+    },
+    "chatModel": {
+      "x-title": "Model",
+      "description": "The model which will generate the completion. <a href=\"https://beta.openai.com/docs/models/overview\">Learn more</a>.",
+      "default": "gpt-3.5-turbo",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "complete"
+          ],
+          "resource": [
+            "chat"
+          ]
+        },
+        "hide": {
+          "@version": [
+            1
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "prompt": {
+      "x-title": "Prompt",
+      "description": "The prompt to generate completion(s) for",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "text"
+          ],
+          "operation": [
+            "complete"
+          ]
+        }
+      },
+      "type": "string",
+      "x-rows": 2
+    },
+    "simplifyOutput": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "complete",
+            "edit"
+          ],
+          "resource": [
+            "text"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "options": {
+      "x-title": "Options",
+      "description": "Additional options to add",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "complete",
+            "edit"
+          ],
+          "resource": [
+            "text"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "echo": {
+          "x-title": "Echo Prompt",
+          "description": "Whether the prompt should be echo back in addition to the completion",
+          "default": false,
+          "x-displayOptions": {
+            "show": {
+              "/operation": [
+                "complete"
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "frequency_penalty": {
+          "x-title": "Frequency Penalty",
+          "description": "Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim",
+          "default": 0,
+          "type": "number",
+          "minimum": -2,
+          "maximum": 2,
+          "x-precision": 1
+        },
+        "maxTokens": {
+          "x-title": "Maximum Number of Tokens",
+          "description": "The maximum number of tokens to generate in the completion. Most models have a context length of 2048 tokens (except for the newest models, which support 32,768).",
+          "default": 16,
+          "x-displayOptions": {
+            "show": {
+              "/operation": [
+                "complete"
+              ]
+            }
+          },
+          "type": "number",
+          "maximum": 32768
+        },
+        "n": {
+          "x-title": "Number of Completions",
+          "description": "How many completions to generate for each prompt. Note: Because this parameter generates many completions, it can quickly consume your token quota. Use carefully and ensure that you have reasonable settings for max_tokens and stop.",
+          "default": 1,
+          "type": "number"
+        },
+        "presence_penalty": {
+          "x-title": "Presence Penalty",
+          "description": "Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics",
+          "default": 0,
+          "type": "number",
+          "minimum": -2,
+          "maximum": 2,
+          "x-precision": 1
+        },
+        "temperature": {
+          "x-title": "Sampling Temperature",
+          "description": "Controls randomness: Lowering results in less random completions. As the temperature approaches zero, the model will become deterministic and repetitive.",
+          "default": 1,
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "x-precision": 1
+        },
+        "topP": {
+          "x-title": "Top P",
+          "description": "Controls diversity via nucleus sampling: 0.5 means half of all likelihood-weighted options are considered. We generally recommend altering this or temperature but not both.",
+          "default": 1,
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "x-precision": 1
+        }
+      }
+    },
+    "imageModel": {
+      "x-title": "Model",
+      "description": "The model to use for image generation",
+      "default": "dall-e-2",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "image"
+          ],
+          "operation": [
+            "create"
+          ]
+        },
+        "hide": {
+          "@version": [
+            1
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "responseFormat": {
+      "x-title": "Response Format",
+      "description": "The format in which to return the image(s)",
+      "default": "binaryData",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "image"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "binaryData",
+        "imageUrl"
+      ],
+      "x-enumNames": [
+        "Binary File",
+        "Image Url"
+      ]
+    },
+    "input": {
+      "x-title": "Input",
+      "description": "The input text to classify",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "text"
+          ],
+          "operation": [
+            "moderate"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "instruction": {
+      "x-title": "Instruction",
+      "description": "The instruction that tells the model how to edit the input text",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "text"
+          ],
+          "operation": [
+            "edit"
+          ]
+        }
+      },
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": {
+    "light": "file:openAi.svg",
+    "dark": "file:openAi.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "openAiApi",
+      "required": true
+    }
+  ]
+}

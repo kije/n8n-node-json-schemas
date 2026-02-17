@@ -1,0 +1,521 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Paddle",
+  "description": "Consume Paddle API",
+  "x-n8n-node-type": "paddle",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "coupon",
+      "type": "string",
+      "enum": [
+        "coupon",
+        "payment",
+        "plan",
+        "product",
+        "user"
+      ],
+      "x-enumNames": [
+        "Coupon",
+        "Payment",
+        "Plan",
+        "Product",
+        "User"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Get Many"
+      ],
+      "x-enumDescriptions": [
+        "Get many users"
+      ]
+    },
+    "couponType": {
+      "x-title": "Coupon Type",
+      "description": "Either product (valid for specified products or subscription plans) or checkout (valid for any checkout)",
+      "default": "checkout",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "coupon"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "checkout",
+        "product"
+      ],
+      "x-enumNames": [
+        "Checkout",
+        "Product"
+      ]
+    },
+    "productIds": {
+      "x-title": "Product Names or IDs",
+      "description": "Comma-separated list of product IDs. Required if coupon_type is product. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "coupon"
+          ],
+          "operation": [
+            "create"
+          ],
+          "couponType": [
+            "product"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "discountType": {
+      "x-title": "Discount Type",
+      "description": "Either flat or percentage",
+      "default": "flat",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "coupon"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "flat",
+        "percentage"
+      ],
+      "x-enumNames": [
+        "Flat",
+        "Percentage"
+      ]
+    },
+    "discountAmount": {
+      "x-title": "Discount Amount %",
+      "description": "Discount amount in percentage",
+      "default": 1,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "coupon"
+          ],
+          "operation": [
+            "create"
+          ],
+          "discountType": [
+            "percentage"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "currency": {
+      "x-title": "Currency",
+      "description": "The currency must match the balance currency specified in your account",
+      "default": "EUR",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "coupon"
+          ],
+          "operation": [
+            "create"
+          ],
+          "discountType": [
+            "flat"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "ARS",
+        "AUD",
+        "BRL",
+        "CAD",
+        "CHF",
+        "CNY",
+        "CZK",
+        "DKK",
+        "EUR",
+        "GBP",
+        "HKD",
+        "HUF",
+        "INR",
+        "JPY",
+        "KRW",
+        "MXN",
+        "NOK",
+        "NZD",
+        "PLN",
+        "RUB",
+        "SEK",
+        "SGD",
+        "THB",
+        "TWD",
+        "USD",
+        "ZAR"
+      ],
+      "x-enumNames": [
+        "ARS",
+        "AUD",
+        "BRL",
+        "CAD",
+        "CHF",
+        "CNY",
+        "CZK",
+        "DKK",
+        "EUR",
+        "GBP",
+        "HKD",
+        "HUF",
+        "INR",
+        "JPY",
+        "KRW",
+        "MXN",
+        "NOK",
+        "NZD",
+        "PLN",
+        "RUB",
+        "SEK",
+        "SGD",
+        "THB",
+        "TWD",
+        "USD",
+        "ZAR"
+      ]
+    },
+    "jsonParameters": {
+      "x-title": "JSON Parameters",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "additionalFieldsJson": {
+      "x-title": "Additional Fields",
+      "description": "Attributes in JSON form",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "planId": {
+          "x-title": "Plan ID",
+          "description": "Filter: The subscription plan ID",
+          "default": "",
+          "type": "string"
+        },
+        "subscriptionId": {
+          "x-title": "Subscription ID",
+          "description": "A specific user subscription ID",
+          "default": "",
+          "type": "string"
+        },
+        "state": {
+          "x-title": "State",
+          "description": "Filter: The user subscription status. Returns all active, past_due, trialing and paused subscription plans if not specified.",
+          "default": "active",
+          "type": "string",
+          "enum": [
+            "active",
+            "past_due",
+            "paused",
+            "trialing"
+          ],
+          "x-enumNames": [
+            "Active",
+            "Past Due",
+            "Paused",
+            "Trialing"
+          ]
+        }
+      }
+    },
+    "productId": {
+      "x-title": "Product ID",
+      "description": "The specific product/subscription ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "coupon"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number",
+      "minimum": 1,
+      "maximum": 200
+    },
+    "updateBy": {
+      "x-title": "Update By",
+      "description": "Either flat or percentage",
+      "default": "couponCode",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "coupon"
+          ],
+          "operation": [
+            "update"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "couponCode",
+        "group"
+      ],
+      "x-enumNames": [
+        "Coupon Code",
+        "Group"
+      ]
+    },
+    "couponCode": {
+      "x-title": "Coupon Code",
+      "description": "Identify the coupon to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "coupon"
+          ],
+          "operation": [
+            "update"
+          ],
+          "updateBy": [
+            "couponCode"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "group": {
+      "x-title": "Group",
+      "description": "The name of the group of coupons you want to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "coupon"
+          ],
+          "operation": [
+            "update"
+          ],
+          "updateBy": [
+            "group"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "paymentId": {
+      "x-title": "Payment Name or ID",
+      "description": "The upcoming subscription payment ID. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "reschedule"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "date": {
+      "x-title": "Date",
+      "description": "Date you want to move the payment to",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "reschedule"
+          ]
+        }
+      },
+      "type": "string",
+      "format": "date-time"
+    },
+    "planId": {
+      "x-title": "Plan ID",
+      "description": "Filter: The subscription plan ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "plan"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:paddle.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "paddleApi",
+      "required": true
+    }
+  ]
+}

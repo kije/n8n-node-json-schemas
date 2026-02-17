@@ -1,0 +1,469 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Nextcloud",
+  "description": "Access data on Nextcloud",
+  "x-n8n-node-type": "nextCloud",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "accessToken",
+      "type": "string",
+      "enum": [
+        "accessToken",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "Access Token",
+        "OAuth2"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "file",
+      "type": "string",
+      "enum": [
+        "file",
+        "folder",
+        "user"
+      ],
+      "x-enumNames": [
+        "File",
+        "Folder",
+        "User"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Invite a user to a NextCloud organization",
+        "Delete a user",
+        "Retrieve information about a single user",
+        "Retrieve a list of users",
+        "Edit attributes related to a user"
+      ]
+    },
+    "path": {
+      "x-title": "Folder Path",
+      "description": "The path of which to list the content. The path should start with \"/\".",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "list"
+          ],
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "toPath": {
+      "x-title": "To Path",
+      "description": "The new path of file or folder. The path should start with \"/\".",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "move"
+          ],
+          "resource": [
+            "file",
+            "folder"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "binaryPropertyName": {
+      "x-title": "Input Binary Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "binaryDataUpload": [
+            true
+          ],
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "binaryDataUpload": {
+      "x-title": "Binary File",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "fileContent": {
+      "x-title": "File Content",
+      "description": "The text content of the file to upload",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "binaryDataUpload": [
+            false
+          ],
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "shareType": {
+      "x-title": "Share Type",
+      "description": "The share permissions to set",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "share"
+          ],
+          "resource": [
+            "file",
+            "folder"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        7,
+        4,
+        1,
+        3,
+        0
+      ],
+      "x-enumNames": [
+        "Circle",
+        "Email",
+        "Group",
+        "Public Link",
+        "User"
+      ]
+    },
+    "circleId": {
+      "x-title": "Circle ID",
+      "description": "The ID of the circle to share with",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file",
+            "folder"
+          ],
+          "operation": [
+            "share"
+          ],
+          "shareType": [
+            7
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "The email of the user to invite",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "groupId": {
+      "x-title": "Group ID",
+      "description": "The ID of the group to share with",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file",
+            "folder"
+          ],
+          "operation": [
+            "share"
+          ],
+          "shareType": [
+            1
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "user": {
+      "x-title": "User",
+      "description": "The user to share with",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file",
+            "folder"
+          ],
+          "operation": [
+            "share"
+          ],
+          "shareType": [
+            0
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "search": {
+          "x-title": "Search",
+          "description": "Optional search string",
+          "default": "",
+          "type": "string"
+        },
+        "offset": {
+          "x-title": "Offset",
+          "description": "Optional offset value",
+          "default": "",
+          "type": "number"
+        }
+      }
+    },
+    "userId": {
+      "x-title": "Username",
+      "description": "Username the user will have",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "delete",
+            "get",
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "displayName": {
+          "x-title": "Display Name",
+          "description": "The display name of the user to invite",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "field": {
+          "x-title": "Fields",
+          "type": "object",
+          "properties": {
+            "key": {
+              "x-title": "Key",
+              "description": "Key of the updated attribute",
+              "default": "email",
+              "type": "string",
+              "enum": [
+                "address",
+                "displayname",
+                "email",
+                "password",
+                "twitter",
+                "website"
+              ],
+              "x-enumNames": [
+                "Address",
+                "Display Name",
+                "Email",
+                "Password",
+                "Twitter",
+                "Website"
+              ],
+              "x-enumDescriptions": [
+                "The new address for the user",
+                "The new display name for the user",
+                "The new email for the user",
+                "The new password for the user",
+                "The new twitter handle for the user",
+                "The new website for the user"
+              ]
+            },
+            "value": {
+              "x-title": "Value",
+              "description": "Value of the updated attribute",
+              "default": "",
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:nextcloud.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "nextCloudApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "accessToken"
+          ]
+        }
+      }
+    },
+    {
+      "name": "nextCloudOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

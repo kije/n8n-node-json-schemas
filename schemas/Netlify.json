@@ -1,0 +1,166 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Netlify",
+  "description": "Consume Netlify API",
+  "x-n8n-node-type": "netlify",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "deploy",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "deploy",
+        "site"
+      ],
+      "x-enumNames": [
+        "Deploy",
+        "Site"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "delete",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "site"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "delete",
+        "get",
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Delete",
+        "Get",
+        "Get Many"
+      ],
+      "x-enumDescriptions": [
+        "Delete a site",
+        "Get a site",
+        "Returns many sites"
+      ]
+    },
+    "siteId": {
+      "x-title": "Site ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "site"
+          ],
+          "operation": [
+            "get",
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "deployId": {
+      "x-title": "Deploy ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deploy"
+          ],
+          "operation": [
+            "get",
+            "cancel"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "site"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "site"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 200
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deploy"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "branch": {
+          "x-title": "Branch",
+          "default": "",
+          "type": "string"
+        },
+        "title": {
+          "x-title": "Title",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:netlify.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "netlifyApi",
+      "required": true
+    }
+  ]
+}

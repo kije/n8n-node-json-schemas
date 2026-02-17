@@ -1,0 +1,704 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MySQL",
+  "description": "Get, add and update data in MySQL",
+  "x-n8n-node-type": "mySql",
+  "x-n8n-version": 2.1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "database",
+      "type": "string"
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "insert",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "deleteTable",
+        "executeQuery",
+        "insert",
+        "upsert",
+        "select",
+        "update"
+      ],
+      "x-enumNames": [
+        "Delete",
+        "Execute SQL",
+        "Insert",
+        "Insert or Update",
+        "Select",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Delete an entire table or rows in a table",
+        "Execute an SQL query",
+        "Insert rows in a table",
+        "Insert or update rows in a table",
+        "Select rows from a table",
+        "Update rows in a table"
+      ]
+    },
+    "table": {
+      "x-title": "Table",
+      "description": "The table you want to work on",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "hide": {
+          "operation": [
+            "executeQuery"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "name"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "name",
+          "displayName": "Name",
+          "type": "string"
+        }
+      ]
+    },
+    "deleteCommand": {
+      "x-title": "Command",
+      "default": "truncate",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "deleteTable"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "truncate",
+        "delete",
+        "drop"
+      ],
+      "x-enumNames": [
+        "Truncate",
+        "Delete",
+        "Drop"
+      ],
+      "x-enumDescriptions": [
+        "Only removes the table's data and preserves the table's structure",
+        "Delete the rows that match the 'Select Rows' conditions below. If no selection is made, all rows in the table are deleted.",
+        "Deletes the table's data and also the table's structure permanently"
+      ]
+    },
+    "where": {
+      "x-title": "Select Rows",
+      "description": "If not set, all rows will be selected",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "column": {
+                "x-title": "Column",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\" target=\"_blank\">expression</a>",
+                "default": "",
+                "type": "string"
+              },
+              "condition": {
+                "x-title": "Operator",
+                "description": "The operator to check the column against. When using 'LIKE' operator percent sign ( %) matches zero or more characters, underscore ( _ ) matches any single character.",
+                "default": "equal",
+                "type": "string",
+                "enum": [
+                  "equal",
+                  "!=",
+                  "LIKE",
+                  ">",
+                  "<",
+                  ">=",
+                  "<=",
+                  "IS NULL",
+                  "IS NOT NULL"
+                ],
+                "x-enumNames": [
+                  "Equal",
+                  "Not Equal",
+                  "Like",
+                  "Greater Than",
+                  "Less Than",
+                  "Greater Than Or Equal",
+                  "Less Than Or Equal",
+                  "Is Null",
+                  "Is Not Null"
+                ]
+              },
+              "value": {
+                "x-title": "Value",
+                "default": "",
+                "x-displayOptions": {
+                  "hide": {
+                    "condition": [
+                      "IS NULL",
+                      "IS NOT NULL"
+                    ]
+                  }
+                },
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "combineConditions": {
+      "x-title": "Combine Conditions",
+      "description": "How to combine the conditions defined in \"Select Rows\": AND requires all conditions to be true, OR requires at least one condition to be true",
+      "default": "AND",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "AND",
+        "OR"
+      ],
+      "x-enumNames": [
+        "AND",
+        "OR"
+      ],
+      "x-enumDescriptions": [
+        "Only rows that meet all the conditions are selected",
+        "Rows that meet at least one condition are selected"
+      ]
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "connectionTimeoutMillis": {
+          "x-title": "Connection Timeout",
+          "description": "Number of milliseconds reserved for connecting to the database",
+          "default": 30,
+          "type": "number",
+          "minimum": 1
+        },
+        "connectionLimit": {
+          "x-title": "Connections Limit",
+          "description": "Maximum amount of connections to the database, setting high value can lead to performance issues and potential database crashes",
+          "default": 10,
+          "type": "number",
+          "minimum": 1
+        },
+        "queryBatching": {
+          "x-title": "Query Batching",
+          "description": "The way queries should be sent to the database",
+          "default": "single",
+          "type": "string",
+          "enum": [
+            "single",
+            "independently",
+            "transaction"
+          ],
+          "x-enumNames": [
+            "Single Query",
+            "Independent",
+            "Transaction"
+          ],
+          "x-enumDescriptions": [
+            "A single query for all incoming items",
+            "Execute one query per incoming item of the run",
+            "Execute all queries in a transaction, if a failure occurs, all changes are rolled back"
+          ]
+        },
+        "queryReplacement": {
+          "x-title": "Query Parameters",
+          "description": "Comma-separated list of the values you want to use as query parameters. You can drag the values from the input panel on the left. <a href=\"https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.mysql/\" target=\"_blank\">More info</a>",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/operation": [
+                "executeQuery"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "outputColumns": {
+          "x-title": "Output Columns",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\" target=\"_blank\">expression</a>",
+          "default": [],
+          "x-displayOptions": {
+            "show": {
+              "/operation": [
+                "select"
+              ]
+            }
+          },
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "largeNumbersOutput": {
+          "x-title": "Output Large-Format Numbers As",
+          "default": "text",
+          "x-displayOptions": {
+            "show": {
+              "/operation": [
+                "select",
+                "executeQuery"
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "numbers",
+            "text"
+          ],
+          "x-enumNames": [
+            "Numbers",
+            "Text"
+          ],
+          "x-enumDescriptions": [
+            "",
+            "Use this if you expect numbers longer than 16 digits (otherwise numbers may be incorrect)"
+          ]
+        },
+        "decimalNumbers": {
+          "x-title": "Output Decimals as Numbers",
+          "description": "Whether to output DECIMAL types as numbers instead of strings",
+          "default": false,
+          "x-displayOptions": {
+            "show": {
+              "/operation": [
+                "select",
+                "executeQuery"
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "priority": {
+          "x-title": "Priority",
+          "description": "Ignore any ignorable errors that occur while executing the INSERT statement",
+          "default": "LOW_PRIORITY",
+          "x-displayOptions": {
+            "show": {
+              "/operation": [
+                "insert"
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "LOW_PRIORITY",
+            "HIGH_PRIORITY"
+          ],
+          "x-enumNames": [
+            "Low Prioirity",
+            "High Priority"
+          ],
+          "x-enumDescriptions": [
+            "Delays execution of the INSERT until no other clients are reading from the table",
+            "Overrides the effect of the --low-priority-updates option if the server was started with that option. It also causes concurrent inserts not to be used."
+          ]
+        },
+        "replaceEmptyStrings": {
+          "x-title": "Replace Empty Strings with NULL",
+          "description": "Whether to replace empty strings with NULL in input, could be useful when data come from spreadsheet",
+          "default": false,
+          "x-displayOptions": {
+            "show": {
+              "/operation": [
+                "insert",
+                "update",
+                "upsert",
+                "executeQuery"
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "selectDistinct": {
+          "x-title": "Select Distinct",
+          "description": "Whether to remove these duplicate rows",
+          "default": false,
+          "x-displayOptions": {
+            "show": {
+              "/operation": [
+                "select"
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "detailedOutput": {
+          "x-title": "Output Query Execution Details",
+          "description": "Whether to show in output details of the ofexecuted query for each statement, or just confirmation of success",
+          "default": false,
+          "type": "boolean"
+        },
+        "skipOnConflict": {
+          "x-title": "Skip on Conflict",
+          "description": "Whether to skip the row and do not throw error if a unique constraint or exclusion constraint is violated",
+          "default": false,
+          "x-displayOptions": {
+            "show": {
+              "/operation": [
+                "insert"
+              ]
+            }
+          },
+          "type": "boolean"
+        }
+      }
+    },
+    "query": {
+      "x-title": "Query",
+      "description": "The SQL query to execute. You can use n8n expressions and $1, $2, $3, etc to refer to the 'Query Parameters' set in options below.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "executeQuery"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-editor": "sqlEditor"
+    },
+    "dataMode": {
+      "x-title": "Data Mode",
+      "description": "Whether to map node input properties and the table data automatically or manually",
+      "default": "autoMapInputData",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "autoMapInputData",
+        "defineBelow"
+      ],
+      "x-enumNames": [
+        "Auto-Map Input Data to Columns",
+        "Map Each Column Below"
+      ],
+      "x-enumDescriptions": [
+        "Use when node input properties names exactly match the table column names",
+        "Set the value for each destination column manually"
+      ]
+    },
+    "valuesToSend": {
+      "x-title": "Values to Send",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "dataMode": [
+            "defineBelow"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "column": {
+                "x-title": "Column",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\" target=\"_blank\">expression</a>",
+                "default": [],
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "returnAll": [
+            false
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "sort": {
+      "x-title": "Sort",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "column": {
+                "x-title": "Column",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\" target=\"_blank\">expression</a>",
+                "default": "",
+                "type": "string"
+              },
+              "direction": {
+                "x-title": "Direction",
+                "default": "ASC",
+                "type": "string",
+                "enum": [
+                  "ASC",
+                  "DESC"
+                ],
+                "x-enumNames": [
+                  "ASC",
+                  "DESC"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "columnToMatchOn": {
+      "x-title": "Column to Match On",
+      "description": "The column to compare when finding the rows to update. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\" target=\"_blank\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "valueToMatchOn": {
+      "x-title": "Value of Column to Match On",
+      "description": "Rows with a value in the specified \"Column to Match On\" that corresponds to the value in this field will be updated. New rows will be created for non-matching items.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "dataMode": [
+            "defineBelow"
+          ],
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{ $parameter[\"operation\"] }}",
+  "x-icon": {
+    "light": "file:mysql.svg",
+    "dark": "file:mysql.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "mySql",
+      "required": true,
+      "testedBy": "mysqlConnectionTest"
+    }
+  ]
+}

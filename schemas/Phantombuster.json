@@ -1,0 +1,298 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Phantombuster",
+  "description": "Consume Phantombuster API",
+  "x-n8n-node-type": "phantombuster",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "agent",
+      "type": "string",
+      "enum": [
+        "agent"
+      ],
+      "x-enumNames": [
+        "Agent"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "launch",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "agent"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "delete",
+        "get",
+        "getAll",
+        "getOutput",
+        "launch"
+      ],
+      "x-enumNames": [
+        "Delete",
+        "Get",
+        "Get Many",
+        "Get Output",
+        "Launch"
+      ],
+      "x-enumDescriptions": [
+        "Delete an agent by ID",
+        "Get an agent by ID",
+        "Get many agents of the current user's organization",
+        "Get the output of the most recent container of an agent",
+        "Add an agent to the launch queue"
+      ]
+    },
+    "agentId": {
+      "x-title": "Agent Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "launch"
+          ],
+          "resource": [
+            "agent"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "agent"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 25,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "agent"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 50
+    },
+    "resolveData": {
+      "x-title": "Resolve Data",
+      "description": "By default the launch just include the container ID. If this option gets activated, it will resolve the data automatically.",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "launch"
+          ],
+          "resource": [
+            "agent"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "agent"
+          ],
+          "operation": [
+            "launch"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "argumentsJson": {
+          "x-title": "Arguments (JSON)",
+          "description": "Agent argument. Can either be a JSON string or a plain object. The argument can be retrieved with buster.argument in the agent’s script.",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                true
+              ]
+            }
+          },
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "argumentsUi": {
+          "x-title": "Arguments",
+          "default": {},
+          "x-displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "type": "object",
+          "properties": {
+            "argumentValues": {
+              "x-title": "Argument",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "x-title": "Key",
+                    "description": "Name of the argument key to add",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "Value to set for the argument key",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "bonusArgumentUi": {
+          "x-title": "Bonus Argument",
+          "default": {},
+          "x-displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "type": "object",
+          "properties": {
+            "bonusArgumentValue": {
+              "x-title": "Bonus Argument",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "x-title": "Key",
+                    "description": "Name of the argument key to add",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "Value to set for the argument key",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "bonusArgumentJson": {
+          "x-title": "Bonus Argument (JSON)",
+          "description": "Agent bonus argument. Can either be a JSON string or a plain object. This bonus argument is single-use, it will only be used for the current launch. If present, it will be merged with the original argument, resulting in an effective argument that can be retrieved with buster.argument in the agent’s script.",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                true
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "manualLaunch": {
+          "x-title": "Manual Launch",
+          "description": "Whether the agent will be considered as \"launched manually\"",
+          "default": false,
+          "type": "boolean"
+        },
+        "maxInstanceCount": {
+          "x-title": "Max Instance Count",
+          "description": "If set, the agent will only be launched if the number of already running instances is below the specified number",
+          "default": 0,
+          "type": "number"
+        },
+        "saveArgument": {
+          "x-title": "Save Argument",
+          "description": "If true, argument will be saved as the default launch options for the agent",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "jsonParameters": {
+      "x-title": "JSON Parameters",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "launch"
+          ],
+          "resource": [
+            "agent"
+          ]
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:phantombuster.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "phantombusterApi",
+      "required": true
+    }
+  ]
+}

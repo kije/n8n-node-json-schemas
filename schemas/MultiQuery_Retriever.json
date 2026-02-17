@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MultiQuery Retriever",
+  "description": "Automates prompt tuning, generates diverse queries and expands document pool for enhanced retrieval.",
+  "x-n8n-node-type": "retrieverMultiQuery",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "options": {
+      "x-title": "Options",
+      "description": "Additional options to add",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "queryCount": {
+          "x-title": "Query Count",
+          "description": "Number of different versions of the given question to generate",
+          "default": 3,
+          "type": "number",
+          "minimum": 1
+        }
+      }
+    }
+  },
+  "x-icon": "fa:box-open",
+  "x-inputs": [
+    {
+      "displayName": "Model",
+      "maxConnections": 1,
+      "type": "ai_languageModel",
+      "required": true
+    },
+    {
+      "displayName": "Retriever",
+      "maxConnections": 1,
+      "type": "ai_retriever",
+      "required": true
+    }
+  ],
+  "x-outputs": [
+    {
+      "displayName": "Retriever",
+      "maxConnections": 1,
+      "type": "ai_retriever"
+    }
+  ]
+}

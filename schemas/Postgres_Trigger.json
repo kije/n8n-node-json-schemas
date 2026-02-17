@@ -1,0 +1,231 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Postgres Trigger",
+  "description": "Listens to Postgres messages",
+  "x-n8n-node-type": "postgresTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "triggerMode": {
+      "x-title": "Listen For",
+      "default": "createTrigger",
+      "type": "string",
+      "enum": [
+        "createTrigger",
+        "listenTrigger"
+      ],
+      "x-enumNames": [
+        "Table Row Change Events",
+        "Advanced"
+      ],
+      "x-enumDescriptions": [
+        "Insert, update or delete",
+        "Listen to existing Postgres channel"
+      ]
+    },
+    "schema": {
+      "x-title": "Schema Name",
+      "default": {
+        "mode": "list",
+        "value": "public"
+      },
+      "x-displayOptions": {
+        "show": {
+          "triggerMode": [
+            "createTrigger"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "name"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "name",
+          "displayName": "Name",
+          "type": "string"
+        }
+      ]
+    },
+    "tableName": {
+      "x-title": "Table Name",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "triggerMode": [
+            "createTrigger"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "name"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "name",
+          "displayName": "Name",
+          "type": "string"
+        }
+      ]
+    },
+    "channelName": {
+      "x-title": "Channel Name",
+      "description": "Name of the channel to listen to",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "triggerMode": [
+            "listenTrigger"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "firesOn": {
+      "x-title": "Event to listen for",
+      "default": "INSERT",
+      "x-displayOptions": {
+        "show": {
+          "triggerMode": [
+            "createTrigger"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "x-enumNames": [
+        "Insert",
+        "Update",
+        "Delete"
+      ]
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "triggerMode": [
+            "createTrigger"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "channelName": {
+          "x-title": "Channel Name",
+          "description": "Name of the channel to listen to",
+          "default": "",
+          "type": "string"
+        },
+        "functionName": {
+          "x-title": "Function Name",
+          "description": "Name of the function to create",
+          "default": "",
+          "type": "string"
+        },
+        "replaceIfExists": {
+          "x-title": "Replace if Exists",
+          "description": "Whether to replace an existing function and trigger with the same name",
+          "default": false,
+          "type": "boolean"
+        },
+        "triggerName": {
+          "x-title": "Trigger Name",
+          "description": "Name of the trigger to create",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "connectionTimeout": {
+          "x-title": "Connection Timeout",
+          "description": "Number of seconds reserved for connecting to the database",
+          "default": 30,
+          "type": "number"
+        },
+        "delayClosingIdleConnection": {
+          "x-title": "Delay Closing Idle Connection",
+          "description": "Number of seconds to wait before idle connection would be eligible for closing",
+          "default": 0,
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    }
+  },
+  "x-icon": "file:postgres.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "postgres",
+      "required": true
+    }
+  ]
+}

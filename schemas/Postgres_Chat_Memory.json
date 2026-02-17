@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Postgres Chat Memory",
+  "description": "Stores the chat history in Postgres table.",
+  "x-n8n-node-type": "memoryPostgresChat",
+  "x-n8n-version": [
+    1,
+    1.1,
+    1.2,
+    1.3
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "sessionIdType": {
+      "x-title": "Session ID",
+      "default": "fromInput",
+      "type": "string",
+      "enum": [
+        "fromInput",
+        "customKey"
+      ],
+      "x-enumNames": [
+        "Connected Chat Trigger Node",
+        "Define below"
+      ],
+      "x-enumDescriptions": [
+        "Looks for an input field called 'sessionId' that is coming from a directly connected Chat Trigger",
+        "Use an expression to reference data in previous nodes or enter static text"
+      ]
+    },
+    "sessionKey": {
+      "x-title": "Key",
+      "description": "The key to use to store session ID in the memory",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "sessionIdType": [
+            "customKey"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "tableName": {
+      "x-title": "Table Name",
+      "description": "The table name to store the chat history in. If table does not exist, it will be created.",
+      "default": "n8n_chat_histories",
+      "type": "string"
+    },
+    "contextWindowLength": {
+      "x-title": "Context Window Length",
+      "default": 5,
+      "x-displayOptions": {
+        "hide": {
+          "@version": [
+            {
+              "_cnd": {
+                "lt": 1.1
+              }
+            }
+          ]
+        }
+      },
+      "type": "number"
+    }
+  },
+  "x-icon": "file:postgres.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "ai_memory"
+  ],
+  "x-credentials": [
+    {
+      "name": "postgres",
+      "required": true,
+      "testedBy": "postgresConnectionTest"
+    }
+  ]
+}

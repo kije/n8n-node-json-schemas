@@ -1,0 +1,263 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "One Simple API",
+  "description": "A toolbox of no-code utilities",
+  "x-n8n-node-type": "oneSimpleApi",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "website",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "information",
+        "socialProfile",
+        "utility",
+        "website"
+      ],
+      "x-enumNames": [
+        "Information",
+        "Social Profile",
+        "Utility",
+        "Website"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "validateEmail",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "utility"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "expandURL",
+        "qrCode",
+        "validateEmail"
+      ],
+      "x-enumNames": [
+        "Expand URL",
+        "Generate QR Code",
+        "Validate Email"
+      ],
+      "x-enumDescriptions": [
+        "Expand a shortened URL",
+        "Generate a QR Code",
+        "Validate an email address"
+      ]
+    },
+    "link": {
+      "x-title": "URL",
+      "description": "URL to unshorten",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "expandURL"
+          ],
+          "resource": [
+            "utility"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "download": {
+      "x-title": "Download Screenshot?",
+      "description": "Whether to download the screenshot or return a link to it",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "screenshot"
+          ],
+          "resource": [
+            "website"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "output": {
+      "x-title": "Put Output In Field",
+      "description": "The name of the output field to put the binary file data in",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "screenshot"
+          ],
+          "resource": [
+            "website"
+          ],
+          "download": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "website"
+          ],
+          "operation": [
+            "seo"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "headers": {
+          "x-title": "Include Headers?",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "message": {
+      "x-title": "QR Content",
+      "description": "The text that should be turned into a QR code - like a website URL",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "qrCode"
+          ],
+          "resource": [
+            "utility"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "profileName": {
+      "x-title": "Profile Name",
+      "description": "Profile name to get details of",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "instagramProfile"
+          ],
+          "resource": [
+            "socialProfile"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "artistName": {
+      "x-title": "Artist Name",
+      "description": "Artist name to get details for",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "spotifyArtistProfile"
+          ],
+          "resource": [
+            "socialProfile"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "value": {
+      "x-title": "Value",
+      "description": "Value to convert",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "exchangeRate"
+          ],
+          "resource": [
+            "information"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "fromCurrency": {
+      "x-title": "From Currency",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "exchangeRate"
+          ],
+          "resource": [
+            "information"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "toCurrency": {
+      "x-title": "To Currency",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "exchangeRate"
+          ],
+          "resource": [
+            "information"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "emailAddress": {
+      "x-title": "Email Address",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "validateEmail"
+          ],
+          "resource": [
+            "utility"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-icon": "file:onesimpleapi.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "oneSimpleApi",
+      "required": true
+    }
+  ]
+}

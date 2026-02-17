@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Onfleet Trigger",
+  "description": "Starts the workflow when Onfleet events occur",
+  "x-n8n-node-type": "onfleetTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "triggerOn": {
+      "x-title": "Trigger On",
+      "default": [],
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "SMSRecipientOptOut",
+        "smsRecipientResponseMissed",
+        "taskArrival",
+        "taskAssigned",
+        "taskCloned",
+        "taskCompleted",
+        "taskCreated",
+        "taskDelayed",
+        "taskDeleted",
+        "taskEta",
+        "taskFailed",
+        "taskStarted",
+        "taskUnassigned",
+        "taskUpdated",
+        "workerCreated",
+        "workerDeleted",
+        "workerDuty"
+      ],
+      "x-enumNames": [
+        "SMS Recipient Opt Out",
+        "SMS Recipient Response Missed",
+        "Task Arrival",
+        "Task Assigned",
+        "Task Cloned",
+        "Task Completed",
+        "Task Created",
+        "Task Delayed",
+        "Task Deleted",
+        "Task ETA",
+        "Task Failed",
+        "Task Started",
+        "Task Unassigned",
+        "Task Updated",
+        "Worker Created",
+        "Worker Deleted",
+        "Worker Duty"
+      ]
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "name": {
+          "x-title": "Name",
+          "description": "A name for the webhook for identification",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"triggerOn\"]}}",
+  "x-icon": "file:Onfleet.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "onfleetApi",
+      "required": true,
+      "testedBy": "onfleetApiTest"
+    }
+  ],
+  "x-webhooks": "true"
+}

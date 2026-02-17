@@ -1,0 +1,546 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MISP",
+  "description": "Consume the MISP API",
+  "x-n8n-node-type": "misp",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "attribute",
+      "type": "string",
+      "enum": [
+        "attribute",
+        "event",
+        "eventTag",
+        "feed",
+        "galaxy",
+        "noticelist",
+        "object",
+        "organisation",
+        "tag",
+        "user",
+        "warninglist"
+      ],
+      "x-enumNames": [
+        "Attribute",
+        "Event",
+        "Event Tag",
+        "Feed",
+        "Galaxy",
+        "Noticelist",
+        "Object",
+        "Organisation",
+        "Tag",
+        "User",
+        "Warninglist"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "warninglist"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "get",
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Get",
+        "Get Many"
+      ]
+    },
+    "eventId": {
+      "x-title": "Event ID",
+      "description": "UUID or numeric ID of the event",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "eventTag"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "type": {
+      "x-title": "Type",
+      "default": "text",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "attribute"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "text",
+        "url",
+        "comment"
+      ],
+      "x-enumNames": [
+        "Text",
+        "URL",
+        "Comment"
+      ]
+    },
+    "value": {
+      "x-title": "Value",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "useJson": [
+            false
+          ],
+          "resource": [
+            "object"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "gpgkey": {
+          "x-title": "GPG Key",
+          "default": "",
+          "type": "string"
+        },
+        "invited_by": {
+          "x-title": "Inviter Email or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "org_id": {
+          "x-title": "Organization Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "attributeId": {
+      "x-title": "Attribute ID",
+      "description": "ID of the attribute to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "attribute"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "warninglist"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "warninglist"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "useJson": {
+      "x-title": "Use JSON to Specify Fields",
+      "description": "Whether to use JSON to specify the fields for the search request",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "object"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "jsonOutput": {
+      "x-title": "JSON",
+      "description": "Get more info at {YOUR_BASE_URL_SPECIFIED_IN_CREDENTIALS}/api/openapi#operation/restSearchAttributes",
+      "default": "{\n  \"value\": \"search value\",\n  \"type\": \"text\"\n}\n",
+      "x-displayOptions": {
+        "show": {
+          "useJson": [
+            true
+          ],
+          "resource": [
+            "object"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "email": {
+          "x-title": "Email",
+          "default": "",
+          "type": "string"
+        },
+        "gpgkey": {
+          "x-title": "GPG Key",
+          "default": "",
+          "type": "string"
+        },
+        "invited_by": {
+          "x-title": "Inviter Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "org_id": {
+          "x-title": "Organization Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "org_id": {
+      "x-title": "Organization Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "information": {
+      "x-title": "Information",
+      "description": "Information on the event - max 65535 characters",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "tagId": {
+      "x-title": "Tag ID",
+      "description": "ID of the tag to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "name": {
+      "x-title": "Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "provider": {
+      "x-title": "Provider",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "feed"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "url": {
+      "x-title": "URL",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "feed"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "feedId": {
+      "x-title": "Feed ID",
+      "description": "ID of the feed to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "feed"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "galaxyId": {
+      "x-title": "Galaxy ID",
+      "description": "UUID or numeric ID of the galaxy",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "galaxy"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "noticelistId": {
+      "x-title": "Noticelist ID",
+      "description": "Numeric ID of the noticelist",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "noticelist"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "organisationId": {
+      "x-title": "Organisation ID",
+      "description": "ID of the organisation to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "organisation"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "email": {
+      "x-title": "Email",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "role_id": {
+      "x-title": "Role ID",
+      "description": "Role IDs are available in the MISP dashboard at /roles/index",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "userId": {
+      "x-title": "User ID",
+      "description": "ID of the user to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "warninglistId": {
+      "x-title": "Warninglist ID",
+      "description": "Numeric ID of the warninglist",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "warninglist"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:misp.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "mispApi",
+      "required": true
+    }
+  ]
+}

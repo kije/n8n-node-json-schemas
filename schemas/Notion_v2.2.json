@@ -1,0 +1,2181 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Notion",
+  "description": "Consume Notion API",
+  "x-n8n-node-type": "notion",
+  "x-n8n-version": 2.2,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "Credentials": {
+      "default": "",
+      "type": "string",
+      "x-n8n-type": "credentials"
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "page",
+      "type": "string",
+      "enum": [
+        "block",
+        "database",
+        "databasePage",
+        "page",
+        "user"
+      ],
+      "x-enumNames": [
+        "Block",
+        "Database",
+        "Database Page",
+        "Page",
+        "User"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "get",
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Get",
+        "Get Many"
+      ],
+      "x-enumDescriptions": [
+        "Get a user",
+        "Get many users"
+      ]
+    },
+    "blockId": {
+      "x-title": "Block",
+      "description": "The Notion Block to get all children from, when using 'By URL' mode make sure to use the URL of the block itself, you can find it in block parameters in Notion under 'Copy link to block'",
+      "default": {
+        "mode": "url",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "block"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 2.2
+              }
+            }
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "url",
+          "displayName": "Link",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "blockUi": {
+      "x-title": "Blocks",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "page"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "blockValues": {
+          "x-title": "Block",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "x-title": "Type Name or ID",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": "paragraph",
+                "type": "string"
+              },
+              "richText": {
+                "x-title": "Rich Text",
+                "default": false,
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "numbered_list_item"
+                    ]
+                  }
+                },
+                "type": "boolean"
+              },
+              "textContent": {
+                "x-title": "Text",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "numbered_list_item"
+                    ],
+                    "richText": [
+                      false
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "text": {
+                "x-title": "Text",
+                "description": "Rich text in the block",
+                "default": {},
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "numbered_list_item"
+                    ],
+                    "richText": [
+                      true
+                    ]
+                  }
+                },
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "x-title": "Text",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "textType": {
+                          "x-title": "Type",
+                          "default": "text",
+                          "type": "string",
+                          "enum": [
+                            "equation",
+                            "mention",
+                            "text"
+                          ],
+                          "x-enumNames": [
+                            "Equation",
+                            "Mention",
+                            "Text"
+                          ]
+                        },
+                        "text": {
+                          "x-title": "Text",
+                          "description": "Text content. This field contains the actual content of your text and is probably the field you'll use most often.",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "textType": [
+                                "text"
+                              ]
+                            }
+                          },
+                          "type": "string"
+                        },
+                        "isLink": {
+                          "x-title": "Is Link",
+                          "default": false,
+                          "x-displayOptions": {
+                            "show": {
+                              "textType": [
+                                "text"
+                              ]
+                            }
+                          },
+                          "type": "boolean"
+                        },
+                        "textLink": {
+                          "x-title": "Text Link",
+                          "description": "The URL that this link points to",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "textType": [
+                                "text"
+                              ],
+                              "isLink": [
+                                true
+                              ]
+                            }
+                          },
+                          "type": "string"
+                        },
+                        "mentionType": {
+                          "x-title": "Type",
+                          "description": "An inline mention of a user, page, database, or date. In the app these are created by typing @ followed by the name of a user, page, database, or a date.",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "textType": [
+                                "mention"
+                              ]
+                            }
+                          },
+                          "type": "string",
+                          "enum": [
+                            "database",
+                            "date",
+                            "page",
+                            "user"
+                          ],
+                          "x-enumNames": [
+                            "Database",
+                            "Date",
+                            "Page",
+                            "User"
+                          ]
+                        },
+                        "user": {
+                          "x-title": "User Name or ID",
+                          "description": "The ID of the user being mentioned. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "mentionType": [
+                                "user"
+                              ]
+                            }
+                          },
+                          "type": "string"
+                        },
+                        "page": {
+                          "x-title": "Page ID",
+                          "description": "The ID of the page being mentioned",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "mentionType": [
+                                "page"
+                              ]
+                            }
+                          },
+                          "type": "string"
+                        },
+                        "database": {
+                          "x-title": "Database",
+                          "description": "The Notion Database being mentioned",
+                          "default": {
+                            "mode": "list",
+                            "value": ""
+                          },
+                          "x-displayOptions": {
+                            "show": {
+                              "mentionType": [
+                                "database"
+                              ]
+                            }
+                          },
+                          "type": "object",
+                          "properties": {
+                            "__rl": {
+                              "type": "boolean",
+                              "const": true
+                            },
+                            "mode": {
+                              "type": "string",
+                              "enum": [
+                                "list",
+                                "url",
+                                "id"
+                              ]
+                            },
+                            "value": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "mode",
+                            "value"
+                          ],
+                          "x-modes": [
+                            {
+                              "name": "list",
+                              "displayName": "Database",
+                              "type": "list"
+                            },
+                            {
+                              "name": "url",
+                              "displayName": "Link",
+                              "type": "string"
+                            },
+                            {
+                              "name": "id",
+                              "displayName": "ID",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "range": {
+                          "x-title": "Range",
+                          "description": "Whether or not you want to define a date range",
+                          "default": false,
+                          "x-displayOptions": {
+                            "show": {
+                              "mentionType": [
+                                "date"
+                              ]
+                            }
+                          },
+                          "type": "boolean"
+                        },
+                        "date": {
+                          "x-title": "Date",
+                          "description": "An ISO 8601 format date, with optional time",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "mentionType": [
+                                "date"
+                              ],
+                              "range": [
+                                false
+                              ]
+                            }
+                          },
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "dateStart": {
+                          "x-title": "Date Start",
+                          "description": "An ISO 8601 format date, with optional time",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "mentionType": [
+                                "date"
+                              ],
+                              "range": [
+                                true
+                              ]
+                            }
+                          },
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "dateEnd": {
+                          "x-title": "Date End",
+                          "description": "An ISO 8601 formatted date, with optional time. Represents the end of a date range.",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "range": [
+                                true
+                              ],
+                              "mentionType": [
+                                "date"
+                              ]
+                            }
+                          },
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "expression": {
+                          "x-title": "Expression",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "textType": [
+                                "equation"
+                              ]
+                            }
+                          },
+                          "type": "string"
+                        },
+                        "annotationUi": {
+                          "x-title": "Annotations",
+                          "description": "All annotations that apply to this rich text",
+                          "default": {},
+                          "type": "object",
+                          "properties": {
+                            "bold": {
+                              "x-title": "Bold",
+                              "description": "Whether the text is bolded",
+                              "default": false,
+                              "type": "boolean"
+                            },
+                            "italic": {
+                              "x-title": "Italic",
+                              "description": "Whether the text is italicized",
+                              "default": false,
+                              "type": "boolean"
+                            },
+                            "strikethrough": {
+                              "x-title": "Strikethrough",
+                              "description": "Whether the text is struck through",
+                              "default": false,
+                              "type": "boolean"
+                            },
+                            "underline": {
+                              "x-title": "Underline",
+                              "description": "Whether the text is underlined",
+                              "default": false,
+                              "type": "boolean"
+                            },
+                            "code": {
+                              "x-title": "Code",
+                              "description": "Whether the text is code style",
+                              "default": false,
+                              "type": "boolean"
+                            },
+                            "color": {
+                              "x-title": "Color",
+                              "description": "Color of the text",
+                              "default": "",
+                              "type": "string",
+                              "enum": [
+                                "default",
+                                "gray",
+                                "brown",
+                                "orange",
+                                "yellow",
+                                "green",
+                                "blue",
+                                "purple",
+                                "pink",
+                                "red",
+                                "gray_background",
+                                "brown_background",
+                                "orange_background",
+                                "yellow_background",
+                                "green_background",
+                                "blue_background",
+                                "purple_background",
+                                "pink_background",
+                                "red_background"
+                              ],
+                              "x-enumNames": [
+                                "Default",
+                                "Gray",
+                                "Brown",
+                                "Orange",
+                                "Yellow",
+                                "Green",
+                                "Blue",
+                                "Purple",
+                                "Pink",
+                                "Red",
+                                "Gray Background",
+                                "Brown Background",
+                                "Orange Background",
+                                "Yellow Background",
+                                "Green Background",
+                                "Blue Background",
+                                "Purple Background",
+                                "Pink Background",
+                                "Red Background"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "checked": {
+                "x-title": "Checked",
+                "description": "Whether the to_do is checked or not",
+                "default": false,
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "to_do"
+                    ]
+                  }
+                },
+                "type": "boolean"
+              },
+              "title": {
+                "x-title": "Title",
+                "description": "Plain text of page title",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "child_page"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "url": {
+                "x-title": "Image URL",
+                "description": "Image file reference",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "image"
+                    ]
+                  }
+                },
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "fetchNestedBlocks": {
+      "x-title": "Also Fetch Nested Blocks",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "block"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "simplifyOutput": {
+      "x-title": "Simplify Output",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "block"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        },
+        "hide": {
+          "@version": [
+            1,
+            2
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "databaseId": {
+      "x-title": "Database",
+      "description": "The Notion Database to operate on",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "databasePage"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "Database",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "Link",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "simple": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "page"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "text": {
+      "x-title": "Search Text",
+      "description": "The text to search for",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "page"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "page"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "filter": {
+          "x-title": "Filters",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "filters": {
+              "x-title": "Filter",
+              "type": "object",
+              "properties": {
+                "property": {
+                  "x-title": "Property",
+                  "description": "The name of the property to filter by",
+                  "default": "object",
+                  "type": "string",
+                  "enum": [
+                    "object"
+                  ],
+                  "x-enumNames": [
+                    "Object"
+                  ]
+                },
+                "value": {
+                  "x-title": "Value",
+                  "description": "The value of the property to filter by",
+                  "default": "",
+                  "type": "string",
+                  "enum": [
+                    "database",
+                    "page"
+                  ],
+                  "x-enumNames": [
+                    "Database",
+                    "Page"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "sort": {
+          "x-title": "Sort",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "sortValue": {
+              "x-title": "Sort",
+              "type": "object",
+              "properties": {
+                "direction": {
+                  "x-title": "Direction",
+                  "description": "The direction to sort",
+                  "default": "descending",
+                  "type": "string",
+                  "enum": [
+                    "ascending",
+                    "descending"
+                  ],
+                  "x-enumNames": [
+                    "Ascending",
+                    "Descending"
+                  ]
+                },
+                "timestamp": {
+                  "x-title": "Timestamp",
+                  "description": "The name of the timestamp to sort against",
+                  "default": "last_edited_time",
+                  "type": "string",
+                  "enum": [
+                    "last_edited_time"
+                  ],
+                  "x-enumNames": [
+                    "Last Edited Time"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "Page title. Appears at the top of the page and can be found via Quick Find.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "page"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "propertiesUi": {
+      "x-title": "Properties",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "databasePage"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "propertyValues": {
+          "x-title": "Property",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "x-title": "Key Name or ID",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": "",
+                "type": "string"
+              },
+              "type": {
+                "x-title": "Type",
+                "default": "={{$parameter[\"&key\"].split(\"|\")[1]}}",
+                "type": "string"
+              },
+              "title": {
+                "x-title": "Title",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "title"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "richText": {
+                "x-title": "Rich Text",
+                "default": false,
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "rich_text"
+                    ]
+                  }
+                },
+                "type": "boolean"
+              },
+              "textContent": {
+                "x-title": "Text",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "rich_text"
+                    ],
+                    "richText": [
+                      false
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "text": {
+                "x-title": "Text",
+                "description": "Rich text in the block",
+                "default": {},
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "rich_text"
+                    ],
+                    "richText": [
+                      true
+                    ]
+                  }
+                },
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "x-title": "Text",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "textType": {
+                          "x-title": "Type",
+                          "default": "text",
+                          "type": "string",
+                          "enum": [
+                            "equation",
+                            "mention",
+                            "text"
+                          ],
+                          "x-enumNames": [
+                            "Equation",
+                            "Mention",
+                            "Text"
+                          ]
+                        },
+                        "text": {
+                          "x-title": "Text",
+                          "description": "Text content. This field contains the actual content of your text and is probably the field you'll use most often.",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "textType": [
+                                "text"
+                              ]
+                            }
+                          },
+                          "type": "string"
+                        },
+                        "isLink": {
+                          "x-title": "Is Link",
+                          "default": false,
+                          "x-displayOptions": {
+                            "show": {
+                              "textType": [
+                                "text"
+                              ]
+                            }
+                          },
+                          "type": "boolean"
+                        },
+                        "textLink": {
+                          "x-title": "Text Link",
+                          "description": "The URL that this link points to",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "textType": [
+                                "text"
+                              ],
+                              "isLink": [
+                                true
+                              ]
+                            }
+                          },
+                          "type": "string"
+                        },
+                        "mentionType": {
+                          "x-title": "Type",
+                          "description": "An inline mention of a user, page, database, or date. In the app these are created by typing @ followed by the name of a user, page, database, or a date.",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "textType": [
+                                "mention"
+                              ]
+                            }
+                          },
+                          "type": "string",
+                          "enum": [
+                            "database",
+                            "date",
+                            "page",
+                            "user"
+                          ],
+                          "x-enumNames": [
+                            "Database",
+                            "Date",
+                            "Page",
+                            "User"
+                          ]
+                        },
+                        "user": {
+                          "x-title": "User Name or ID",
+                          "description": "The ID of the user being mentioned. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "mentionType": [
+                                "user"
+                              ]
+                            }
+                          },
+                          "type": "string"
+                        },
+                        "page": {
+                          "x-title": "Page ID",
+                          "description": "The ID of the page being mentioned",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "mentionType": [
+                                "page"
+                              ]
+                            }
+                          },
+                          "type": "string"
+                        },
+                        "database": {
+                          "x-title": "Database",
+                          "description": "The Notion Database being mentioned",
+                          "default": {
+                            "mode": "list",
+                            "value": ""
+                          },
+                          "x-displayOptions": {
+                            "show": {
+                              "mentionType": [
+                                "database"
+                              ]
+                            }
+                          },
+                          "type": "object",
+                          "properties": {
+                            "__rl": {
+                              "type": "boolean",
+                              "const": true
+                            },
+                            "mode": {
+                              "type": "string",
+                              "enum": [
+                                "list",
+                                "url",
+                                "id"
+                              ]
+                            },
+                            "value": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "mode",
+                            "value"
+                          ],
+                          "x-modes": [
+                            {
+                              "name": "list",
+                              "displayName": "Database",
+                              "type": "list"
+                            },
+                            {
+                              "name": "url",
+                              "displayName": "Link",
+                              "type": "string"
+                            },
+                            {
+                              "name": "id",
+                              "displayName": "ID",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "range": {
+                          "x-title": "Range",
+                          "description": "Whether or not you want to define a date range",
+                          "default": false,
+                          "x-displayOptions": {
+                            "show": {
+                              "mentionType": [
+                                "date"
+                              ]
+                            }
+                          },
+                          "type": "boolean"
+                        },
+                        "date": {
+                          "x-title": "Date",
+                          "description": "An ISO 8601 format date, with optional time",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "mentionType": [
+                                "date"
+                              ],
+                              "range": [
+                                false
+                              ]
+                            }
+                          },
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "dateStart": {
+                          "x-title": "Date Start",
+                          "description": "An ISO 8601 format date, with optional time",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "mentionType": [
+                                "date"
+                              ],
+                              "range": [
+                                true
+                              ]
+                            }
+                          },
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "dateEnd": {
+                          "x-title": "Date End",
+                          "description": "An ISO 8601 formatted date, with optional time. Represents the end of a date range.",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "range": [
+                                true
+                              ],
+                              "mentionType": [
+                                "date"
+                              ]
+                            }
+                          },
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "expression": {
+                          "x-title": "Expression",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "textType": [
+                                "equation"
+                              ]
+                            }
+                          },
+                          "type": "string"
+                        },
+                        "annotationUi": {
+                          "x-title": "Annotations",
+                          "description": "All annotations that apply to this rich text",
+                          "default": {},
+                          "type": "object",
+                          "properties": {
+                            "bold": {
+                              "x-title": "Bold",
+                              "description": "Whether the text is bolded",
+                              "default": false,
+                              "type": "boolean"
+                            },
+                            "italic": {
+                              "x-title": "Italic",
+                              "description": "Whether the text is italicized",
+                              "default": false,
+                              "type": "boolean"
+                            },
+                            "strikethrough": {
+                              "x-title": "Strikethrough",
+                              "description": "Whether the text is struck through",
+                              "default": false,
+                              "type": "boolean"
+                            },
+                            "underline": {
+                              "x-title": "Underline",
+                              "description": "Whether the text is underlined",
+                              "default": false,
+                              "type": "boolean"
+                            },
+                            "code": {
+                              "x-title": "Code",
+                              "description": "Whether the text is code style",
+                              "default": false,
+                              "type": "boolean"
+                            },
+                            "color": {
+                              "x-title": "Color",
+                              "description": "Color of the text",
+                              "default": "",
+                              "type": "string",
+                              "enum": [
+                                "default",
+                                "gray",
+                                "brown",
+                                "orange",
+                                "yellow",
+                                "green",
+                                "blue",
+                                "purple",
+                                "pink",
+                                "red",
+                                "gray_background",
+                                "brown_background",
+                                "orange_background",
+                                "yellow_background",
+                                "green_background",
+                                "blue_background",
+                                "purple_background",
+                                "pink_background",
+                                "red_background"
+                              ],
+                              "x-enumNames": [
+                                "Default",
+                                "Gray",
+                                "Brown",
+                                "Orange",
+                                "Yellow",
+                                "Green",
+                                "Blue",
+                                "Purple",
+                                "Pink",
+                                "Red",
+                                "Gray Background",
+                                "Brown Background",
+                                "Orange Background",
+                                "Yellow Background",
+                                "Green Background",
+                                "Blue Background",
+                                "Purple Background",
+                                "Pink Background",
+                                "Red Background"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "phoneValue": {
+                "x-title": "Phone Number",
+                "description": "Phone number. No structure is enforced.",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "phone_number"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "multiSelectValue": {
+                "x-title": "Option Names or IDs",
+                "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": [],
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "multi_select"
+                    ]
+                  }
+                },
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "selectValue": {
+                "x-title": "Option Name or ID",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "select"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "statusValue": {
+                "x-title": "Status Name or ID",
+                "description": "Name of the option you want to set. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "status"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "emailValue": {
+                "x-title": "Email",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "email"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "ignoreIfEmpty": {
+                "x-title": "Ignore If Empty",
+                "default": false,
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "url"
+                    ]
+                  }
+                },
+                "type": "boolean"
+              },
+              "urlValue": {
+                "x-title": "URL",
+                "description": "Web address",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "url"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "peopleValue": {
+                "x-title": "User Names or IDs",
+                "description": "List of users. Multiples can be defined separated by comma. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                "default": [],
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "people"
+                    ]
+                  }
+                },
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "relationValue": {
+                "x-title": "Relation IDs",
+                "description": "List of databases that belong to another database. Multiples can be defined separated by comma.",
+                "default": [],
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "relation"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "checkboxValue": {
+                "x-title": "Checked",
+                "description": "Whether or not the checkbox is checked. <code>true</code> represents checked. <code>false</code> represents unchecked.",
+                "default": false,
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "checkbox"
+                    ]
+                  }
+                },
+                "type": "boolean"
+              },
+              "numberValue": {
+                "x-title": "Number",
+                "description": "Number value",
+                "default": 0,
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "number"
+                    ]
+                  }
+                },
+                "type": "number"
+              },
+              "range": {
+                "x-title": "Range",
+                "description": "Whether or not you want to define a date range",
+                "default": false,
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "date"
+                    ]
+                  }
+                },
+                "type": "boolean"
+              },
+              "includeTime": {
+                "x-title": "Include Time",
+                "description": "Whether or not to include the time in the date",
+                "default": true,
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "date"
+                    ]
+                  }
+                },
+                "type": "boolean"
+              },
+              "date": {
+                "x-title": "Date",
+                "description": "An ISO 8601 format date, with optional time",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "range": [
+                      false
+                    ],
+                    "type": [
+                      "date"
+                    ]
+                  }
+                },
+                "type": "string",
+                "format": "date-time"
+              },
+              "dateStart": {
+                "x-title": "Date Start",
+                "description": "An ISO 8601 format date, with optional time",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "range": [
+                      true
+                    ],
+                    "type": [
+                      "date"
+                    ]
+                  }
+                },
+                "type": "string",
+                "format": "date-time"
+              },
+              "dateEnd": {
+                "x-title": "Date End",
+                "description": "An ISO 8601 formatted date, with optional time. Represents the end of a date range.",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "range": [
+                      true
+                    ],
+                    "type": [
+                      "date"
+                    ]
+                  }
+                },
+                "type": "string",
+                "format": "date-time"
+              },
+              "timezone": {
+                "x-title": "Timezone Name or ID",
+                "description": "Time zone to use. By default n8n timezone is used. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                "default": "default",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "date"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "fileUrls": {
+                "x-title": "File URLs",
+                "default": {},
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "files"
+                    ]
+                  },
+                  "hide": {
+                    "@version": [
+                      1
+                    ]
+                  }
+                },
+                "type": "object",
+                "properties": {
+                  "fileUrl": {
+                    "x-title": "File",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "x-title": "Name",
+                          "default": "",
+                          "type": "string"
+                        },
+                        "url": {
+                          "x-title": "File URL",
+                          "description": "Link to externally hosted file",
+                          "default": "",
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "pageId": {
+      "x-title": "Page Link or ID",
+      "description": "The Page URL from Notion's 'copy link' functionality (or just the ID contained within the URL)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            1
+          ],
+          "resource": [
+            "page"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "filterType": {
+      "x-title": "Filter",
+      "default": "none",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "databasePage"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        },
+        "hide": {
+          "@version": [
+            1
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "none",
+        "manual",
+        "json"
+      ],
+      "x-enumNames": [
+        "None",
+        "Build Manually",
+        "JSON"
+      ]
+    },
+    "matchType": {
+      "x-title": "Must Match",
+      "default": "anyFilter",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "databasePage"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "manual"
+          ]
+        },
+        "hide": {
+          "@version": [
+            1
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "anyFilter",
+        "allFilters"
+      ],
+      "x-enumNames": [
+        "Any filter",
+        "All Filters"
+      ]
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "databasePage"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "manual"
+          ]
+        },
+        "hide": {
+          "@version": [
+            1
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "conditions": {
+          "x-title": "Conditions",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "x-title": "Property Name or ID",
+                "description": "The name of the property to filter by. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                "default": "",
+                "type": "string"
+              },
+              "type": {
+                "x-title": "Type",
+                "default": "={{$parameter[\"&key\"].split(\"|\")[1]}}",
+                "type": "string"
+              },
+              "condition": {
+                "x-title": "Condition",
+                "description": "The value of the property to filter by",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "formula"
+                    ],
+                    "returnType": [
+                      "date"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "equals",
+                  "before",
+                  "after",
+                  "on_or_before",
+                  "is_empty",
+                  "is_not_empty",
+                  "on_or_after",
+                  "past_week",
+                  "past_month",
+                  "past_year",
+                  "next_week",
+                  "next_month",
+                  "next_year"
+                ],
+                "x-enumNames": [
+                  "Equals",
+                  "Before",
+                  "After",
+                  "On Or Before",
+                  "Is Empty",
+                  "Is Not Empty",
+                  "On Or After",
+                  "Past Week",
+                  "Past Month",
+                  "Past Year",
+                  "Next Week",
+                  "Next Month",
+                  "Next Year"
+                ]
+              },
+              "returnType": {
+                "x-title": "Return Type",
+                "description": "The formula return type",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "formula"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "text",
+                  "checkbox",
+                  "number",
+                  "date"
+                ],
+                "x-enumNames": [
+                  "Text",
+                  "Checkbox",
+                  "Number",
+                  "Date"
+                ]
+              },
+              "titleValue": {
+                "x-title": "Title",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "title"
+                    ]
+                  },
+                  "hide": {
+                    "condition": [
+                      "is_empty",
+                      "is_not_empty"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "richTextValue": {
+                "x-title": "Text",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "rich_text"
+                    ]
+                  },
+                  "hide": {
+                    "condition": [
+                      "is_empty",
+                      "is_not_empty"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "phoneNumberValue": {
+                "x-title": "Phone Number",
+                "description": "Phone number. No structure is enforced.",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "phone_number"
+                    ]
+                  },
+                  "hide": {
+                    "condition": [
+                      "is_empty",
+                      "is_not_empty"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "multiSelectValue": {
+                "x-title": "Option Name or ID",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": [],
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "multi_select"
+                    ]
+                  },
+                  "hide": {
+                    "condition": [
+                      "is_empty",
+                      "is_not_empty"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "selectValue": {
+                "x-title": "Option Name or ID",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "select"
+                    ]
+                  },
+                  "hide": {
+                    "condition": [
+                      "is_empty",
+                      "is_not_empty"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "statusValue": {
+                "x-title": "Status Name or ID",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "status"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "emailValue": {
+                "x-title": "Email",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "email"
+                    ]
+                  },
+                  "hide": {
+                    "condition": [
+                      "is_empty",
+                      "is_not_empty"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "urlValue": {
+                "x-title": "URL",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "url"
+                    ]
+                  },
+                  "hide": {
+                    "condition": [
+                      "is_empty",
+                      "is_not_empty"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "peopleValue": {
+                "x-title": "User Name or ID",
+                "description": "List of users. Multiples can be defined separated by comma. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "people"
+                    ]
+                  },
+                  "hide": {
+                    "condition": [
+                      "is_empty",
+                      "is_not_empty"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "createdByValue": {
+                "x-title": "User Name or ID",
+                "description": "List of users. Multiples can be defined separated by comma. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "created_by"
+                    ]
+                  },
+                  "hide": {
+                    "condition": [
+                      "is_empty",
+                      "is_not_empty"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "lastEditedByValue": {
+                "x-title": "User Name or ID",
+                "description": "List of users. Multiples can be defined separated by comma. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "last_edited_by"
+                    ]
+                  },
+                  "hide": {
+                    "condition": [
+                      "is_empty",
+                      "is_not_empty"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "relationValue": {
+                "x-title": "Relation ID",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "relation"
+                    ]
+                  },
+                  "hide": {
+                    "condition": [
+                      "is_empty",
+                      "is_not_empty"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "checkboxValue": {
+                "x-title": "Boolean",
+                "description": "Whether or not the checkbox is checked. <code>true</code> represents checked. <code>false</code> represents unchecked",
+                "default": false,
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "formula"
+                    ],
+                    "returnType": [
+                      "checkbox"
+                    ]
+                  }
+                },
+                "type": "boolean"
+              },
+              "numberValue": {
+                "x-title": "Number",
+                "description": "Number value",
+                "default": 0,
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "formula"
+                    ],
+                    "returnType": [
+                      "number"
+                    ]
+                  },
+                  "hide": {
+                    "condition": [
+                      "is_empty",
+                      "is_not_empty"
+                    ]
+                  }
+                },
+                "type": "number"
+              },
+              "date": {
+                "x-title": "Date",
+                "description": "An ISO 8601 format date, with optional time",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "date"
+                    ]
+                  },
+                  "hide": {
+                    "condition": [
+                      "is_empty",
+                      "is_not_empty",
+                      "past_week",
+                      "past_month",
+                      "past_year",
+                      "next_week",
+                      "next_month",
+                      "next_year"
+                    ]
+                  }
+                },
+                "type": "string",
+                "format": "date-time"
+              },
+              "createdTimeValue": {
+                "x-title": "Created Time",
+                "description": "An ISO 8601 format date, with optional time",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "created_time"
+                    ]
+                  },
+                  "hide": {
+                    "condition": [
+                      "is_empty",
+                      "is_not_empty",
+                      "past_week",
+                      "past_month",
+                      "past_year",
+                      "next_week",
+                      "next_month",
+                      "next_year"
+                    ]
+                  }
+                },
+                "type": "string",
+                "format": "date-time"
+              },
+              "lastEditedTime": {
+                "x-title": "Last Edited Time",
+                "description": "An ISO 8601 format date, with optional time",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "last_edited_time"
+                    ]
+                  },
+                  "hide": {
+                    "condition": [
+                      "is_empty",
+                      "is_not_empty",
+                      "past_week",
+                      "past_month",
+                      "past_year",
+                      "next_week",
+                      "next_month",
+                      "next_year"
+                    ]
+                  }
+                },
+                "type": "string",
+                "format": "date-time"
+              },
+              "textValue": {
+                "x-title": "Text",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "formula"
+                    ],
+                    "returnType": [
+                      "text"
+                    ]
+                  },
+                  "hide": {
+                    "condition": [
+                      "is_empty",
+                      "is_not_empty"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "dateValue": {
+                "x-title": "Date",
+                "description": "An ISO 8601 format date, with optional time",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "formula"
+                    ],
+                    "returnType": [
+                      "date"
+                    ]
+                  },
+                  "hide": {
+                    "condition": [
+                      "is_empty",
+                      "is_not_empty",
+                      "past_week",
+                      "past_month",
+                      "past_year",
+                      "next_week",
+                      "next_month",
+                      "next_year"
+                    ]
+                  }
+                },
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      }
+    },
+    "filterJson": {
+      "x-title": "Filters (JSON)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "databasePage"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "json"
+          ]
+        },
+        "hide": {
+          "@version": [
+            1
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "userId": {
+      "x-title": "User ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": {
+    "light": "file:notion.svg",
+    "dark": "file:notion.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "notionApi",
+      "required": true
+    }
+  ]
+}

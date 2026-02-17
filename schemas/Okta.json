@@ -1,0 +1,655 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Okta",
+  "description": "Use the Okta API",
+  "x-n8n-node-type": "okta",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "user",
+      "type": "string",
+      "enum": [
+        "user"
+      ],
+      "x-enumNames": [
+        "User"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a new user",
+        "Delete an existing user",
+        "Get details of a user",
+        "Get many users",
+        "Update an existing user"
+      ]
+    },
+    "userId": {
+      "x-title": "User",
+      "description": "The user you want to operate on. Choose from the list, or specify an ID.",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get",
+            "update",
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "login",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "login",
+          "displayName": "By username",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "firstName": {
+      "x-title": "First Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "lastName": {
+      "x-title": "Last Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "login": {
+      "x-title": "Username",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "email": {
+      "x-title": "Email",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "activate": {
+      "x-title": "Activate",
+      "description": "Whether to activate the user and allow access to all assigned applications",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "getCreateFields": {
+      "x-title": "Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "city": {
+          "x-title": "City",
+          "default": "",
+          "type": "string"
+        },
+        "costCenter": {
+          "x-title": "Cost Center",
+          "default": "",
+          "type": "string"
+        },
+        "countryCode": {
+          "x-title": "Country Code",
+          "default": "",
+          "type": "string"
+        },
+        "department": {
+          "x-title": "Department",
+          "default": "",
+          "type": "string"
+        },
+        "displayName": {
+          "x-title": "Display Name",
+          "default": "",
+          "type": "string"
+        },
+        "division": {
+          "x-title": "Division",
+          "default": "",
+          "type": "string"
+        },
+        "employeeNumber": {
+          "x-title": "Employee Number",
+          "default": "",
+          "type": "string"
+        },
+        "honorificPrefix": {
+          "x-title": "Honorific Prefix",
+          "default": "",
+          "type": "string"
+        },
+        "honorificSuffix": {
+          "x-title": "Honorific Suffix",
+          "default": "",
+          "type": "string"
+        },
+        "locale": {
+          "x-title": "Locale",
+          "default": "",
+          "type": "string"
+        },
+        "manager": {
+          "x-title": "Manager",
+          "default": "",
+          "type": "string"
+        },
+        "managerId": {
+          "x-title": "ManagerId",
+          "default": "",
+          "type": "string"
+        },
+        "middleName": {
+          "x-title": "Middle Name",
+          "default": "",
+          "type": "string"
+        },
+        "mobilePhone": {
+          "x-title": "Mobile Phone",
+          "default": "",
+          "type": "string"
+        },
+        "nickName": {
+          "x-title": "Nick Name",
+          "default": "",
+          "type": "string"
+        },
+        "password": {
+          "x-title": "Password",
+          "default": "",
+          "type": "string",
+          "format": "password"
+        },
+        "organization": {
+          "x-title": "Organization",
+          "default": "",
+          "type": "string"
+        },
+        "postalAddress": {
+          "x-title": "Postal Address",
+          "default": "",
+          "type": "string"
+        },
+        "preferredLanguage": {
+          "x-title": "Preferred Language",
+          "default": "",
+          "type": "string"
+        },
+        "primaryPhone": {
+          "x-title": "Primary Phone",
+          "default": "",
+          "type": "string"
+        },
+        "profileUrl": {
+          "x-title": "Profile Url",
+          "default": "",
+          "type": "string"
+        },
+        "recoveryQuestionAnswer": {
+          "x-title": "Recovery Question Answer",
+          "default": "",
+          "type": "string"
+        },
+        "recoveryQuestionQuestion": {
+          "x-title": "Recovery Question Question",
+          "default": "",
+          "type": "string"
+        },
+        "secondEmail": {
+          "x-title": "Second Email",
+          "default": "",
+          "type": "string"
+        },
+        "state": {
+          "x-title": "State",
+          "default": "",
+          "type": "string"
+        },
+        "streetAddress": {
+          "x-title": "Street Address",
+          "default": "",
+          "type": "string"
+        },
+        "timezone": {
+          "x-title": "Timezone",
+          "default": "",
+          "type": "string"
+        },
+        "title": {
+          "x-title": "Title",
+          "default": "",
+          "type": "string"
+        },
+        "userType": {
+          "x-title": "User Type",
+          "default": "",
+          "type": "string"
+        },
+        "zipCode": {
+          "x-title": "Zip Code",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "getUpdateFields": {
+      "x-title": "Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "city": {
+          "x-title": "City",
+          "default": "",
+          "type": "string"
+        },
+        "costCenter": {
+          "x-title": "Cost Center",
+          "default": "",
+          "type": "string"
+        },
+        "countryCode": {
+          "x-title": "Country Code",
+          "default": "",
+          "type": "string"
+        },
+        "department": {
+          "x-title": "Department",
+          "default": "",
+          "type": "string"
+        },
+        "displayName": {
+          "x-title": "Display Name",
+          "default": "",
+          "type": "string"
+        },
+        "division": {
+          "x-title": "Division",
+          "default": "",
+          "type": "string"
+        },
+        "email": {
+          "x-title": "Email",
+          "default": "",
+          "type": "string"
+        },
+        "employeeNumber": {
+          "x-title": "Employee Number",
+          "default": "",
+          "type": "string"
+        },
+        "firstName": {
+          "x-title": "First Name",
+          "default": "",
+          "type": "string"
+        },
+        "honorificPrefix": {
+          "x-title": "Honorific Prefix",
+          "default": "",
+          "type": "string"
+        },
+        "honorificSuffix": {
+          "x-title": "Honorific Suffix",
+          "default": "",
+          "type": "string"
+        },
+        "lastName": {
+          "x-title": "Last Name",
+          "default": "",
+          "type": "string"
+        },
+        "locale": {
+          "x-title": "Locale",
+          "default": "",
+          "type": "string"
+        },
+        "manager": {
+          "x-title": "Manager",
+          "default": "",
+          "type": "string"
+        },
+        "managerId": {
+          "x-title": "ManagerId",
+          "default": "",
+          "type": "string"
+        },
+        "middleName": {
+          "x-title": "Middle Name",
+          "default": "",
+          "type": "string"
+        },
+        "mobilePhone": {
+          "x-title": "Mobile Phone",
+          "default": "",
+          "type": "string"
+        },
+        "nickName": {
+          "x-title": "Nick Name",
+          "default": "",
+          "type": "string"
+        },
+        "organization": {
+          "x-title": "Organization",
+          "default": "",
+          "type": "string"
+        },
+        "password": {
+          "x-title": "Password",
+          "default": "",
+          "type": "string",
+          "format": "password"
+        },
+        "postalAddress": {
+          "x-title": "Postal Address",
+          "default": "",
+          "type": "string"
+        },
+        "preferredLanguage": {
+          "x-title": "Preferred Language",
+          "default": "",
+          "type": "string"
+        },
+        "primaryPhone": {
+          "x-title": "Primary Phone",
+          "default": "",
+          "type": "string"
+        },
+        "profileUrl": {
+          "x-title": "Profile Url",
+          "default": "",
+          "type": "string"
+        },
+        "recoveryQuestionAnswer": {
+          "x-title": "Recovery Question Answer",
+          "default": "",
+          "type": "string"
+        },
+        "recoveryQuestionQuestion": {
+          "x-title": "Recovery Question Question",
+          "default": "",
+          "type": "string"
+        },
+        "secondEmail": {
+          "x-title": "Second Email",
+          "default": "",
+          "type": "string"
+        },
+        "state": {
+          "x-title": "State",
+          "default": "",
+          "type": "string"
+        },
+        "streetAddress": {
+          "x-title": "Street Address",
+          "default": "",
+          "type": "string"
+        },
+        "timezone": {
+          "x-title": "Timezone",
+          "default": "",
+          "type": "string"
+        },
+        "title": {
+          "x-title": "Title",
+          "default": "",
+          "type": "string"
+        },
+        "userType": {
+          "x-title": "User Type",
+          "default": "",
+          "type": "string"
+        },
+        "login": {
+          "x-title": "Username",
+          "default": "",
+          "type": "string"
+        },
+        "zipCode": {
+          "x-title": "Zip Code",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "searchQuery": {
+      "x-title": "Search Query",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 20,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 200
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "simplify": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get",
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "sendEmail": {
+      "x-title": "Send Email",
+      "description": "Whether to send a deactivation email to the administrator",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": {
+    "light": "file:Okta.svg",
+    "dark": "file:Okta.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "oktaApi",
+      "required": true
+    }
+  ]
+}

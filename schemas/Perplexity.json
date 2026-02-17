@@ -1,0 +1,265 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Perplexity",
+  "description": " AI-powered answer engine that provides accurate, trusted, and real-time answers to any question. Generates AI responses with citations",
+  "x-n8n-node-type": "perplexity",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "chat",
+      "type": "string"
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "complete",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "chat"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "complete"
+      ],
+      "x-enumNames": [
+        "Message a Model"
+      ],
+      "x-enumDescriptions": [
+        "Create one or more completions for a given text"
+      ]
+    },
+    "model": {
+      "x-title": "Model",
+      "description": "The model which will generate the completion",
+      "default": "sonar",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "chat"
+          ],
+          "operation": [
+            "complete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "sonar",
+        "sonar-deep-research",
+        "sonar-pro",
+        "sonar-reasoning",
+        "sonar-reasoning-pro"
+      ],
+      "x-enumNames": [
+        "Sonar",
+        "Sonar Deep Research",
+        "Sonar Pro",
+        "Sonar Reasoning",
+        "Sonar Reasoning Pro"
+      ]
+    },
+    "messages": {
+      "x-title": "Messages",
+      "description": "Any optional system messages must be sent first, followed by alternating user and assistant messages",
+      "default": {
+        "message": [
+          {
+            "role": "user",
+            "content": ""
+          }
+        ]
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "chat"
+          ],
+          "operation": [
+            "complete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "message": {
+          "x-title": "Message",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "content": {
+                "x-title": "Text",
+                "description": "The content of the message to be sent",
+                "default": "",
+                "type": "string",
+                "x-rows": 2
+              },
+              "role": {
+                "x-title": "Role",
+                "description": "Role in shaping the model's response, it tells the model how it should behave and interact with the user",
+                "default": "user",
+                "x-required": true,
+                "type": "string",
+                "enum": [
+                  "assistant",
+                  "system",
+                  "user"
+                ],
+                "x-enumNames": [
+                  "Assistant",
+                  "System",
+                  "User"
+                ],
+                "x-enumDescriptions": [
+                  "Tell the model to adopt a specific tone or personality. Must alternate with user messages.",
+                  "Set the models behavior or context. Must come before user and assistant messages.",
+                  "Send a message as a user and get a response from the model"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "simplify": {
+      "x-title": "Simplify Output",
+      "description": "Whether to return only essential fields (ID, citations, message)",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "chat"
+          ],
+          "operation": [
+            "complete"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "chat"
+          ],
+          "operation": [
+            "complete"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "frequencyPenalty": {
+          "x-title": "Frequency Penalty",
+          "description": "Values greater than 1.0 penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim",
+          "default": 0,
+          "type": "number",
+          "minimum": 0
+        },
+        "maxTokens": {
+          "x-title": "Maximum Number of Tokens",
+          "description": "The maximum number of tokens to generate in the completion. The number of tokens requested plus the number of prompt tokens sent in messages must not exceed the context window token limit of model requested.",
+          "default": 1,
+          "type": "number"
+        },
+        "temperature": {
+          "x-title": "Output Randomness (Temperature)",
+          "description": "The amount of randomness in the response, valued between 0 inclusive and 2 exclusive. Higher values are more random, and lower values are more deterministic.",
+          "default": 0.2,
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1.99
+        },
+        "topK": {
+          "x-title": "Top K",
+          "description": "The number of tokens to keep for highest Top K filtering, specified as an integer between 0 and 2048 inclusive. If set to 0, Top K filtering is disabled. We recommend either altering Top K or Top P, but not both.",
+          "default": 0,
+          "type": "number",
+          "minimum": 0,
+          "maximum": 2048
+        },
+        "topP": {
+          "x-title": "Top P",
+          "description": "The nucleus sampling threshold, valued between 0 and 1 inclusive. For each subsequent token, the model considers the results of the tokens with Top P probability mass. We recommend either altering Top K or Top P, but not both.",
+          "default": 0.9,
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "presencePenalty": {
+          "x-title": "Presence Penalty",
+          "description": "A value between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics.",
+          "default": 0,
+          "type": "number",
+          "minimum": -2,
+          "maximum": 2
+        },
+        "returnImages": {
+          "x-title": "Return Images",
+          "description": "Whether or not a request to an online model should return images. Requires Perplexity API usage Tier-2.",
+          "default": false,
+          "type": "boolean"
+        },
+        "returnRelatedQuestions": {
+          "x-title": "Return Related Questions",
+          "description": "Whether or not a request to an online model should return related questions. Requires Perplexity API usage Tier-2.",
+          "default": false,
+          "type": "boolean"
+        },
+        "searchDomainFilter": {
+          "x-title": "Search Domain Filter",
+          "description": "Limit the citations used by the online model to URLs from the specified domains. For blacklisting, add a <code>-</code> to the beginning of the domain string (e.g., <code>-domain1</code>). Currently limited to 3 domains. Requires Perplexity API usage Tier-3.",
+          "default": "",
+          "type": "string"
+        },
+        "searchRecency": {
+          "x-title": "Search Recency Filter",
+          "description": "Returns search results within the specified time interval",
+          "default": "month",
+          "type": "string",
+          "enum": [
+            "day",
+            "hour",
+            "month",
+            "week"
+          ],
+          "x-enumNames": [
+            "Day",
+            "Hour",
+            "Month",
+            "Week"
+          ]
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{ $parameter[\"operation\"] + \": \" + $parameter[\"resource\"] }}",
+  "x-icon": {
+    "light": "file:perplexity.svg",
+    "dark": "file:perplexity.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "perplexityApi",
+      "required": true
+    }
+  ]
+}

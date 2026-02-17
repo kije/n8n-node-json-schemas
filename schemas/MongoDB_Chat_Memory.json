@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MongoDB Chat Memory",
+  "description": "Stores the chat history in MongoDB collection.",
+  "x-n8n-node-type": "memoryMongoDbChat",
+  "x-n8n-version": [
+    1
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "sessionIdType": {
+      "x-title": "Session ID",
+      "default": "fromInput",
+      "type": "string",
+      "enum": [
+        "fromInput",
+        "customKey"
+      ],
+      "x-enumNames": [
+        "Connected Chat Trigger Node",
+        "Define below"
+      ],
+      "x-enumDescriptions": [
+        "Looks for an input field called 'sessionId' that is coming from a directly connected Chat Trigger",
+        "Use an expression to reference data in previous nodes or enter static text"
+      ]
+    },
+    "sessionKey": {
+      "x-title": "Key",
+      "description": "The key to use to store session ID in the memory",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "sessionIdType": [
+            "customKey"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "collectionName": {
+      "x-title": "Collection Name",
+      "description": "The collection name to store the chat history in. If collection does not exist, it will be created.",
+      "default": "n8n_chat_histories",
+      "type": "string"
+    },
+    "databaseName": {
+      "x-title": "Database Name",
+      "description": "The database name to store the chat history in. If not provided, the database from credentials will be used.",
+      "default": "",
+      "type": "string"
+    },
+    "contextWindowLength": {
+      "x-title": "Context Window Length",
+      "default": 5,
+      "type": "number"
+    }
+  },
+  "x-icon": "file:mongodb.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "ai_memory"
+  ],
+  "x-credentials": [
+    {
+      "name": "mongoDb",
+      "required": true
+    }
+  ]
+}

@@ -1,0 +1,848 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Oracle Database",
+  "description": "Get, add and update data in Oracle database",
+  "x-n8n-node-type": "oracleDatabase",
+  "x-n8n-version": [
+    1
+  ],
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "database",
+      "type": "string"
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "insert",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "deleteTable",
+        "execute",
+        "insert",
+        "upsert",
+        "select",
+        "update"
+      ],
+      "x-enumNames": [
+        "Delete",
+        "Execute SQL",
+        "Insert",
+        "Insert or Update",
+        "Select",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Delete an entire table or rows in a table",
+        "Execute an SQL",
+        "Insert rows in a table",
+        "Insert or update rows in a table",
+        "Select rows from a table",
+        "Update rows in a table"
+      ]
+    },
+    "schema": {
+      "x-title": "Schema",
+      "description": "The schema that contains the table you want to work on",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "hide": {
+          "operation": [
+            "execute"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "name"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "name",
+          "displayName": "By Name",
+          "type": "string"
+        }
+      ]
+    },
+    "table": {
+      "x-title": "Table",
+      "description": "The table you want to work on",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "hide": {
+          "operation": [
+            "execute"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "name"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "name",
+          "displayName": "By Name",
+          "type": "string"
+        }
+      ]
+    },
+    "deleteCommand": {
+      "x-title": "Command",
+      "default": "truncate",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "deleteTable"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "truncate",
+        "delete",
+        "drop"
+      ],
+      "x-enumNames": [
+        "Truncate",
+        "Delete",
+        "Drop"
+      ],
+      "x-enumDescriptions": [
+        "Only removes the table's data and preserves the table's structure",
+        "Delete the rows that match the 'Select Rows' conditions below. If no selection is made, all rows in the table are deleted.",
+        "Deletes the table's data and also the table's structure permanently"
+      ]
+    },
+    "where": {
+      "x-title": "Select Rows",
+      "description": "If not set, all rows will be selected",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "column": {
+                "x-title": "Column",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\" target=\"_blank\">expression</a>",
+                "default": "",
+                "type": "string"
+              },
+              "condition": {
+                "x-title": "Operator",
+                "description": "The operator to check the column against. When using 'LIKE' operator percent sign ( %) matches zero or more characters, underscore ( _ ) matches any single character.",
+                "default": "equal",
+                "type": "string",
+                "enum": [
+                  "equal",
+                  "!=",
+                  "LIKE",
+                  ">",
+                  "<",
+                  ">=",
+                  "<=",
+                  "IS NULL",
+                  "IS NOT NULL"
+                ],
+                "x-enumNames": [
+                  "Equal",
+                  "Not Equal",
+                  "Like",
+                  "Greater Than",
+                  "Less Than",
+                  "Greater Than Or Equal",
+                  "Less Than Or Equal",
+                  "Is Null",
+                  "Is Not Null"
+                ]
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "Parameters to pass to the tool as JSON or string",
+                "default": "{\"key\": \"val\"}",
+                "x-displayOptions": {
+                  "hide": {
+                    "condition": [
+                      "IS NULL",
+                      "IS NOT NULL"
+                    ]
+                  }
+                },
+                "oneOf": [
+                  {
+                    "type": "string",
+                    "description": "JSON string"
+                  },
+                  {
+                    "type": "object"
+                  },
+                  {
+                    "type": "array"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "combineConditions": {
+      "x-title": "Combine Conditions",
+      "description": "How to combine the conditions defined in \"Select Rows\": AND requires all conditions to be true, OR requires at least one condition to be true",
+      "default": "AND",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "AND",
+        "OR"
+      ],
+      "x-enumNames": [
+        "AND",
+        "OR"
+      ],
+      "x-enumDescriptions": [
+        "Only rows that meet all the conditions are selected",
+        "Rows that meet at least one condition are selected"
+      ]
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "autoCommit": {
+          "x-title": "Auto Commit",
+          "description": "Whether this property is true, then the transaction in the current connection is automatically committed at the end of statement execution",
+          "default": true,
+          "type": "boolean"
+        },
+        "params": {
+          "x-title": "Bind Variable Placeholder Values",
+          "description": "Enter the values for the bind parameters used in the statement",
+          "default": {},
+          "x-displayOptions": {
+            "show": {
+              "/operation": [
+                "execute"
+              ]
+            }
+          },
+          "type": "object",
+          "properties": {
+            "values": {
+              "x-title": "Values",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "x-title": "Bind Name or Number",
+                    "description": "A bind variable placeholder identifier or numeral",
+                    "default": "",
+                    "x-required": true,
+                    "type": "string"
+                  },
+                  "bindDirection": {
+                    "x-title": "Bind Direction",
+                    "description": "Specify whether data values bound to SQL or PL/SQL bind parameters are passed into, or out from, the database",
+                    "default": "in",
+                    "x-required": true,
+                    "type": "string",
+                    "enum": [
+                      "in",
+                      "out",
+                      "inout"
+                    ],
+                    "x-enumNames": [
+                      "IN",
+                      "OUT",
+                      "IN-OUT"
+                    ]
+                  },
+                  "datatype": {
+                    "x-title": "Data Type",
+                    "default": "string",
+                    "x-required": true,
+                    "type": "string",
+                    "enum": [
+                      "blob",
+                      "boolean",
+                      "date",
+                      "json",
+                      "number",
+                      "sparse",
+                      "string",
+                      "vector"
+                    ],
+                    "x-enumNames": [
+                      "BLOB",
+                      "Boolean",
+                      "Date",
+                      "JSON",
+                      "Number",
+                      "SparseVector",
+                      "String",
+                      "Vector"
+                    ]
+                  },
+                  "valueString": {
+                    "x-title": "Value (String)",
+                    "default": "",
+                    "x-displayOptions": {
+                      "show": {
+                        "datatype": [
+                          "string"
+                        ]
+                      }
+                    },
+                    "type": "string"
+                  },
+                  "valueNumber": {
+                    "x-title": "Value (Number)",
+                    "default": 0,
+                    "x-displayOptions": {
+                      "show": {
+                        "datatype": [
+                          "number"
+                        ]
+                      }
+                    },
+                    "type": "number"
+                  },
+                  "valueDate": {
+                    "x-title": "Value (Date)",
+                    "default": 0,
+                    "x-displayOptions": {
+                      "show": {
+                        "datatype": [
+                          "date"
+                        ]
+                      }
+                    },
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "valueBoolean": {
+                    "x-title": "Value (Boolean)",
+                    "default": false,
+                    "x-displayOptions": {
+                      "show": {
+                        "datatype": [
+                          "boolean"
+                        ]
+                      }
+                    },
+                    "type": "boolean"
+                  },
+                  "valueJson": {
+                    "x-title": "Value (JSON)",
+                    "default": "{}",
+                    "x-displayOptions": {
+                      "show": {
+                        "datatype": [
+                          "json"
+                        ]
+                      }
+                    },
+                    "oneOf": [
+                      {
+                        "type": "string",
+                        "description": "JSON string"
+                      },
+                      {
+                        "type": "object"
+                      },
+                      {
+                        "type": "array"
+                      }
+                    ]
+                  },
+                  "valueVector": {
+                    "x-title": "Value (VECTOR)",
+                    "description": "A JSON array of dimension values",
+                    "default": "[]",
+                    "x-displayOptions": {
+                      "show": {
+                        "datatype": [
+                          "vector"
+                        ]
+                      }
+                    },
+                    "oneOf": [
+                      {
+                        "type": "string",
+                        "description": "JSON string"
+                      },
+                      {
+                        "type": "object"
+                      },
+                      {
+                        "type": "array"
+                      }
+                    ]
+                  },
+                  "valueBlob": {
+                    "x-title": "Value (BLOB)",
+                    "description": "A Binary data",
+                    "default": "[]",
+                    "x-displayOptions": {
+                      "show": {
+                        "datatype": [
+                          "blob"
+                        ]
+                      }
+                    },
+                    "oneOf": [
+                      {
+                        "type": "string",
+                        "description": "JSON string"
+                      },
+                      {
+                        "type": "object"
+                      },
+                      {
+                        "type": "array"
+                      }
+                    ]
+                  },
+                  "valueSparse": {
+                    "x-title": "Value (Sparse Vector)",
+                    "default": {},
+                    "x-displayOptions": {
+                      "show": {
+                        "datatype": [
+                          "sparse"
+                        ]
+                      }
+                    },
+                    "type": "object",
+                    "properties": {
+                      "dimensions": {
+                        "x-title": "Dimensions",
+                        "description": "Total number of dimensions",
+                        "default": 0,
+                        "type": "number"
+                      },
+                      "indices": {
+                        "x-title": "Indices",
+                        "description": "A JSON array of indices, e.g., [0, 2, 5]",
+                        "default": "[]",
+                        "oneOf": [
+                          {
+                            "type": "string",
+                            "description": "JSON string"
+                          },
+                          {
+                            "type": "object"
+                          },
+                          {
+                            "type": "array"
+                          }
+                        ]
+                      },
+                      "values": {
+                        "x-title": "Values",
+                        "description": "A JSON array of values matching indices",
+                        "default": "[]",
+                        "oneOf": [
+                          {
+                            "type": "string",
+                            "description": "JSON string"
+                          },
+                          {
+                            "type": "object"
+                          },
+                          {
+                            "type": "array"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "parseInStatement": {
+                    "x-title": "Parse for IN Statement",
+                    "default": false,
+                    "x-required": true,
+                    "type": "string",
+                    "enum": [
+                      false,
+                      true
+                    ],
+                    "x-enumNames": [
+                      "No",
+                      "Yes"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "fetchArraySize": {
+          "x-title": "Fetch Array Size",
+          "description": "This property is a number that sets the size of an internal buffer used for fetching query rows from Oracle Database. Changing it may affect query performance but does not affect how many rows are returned to the application.",
+          "default": 100,
+          "x-displayOptions": {
+            "show": {
+              "/operation": [
+                "execute",
+                "select"
+              ]
+            }
+          },
+          "type": "number",
+          "minimum": 0
+        },
+        "prefetchRows": {
+          "x-title": "Number of Rows to Prefetch",
+          "description": "This property is a query tuning option to set the number of additional rows the underlying Oracle driver fetches during the internal initial statement execution phase of a query",
+          "default": 2,
+          "x-displayOptions": {
+            "show": {
+              "/operation": [
+                "execute",
+                "select"
+              ]
+            }
+          },
+          "type": "number",
+          "minimum": 0
+        },
+        "outputColumns": {
+          "x-title": "Output Columns",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\" target=\"_blank\">expression</a>",
+          "default": [],
+          "x-displayOptions": {
+            "show": {
+              "/operation": [
+                "insert",
+                "select",
+                "update",
+                "upsert"
+              ]
+            }
+          },
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "largeNumbersOutputAsString": {
+          "x-title": "Output Numbers As String",
+          "description": "Whether the numbers should be retrieved as string",
+          "default": false,
+          "x-displayOptions": {
+            "show": {
+              "/operation": [
+                "execute",
+                "select"
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "stmtBatching": {
+          "x-title": "Statement Batching",
+          "description": "The way queries should be sent to the database",
+          "default": "independently",
+          "x-displayOptions": {
+            "show": {
+              "/operation": [
+                "deleteTable"
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "single",
+            "independently",
+            "transaction"
+          ],
+          "x-enumNames": [
+            "Single Statement",
+            "Independently",
+            "Transaction"
+          ],
+          "x-enumDescriptions": [
+            "A single Statement for all incoming items",
+            "Execute one Statement per incoming item of the run",
+            "Execute all Statements in a transaction, if a failure occurs, all changes are rolled back"
+          ]
+        }
+      }
+    },
+    "query": {
+      "x-title": "Statement",
+      "description": "The SQL statement to execute. You can use n8n expressions and positional parameters like :1, :2, :3, or named parameters like :name, :ID, etc to refer to the 'Bind Variable Placeholder Values' set in options below.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "execute"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-editor": "sqlEditor"
+    },
+    "columns": {
+      "x-title": "Columns",
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-n8n-type": "resourceMapper"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ],
+          "returnAll": [
+            false
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "sort": {
+      "x-title": "Sort",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "database"
+          ],
+          "operation": [
+            "select"
+          ]
+        },
+        "hide": {
+          "table": [
+            ""
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "column": {
+                "x-title": "Column",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\" target=\"_blank\">expression</a>",
+                "default": "",
+                "type": "string"
+              },
+              "direction": {
+                "x-title": "Direction",
+                "default": "ASC",
+                "type": "string",
+                "enum": [
+                  "ASC",
+                  "DESC"
+                ],
+                "x-enumNames": [
+                  "ASC",
+                  "DESC"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{ $parameter[\"operation\"] }}",
+  "x-icon": "file:oracle.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "oracleDBApi",
+      "required": true,
+      "testedBy": "oracleDBConnectionTest"
+    }
+  ]
+}

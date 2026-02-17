@@ -1,0 +1,226 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Mistral AI",
+  "description": "Consume Mistral AI API",
+  "x-n8n-node-type": "mistralAi",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "document",
+      "type": "string",
+      "enum": [
+        "document"
+      ],
+      "x-enumNames": [
+        "Document"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "extractText",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "extractText"
+      ],
+      "x-enumNames": [
+        "Extract Text"
+      ],
+      "x-enumDescriptions": [
+        "Extract text from document using OCR"
+      ]
+    },
+    "model": {
+      "x-title": "Model",
+      "description": "The OCR model to use",
+      "default": "mistral-ocr-latest",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "extractText"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "mistral-ocr-latest"
+      ],
+      "x-enumNames": [
+        "mistral-ocr-latest"
+      ]
+    },
+    "documentType": {
+      "x-title": "Document Type",
+      "description": "The type of document to process",
+      "default": "document_url",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "extractText"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "document_url",
+        "image_url"
+      ],
+      "x-enumNames": [
+        "Document",
+        "Image"
+      ]
+    },
+    "inputType": {
+      "x-title": "Input Type",
+      "description": "How the document will be provided",
+      "default": "binary",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "extractText"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "binary",
+        "url"
+      ],
+      "x-enumNames": [
+        "Binary Data",
+        "URL"
+      ]
+    },
+    "binaryProperty": {
+      "x-title": "Input Binary Field",
+      "description": "Name of the input binary field that contains the file to process",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "inputType": [
+            "binary"
+          ],
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "extractText"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "url": {
+      "x-title": "URL",
+      "description": "URL of the document or image to process",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "inputType": [
+            "url"
+          ],
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "extractText"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "extractText"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "batch": {
+          "x-title": "Enable Batch Processing",
+          "description": "Whether to process multiple documents in a single API call (more cost-efficient)",
+          "default": false,
+          "type": "boolean"
+        },
+        "batchSize": {
+          "x-title": "Batch Size",
+          "description": "Maximum number of documents to process in a single batch",
+          "default": 50,
+          "x-displayOptions": {
+            "show": {
+              "batch": [
+                true
+              ]
+            }
+          },
+          "x-required": true,
+          "type": "number",
+          "maximum": 2048
+        },
+        "deleteFiles": {
+          "x-title": "Delete Files After Processing",
+          "description": "Whether to delete the files on Mistral Cloud after processing",
+          "default": true,
+          "x-displayOptions": {
+            "show": {
+              "batch": [
+                true
+              ]
+            }
+          },
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{ $parameter[\"operation\"] + \": \" + $parameter[\"resource\"] }}",
+  "x-icon": {
+    "light": "file:mistralAi.svg",
+    "dark": "file:mistralAi.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "mistralCloudApi",
+      "required": true
+    }
+  ]
+}

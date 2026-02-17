@@ -1,0 +1,138 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OpenAI Model",
+  "description": "For advanced usage with an AI chain",
+  "x-n8n-node-type": "lmOpenAi",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "model": {
+      "x-title": "Model",
+      "description": "The model which will generate the completion. <a href=\"https://beta.openai.com/docs/models/overview\">Learn more</a>.",
+      "default": {
+        "mode": "list",
+        "value": "gpt-3.5-turbo-instruct"
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "options": {
+      "x-title": "Options",
+      "description": "Additional options to add",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "baseURL": {
+          "x-title": "Base URL",
+          "description": "Override the default base URL for the API",
+          "default": "https://api.openai.com/v1",
+          "type": "string"
+        },
+        "frequencyPenalty": {
+          "x-title": "Frequency Penalty",
+          "description": "Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim",
+          "default": 0,
+          "type": "number",
+          "minimum": -2,
+          "maximum": 2,
+          "x-precision": 1
+        },
+        "maxTokens": {
+          "x-title": "Maximum Number of Tokens",
+          "description": "The maximum number of tokens to generate in the completion. Most models have a context length of 2048 tokens (except for the newest models, which support 32,768).",
+          "default": -1,
+          "type": "number",
+          "maximum": 32768
+        },
+        "presencePenalty": {
+          "x-title": "Presence Penalty",
+          "description": "Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics",
+          "default": 0,
+          "type": "number",
+          "minimum": -2,
+          "maximum": 2,
+          "x-precision": 1
+        },
+        "temperature": {
+          "x-title": "Sampling Temperature",
+          "description": "Controls randomness: Lowering results in less random completions. As the temperature approaches zero, the model will become deterministic and repetitive.",
+          "default": 0.7,
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "x-precision": 1
+        },
+        "timeout": {
+          "x-title": "Timeout",
+          "description": "Maximum amount of time a request is allowed to take in milliseconds",
+          "default": 60000,
+          "type": "number"
+        },
+        "maxRetries": {
+          "x-title": "Max Retries",
+          "description": "Maximum number of retries to attempt",
+          "default": 2,
+          "type": "number"
+        },
+        "topP": {
+          "x-title": "Top P",
+          "description": "Controls diversity via nucleus sampling: 0.5 means half of all likelihood-weighted options are considered. We generally recommend altering this or temperature but not both.",
+          "default": 1,
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "x-precision": 1
+        }
+      }
+    }
+  },
+  "x-icon": {
+    "light": "file:openAiLight.svg",
+    "dark": "file:openAiLight.dark.svg"
+  },
+  "x-inputs": [],
+  "x-outputs": [
+    "ai_languageModel"
+  ],
+  "x-credentials": [
+    {
+      "name": "openAiApi",
+      "required": true
+    }
+  ]
+}

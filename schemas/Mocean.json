@@ -1,0 +1,171 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Mocean",
+  "description": "Send SMS and voice messages via Mocean",
+  "x-n8n-node-type": "mocean",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "sms",
+      "type": "string",
+      "enum": [
+        "sms",
+        "voice"
+      ],
+      "x-enumNames": [
+        "SMS",
+        "Voice"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "send",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sms",
+            "voice"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "send"
+      ],
+      "x-enumNames": [
+        "Send"
+      ],
+      "x-enumDescriptions": [
+        "Send SMS/Voice message"
+      ]
+    },
+    "from": {
+      "x-title": "From",
+      "description": "Number to which to send the message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "sms",
+            "voice"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "to": {
+      "x-title": "To",
+      "description": "Number from which to send the message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "sms",
+            "voice"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "language": {
+      "x-title": "Language",
+      "default": "en-US",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "voice"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "cmn-CN",
+        "en-GB",
+        "en-US",
+        "ja-JP",
+        "ko-KR"
+      ],
+      "x-enumNames": [
+        "Chinese Mandarin (China)",
+        "English (United Kingdom)",
+        "English (United States)",
+        "Japanese (Japan)",
+        "Korean (Korea)"
+      ]
+    },
+    "message": {
+      "x-title": "Message",
+      "description": "Message to send",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "sms",
+            "voice"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "sms"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "dlrUrl": {
+          "x-title": "Delivery Report URL",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": {
+    "light": "file:mocean.svg",
+    "dark": "file:mocean.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "moceanApi",
+      "required": true,
+      "testedBy": "moceanApiTest"
+    }
+  ]
+}

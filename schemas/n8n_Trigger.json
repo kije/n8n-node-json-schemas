@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "n8n Trigger",
+  "description": "Handle events and perform actions on your n8n instance",
+  "x-n8n-node-type": "n8nTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "events": {
+      "x-title": "Events",
+      "description": "Specifies under which conditions an execution should happen:\n\t\t\t\t<ul>\n\t\t\t\t\t<li><b>Published Workflow Updated</b>: Triggers when workflow version is published from a published state (workflow was already published)</li>\n\t\t\t\t\t<li><b>Instance Started</b>:  Triggers when this n8n instance is started or re-started</li>\n\t\t\t\t\t<li><b>Workflow Published</b>: Triggers when workflow version is published from an unpublished state (workflow was unpublished)</li>\n\t\t\t\t</ul>",
+      "default": [],
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "update",
+          "init",
+          "activate"
+        ]
+      },
+      "x-enumNames": [
+        "Published Workflow Updated",
+        "Instance Started",
+        "Workflow Published"
+      ]
+    }
+  },
+  "x-icon": "file:n8nTrigger.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ]
+}

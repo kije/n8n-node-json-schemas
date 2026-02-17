@@ -1,0 +1,475 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NocoDB",
+  "description": "Read, update, write and delete data from NocoDB",
+  "x-n8n-node-type": "nocoDb",
+  "x-n8n-version": [
+    1,
+    2,
+    3
+  ],
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "nocoDb",
+      "type": "string",
+      "enum": [
+        "nocoDbApiToken",
+        "nocoDb"
+      ],
+      "x-enumNames": [
+        "API Token",
+        "User Token"
+      ]
+    },
+    "version": {
+      "x-title": "API Version",
+      "default": 3,
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            3
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        1,
+        2,
+        3
+      ],
+      "x-enumNames": [
+        "Before v0.90.0",
+        "v0.90.0 Onwards",
+        "v0.200.0 Onwards"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "row",
+      "type": "string",
+      "enum": [
+        "row"
+      ],
+      "x-enumNames": [
+        "Row"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a row",
+        "Delete a row",
+        "Retrieve a row",
+        "Retrieve many rows",
+        "Update a row"
+      ]
+    },
+    "workspaceId": {
+      "x-title": "Workspace Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "none",
+      "x-displayOptions": {
+        "show": {
+          "version": [
+            3
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "projectId": {
+      "x-title": "Project Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "version": [
+            2
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "table": {
+      "x-title": "Table",
+      "description": "The name of the table",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "version": [
+            1
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "primaryKey": {
+      "x-title": "Primary Key Type",
+      "default": "id",
+      "x-displayOptions": {
+        "show": {
+          "version": [
+            3
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "id",
+        "ncRecordId",
+        "custom"
+      ],
+      "x-enumNames": [
+        "Default",
+        "Imported From Airtable",
+        "Custom"
+      ],
+      "x-enumDescriptions": [
+        "Default, added when table was created from UI by those options: Create new table / Import from Excel / Import from CSV",
+        "Select if table was imported from Airtable",
+        "When connecting to existing external database as existing primary key field is retained as is, enter the name of the primary key field below"
+      ]
+    },
+    "customPrimaryKey": {
+      "x-title": "Field Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "version": [
+            3
+          ],
+          "operation": [
+            "delete"
+          ],
+          "primaryKey": [
+            "custom"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "id": {
+      "x-title": "Row ID Value",
+      "description": "The value of the ID field",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "version": [
+            3
+          ],
+          "operation": [
+            "delete",
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "downloadAttachments": {
+      "x-title": "Download Attachments",
+      "description": "Whether the attachment fields define in 'Download Fields' will be downloaded",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "downloadFieldNames": {
+      "x-title": "Download Fields",
+      "description": "Name of the fields of type 'attachment' that should be downloaded. Multiple ones can be defined separated by comma. Case sensitive.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "downloadAttachments": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "viewId": {
+          "x-title": "View ID",
+          "description": "The select fields of the returned rows",
+          "default": "",
+          "type": "string"
+        },
+        "fields": {
+          "x-title": "Fields",
+          "description": "The select fields of the returned rows",
+          "default": [],
+          "type": "string"
+        },
+        "sort": {
+          "x-title": "Sort",
+          "description": "The sorting rules for the returned rows",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "property": {
+              "x-title": "Property",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "x-title": "Field",
+                    "description": "Name of the field to sort on",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "direction": {
+                    "x-title": "Direction",
+                    "description": "The sort direction",
+                    "default": "asc",
+                    "type": "string",
+                    "enum": [
+                      "asc",
+                      "desc"
+                    ],
+                    "x-enumNames": [
+                      "ASC",
+                      "DESC"
+                    ],
+                    "x-enumDescriptions": [
+                      "Sort in ascending order (small -> large)",
+                      "Sort in descending order (large -> small)"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "where": {
+          "x-title": "Filter By Formula",
+          "description": "A formula used to filter rows",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "dataToSend": {
+      "x-title": "Data to Send",
+      "description": "Whether to insert the input data this node receives in the new row",
+      "default": "defineBelow",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "update"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "autoMapInputData",
+        "defineBelow"
+      ],
+      "x-enumNames": [
+        "Auto-Map Input Data to Columns",
+        "Define Below for Each Column"
+      ],
+      "x-enumDescriptions": [
+        "Use when node input properties match destination column names",
+        "Set the value for each destination column"
+      ]
+    },
+    "inputsToIgnore": {
+      "x-title": "Inputs to Ignore",
+      "description": "List of input properties to avoid sending, separated by commas. Leave empty to send all properties.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "update"
+          ],
+          "dataToSend": [
+            "autoMapInputData"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "fieldsUi": {
+      "x-title": "Fields to Send",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "update"
+          ],
+          "dataToSend": [
+            "defineBelow"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "fieldValues": {
+          "x-title": "Field",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "fieldName": {
+                "x-title": "Field Name",
+                "default": "",
+                "type": "string"
+              },
+              "binaryData": {
+                "x-title": "Is Binary File",
+                "description": "Whether the field data to set is binary and should be taken from a binary property",
+                "default": false,
+                "type": "boolean"
+              },
+              "fieldValue": {
+                "x-title": "Field Value",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "binaryData": [
+                      false
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "binaryProperty": {
+                "x-title": "Take Input From Field",
+                "description": "The field containing the binary file data to be uploaded",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "binaryData": [
+                      true
+                    ]
+                  }
+                },
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:nocodb.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "nocoDb",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "nocoDb"
+          ]
+        }
+      }
+    },
+    {
+      "name": "nocoDbApiToken",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "nocoDbApiToken"
+          ]
+        }
+      }
+    }
+  ]
+}

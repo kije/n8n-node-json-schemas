@@ -1,0 +1,1102 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OpenAI",
+  "description": "Message an assistant or GPT, analyze images, generate audio, etc.",
+  "x-n8n-node-type": "openAi",
+  "x-n8n-version": 2.1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "text",
+      "type": "string",
+      "enum": [
+        "text",
+        "image",
+        "audio",
+        "file",
+        "conversation",
+        "video"
+      ],
+      "x-enumNames": [
+        "Text",
+        "Image",
+        "Audio",
+        "File",
+        "Conversation",
+        "Video"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "generate",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "generate"
+      ],
+      "x-enumNames": [
+        "Generate"
+      ],
+      "x-enumDescriptions": [
+        "Creates a video from a text prompt"
+      ]
+    },
+    "model": {
+      "x-title": "Model",
+      "description": "The model to use for image generation",
+      "default": "gpt-image-1",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "edit"
+          ],
+          "resource": [
+            "image"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "dall-e-2",
+        "gpt-image-1"
+      ],
+      "x-enumNames": [
+        "DALL·E 2",
+        "GPT Image 1"
+      ]
+    },
+    "input": {
+      "x-title": "Text Input",
+      "description": "The input text to classify if it is violates the moderation policy",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "classify"
+          ],
+          "resource": [
+            "text"
+          ]
+        }
+      },
+      "type": "string",
+      "x-rows": 2
+    },
+    "voice": {
+      "x-title": "Voice",
+      "description": "The voice to use when generating the audio",
+      "default": "alloy",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "generate"
+          ],
+          "resource": [
+            "audio"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "alloy",
+        "echo",
+        "fable",
+        "nova",
+        "onyx",
+        "shimmer"
+      ],
+      "x-enumNames": [
+        "Alloy",
+        "Echo",
+        "Fable",
+        "Nova",
+        "Onyx",
+        "Shimmer"
+      ]
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "generate"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "binaryPropertyNameReference": {
+          "x-title": "Reference",
+          "description": "Optional image reference that guides generation",
+          "default": "data",
+          "type": "string"
+        },
+        "waitTime": {
+          "x-title": "Wait Timeout",
+          "description": "Time to wait for the video to be generated in seconds",
+          "default": 300,
+          "type": "number",
+          "minimum": 5,
+          "maximum": 7200
+        },
+        "fileName": {
+          "x-title": "Output Field Name",
+          "default": "data",
+          "type": "string"
+        }
+      }
+    },
+    "binaryPropertyName": {
+      "x-title": "Binary Field Name",
+      "description": "Name of the binary property which contains the image. It should be a square png file less than 4MB.",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "/model": [
+            "dall-e-2"
+          ],
+          "operation": [
+            "edit"
+          ],
+          "resource": [
+            "image"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "fileId": {
+      "x-title": "File",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "deleteFile"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "prompt": {
+      "x-title": "Prompt",
+      "description": "The prompt to generate a video from",
+      "default": "A video of a cat playing with a ball",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "generate"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-rows": 2
+    },
+    "modelId": {
+      "x-title": "Model",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "generate"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "text": {
+      "x-title": "Text Input",
+      "default": "What's in this image?",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "analyze"
+          ],
+          "resource": [
+            "image"
+          ]
+        }
+      },
+      "type": "string",
+      "x-rows": 2
+    },
+    "inputType": {
+      "x-title": "Input Type",
+      "default": "url",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "analyze"
+          ],
+          "resource": [
+            "image"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "url",
+        "base64"
+      ],
+      "x-enumNames": [
+        "Image URL(s)",
+        "Binary File(s)"
+      ]
+    },
+    "imageUrls": {
+      "x-title": "URL(s)",
+      "description": "URL(s) of the image(s) to analyze, multiple URLs can be added separated by comma",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "inputType": [
+            "url"
+          ],
+          "operation": [
+            "analyze"
+          ],
+          "resource": [
+            "image"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "simplify": {
+      "x-title": "Simplify Output",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "response"
+          ],
+          "resource": [
+            "text"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "images": {
+      "x-title": "Images",
+      "description": "Add one or more binary fields to include images with your prompt. Each image should be a png, webp, or jpg file less than 50MB. You can provide up to 16 images.",
+      "default": {
+        "values": [
+          {
+            "binaryPropertyName": "data"
+          }
+        ]
+      },
+      "x-displayOptions": {
+        "show": {
+          "/model": [
+            "gpt-image-1"
+          ],
+          "operation": [
+            "edit"
+          ],
+          "resource": [
+            "image"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Image",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "binaryPropertyName": {
+                "x-title": "Binary Field Name",
+                "description": "The name of the binary field containing the image data",
+                "default": "data",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "n": {
+      "x-title": "Number of Images",
+      "description": "The number of images to generate. Must be between 1 and 10.",
+      "default": 1,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "edit"
+          ],
+          "resource": [
+            "image"
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 10
+    },
+    "size": {
+      "x-title": "Size",
+      "description": "Output resolution formatted as width x height. 1024x1792 and 1792x1024 are only supported by Sora 2 Pro.",
+      "default": "1280x720",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "generate"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "720x1280",
+        "1280x720",
+        "1024x1792",
+        "1792x1024"
+      ],
+      "x-enumNames": [
+        "720x1280",
+        "1280x720",
+        "1024x1792",
+        "1792x1024"
+      ]
+    },
+    "quality": {
+      "x-title": "Quality",
+      "description": "The quality of the image that will be generated",
+      "default": "auto",
+      "x-displayOptions": {
+        "show": {
+          "/model": [
+            "gpt-image-1"
+          ],
+          "operation": [
+            "edit"
+          ],
+          "resource": [
+            "image"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "auto",
+        "high",
+        "medium",
+        "low",
+        "standard"
+      ],
+      "x-enumNames": [
+        "Auto",
+        "High",
+        "Medium",
+        "Low",
+        "Standard"
+      ]
+    },
+    "responseFormat": {
+      "x-title": "Response Format",
+      "description": "The format in which the generated images are returned. URLs are only valid for 60 minutes after generation.",
+      "default": "url",
+      "x-displayOptions": {
+        "show": {
+          "/model": [
+            "dall-e-2"
+          ],
+          "operation": [
+            "edit"
+          ],
+          "resource": [
+            "image"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "url",
+        "b64_json"
+      ],
+      "x-enumNames": [
+        "URL",
+        "Base64 JSON"
+      ]
+    },
+    "outputFormat": {
+      "x-title": "Output Format",
+      "description": "The format in which the generated images are returned. Only supported for gpt-image-1.",
+      "default": "png",
+      "x-displayOptions": {
+        "show": {
+          "/model": [
+            "gpt-image-1"
+          ],
+          "operation": [
+            "edit"
+          ],
+          "resource": [
+            "image"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "png",
+        "jpeg",
+        "webp"
+      ],
+      "x-enumNames": [
+        "PNG",
+        "JPEG",
+        "WebP"
+      ]
+    },
+    "outputCompression": {
+      "x-title": "Output Compression",
+      "description": "The compression level (0-100%) for the generated images. Only supported for gpt-image-1 with webp or jpeg output formats.",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "/model": [
+            "gpt-image-1"
+          ],
+          "outputFormat": [
+            "webp",
+            "jpeg"
+          ],
+          "operation": [
+            "edit"
+          ],
+          "resource": [
+            "image"
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "responses": {
+      "x-title": "Messages",
+      "default": {
+        "values": [
+          {
+            "type": "text"
+          }
+        ]
+      },
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "response"
+          ],
+          "resource": [
+            "text"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Message",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "x-title": "Type",
+                "default": "text",
+                "type": "string",
+                "enum": [
+                  "text",
+                  "image",
+                  "file"
+                ],
+                "x-enumNames": [
+                  "Text",
+                  "Image",
+                  "File"
+                ]
+              },
+              "role": {
+                "x-title": "Role",
+                "description": "Role in shaping the model's response, it tells the model how it should behave and interact with the user",
+                "default": "user",
+                "type": "string",
+                "enum": [
+                  "user",
+                  "assistant",
+                  "system"
+                ],
+                "x-enumNames": [
+                  "User",
+                  "Assistant",
+                  "System"
+                ],
+                "x-enumDescriptions": [
+                  "Send a message as a user and get a response from the model",
+                  "Tell the model to adopt a specific tone or personality",
+                  "Usually used to set the model's behavior or context for the next user message"
+                ]
+              },
+              "content": {
+                "x-title": "Prompt",
+                "description": "The content of the message to be send",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "text"
+                    ]
+                  }
+                },
+                "type": "string",
+                "x-rows": 2
+              },
+              "imageType": {
+                "x-title": "Image Type",
+                "default": "url",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "image"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "url",
+                  "fileId",
+                  "base64"
+                ],
+                "x-enumNames": [
+                  "Image URL",
+                  "File ID",
+                  "File Data"
+                ]
+              },
+              "imageUrl": {
+                "x-title": "Image URL",
+                "description": "URL of the image to be sent",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "image"
+                    ],
+                    "imageType": [
+                      "url"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "binaryPropertyName": {
+                "x-title": "File Data",
+                "description": "Name of the binary property which contains the file",
+                "default": "data",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "file"
+                    ],
+                    "fileType": [
+                      "base64"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "fileId": {
+                "x-title": "File ID",
+                "description": "ID of the file to be sent",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "file"
+                    ],
+                    "fileType": [
+                      "fileId"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "imageDetail": {
+                "x-title": "Detail",
+                "description": "The detail level of the image to be sent to the model",
+                "default": "auto",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "image"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "auto",
+                  "low",
+                  "high"
+                ],
+                "x-enumNames": [
+                  "Auto",
+                  "Low",
+                  "High"
+                ]
+              },
+              "fileType": {
+                "x-title": "File Type",
+                "default": "url",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "file"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "url",
+                  "fileId",
+                  "base64"
+                ],
+                "x-enumNames": [
+                  "File URL",
+                  "File ID",
+                  "File Data"
+                ]
+              },
+              "fileUrl": {
+                "x-title": "File URL",
+                "description": "URL of the file to be sent. Accepts base64 encoded files as well.",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "file"
+                    ],
+                    "fileType": [
+                      "url"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "fileName": {
+                "x-title": "File Name",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "file"
+                    ],
+                    "fileType": [
+                      "base64"
+                    ]
+                  }
+                },
+                "x-required": true,
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "hideTools": {
+      "x-title": "Hide Tools",
+      "default": "hide",
+      "x-displayOptions": {
+        "show": {
+          "modelId": [
+            "gpt-3.5-turbo-16k-0613",
+            "dall-e-3",
+            "text-embedding-3-large",
+            "dall-e-2",
+            "whisper-1",
+            "tts-1-hd-1106",
+            "tts-1-hd",
+            "gpt-4-0314",
+            "text-embedding-3-small",
+            "gpt-4-32k-0314",
+            "gpt-3.5-turbo-0301",
+            "gpt-4-vision-preview",
+            "gpt-3.5-turbo-16k",
+            "gpt-3.5-turbo-instruct-0914",
+            "tts-1",
+            "davinci-002",
+            "gpt-3.5-turbo-instruct",
+            "babbage-002",
+            "tts-1-1106",
+            "text-embedding-ada-002"
+          ],
+          "operation": [
+            "response"
+          ],
+          "resource": [
+            "text"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "builtInTools": {
+      "x-title": "Built-in Tools",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "response"
+          ],
+          "resource": [
+            "text"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "webSearch": {
+          "x-title": "Web Search",
+          "default": {
+            "searchContextSize": "medium"
+          },
+          "type": "object",
+          "properties": {
+            "searchContextSize": {
+              "x-title": "Search Context Size",
+              "description": "High level guidance for the amount of context window space to use for the search",
+              "default": "medium",
+              "type": "string",
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ],
+              "x-enumNames": [
+                "Low",
+                "Medium",
+                "High"
+              ]
+            },
+            "allowedDomains": {
+              "x-title": "Web Search Allowed Domains",
+              "description": "Comma-separated list of domains to search. Only domains in this list will be searched.",
+              "default": "",
+              "type": "string"
+            },
+            "country": {
+              "x-title": "Country",
+              "default": "",
+              "type": "string"
+            },
+            "city": {
+              "x-title": "City",
+              "default": "",
+              "type": "string"
+            },
+            "region": {
+              "x-title": "Region",
+              "default": "",
+              "type": "string"
+            }
+          }
+        },
+        "fileSearch": {
+          "x-title": "File Search",
+          "default": {
+            "vectorStoreIds": "[]"
+          },
+          "type": "object",
+          "properties": {
+            "vectorStoreIds": {
+              "x-title": "Vector Store IDs",
+              "description": "The vector store IDs to use for the file search. Vector stores are managed via OpenAI Dashboard.",
+              "default": "[]",
+              "x-required": true,
+              "oneOf": [
+                {
+                  "type": "string",
+                  "description": "JSON string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "array"
+                }
+              ]
+            },
+            "filters": {
+              "x-title": "Filters",
+              "default": "{}",
+              "oneOf": [
+                {
+                  "type": "string",
+                  "description": "JSON string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "array"
+                }
+              ]
+            },
+            "maxResults": {
+              "x-title": "Max Results",
+              "default": 1,
+              "type": "number",
+              "minimum": 1,
+              "maximum": 50
+            }
+          }
+        },
+        "codeInterpreter": {
+          "x-title": "Code Interpreter",
+          "description": "Whether to allow the model to execute code in a sandboxed environment",
+          "default": true,
+          "type": "boolean"
+        }
+      }
+    },
+    "messages": {
+      "x-title": "Messages",
+      "default": {
+        "values": [
+          {
+            "type": "text"
+          }
+        ]
+      },
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "conversation"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Message",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "role": {
+                "x-title": "Role",
+                "description": "Role in shaping the model's response, it tells the model how it should behave and interact with the user",
+                "default": "user",
+                "type": "string",
+                "enum": [
+                  "user",
+                  "assistant",
+                  "system"
+                ],
+                "x-enumNames": [
+                  "User",
+                  "Assistant",
+                  "System"
+                ],
+                "x-enumDescriptions": [
+                  "Send a message as a user and get a response from the model",
+                  "Tell the model to adopt a specific tone or personality",
+                  "Usually used to set the model's behavior or context for the next user message"
+                ]
+              },
+              "content": {
+                "x-title": "Prompt",
+                "description": "The content of the message to be send",
+                "default": "",
+                "x-displayOptions": {},
+                "type": "string",
+                "x-rows": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    "conversationId": {
+      "x-title": "Conversation ID",
+      "description": "The ID of the conversation to retrieve",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "conversation"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "metadata": {
+      "x-title": "Metadata",
+      "description": "Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format, and querying for objects via API or the dashboard. Keys are strings with a maximum length of 64 characters. Values are strings with a maximum length of 512 characters.",
+      "default": "{}",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "conversation"
+          ]
+        }
+      },
+      "x-required": true,
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "seconds": {
+      "x-title": "Seconds",
+      "description": "Clip duration in seconds",
+      "default": 4,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "generate"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    }
+  },
+  "x-subtitle": "={{((resource, operation) => {\n    if (operation === 'deleteAssistant') {\n        return 'Delete Assistant';\n    }\n    if (operation === 'deleteFile') {\n        return 'Delete File';\n    }\n    if (operation === 'classify') {\n        return 'Classify Text';\n    }\n    if (operation === 'message' && resource === 'text') {\n        return 'Message Model';\n    }\n    const capitalize = (str) => {\n        const chars = str.split('');\n        chars[0] = chars[0].toUpperCase();\n        return chars.join('');\n    };\n    if (['transcribe', 'translate'].includes(operation)) {\n        resource = 'recording';\n    }\n    if (operation === 'list') {\n        resource = resource + 's';\n    }\n    return `${capitalize(operation)} ${capitalize(resource)}`;\n})($parameter.resource, $parameter.operation)}}",
+  "x-icon": {
+    "light": "file:openAi.svg",
+    "dark": "file:openAi.dark.svg"
+  },
+  "x-inputs": "={{((resource, operation, hideTools, memory) => {\n    if (resource === 'assistant' && operation === 'message') {\n        const inputs = [\n            { type: 'main' },\n            { type: 'ai_tool', displayName: 'Tools' },\n        ];\n        if (memory !== 'threadId') {\n            inputs.push({ type: 'ai_memory', displayName: 'Memory', maxConnections: 1 });\n        }\n        return inputs;\n    }\n    if (resource === 'text' && (operation === 'message' || operation === 'response')) {\n        if (hideTools === 'hide') {\n            return ['main'];\n        }\n        return [{ type: 'main' }, { type: 'ai_tool', displayName: 'Tools' }];\n    }\n    return ['main'];\n})($parameter.resource, $parameter.operation, $parameter.hideTools, $parameter.memory ?? undefined)}}",
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "openAiApi",
+      "required": true
+    }
+  ]
+}

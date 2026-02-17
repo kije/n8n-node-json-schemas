@@ -1,0 +1,456 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "n8n",
+  "description": "Handle events and perform actions on your n8n instance",
+  "x-n8n-node-type": "n8n",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "workflow",
+      "type": "string",
+      "enum": [
+        "audit",
+        "credential",
+        "execution",
+        "workflow"
+      ],
+      "x-enumNames": [
+        "Audit",
+        "Credential",
+        "Execution",
+        "Workflow"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "workflow"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "activate",
+        "create",
+        "deactivate",
+        "delete",
+        "get",
+        "getAll",
+        "getVersion",
+        "update"
+      ],
+      "x-enumNames": [
+        "Publish",
+        "Create",
+        "Unpublish",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Get Version",
+        "Update"
+      ]
+    },
+    "additionalOptions": {
+      "x-title": "Additional Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "audit"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "categories": {
+          "x-title": "Categories",
+          "description": "Risk categories to include in the audit",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "credentials",
+              "database",
+              "filesystem",
+              "instance",
+              "nodes"
+            ]
+          },
+          "x-enumNames": [
+            "Credentials",
+            "Database",
+            "Filesystem",
+            "Instance",
+            "Nodes"
+          ]
+        },
+        "daysAbandonedWorkflow": {
+          "x-title": "Days Abandoned Workflow",
+          "description": "Days for a workflow to be considered abandoned if not executed",
+          "default": 90,
+          "type": "number"
+        }
+      }
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "Name of the new credential",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "credential"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "credentialTypeName": {
+      "x-title": "Credential Type",
+      "description": "The available types depend on nodes installed on the n8n instance. Some built-in types include e.g. 'githubApi', 'notionApi', and 'slackApi'.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "credential"
+          ],
+          "operation": [
+            "getSchema"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "data": {
+      "x-title": "Data",
+      "description": "A valid JSON object with properties required for this Credential Type. To see the expected format, you can use 'Get Schema' operation.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "credential"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "credentialId": {
+      "x-title": "Credential ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "credential"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "executionId": {
+      "x-title": "Execution ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "execution"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "workflow"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "workflow"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 250
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "workflow"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "activeWorkflows": {
+          "x-title": "Return Only Published Workflows",
+          "default": true,
+          "type": "boolean"
+        },
+        "tags": {
+          "x-title": "Tags",
+          "description": "Include only workflows with these tags",
+          "default": "",
+          "type": "string"
+        },
+        "name": {
+          "x-title": "Name",
+          "default": "",
+          "type": "string"
+        },
+        "projectId": {
+          "x-title": "Project ID",
+          "default": "",
+          "type": "string"
+        },
+        "excludePinnedData": {
+          "x-title": "Exclude Pinned Data",
+          "description": "Whether to exclude pinned data from the response",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "execution"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "activeWorkflows": {
+          "x-title": "Include Execution Details",
+          "description": "Whether to include the detailed execution data",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "workflowId": {
+      "x-title": "Workflow",
+      "description": "Workflow to filter the executions by",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "workflow"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "By URL",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "workflow"
+          ],
+          "operation": [
+            "activate"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "versionId": {
+          "x-title": "Version ID",
+          "description": "The version ID of the workflow to publish",
+          "default": "",
+          "type": "string"
+        },
+        "name": {
+          "x-title": "Name",
+          "description": "Published version name (will be overwritten)",
+          "default": "",
+          "type": "string"
+        },
+        "description": {
+          "x-title": "Description",
+          "description": "Published version description (will be overwritten)",
+          "default": "",
+          "type": "string",
+          "x-rows": 4
+        }
+      }
+    },
+    "workflowObject": {
+      "x-title": "Workflow Object",
+      "description": "A valid JSON object with required fields: 'name', 'nodes', 'connections' and 'settings'. More information can be found in the <a href=\"https://docs.n8n.io/api/api-reference/#tag/workflow/paths/~1workflows~1%7bid%7d/put\">documentation</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "workflow"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "versionId": {
+      "x-title": "Version ID",
+      "description": "The version ID to retrieve",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "workflow"
+          ],
+          "operation": [
+            "getVersion"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:n8n.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "n8nApi",
+      "required": true
+    }
+  ]
+}

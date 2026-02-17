@@ -1,0 +1,572 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Odoo",
+  "description": "Consume Odoo API",
+  "x-n8n-node-type": "odoo",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "contact",
+      "type": "string",
+      "enum": [
+        "contact",
+        "custom",
+        "note",
+        "opportunity"
+      ],
+      "x-enumNames": [
+        "Contact",
+        "Custom Resource",
+        "Note",
+        "Opportunity"
+      ]
+    },
+    "customResource": {
+      "x-title": "Custom Resource Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "custom"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "note"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a new note",
+        "Delete a note",
+        "Get a note",
+        "Get many notes",
+        "Update a note"
+      ]
+    },
+    "fieldsToCreateOrUpdate": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "custom"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "fields": {
+          "x-title": "Field Record:",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "fieldName": {
+                "x-title": "Field Name or ID",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": "",
+                "type": "string"
+              },
+              "fieldValue": {
+                "x-title": "New Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "customResourceId": {
+      "x-title": "Custom Resource ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "custom"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "note"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "note"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 1000
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll",
+            "get"
+          ],
+          "resource": [
+            "note"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "fieldsList": {
+          "x-title": "Fields to Include",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "filterRequest": {
+      "x-title": "Filters",
+      "description": "Filter request by applying filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "custom"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "filter": {
+          "x-title": "Filter",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "fieldName": {
+                "x-title": "Field Name or ID",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": "",
+                "type": "string"
+              },
+              "operator": {
+                "x-title": "Operator",
+                "description": "Specify an operator",
+                "default": "equal",
+                "type": "string",
+                "enum": [
+                  "notEqual",
+                  "lesserThen",
+                  "lesserOrEqual",
+                  "equal",
+                  "greaterThen",
+                  "greaterOrEqual",
+                  "childOf",
+                  "in",
+                  "like",
+                  "notIn"
+                ],
+                "x-enumNames": [
+                  "!=",
+                  "<",
+                  "<=",
+                  "=",
+                  ">",
+                  ">=",
+                  "Child Of",
+                  "In",
+                  "Like",
+                  "Not In"
+                ]
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "Specify value for comparison",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "opportunityName": {
+      "x-title": "Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "opportunity"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "address": {
+          "x-title": "Address",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "value": {
+              "x-title": "Address",
+              "type": "object",
+              "properties": {
+                "city": {
+                  "x-title": "City",
+                  "default": "",
+                  "type": "string"
+                },
+                "country_id": {
+                  "x-title": "Country Name or ID",
+                  "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                  "default": "",
+                  "type": "string"
+                },
+                "state_id": {
+                  "x-title": "State Name or ID",
+                  "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                  "default": "",
+                  "type": "string"
+                },
+                "street": {
+                  "x-title": "Street",
+                  "default": "",
+                  "type": "string"
+                },
+                "street2": {
+                  "x-title": "Street 2",
+                  "default": "",
+                  "type": "string"
+                },
+                "zip": {
+                  "x-title": "Zip Code",
+                  "default": "",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "email": {
+          "x-title": "Email",
+          "default": "",
+          "type": "string"
+        },
+        "comment": {
+          "x-title": "Internal Notes",
+          "default": "",
+          "type": "string"
+        },
+        "function": {
+          "x-title": "Job Position",
+          "default": "",
+          "type": "string"
+        },
+        "mobile": {
+          "x-title": "Mobile",
+          "default": "",
+          "type": "string"
+        },
+        "phone": {
+          "x-title": "Phone",
+          "default": "",
+          "type": "string"
+        },
+        "vat": {
+          "x-title": "Tax ID",
+          "default": "",
+          "type": "string"
+        },
+        "website": {
+          "x-title": "Website",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "opportunityId": {
+      "x-title": "Opportunity ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "opportunity"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "address": {
+          "x-title": "Address",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "value": {
+              "x-title": "Address",
+              "type": "object",
+              "properties": {
+                "city": {
+                  "x-title": "City",
+                  "default": "",
+                  "type": "string"
+                },
+                "country_id": {
+                  "x-title": "Country Name or ID",
+                  "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                  "default": "",
+                  "type": "string"
+                },
+                "state_id": {
+                  "x-title": "State Name or ID",
+                  "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                  "default": "",
+                  "type": "string"
+                },
+                "street": {
+                  "x-title": "Street",
+                  "default": "",
+                  "type": "string"
+                },
+                "street2": {
+                  "x-title": "Street 2",
+                  "default": "",
+                  "type": "string"
+                },
+                "zip": {
+                  "x-title": "Zip Code",
+                  "default": "",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "email": {
+          "x-title": "Email",
+          "default": "",
+          "type": "string"
+        },
+        "comment": {
+          "x-title": "Internal Notes",
+          "default": "",
+          "type": "string"
+        },
+        "function": {
+          "x-title": "Job Position",
+          "default": "",
+          "type": "string"
+        },
+        "mobile": {
+          "x-title": "Mobile",
+          "default": "",
+          "type": "string"
+        },
+        "name": {
+          "x-title": "Name",
+          "default": "",
+          "type": "string"
+        },
+        "phone": {
+          "x-title": "Phone",
+          "default": "",
+          "type": "string"
+        },
+        "vat": {
+          "x-title": "Tax ID",
+          "default": "",
+          "type": "string"
+        },
+        "website": {
+          "x-title": "Website",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "contactName": {
+      "x-title": "Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "contactId": {
+      "x-title": "Contact ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "memo": {
+      "x-title": "Memo",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "note"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "noteId": {
+      "x-title": "Note ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "note"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:odoo.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "odooApi",
+      "required": true,
+      "testedBy": "odooApiTest"
+    }
+  ]
+}

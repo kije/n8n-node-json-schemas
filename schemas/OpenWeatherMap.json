@@ -1,0 +1,158 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OpenWeatherMap",
+  "description": "Gets current and future weather information",
+  "x-n8n-node-type": "openWeatherMap",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "operation": {
+      "x-title": "Operation",
+      "default": "currentWeather",
+      "type": "string",
+      "enum": [
+        "currentWeather",
+        "5DayForecast"
+      ],
+      "x-enumNames": [
+        "Current Weather",
+        "5 Day Forecast"
+      ],
+      "x-enumDescriptions": [
+        "Returns the current weather data",
+        "Returns the weather data for the next 5 days"
+      ]
+    },
+    "format": {
+      "x-title": "Format",
+      "description": "The format in which format the data should be returned",
+      "default": "metric",
+      "type": "string",
+      "enum": [
+        "imperial",
+        "metric",
+        "standard"
+      ],
+      "x-enumNames": [
+        "Imperial",
+        "Metric",
+        "Scientific"
+      ],
+      "x-enumDescriptions": [
+        "Fahrenheit | miles/hour",
+        "Celsius | meter/sec",
+        "Kelvin | meter/sec"
+      ]
+    },
+    "locationSelection": {
+      "x-title": "Location Selection",
+      "description": "How to define the location for which to return the weather",
+      "default": "cityName",
+      "type": "string",
+      "enum": [
+        "cityName",
+        "cityId",
+        "coordinates",
+        "zipCode"
+      ],
+      "x-enumNames": [
+        "City Name",
+        "City ID",
+        "Coordinates",
+        "Zip Code"
+      ]
+    },
+    "cityName": {
+      "x-title": "City",
+      "description": "The name of the city to return the weather of",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "locationSelection": [
+            "cityName"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "cityId": {
+      "x-title": "City ID",
+      "description": "The ID of city to return the weather of. List can be downloaded here: http://bulk.openweathermap.org/sample/.",
+      "default": 160001123,
+      "x-displayOptions": {
+        "show": {
+          "locationSelection": [
+            "cityId"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "latitude": {
+      "x-title": "Latitude",
+      "description": "The latitude of the location to return the weather of",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "locationSelection": [
+            "coordinates"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "longitude": {
+      "x-title": "Longitude",
+      "description": "The longitude of the location to return the weather of",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "locationSelection": [
+            "coordinates"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "zipCode": {
+      "x-title": "Zip Code",
+      "description": "The ID of city to return the weather of. List can be downloaded here: http://bulk.openweathermap.org/sample/.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "locationSelection": [
+            "zipCode"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "language": {
+      "x-title": "Language",
+      "description": "The two letter language code to get your output in (eg. en, de, ...).",
+      "default": "",
+      "type": "string"
+    }
+  },
+  "x-icon": "file:openWeatherMap.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "openWeatherMapApi",
+      "required": true
+    }
+  ]
+}

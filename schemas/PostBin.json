@@ -1,0 +1,115 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PostBin",
+  "description": "Consume PostBin API",
+  "x-n8n-node-type": "postBin",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "bin",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "bin",
+        "request"
+      ],
+      "x-enumNames": [
+        "Bin",
+        "Request"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "request"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "get",
+        "removeFirst",
+        "send"
+      ],
+      "x-enumNames": [
+        "Get",
+        "Remove First",
+        "Send"
+      ],
+      "x-enumDescriptions": [
+        "Get a request",
+        "Remove the first request from bin",
+        "Send a test request to the bin"
+      ]
+    },
+    "binId": {
+      "x-title": "Bin ID",
+      "description": "Unique identifier for each bin",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "request"
+          ],
+          "operation": [
+            "get",
+            "removeFirst",
+            "send"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "binContent": {
+      "x-title": "Bin Content",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "request"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "type": "string",
+      "x-rows": 5
+    },
+    "requestId": {
+      "x-title": "Request ID",
+      "description": "Unique identifier for each request",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "request"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{ $parameter[\"operation\"] + \": \" + $parameter[\"resource\"] }}",
+  "x-icon": "file:postbin.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": []
+}

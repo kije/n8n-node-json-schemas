@@ -1,0 +1,172 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Plivo",
+  "description": "Send SMS/MMS messages or make phone calls",
+  "x-n8n-node-type": "plivo",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "sms",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "call",
+        "mms",
+        "sms"
+      ],
+      "x-enumNames": [
+        "Call",
+        "MMS",
+        "SMS"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "make",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "call"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "make"
+      ],
+      "x-enumNames": [
+        "Make"
+      ],
+      "x-enumDescriptions": [
+        "Make a voice call"
+      ]
+    },
+    "from": {
+      "x-title": "From",
+      "description": "Caller ID for the call to make",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "call"
+          ],
+          "operation": [
+            "make"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "to": {
+      "x-title": "To",
+      "description": "Phone number to make the call to",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "call"
+          ],
+          "operation": [
+            "make"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "message": {
+      "x-title": "Message",
+      "description": "Message to send",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "mms"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "media_urls": {
+      "x-title": "Media URLs",
+      "description": "Comma-separated list of media URLs of the files from your file server",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "mms"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "answer_method": {
+      "x-title": "Answer Method",
+      "description": "HTTP verb to be used when invoking the Answer URL",
+      "default": "POST",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "call"
+          ],
+          "operation": [
+            "make"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "GET",
+        "POST"
+      ],
+      "x-enumNames": [
+        "GET",
+        "POST"
+      ]
+    },
+    "answer_url": {
+      "x-title": "Answer URL",
+      "description": "URL to be invoked by Plivo once the call is answered. It should return the XML to handle the call once answered.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "call"
+          ],
+          "operation": [
+            "make"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:plivo.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "plivoApi",
+      "required": true
+    }
+  ]
+}

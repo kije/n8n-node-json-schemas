@@ -1,0 +1,702 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OpenAI Chat Model",
+  "description": "For advanced usage with an AI chain",
+  "x-n8n-node-type": "lmChatOpenAi",
+  "x-n8n-version": [
+    1,
+    1.1,
+    1.2,
+    1.3
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "model": {
+      "x-title": "Model",
+      "description": "The model. Choose from the list, or specify an ID.",
+      "default": {
+        "mode": "list",
+        "value": "gpt-5-mini"
+      },
+      "x-displayOptions": {
+        "hide": {
+          "@version": [
+            {
+              "_cnd": {
+                "lte": 1.1
+              }
+            }
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "responsesApiEnabled": {
+      "x-title": "Use Responses API",
+      "description": "Whether to use the Responses API to generate the response. <a href=\"https://docs.n8n.io/integrations/builtin/cluster-nodes/sub-nodes/n8n-nodes-langchain.lmchatopenai/#use-responses-api\">Learn more</a>.",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.3
+              }
+            }
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "builtInTools": {
+      "x-title": "Built-in Tools",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.3
+              }
+            }
+          ],
+          "/responsesApiEnabled": [
+            true
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "webSearch": {
+          "x-title": "Web Search",
+          "default": {
+            "searchContextSize": "medium"
+          },
+          "type": "object",
+          "properties": {
+            "searchContextSize": {
+              "x-title": "Search Context Size",
+              "description": "High level guidance for the amount of context window space to use for the search",
+              "default": "medium",
+              "type": "string",
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ],
+              "x-enumNames": [
+                "Low",
+                "Medium",
+                "High"
+              ]
+            },
+            "allowedDomains": {
+              "x-title": "Web Search Allowed Domains",
+              "description": "Comma-separated list of domains to search. Only domains in this list will be searched.",
+              "default": "",
+              "type": "string"
+            },
+            "country": {
+              "x-title": "Country",
+              "default": "",
+              "type": "string"
+            },
+            "city": {
+              "x-title": "City",
+              "default": "",
+              "type": "string"
+            },
+            "region": {
+              "x-title": "Region",
+              "default": "",
+              "type": "string"
+            }
+          }
+        },
+        "fileSearch": {
+          "x-title": "File Search",
+          "default": {
+            "vectorStoreIds": "[]"
+          },
+          "type": "object",
+          "properties": {
+            "vectorStoreIds": {
+              "x-title": "Vector Store IDs",
+              "description": "The vector store IDs to use for the file search. Vector stores are managed via OpenAI Dashboard. <a href=\"https://docs.n8n.io/integrations/builtin/cluster-nodes/sub-nodes/n8n-nodes-langchain.lmchatopenai/#built-in-tools\">Learn more</a>.",
+              "default": "[]",
+              "x-required": true,
+              "oneOf": [
+                {
+                  "type": "string",
+                  "description": "JSON string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "array"
+                }
+              ]
+            },
+            "filters": {
+              "x-title": "Filters",
+              "default": "{}",
+              "oneOf": [
+                {
+                  "type": "string",
+                  "description": "JSON string"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "array"
+                }
+              ]
+            },
+            "maxResults": {
+              "x-title": "Max Results",
+              "default": 1,
+              "type": "number",
+              "minimum": 1,
+              "maximum": 50
+            }
+          }
+        },
+        "codeInterpreter": {
+          "x-title": "Code Interpreter",
+          "description": "Whether to allow the model to execute code in a sandboxed environment",
+          "default": true,
+          "type": "boolean"
+        }
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "description": "Additional options to add",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "baseURL": {
+          "x-title": "Base URL",
+          "description": "Override the default base URL for the API",
+          "default": "https://api.openai.com/v1",
+          "x-displayOptions": {
+            "hide": {
+              "@version": [
+                {
+                  "_cnd": {
+                    "gte": 1.1
+                  }
+                }
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "frequencyPenalty": {
+          "x-title": "Frequency Penalty",
+          "description": "Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim",
+          "default": 0,
+          "type": "number",
+          "minimum": -2,
+          "maximum": 2,
+          "x-precision": 1
+        },
+        "maxTokens": {
+          "x-title": "Maximum Number of Tokens",
+          "description": "The maximum number of tokens to generate in the completion. Most models have a context length of 2048 tokens (except for the newest models, which support 32,768).",
+          "default": -1,
+          "type": "number",
+          "maximum": 32768
+        },
+        "responseFormat": {
+          "x-title": "Response Format",
+          "default": "text",
+          "x-displayOptions": {
+            "show": {
+              "@version": [
+                {
+                  "_cnd": {
+                    "gte": 1.3
+                  }
+                }
+              ],
+              "/responsesApiEnabled": [
+                false
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "text",
+            "json_object"
+          ],
+          "x-enumNames": [
+            "Text",
+            "JSON"
+          ],
+          "x-enumDescriptions": [
+            "Regular text response",
+            "Enables JSON mode, which should guarantee the message the model generates is valid JSON"
+          ]
+        },
+        "textFormat": {
+          "x-title": "Response Format",
+          "default": {
+            "textOptions": [
+              {
+                "type": "text"
+              }
+            ]
+          },
+          "x-displayOptions": {
+            "show": {
+              "@version": [
+                {
+                  "_cnd": {
+                    "gte": 1.3
+                  }
+                }
+              ],
+              "/responsesApiEnabled": [
+                true
+              ]
+            }
+          },
+          "type": "object",
+          "properties": {
+            "textOptions": {
+              "x-title": "Text",
+              "type": "object",
+              "properties": {
+                "type": {
+                  "x-title": "Type",
+                  "default": "",
+                  "type": "string",
+                  "enum": [
+                    "text",
+                    "json_schema",
+                    "json_object"
+                  ],
+                  "x-enumNames": [
+                    "Text",
+                    "JSON Schema (recommended)",
+                    "JSON Object"
+                  ]
+                },
+                "verbosity": {
+                  "x-title": "Verbosity",
+                  "default": "medium",
+                  "type": "string",
+                  "enum": [
+                    "low",
+                    "medium",
+                    "high"
+                  ],
+                  "x-enumNames": [
+                    "Low",
+                    "Medium",
+                    "High"
+                  ]
+                },
+                "name": {
+                  "x-title": "Name",
+                  "description": "The name of the response format. Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum length of 64.",
+                  "default": "my_schema",
+                  "x-displayOptions": {
+                    "show": {
+                      "type": [
+                        "json_schema"
+                      ]
+                    }
+                  },
+                  "type": "string"
+                },
+                "schema": {
+                  "x-title": "Schema",
+                  "description": "The schema of the response format",
+                  "default": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"message\": {\n      \"type\": \"string\"\n    }\n  },\n  \"additionalProperties\": false,\n  \"required\": [\"message\"]\n}",
+                  "x-displayOptions": {
+                    "show": {
+                      "type": [
+                        "json_schema"
+                      ]
+                    }
+                  },
+                  "oneOf": [
+                    {
+                      "type": "string",
+                      "description": "JSON string"
+                    },
+                    {
+                      "type": "object"
+                    },
+                    {
+                      "type": "array"
+                    }
+                  ]
+                },
+                "description": {
+                  "x-title": "Description",
+                  "description": "The description of the response format",
+                  "default": "",
+                  "x-displayOptions": {
+                    "show": {
+                      "type": [
+                        "json_schema"
+                      ]
+                    }
+                  },
+                  "type": "string"
+                },
+                "strict": {
+                  "x-title": "Strict",
+                  "description": "Whether to require that the AI will always generate responses that match the provided JSON Schema",
+                  "default": false,
+                  "x-displayOptions": {
+                    "show": {
+                      "type": [
+                        "json_schema"
+                      ]
+                    }
+                  },
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "presencePenalty": {
+          "x-title": "Presence Penalty",
+          "description": "Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics",
+          "default": 0,
+          "type": "number",
+          "minimum": -2,
+          "maximum": 2,
+          "x-precision": 1
+        },
+        "temperature": {
+          "x-title": "Sampling Temperature",
+          "description": "Controls randomness: Lowering results in less random completions. As the temperature approaches zero, the model will become deterministic and repetitive.",
+          "default": 0.7,
+          "type": "number",
+          "minimum": 0,
+          "maximum": 2,
+          "x-precision": 1
+        },
+        "reasoningEffort": {
+          "x-title": "Reasoning Effort",
+          "description": "Controls the amount of reasoning tokens to use. A value of \"low\" will favor speed and economical token usage, \"high\" will favor more complete reasoning at the cost of more tokens generated and slower responses.",
+          "default": "medium",
+          "x-displayOptions": {
+            "show": {
+              "/model": [
+                {
+                  "_cnd": {
+                    "regex": "(^o1([-\\d]+)?$)|(^o[3-9].*)|(^gpt-5.*)"
+                  }
+                }
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "x-enumNames": [
+            "Low",
+            "Medium",
+            "High"
+          ],
+          "x-enumDescriptions": [
+            "Favors speed and economical token usage",
+            "Balance between speed and reasoning accuracy",
+            "Favors more complete reasoning at the cost of more tokens generated and slower responses"
+          ]
+        },
+        "timeout": {
+          "x-title": "Timeout",
+          "description": "Maximum amount of time a request is allowed to take in milliseconds",
+          "default": 60000,
+          "type": "number"
+        },
+        "maxRetries": {
+          "x-title": "Max Retries",
+          "description": "Maximum number of retries to attempt",
+          "default": 2,
+          "type": "number"
+        },
+        "topP": {
+          "x-title": "Top P",
+          "description": "Controls diversity via nucleus sampling: 0.5 means half of all likelihood-weighted options are considered. We generally recommend altering this or temperature but not both.",
+          "default": 1,
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "x-precision": 1
+        },
+        "conversationId": {
+          "x-title": "Conversation ID",
+          "description": "The conversation that this response belongs to. Input items and output items from this response are automatically added to this conversation after this response completes.",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "@version": [
+                {
+                  "_cnd": {
+                    "gte": 1.3
+                  }
+                }
+              ],
+              "/responsesApiEnabled": [
+                true
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "promptCacheKey": {
+          "x-title": "Prompt Cache Key",
+          "description": "Used by OpenAI to cache responses for similar requests to optimize your cache hit rates",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "@version": [
+                {
+                  "_cnd": {
+                    "gte": 1.3
+                  }
+                }
+              ],
+              "/responsesApiEnabled": [
+                true
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "safetyIdentifier": {
+          "x-title": "Safety Identifier",
+          "description": "A stable identifier used to help detect users of your application that may be violating OpenAI's usage policies. The IDs should be a string that uniquely identifies each user.",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "@version": [
+                {
+                  "_cnd": {
+                    "gte": 1.3
+                  }
+                }
+              ],
+              "/responsesApiEnabled": [
+                true
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "serviceTier": {
+          "x-title": "Service Tier",
+          "description": "The service tier to use for the request",
+          "default": "auto",
+          "x-displayOptions": {
+            "show": {
+              "@version": [
+                {
+                  "_cnd": {
+                    "gte": 1.3
+                  }
+                }
+              ],
+              "/responsesApiEnabled": [
+                true
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "auto",
+            "flex",
+            "default",
+            "priority"
+          ],
+          "x-enumNames": [
+            "Auto",
+            "Flex",
+            "Default",
+            "Priority"
+          ]
+        },
+        "metadata": {
+          "x-title": "Metadata",
+          "description": "Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format, and querying for objects via API or the dashboard. Keys are strings with a maximum length of 64 characters. Values are strings with a maximum length of 512 characters.",
+          "default": "{}",
+          "x-displayOptions": {
+            "show": {
+              "@version": [
+                {
+                  "_cnd": {
+                    "gte": 1.3
+                  }
+                }
+              ],
+              "/responsesApiEnabled": [
+                true
+              ]
+            }
+          },
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "topLogprobs": {
+          "x-title": "Top Logprobs",
+          "description": "An integer between 0 and 20 specifying the number of most likely tokens to return at each token position, each with an associated log probability",
+          "default": 0,
+          "x-displayOptions": {
+            "show": {
+              "@version": [
+                {
+                  "_cnd": {
+                    "gte": 1.3
+                  }
+                }
+              ],
+              "/responsesApiEnabled": [
+                true
+              ]
+            }
+          },
+          "type": "number",
+          "minimum": 0,
+          "maximum": 20
+        },
+        "promptConfig": {
+          "x-title": "Prompt",
+          "description": "Configure the reusable prompt template configured via OpenAI Dashboard. <a href=\"https://platform.openai.com/docs/guides/prompt-engineering#reusable-prompts\">Learn more</a>.",
+          "default": {
+            "promptOptions": [
+              {
+                "promptId": ""
+              }
+            ]
+          },
+          "x-displayOptions": {
+            "show": {
+              "@version": [
+                {
+                  "_cnd": {
+                    "gte": 1.3
+                  }
+                }
+              ],
+              "/responsesApiEnabled": [
+                true
+              ]
+            }
+          },
+          "type": "object",
+          "properties": {
+            "promptOptions": {
+              "x-title": "Prompt",
+              "type": "object",
+              "properties": {
+                "promptId": {
+                  "x-title": "Prompt ID",
+                  "description": "The unique identifier of the prompt template to use",
+                  "default": "",
+                  "type": "string"
+                },
+                "version": {
+                  "x-title": "Version",
+                  "description": "Optional version of the prompt template",
+                  "default": "",
+                  "type": "string"
+                },
+                "variables": {
+                  "x-title": "Variables",
+                  "description": "Variables to be substituted into the prompt template",
+                  "default": "{}",
+                  "oneOf": [
+                    {
+                      "type": "string",
+                      "description": "JSON string"
+                    },
+                    {
+                      "type": "object"
+                    },
+                    {
+                      "type": "array"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-icon": {
+    "light": "file:openAiLight.svg",
+    "dark": "file:openAiLight.dark.svg"
+  },
+  "x-inputs": [],
+  "x-outputs": [
+    "ai_languageModel"
+  ],
+  "x-credentials": [
+    {
+      "name": "openAiApi",
+      "required": true
+    }
+  ]
+}

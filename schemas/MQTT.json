@@ -1,0 +1,83 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MQTT",
+  "description": "Push messages to MQTT",
+  "x-n8n-node-type": "mqtt",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "topic": {
+      "x-title": "Topic",
+      "description": "The topic to publish to",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "sendInputData": {
+      "x-title": "Send Input Data",
+      "description": "Whether to send the data the node receives as JSON",
+      "default": true,
+      "type": "boolean"
+    },
+    "message": {
+      "x-title": "Message",
+      "description": "The message to publish",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "sendInputData": [
+            false
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "qos": {
+          "x-title": "QoS",
+          "description": "QoS subscription level",
+          "default": 0,
+          "type": "string",
+          "enum": [
+            0,
+            1,
+            2
+          ],
+          "x-enumNames": [
+            "Received at Most Once",
+            "Received at Least Once",
+            "Exactly Once"
+          ]
+        },
+        "retain": {
+          "x-title": "Retain",
+          "description": "Normally if a publisher publishes a message to a topic, and no one is subscribed to that topic the message is simply discarded by the broker. However the publisher can tell the broker to keep the last message on that topic by setting the retain flag to true.",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-icon": "file:mqtt.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "mqtt",
+      "required": true,
+      "testedBy": "mqttConnectionTest"
+    }
+  ]
+}

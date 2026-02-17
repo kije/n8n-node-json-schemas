@@ -1,0 +1,542 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Netscaler ADC",
+  "description": "Consume Netscaler ADC API",
+  "x-n8n-node-type": "citrixAdc",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "file",
+      "type": "string",
+      "enum": [
+        "certificate",
+        "file"
+      ],
+      "x-enumNames": [
+        "Certificate",
+        "File"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "upload",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "delete",
+        "download",
+        "upload"
+      ],
+      "x-enumNames": [
+        "Delete",
+        "Download",
+        "Upload"
+      ]
+    },
+    "certificateFileName": {
+      "x-title": "Certificate File Name",
+      "description": "Name of and, optionally, path to the X509 certificate file that is used to form the certificate-key pair. /nsconfig/ssl/ is the default path.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "certificate"
+          ],
+          "operation": [
+            "install"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "certificateFormat": {
+      "x-title": "Certificate Format",
+      "description": "Input format of the certificate and the private-key files. The three formats supported by the appliance are: PEM - Privacy Enhanced Mail DER - Distinguished Encoding Rule PFX - Personal Information Exchange.",
+      "default": "PEM",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "certificate"
+          ],
+          "operation": [
+            "install"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "PEM",
+        "DER"
+      ],
+      "x-enumNames": [
+        "PEM",
+        "DER"
+      ]
+    },
+    "certificateType": {
+      "x-title": "Certificate Type",
+      "default": "ROOT_CERT",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "certificate"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "ROOT_CERT",
+        "INTM_CERT",
+        "SRVR_CERT",
+        "CLNT_CERT"
+      ],
+      "x-enumNames": [
+        "Root-CA",
+        "Intermediate-CA",
+        "Server",
+        "Client"
+      ],
+      "x-enumDescriptions": [
+        "You must specify the key file name. The generated Root-CA certificate can be used for signing end-user client or server certificates or to create Intermediate-CA certificates.",
+        "Intermediate-CA certificate",
+        "SSL server certificate used on SSL servers for end-to-end encryption",
+        "End-user client certificate used for client authentication"
+      ]
+    },
+    "certificateRequestFileName": {
+      "x-title": "Certificate Request File Name",
+      "description": "Name for and, optionally, path to the certificate-signing request (CSR). /nsconfig/ssl/ is the default path.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "certificate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "caCertificateFileName": {
+      "x-title": "CA Certificate File Name",
+      "description": "Name of the CA certificate file that issues and signs the Intermediate-CA certificate or the end-user client and server certificates",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "certificate"
+          ],
+          "operation": [
+            "create"
+          ],
+          "certificateType": [
+            "INTM_CERT",
+            "SRVR_CERT",
+            "CLNT_CERT"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "caCertificateFileFormat": {
+      "x-title": "CA Certificate File Format",
+      "description": "Format of the CA certificate",
+      "default": "PEM",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "certificate"
+          ],
+          "operation": [
+            "create"
+          ],
+          "certificateType": [
+            "INTM_CERT",
+            "SRVR_CERT",
+            "CLNT_CERT"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "PEM",
+        "DER"
+      ],
+      "x-enumNames": [
+        "PEM",
+        "DER"
+      ]
+    },
+    "caPrivateKeyFileName": {
+      "x-title": "CA Private Key File Name",
+      "description": "Private key, associated with the CA certificate that is used to sign the Intermediate-CA certificate or the end-user client and server certificate. If the CA key file is password protected, the user is prompted to enter the pass phrase that was used to encrypt the key.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "certificate"
+          ],
+          "operation": [
+            "create"
+          ],
+          "certificateType": [
+            "INTM_CERT",
+            "SRVR_CERT",
+            "CLNT_CERT"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "caPrivateKeyFileFormat": {
+      "x-title": "CA Private Key File Format",
+      "description": "Format of the CA certificate",
+      "default": "PEM",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "certificate"
+          ],
+          "operation": [
+            "create"
+          ],
+          "certificateType": [
+            "INTM_CERT",
+            "SRVR_CERT",
+            "CLNT_CERT"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "PEM",
+        "DER"
+      ],
+      "x-enumNames": [
+        "PEM",
+        "DER"
+      ]
+    },
+    "privateKeyFileName": {
+      "x-title": "Private Key File Name",
+      "description": "Name of and, optionally, path to the X509 certificate file that is used to form the certificate-key pair. /nsconfig/ssl/ is the default path.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "certificate"
+          ],
+          "operation": [
+            "install"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "caSerialFileNumber": {
+      "x-title": "CA Serial File Number",
+      "description": "Serial number file maintained for the CA certificate. This file contains the serial number of the next certificate to be issued or signed by the CA.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "certificate"
+          ],
+          "operation": [
+            "create"
+          ],
+          "certificateType": [
+            "INTM_CERT",
+            "SRVR_CERT",
+            "CLNT_CERT"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "privateKeyFormat": {
+      "x-title": "Private Key Format",
+      "description": "Format in which the key is stored on the appliance",
+      "default": "PEM",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "certificate"
+          ],
+          "operation": [
+            "create"
+          ],
+          "certificateType": [
+            "ROOT_CERT"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "PEM",
+        "DER"
+      ],
+      "x-enumNames": [
+        "PEM",
+        "DER"
+      ]
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "certificate"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "pempassphrase": {
+          "x-title": "PEM Passphrase (For Encrypted CA Key)",
+          "description": "Name for and, optionally, path to the private key. You can either use an existing RSA or DSA key that you own or create a new private key on the Netscaler ADC. This file is required only when creating a self-signed Root-CA certificate. The key file is stored in the /nsconfig/ssl directory by default.",
+          "default": "",
+          "x-displayOptions": {
+            "hide": {
+              "/certificateType": [
+                "ROOT_CERT"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "subjectaltname": {
+          "x-title": "Subject Alternative Name",
+          "description": "Subject Alternative Name (SAN) is an extension to X.509 that allows various values to be associated with a security certificate using a subjectAltName field",
+          "default": "",
+          "type": "string"
+        },
+        "days": {
+          "x-title": "Validity Period (Number of Days)",
+          "description": "Number of days for which the certificate will be valid, beginning with the time and day (system time) of creation",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "certificateKeyPairName": {
+      "x-title": "Certificate-Key Pair Name",
+      "description": "Name for the certificate and private-key pair",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "certificate"
+          ],
+          "operation": [
+            "install"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "password": {
+      "x-title": "Password",
+      "description": "Input format of the certificate and the private-key files. The three formats supported by the appliance are: PEM - Privacy Enhanced Mail DER - Distinguished Encoding Rule PFX - Personal Information Exchange.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "certificate"
+          ],
+          "operation": [
+            "install"
+          ],
+          "certificateFormat": [
+            "PEM"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "password"
+    },
+    "notifyExpiration": {
+      "x-title": "Notify When Expires",
+      "description": "Whether to alert when the certificate is about to expire",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "certificate"
+          ],
+          "operation": [
+            "install"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "notificationPeriod": {
+      "x-title": "Notification Period (Days)",
+      "description": "Time, in number of days, before certificate expiration, at which to generate an alert that the certificate is about to expire",
+      "default": 10,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "certificate"
+          ],
+          "operation": [
+            "install"
+          ],
+          "notifyExpiration": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number",
+      "minimum": 10,
+      "maximum": 100
+    },
+    "certificateBundle": {
+      "x-title": "Certificate Bundle",
+      "description": "Whether to parse the certificate chain as a single file after linking the server certificate to its issuer's certificate within the file",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "certificate"
+          ],
+          "operation": [
+            "install"
+          ],
+          "certificateFormat": [
+            "PEM"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "fileLocation": {
+      "x-title": "File Location",
+      "default": "/nsconfig/ssl/",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "delete",
+            "download"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "binaryProperty": {
+      "x-title": "Put Output in Field",
+      "description": "The name of the output field to put the binary file data in",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "download"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "fileName": {
+          "x-title": "File Name",
+          "description": "Name of the file. It should not include filepath.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "fileName": {
+      "x-title": "File Name",
+      "description": "Name of the file. It should not include filepath.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "delete",
+            "download"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": {
+    "light": "file:netscaler.svg",
+    "dark": "file:netscaler.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "citrixAdcApi",
+      "required": true
+    }
+  ]
+}

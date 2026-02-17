@@ -1,0 +1,113 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MSG91",
+  "description": "Sends transactional SMS via MSG91",
+  "x-n8n-node-type": "msg91",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "sms",
+      "type": "string",
+      "enum": [
+        "sms"
+      ],
+      "x-enumNames": [
+        "SMS"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "send",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sms"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "send"
+      ],
+      "x-enumNames": [
+        "Send"
+      ],
+      "x-enumDescriptions": [
+        "Send SMS"
+      ]
+    },
+    "from": {
+      "x-title": "Sender ID",
+      "description": "The number from which to send the message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "sms"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "to": {
+      "x-title": "To",
+      "description": "The number, with coutry code, to which to send the message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "sms"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "message": {
+      "x-title": "Message",
+      "description": "The message to send",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "sms"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": {
+    "light": "file:msg91.svg",
+    "dark": "file:msg91.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "msg91Api",
+      "required": true
+    }
+  ]
+}

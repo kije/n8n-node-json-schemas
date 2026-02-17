@@ -1,0 +1,228 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NASA",
+  "description": "Retrieve data from the NASA API",
+  "x-n8n-node-type": "nasa",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "astronomyPictureOfTheDay",
+      "type": "string",
+      "enum": [
+        "asteroidNeoBrowse",
+        "asteroidNeoFeed",
+        "asteroidNeoLookup",
+        "astronomyPictureOfTheDay",
+        "donkiCoronalMassEjection",
+        "donkiHighSpeedStream",
+        "donkiInterplanetaryShock",
+        "donkiMagnetopauseCrossing",
+        "donkiNotifications",
+        "donkiRadiationBeltEnhancement",
+        "donkiSolarEnergeticParticle",
+        "donkiSolarFlare",
+        "donkiWsaEnlilSimulation",
+        "earthAssets",
+        "earthImagery"
+      ],
+      "x-enumNames": [
+        "Asteroid Neo-Browse",
+        "Asteroid Neo-Feed",
+        "Asteroid Neo-Lookup",
+        "Astronomy Picture of the Day",
+        "DONKI Coronal Mass Ejection",
+        "DONKI High Speed Stream",
+        "DONKI Interplanetary Shock",
+        "DONKI Magnetopause Crossing",
+        "DONKI Notification",
+        "DONKI Radiation Belt Enhancement",
+        "DONKI Solar Energetic Particle",
+        "DONKI Solar Flare",
+        "DONKI WSA+EnlilSimulation",
+        "Earth Asset",
+        "Earth Imagery"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "twoLineElementSet"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "get"
+      ],
+      "x-enumNames": [
+        "Get"
+      ],
+      "x-enumDescriptions": [
+        "Retrieve Two-Line Element Set data"
+      ]
+    },
+    "asteroidId": {
+      "x-title": "Asteroid ID",
+      "description": "The ID of the asteroid to be returned",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "asteroidNeoLookup"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "earthImagery",
+            "earthAssets"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "date": {
+          "x-title": "Date",
+          "description": "Date of the image",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "dim": {
+          "x-title": "Degrees",
+          "description": "Width and height of the image in degrees",
+          "default": "",
+          "type": "number"
+        }
+      }
+    },
+    "download": {
+      "x-title": "Download Image",
+      "description": "By default just the URL of the image is returned. When set to true the image will be downloaded.",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "astronomyPictureOfTheDay"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "binaryPropertyName": {
+      "x-title": "Put Output File in Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "earthImagery"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "lat": {
+      "x-title": "Latitude",
+      "description": "Latitude for the location of the image",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "earthImagery",
+            "earthAssets"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "lon": {
+      "x-title": "Longitude",
+      "description": "Longitude for the location of the image",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "earthImagery",
+            "earthAssets"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 20,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \":\" + $parameter[\"resource\"]}}",
+  "x-icon": "file:nasa.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "nasaApi",
+      "required": true
+    }
+  ]
+}

@@ -1,0 +1,810 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Monica CRM",
+  "description": "Consume the Monica CRM API",
+  "x-n8n-node-type": "monicaCrm",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "contact",
+      "type": "string",
+      "enum": [
+        "activity",
+        "call",
+        "contact",
+        "contactField",
+        "contactTag",
+        "conversation",
+        "conversationMessage",
+        "journalEntry",
+        "note",
+        "reminder",
+        "tag",
+        "task"
+      ],
+      "x-enumNames": [
+        "Activity",
+        "Call",
+        "Contact",
+        "Contact Field",
+        "Contact Tag",
+        "Conversation",
+        "Conversation Message",
+        "Journal Entry",
+        "Note",
+        "Reminder",
+        "Tag",
+        "Task"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a task",
+        "Delete a task",
+        "Retrieve a task",
+        "Retrieve many tasks",
+        "Update a task"
+      ]
+    },
+    "activityTypeId": {
+      "x-title": "Activity Type Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "contacts": {
+      "x-title": "Contacts",
+      "description": "Comma-separated list of IDs of the contacts to associate the activity with",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "happenedAt": {
+      "x-title": "Happened At",
+      "description": "Date when the conversation happened",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "conversation"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "summary": {
+      "x-title": "Summary",
+      "description": "Brief description of the activity - max 255 characters",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "description": {
+          "x-title": "Description",
+          "description": "Description of the task - max 100,000 characters",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "activityId": {
+      "x-title": "Activity ID",
+      "description": "ID of the activity to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "contactId": {
+          "x-title": "Contact ID",
+          "description": "ID of the contact to associate the task with",
+          "default": "",
+          "type": "string"
+        },
+        "completed": {
+          "x-title": "Completed",
+          "description": "Whether the task has been completed",
+          "default": false,
+          "type": "boolean"
+        },
+        "description": {
+          "x-title": "Description",
+          "description": "Description of the task - max 100,000 characters",
+          "default": "",
+          "type": "string"
+        },
+        "title": {
+          "x-title": "Title",
+          "description": "Title of the task entry - max 250 characters",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "contactId": {
+      "x-title": "Contact ID",
+      "description": "ID of the contact to associate the task with",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "calledAt": {
+      "x-title": "Called At",
+      "description": "Date when the call happened",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "call"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "content": {
+      "x-title": "Content",
+      "description": "Content of the message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "conversationMessage"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "callId": {
+      "x-title": "Call ID",
+      "description": "ID of the call to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "call"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "firstName": {
+      "x-title": "First Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "genderId": {
+      "x-title": "Gender Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "query": {
+          "x-title": "Search Term",
+          "description": "Search term to filter results by",
+          "default": "",
+          "type": "string"
+        },
+        "sort": {
+          "x-title": "Sort",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "created_at",
+            "-created_at",
+            "updated_at",
+            "-updated_at"
+          ],
+          "x-enumNames": [
+            "Ascended Created At",
+            "Descended Created At",
+            "Ascended Updated At",
+            "Descended Updated At"
+          ]
+        }
+      }
+    },
+    "contactFieldTypeId": {
+      "x-title": "Contact Field Type Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "conversation"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "data": {
+      "x-title": "Content",
+      "description": "Content of the contact field - max 255 characters",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contactField"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "contactFieldId": {
+      "x-title": "Contact Field ID",
+      "description": "ID of the contact field to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contactField"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "tagsToAdd": {
+      "x-title": "Tag Names or IDs",
+      "description": "Tags to add to the contact. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contactTag"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "tagsToRemove": {
+      "x-title": "Tag Names or IDs",
+      "description": "Tags to remove from the contact. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contactTag"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "conversationId": {
+      "x-title": "Conversation ID",
+      "description": "ID of the conversation whose message to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "conversationMessage"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "writtenAt": {
+      "x-title": "Written At",
+      "description": "Date when the message was written",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "conversationMessage"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "writtenByMe": {
+      "x-title": "Written By",
+      "description": "Author of the message",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "conversationMessage"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        true,
+        false
+      ],
+      "x-enumNames": [
+        "User",
+        "Contact"
+      ]
+    },
+    "messageId": {
+      "x-title": "Message ID",
+      "description": "ID of the message to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "conversationMessage"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "Title of the task entry - max 250 characters",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "post": {
+      "x-title": "Content",
+      "description": "Content of the journal entry - max 100,000 characters",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "journalEntry"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "journalId": {
+      "x-title": "Journal Entry ID",
+      "description": "ID of the journal entry to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "journalEntry"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "body": {
+      "x-title": "Body",
+      "description": "Body of the note - max 100,000 characters",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "note"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "noteId": {
+      "x-title": "Note ID",
+      "description": "ID of the note to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "note"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "frequencyType": {
+      "x-title": "Frequency Type",
+      "description": "Type of frequency of the reminder",
+      "default": "one_time",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "one_time",
+        "week",
+        "month",
+        "year"
+      ],
+      "x-enumNames": [
+        "Once",
+        "Weekly",
+        "Monthly",
+        "Yearly"
+      ]
+    },
+    "frequencyNumber": {
+      "x-title": "Recurring Interval",
+      "description": "Interval for the reminder",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ],
+          "frequencyType": [
+            "week",
+            "month",
+            "year"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "initialDate": {
+      "x-title": "Initial Date",
+      "description": "Date of the reminder",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "reminderId": {
+      "x-title": "Reminder ID",
+      "description": "ID of the reminder to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "Name of the tag - max 250 characters",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "tagId": {
+      "x-title": "Tag ID",
+      "description": "ID of the tag to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "taskId": {
+      "x-title": "Task ID",
+      "description": "ID of the task to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:monicaCrm.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "monicaCrmApi",
+      "required": true
+    }
+  ]
+}

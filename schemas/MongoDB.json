@@ -1,0 +1,279 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MongoDB",
+  "description": "Find, insert and update documents in MongoDB",
+  "x-n8n-node-type": "mongoDb",
+  "x-n8n-version": [
+    1,
+    1.1,
+    1.2
+  ],
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "document",
+      "type": "string",
+      "enum": [
+        "searchIndexes",
+        "document"
+      ],
+      "x-enumNames": [
+        "Search Index",
+        "Document"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "createSearchIndex",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "searchIndexes"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "createSearchIndex",
+        "dropSearchIndex",
+        "listSearchIndexes",
+        "updateSearchIndex"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Drop",
+        "List",
+        "Update"
+      ]
+    },
+    "collection": {
+      "x-title": "Collection",
+      "description": "MongoDB Collection",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "query": {
+      "x-title": "Query (JSON Format)",
+      "description": "MongoDB Find query",
+      "default": "{}",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "find"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "x-required": true,
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update",
+            "insert",
+            "findOneAndReplace",
+            "findOneAndUpdate"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "dateFields": {
+          "x-title": "Date Fields",
+          "description": "Comma-separated list of fields that will be parsed as Mongo Date type",
+          "default": "",
+          "type": "string"
+        },
+        "useDotNotation": {
+          "x-title": "Use Dot Notation",
+          "description": "Whether to use dot notation to access date fields",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "fields": {
+      "x-title": "Fields",
+      "description": "Comma-separated list of the fields to be included into the new document",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update",
+            "findOneAndReplace",
+            "findOneAndUpdate"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "updateKey": {
+      "x-title": "Update Key",
+      "description": "Name of the property which decides which rows in the database should be updated. Normally that would be \"id\".",
+      "default": "id",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update",
+            "findOneAndReplace",
+            "findOneAndUpdate"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "upsert": {
+      "x-title": "Upsert",
+      "description": "Whether to perform an insert if no documents match the update key",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update",
+            "findOneAndReplace",
+            "findOneAndUpdate"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "indexName": {
+      "x-title": "Index Name",
+      "description": "If provided, only lists indexes with the specified name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "listSearchIndexes"
+          ],
+          "resource": [
+            "searchIndexes"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "indexNameRequired": {
+      "x-title": "Index Name",
+      "description": "The name of the search index",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "createSearchIndex",
+            "dropSearchIndex",
+            "updateSearchIndex"
+          ],
+          "resource": [
+            "searchIndexes"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "indexDefinition": {
+      "x-title": "Index Definition",
+      "description": "The search index definition",
+      "default": "{}",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "createSearchIndex",
+            "updateSearchIndex"
+          ],
+          "resource": [
+            "searchIndexes"
+          ]
+        }
+      },
+      "x-required": true,
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "indexType": {
+      "x-title": "Index Type",
+      "description": "The search index index type",
+      "default": "vectorSearch",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "createSearchIndex"
+          ],
+          "resource": [
+            "searchIndexes"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "vectorSearch",
+        "search"
+      ],
+      "x-enumNames": [
+        "Vector Search",
+        "Search"
+      ]
+    }
+  },
+  "x-icon": "file:mongodb.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "mongoDb",
+      "required": true,
+      "testedBy": "mongoDbCredentialTest"
+    }
+  ]
+}

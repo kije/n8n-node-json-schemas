@@ -1,0 +1,276 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Microsoft Teams Trigger",
+  "description": "Triggers workflows in n8n based on events from Microsoft Teams, such as new messages or team updates, using specified configurations.",
+  "x-n8n-node-type": "microsoftTeamsTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "event": {
+      "x-title": "Trigger On",
+      "description": "Select the event to trigger the workflow",
+      "default": "newChannelMessage",
+      "type": "string",
+      "enum": [
+        "newChannel",
+        "newChannelMessage",
+        "newChat",
+        "newChatMessage",
+        "newTeamMember"
+      ],
+      "x-enumNames": [
+        "New Channel",
+        "New Channel Message",
+        "New Chat",
+        "New Chat Message",
+        "New Team Member"
+      ],
+      "x-enumDescriptions": [
+        "A new channel is created",
+        "A message is posted to a channel",
+        "A new chat is created",
+        "A message is posted to a chat",
+        "A new member is added to a team"
+      ]
+    },
+    "watchAllTeams": {
+      "x-title": "Watch All Teams",
+      "description": "Whether to watch for the event in all the available teams",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "event": [
+            "newChannel",
+            "newChannelMessage",
+            "newTeamMember"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "teamId": {
+      "x-title": "Team",
+      "description": "Select a team from the list, enter an ID or a URL",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "event": [
+            "newChannel",
+            "newChannelMessage",
+            "newTeamMember"
+          ],
+          "watchAllTeams": [
+            false
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id",
+            "url"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        },
+        {
+          "name": "url",
+          "displayName": "By URL",
+          "type": "string"
+        }
+      ]
+    },
+    "watchAllChannels": {
+      "x-title": "Watch All Channels",
+      "description": "Whether to watch for the event in all the available channels",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "event": [
+            "newChannelMessage"
+          ],
+          "watchAllTeams": [
+            false
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "channelId": {
+      "x-title": "Channel",
+      "description": "Select a channel from the list, enter an ID or a URL",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "event": [
+            "newChannelMessage"
+          ],
+          "watchAllTeams": [
+            false
+          ],
+          "watchAllChannels": [
+            false
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id",
+            "url"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        },
+        {
+          "name": "url",
+          "displayName": "By URL",
+          "type": "string"
+        }
+      ]
+    },
+    "watchAllChats": {
+      "x-title": "Watch All Chats",
+      "description": "Whether to watch for the event in all the available chats",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "event": [
+            "newChatMessage"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "chatId": {
+      "x-title": "Chat",
+      "description": "Select a chat from the list, enter an ID or a URL",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "event": [
+            "newChatMessage"
+          ],
+          "watchAllChats": [
+            false
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id",
+            "url"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        },
+        {
+          "name": "url",
+          "displayName": "By URL",
+          "type": "string"
+        }
+      ]
+    }
+  },
+  "x-subtitle": "Microsoft Teams Trigger",
+  "x-icon": "file:teams.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "microsoftTeamsOAuth2Api",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

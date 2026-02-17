@@ -1,0 +1,383 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Microsoft To Do",
+  "description": "Consume Microsoft To Do API.",
+  "x-n8n-node-type": "microsoftToDo",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "task",
+      "type": "string",
+      "enum": [
+        "linkedResource",
+        "list",
+        "task"
+      ],
+      "x-enumNames": [
+        "Linked Resource",
+        "List",
+        "Task"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ]
+    },
+    "taskListId": {
+      "x-title": "List Name or ID",
+      "description": "The identifier of the list, unique in the user's mailbox. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "delete",
+            "get",
+            "getAll",
+            "update"
+          ],
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "taskId": {
+      "x-title": "Task ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "delete",
+            "get",
+            "update"
+          ],
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "displayName": {
+      "x-title": "New List Name",
+      "description": "List display name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "applicationName": {
+      "x-title": "Application Name",
+      "description": "App name of the source that is sending the linked entity",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "linkedResource"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "content": {
+          "x-title": "Content",
+          "description": "The content of the task",
+          "default": "",
+          "type": "string"
+        },
+        "dueDateTime": {
+          "x-title": "Due",
+          "description": "The date in the specified time zone that the task is to be finished",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "reminderDateTime": {
+          "x-title": "Reminder",
+          "description": "The date in the specified time zone that the task is to be reminded",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "importance": {
+          "x-title": "Importance",
+          "description": "The importance of the task",
+          "default": "normal",
+          "type": "string",
+          "enum": [
+            "low",
+            "normal",
+            "high"
+          ],
+          "x-enumNames": [
+            "Low",
+            "Normal",
+            "High"
+          ]
+        },
+        "status": {
+          "x-title": "Status",
+          "description": "Indicates the state or progress of the task",
+          "default": "notStarted",
+          "type": "string",
+          "enum": [
+            "notStarted",
+            "inProgress",
+            "completed",
+            "waitingOnOthers",
+            "deferred"
+          ],
+          "x-enumNames": [
+            "Not Started",
+            "In Progress",
+            "Completed",
+            "Waiting On Others",
+            "Deferred"
+          ]
+        }
+      }
+    },
+    "linkedResourceId": {
+      "x-title": "Linked Resource ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "linkedResource"
+          ],
+          "operation": [
+            "delete",
+            "get",
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "content": {
+          "x-title": "Content",
+          "description": "The content of the task",
+          "default": "",
+          "type": "string"
+        },
+        "dueDateTime": {
+          "x-title": "Due Date Time",
+          "description": "The date in the specified time zone that the task is to be finished",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "reminderDateTime": {
+          "x-title": "Reminder",
+          "description": "The date in the specified time zone that the task is to be reminded",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "importance": {
+          "x-title": "Importance",
+          "description": "The importance of the task",
+          "default": "normal",
+          "type": "string",
+          "enum": [
+            "low",
+            "normal",
+            "high"
+          ],
+          "x-enumNames": [
+            "Low",
+            "Normal",
+            "High"
+          ]
+        },
+        "status": {
+          "x-title": "Status",
+          "description": "Indicates the state or progress of the task",
+          "default": "notStarted",
+          "type": "string",
+          "enum": [
+            "notStarted",
+            "inProgress",
+            "completed",
+            "waitingOnOthers",
+            "deferred"
+          ],
+          "x-enumNames": [
+            "Not Started",
+            "In Progress",
+            "Completed",
+            "Waiting On Others",
+            "Deferred"
+          ]
+        },
+        "title": {
+          "x-title": "Subject",
+          "description": "A brief description of the task",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "title": {
+      "x-title": "Subject",
+      "description": "A brief description of the task",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "listId": {
+      "x-title": "List ID",
+      "description": "The identifier of the list, unique in the user's mailbox",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "delete",
+            "get",
+            "update"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:todo.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "microsoftToDoOAuth2Api",
+      "required": true
+    }
+  ]
+}

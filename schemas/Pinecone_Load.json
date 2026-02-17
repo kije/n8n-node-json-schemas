@@ -1,0 +1,112 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Pinecone: Load",
+  "description": "Load data from Pinecone Vector Store index",
+  "x-n8n-node-type": "vectorStorePineconeLoad",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "pineconeIndex": {
+      "x-title": "Pinecone Index",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "pineconeNamespace": {
+      "x-title": "Pinecone Namespace",
+      "default": "",
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "metadata": {
+          "x-title": "Metadata Filter",
+          "description": "Metadata to filter the document by",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "metadataValues": {
+              "x-title": "Fields to Set",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "x-title": "Name",
+                    "default": "",
+                    "x-required": true,
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-icon": "file:pinecone.svg",
+  "x-inputs": [
+    {
+      "displayName": "Embedding",
+      "maxConnections": 1,
+      "type": "ai_embedding",
+      "required": true
+    }
+  ],
+  "x-outputs": [
+    "ai_vectorStore"
+  ],
+  "x-credentials": [
+    {
+      "name": "pineconeApi",
+      "required": true
+    }
+  ]
+}

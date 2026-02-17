@@ -1,0 +1,545 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Microsoft Teams",
+  "description": "Consume Microsoft Teams API",
+  "x-n8n-node-type": "microsoftTeams",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "channel",
+      "type": "string",
+      "enum": [
+        "channel",
+        "channelMessage",
+        "chatMessage",
+        "task"
+      ],
+      "x-enumNames": [
+        "Channel",
+        "Channel Message (Beta)",
+        "Chat Message",
+        "Task"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a task",
+        "Delete a task",
+        "Get a task",
+        "Get many tasks",
+        "Update a task"
+      ]
+    },
+    "teamId": {
+      "x-title": "Team Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "channelMessage"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "Channel name as it will appear to the user in Microsoft Teams",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "channel"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "description": "Other options to set",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "chatMessage"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "includeLinkToWorkflow": {
+          "x-title": "Include Link to Workflow",
+          "description": "Whether to append a link to this workflow at the end of the message. This is helpful if you have many workflows sending messages.",
+          "default": true,
+          "type": "boolean"
+        }
+      }
+    },
+    "channelId": {
+      "x-title": "Channel Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "channelMessage"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "task"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "assignedTo": {
+          "x-title": "Assigned To Name or ID",
+          "description": "Who the task should be assigned to. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "bucketId": {
+          "x-title": "Bucket Name or ID",
+          "description": "The bucket for the task to belong to. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "dueDateTime": {
+          "x-title": "Due Date Time",
+          "description": "Date and time at which the task is due. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time.",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "groupId": {
+          "x-title": "Group Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "labels": {
+          "x-title": "Label Names or IDs",
+          "description": "Labels to assign to the task. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "percentComplete": {
+          "x-title": "Percent Complete",
+          "description": "Percentage of task completion. When set to 100, the task is considered completed.",
+          "default": 0,
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "planId": {
+          "x-title": "Plan Name or ID",
+          "description": "The plan for the task to belong to. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "title": {
+          "x-title": "Title",
+          "description": "Title of the task",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "messageType": {
+      "x-title": "Message Type",
+      "description": "The type of the content",
+      "default": "text",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "chatMessage"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "text",
+        "html"
+      ],
+      "x-enumNames": [
+        "Text",
+        "HTML"
+      ]
+    },
+    "message": {
+      "x-title": "Message",
+      "description": "The content of the item",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "chatMessage"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "chatId": {
+      "x-title": "Chat Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "chatMessage"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "messageId": {
+      "x-title": "Message ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "chatMessage"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "groupSource": {
+      "x-title": "Group Source",
+      "default": "all",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll",
+            "create",
+            "update"
+          ],
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "all",
+        "mine"
+      ],
+      "x-enumNames": [
+        "All Groups",
+        "My Groups"
+      ],
+      "x-enumDescriptions": [
+        "From all groups",
+        "Only load groups that account is member of"
+      ]
+    },
+    "groupId": {
+      "x-title": "Group Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "planId": {
+      "x-title": "Plan Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "task"
+          ],
+          "tasksFor": [
+            "plan"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "bucketId": {
+      "x-title": "Bucket Name or ID",
+      "description": "The bucket for the task to belong to. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "Title of the task",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "assignedTo": {
+          "x-title": "Assigned To Name or ID",
+          "description": "Who the task should be assigned to. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "dueDateTime": {
+          "x-title": "Due Date Time",
+          "description": "Date and time at which the task is due. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time.",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "labels": {
+          "x-title": "Label Names or IDs",
+          "description": "Labels to assign to the task. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "percentComplete": {
+          "x-title": "Percent Complete",
+          "description": "Percentage of task completion. When set to 100, the task is considered completed.",
+          "default": 0,
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        }
+      }
+    },
+    "taskId": {
+      "x-title": "Task ID",
+      "description": "The ID of the Task",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "tasksFor": {
+      "x-title": "Tasks For",
+      "default": "member",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "member",
+        "plan"
+      ],
+      "x-enumNames": [
+        "Group Member",
+        "Plan"
+      ],
+      "x-enumDescriptions": [
+        "Tasks assigned to group member",
+        "Tasks in group plan"
+      ]
+    },
+    "memberId": {
+      "x-title": "Member Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "task"
+          ],
+          "tasksFor": [
+            "member"
+          ]
+        }
+      },
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:teams.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "microsoftTeamsOAuth2Api",
+      "required": true
+    }
+  ]
+}
