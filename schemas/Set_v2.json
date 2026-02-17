@@ -1,0 +1,110 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Set",
+  "description": "Sets values on items and optionally remove other values",
+  "x-n8n-node-type": "set",
+  "x-n8n-version": 2,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "keepOnlySet": {
+      "x-title": "Keep Only Set",
+      "description": "Whether only the values set on this node should be kept and all others removed",
+      "default": false,
+      "type": "boolean"
+    },
+    "values": {
+      "x-title": "Values to Set",
+      "description": "The value to set",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "boolean": {
+          "x-title": "Boolean",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Name",
+                "description": "Name of the property to write data to. Supports dot-notation. Example: \"data.person[0].name\"",
+                "default": "propertyName",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "The boolean value to write in the property",
+                "default": false,
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "number": {
+          "x-title": "Number",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Name",
+                "description": "Name of the property to write data to. Supports dot-notation. Example: \"data.person[0].name\"",
+                "default": "propertyName",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "The number value to write in the property",
+                "default": 0,
+                "type": "number"
+              }
+            }
+          }
+        },
+        "string": {
+          "x-title": "String",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Name",
+                "description": "Name of the property to write data to. Supports dot-notation. Example: \"data.person[0].name\"",
+                "default": "propertyName",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "The string value to write in the property",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "dotNotation": {
+          "x-title": "Dot Notation",
+          "description": "<p>By default, dot-notation is used in property names. This means that \"a.b\" will set the property \"b\" underneath \"a\" so { \"a\": { \"b\": value} }.<p></p>If that is not intended this can be deactivated, it will then set { \"a.b\": value } instead.</p>.",
+          "default": true,
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-icon": "fa:pen",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

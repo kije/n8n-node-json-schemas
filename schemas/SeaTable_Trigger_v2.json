@@ -1,0 +1,107 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SeaTable Trigger",
+  "description": "Starts the workflow when SeaTable events occur",
+  "x-n8n-node-type": "seaTableTrigger",
+  "x-n8n-version": 2,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "event": {
+      "x-title": "Event",
+      "default": "newRow",
+      "type": "string",
+      "enum": [
+        "newRow",
+        "updatedRow",
+        "newAsset"
+      ],
+      "x-enumNames": [
+        "New Row",
+        "New or Updated Row",
+        "New Signature"
+      ],
+      "x-enumDescriptions": [
+        "Trigger on newly created rows",
+        "Trigger has recently created or modified rows",
+        "Trigger on new signatures"
+      ]
+    },
+    "tableName": {
+      "x-title": "Table Name",
+      "description": "The name of SeaTable table to access. Choose from the list, or specify the name using an <a href=\"https://docs.n8n.io/code-examples/expressions/\">expression</a>.",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "viewName": {
+      "x-title": "View Name",
+      "description": "The name of SeaTable view to access. Choose from the list, or specify the name using an <a href=\"https://docs.n8n.io/code-examples/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "event": [
+            "newRow",
+            "updatedRow"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "assetColumn": {
+      "x-title": "Signature Column",
+      "description": "Select the digital-signature column that should be tracked. Choose from the list, or specify the name using an <a href=\"https://docs.n8n.io/code-examples/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "event": [
+            "newAsset"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "simple": {
+          "x-title": "Simplify",
+          "description": "Whether to return a simplified version of the response instead of the raw data",
+          "default": true,
+          "type": "boolean"
+        },
+        "convert": {
+          "x-title": "Return Column Names",
+          "description": "Whether to return the column keys (false) or the column names (true)",
+          "default": true,
+          "x-displayOptions": {
+            "show": {
+              "/event": [
+                "newRow",
+                "updatedRow"
+              ]
+            }
+          },
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"event\"]}}",
+  "x-icon": "file:seaTable.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "seaTableApi",
+      "required": true
+    }
+  ]
+}

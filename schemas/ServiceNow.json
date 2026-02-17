@@ -1,0 +1,781 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ServiceNow",
+  "description": "Consume ServiceNow API",
+  "x-n8n-node-type": "serviceNow",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "description": "Authentication method to use",
+      "default": "oAuth2",
+      "type": "string",
+      "enum": [
+        "basicAuth",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "Basic Auth",
+        "OAuth2"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "user",
+      "type": "string",
+      "enum": [
+        "attachment",
+        "businessService",
+        "configurationItems",
+        "department",
+        "dictionary",
+        "incident",
+        "tableRecord",
+        "user",
+        "userGroup",
+        "userRole"
+      ],
+      "x-enumNames": [
+        "Attachment",
+        "Business Service",
+        "Configuration Item",
+        "Department",
+        "Dictionary",
+        "Incident",
+        "Table Record",
+        "User",
+        "User Group",
+        "User Role"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "userRole"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Get Many"
+      ]
+    },
+    "tableName": {
+      "x-title": "Table Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "tableRecord"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "id": {
+      "x-title": "User ID",
+      "description": "Unique identifier of the user",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "inputDataFieldName": {
+      "x-title": "Input Data Field Name",
+      "description": "Name of the binary property that contains the data to upload",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "attachment"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "userRole"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "sysparm_exclude_reference_link": {
+          "x-title": "Exclude Reference Link",
+          "description": "Whether to exclude Table API links for reference fields",
+          "default": false,
+          "type": "boolean"
+        },
+        "sysparm_fields": {
+          "x-title": "Field Names or IDs",
+          "description": "A list of fields to return. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sysparm_query": {
+          "x-title": "Filter",
+          "description": "An encoded query string used to filter the results. <a href=\"https://developer.servicenow.com/dev.do#!/learn/learning-plans/quebec/servicenow_application_developer/app_store_learnv2_rest_quebec_more_about_query_parameters\">More info</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "sysparm_display_value": {
+          "x-title": "Return Values",
+          "description": "Choose which values to return",
+          "default": "false",
+          "type": "string",
+          "enum": [
+            "false",
+            "all",
+            "true"
+          ],
+          "x-enumNames": [
+            "Actual Values",
+            "Both",
+            "Display Values"
+          ]
+        }
+      }
+    },
+    "attachmentId": {
+      "x-title": "Attachment ID",
+      "description": "Sys_id value of the attachment to delete",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "attachment"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "userRole"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "userRole"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "download": {
+      "x-title": "Download Attachments",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "attachment"
+          ],
+          "operation": [
+            "get",
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "outputField": {
+      "x-title": "Output Field",
+      "description": "Field name where downloaded data will be placed",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "attachment"
+          ],
+          "operation": [
+            "get",
+            "getAll"
+          ],
+          "download": [
+            true
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "short_description": {
+      "x-title": "Short Description",
+      "description": "Short description of the user",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "active": {
+          "x-title": "Active",
+          "description": "Whether to activate the user",
+          "default": false,
+          "type": "boolean"
+        },
+        "building": {
+          "x-title": "Building",
+          "description": "The Building address",
+          "default": "",
+          "type": "string"
+        },
+        "city": {
+          "x-title": "City",
+          "description": "City of the user",
+          "default": "",
+          "type": "string"
+        },
+        "company": {
+          "x-title": "Company",
+          "description": "The name of the company for the user",
+          "default": "",
+          "type": "string"
+        },
+        "country": {
+          "x-title": "Country",
+          "description": "Country of the user",
+          "default": "",
+          "type": "string"
+        },
+        "department": {
+          "x-title": "Department",
+          "description": "Department of the user",
+          "default": "",
+          "type": "string"
+        },
+        "email": {
+          "x-title": "Email",
+          "description": "The email address associated with the user",
+          "default": "",
+          "type": "string"
+        },
+        "first_name": {
+          "x-title": "First Name",
+          "description": "The first name of the user",
+          "default": "",
+          "type": "string"
+        },
+        "gender": {
+          "x-title": "Gender",
+          "description": "The gender of the user",
+          "default": "",
+          "type": "string"
+        },
+        "home_phone": {
+          "x-title": "Home Phone",
+          "description": "Home phone of the user",
+          "default": "",
+          "type": "string"
+        },
+        "last_name": {
+          "x-title": "Last Name",
+          "description": "The last name of the user",
+          "default": "",
+          "type": "string"
+        },
+        "location": {
+          "x-title": "Location",
+          "description": "Location of the user",
+          "default": "",
+          "type": "string"
+        },
+        "manager": {
+          "x-title": "Manager",
+          "description": "Manager of the user",
+          "default": "",
+          "type": "string"
+        },
+        "middle_name": {
+          "x-title": "Middle Name",
+          "description": "The middle name of the user",
+          "default": "",
+          "type": "string"
+        },
+        "mobile_phone": {
+          "x-title": "Mobile Phone",
+          "description": "Mobile phone number of the user",
+          "default": "",
+          "type": "string"
+        },
+        "user_password": {
+          "x-title": "Password",
+          "description": "The user's password",
+          "default": "",
+          "type": "string",
+          "format": "password"
+        },
+        "password_needs_reset": {
+          "x-title": "Password Needs Reset",
+          "description": "Whether to require a password reset when the user logs in",
+          "default": false,
+          "type": "boolean"
+        },
+        "phone": {
+          "x-title": "Phone",
+          "description": "The main phone number of the user",
+          "default": "",
+          "type": "string"
+        },
+        "roles": {
+          "x-title": "Role Names or IDs",
+          "description": "Roles of the user. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "source": {
+          "x-title": "Source",
+          "default": "",
+          "type": "string"
+        },
+        "state": {
+          "x-title": "State",
+          "description": "State for the user",
+          "default": "",
+          "type": "string"
+        },
+        "street": {
+          "x-title": "Street",
+          "description": "Street information for the user separated by comma",
+          "default": "",
+          "type": "string"
+        },
+        "user_name": {
+          "x-title": "Username",
+          "description": "A username associated with the user (e.g. user_name.123)",
+          "default": "",
+          "type": "string"
+        },
+        "zip": {
+          "x-title": "Zip Code",
+          "description": "Zip code for the user",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "active": {
+          "x-title": "Active",
+          "description": "Whether to activate the user",
+          "default": false,
+          "type": "boolean"
+        },
+        "building": {
+          "x-title": "Building",
+          "description": "The Building address",
+          "default": "",
+          "type": "string"
+        },
+        "city": {
+          "x-title": "City",
+          "description": "City of the user",
+          "default": "",
+          "type": "string"
+        },
+        "company": {
+          "x-title": "Company",
+          "description": "The name of the company for the user",
+          "default": "",
+          "type": "string"
+        },
+        "country": {
+          "x-title": "Country",
+          "description": "Country of the user",
+          "default": "",
+          "type": "string"
+        },
+        "department": {
+          "x-title": "Department",
+          "description": "Department of the user",
+          "default": "",
+          "type": "string"
+        },
+        "email": {
+          "x-title": "Email",
+          "description": "The email address associated with the user",
+          "default": "",
+          "type": "string"
+        },
+        "first_name": {
+          "x-title": "First Name",
+          "description": "The first name of the user",
+          "default": "",
+          "type": "string"
+        },
+        "gender": {
+          "x-title": "Gender",
+          "description": "The gender of the user",
+          "default": "",
+          "type": "string"
+        },
+        "home_phone": {
+          "x-title": "Home Phone",
+          "description": "Home phone of the user",
+          "default": "",
+          "type": "string"
+        },
+        "last_name": {
+          "x-title": "Last Name",
+          "description": "The last name of the user",
+          "default": "",
+          "type": "string"
+        },
+        "location": {
+          "x-title": "Location",
+          "description": "Location of the user",
+          "default": "",
+          "type": "string"
+        },
+        "manager": {
+          "x-title": "Manager",
+          "description": "Manager of the user",
+          "default": "",
+          "type": "string"
+        },
+        "middle_name": {
+          "x-title": "Middle Name",
+          "description": "The middle name of the user",
+          "default": "",
+          "type": "string"
+        },
+        "mobile_phone": {
+          "x-title": "Mobile Phone",
+          "description": "Mobile phone number of the user",
+          "default": "",
+          "type": "string"
+        },
+        "user_password": {
+          "x-title": "Password",
+          "description": "The user's password",
+          "default": "",
+          "type": "string",
+          "format": "password"
+        },
+        "password_needs_reset": {
+          "x-title": "Password Needs Reset",
+          "description": "Whether to require a password reset when the user logs in",
+          "default": false,
+          "type": "boolean"
+        },
+        "phone": {
+          "x-title": "Phone",
+          "description": "The main phone number of the user",
+          "default": "",
+          "type": "string"
+        },
+        "roles": {
+          "x-title": "Role Names or IDs",
+          "description": "Roles of the user. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "source": {
+          "x-title": "Source",
+          "default": "",
+          "type": "string"
+        },
+        "state": {
+          "x-title": "State",
+          "description": "State for the user",
+          "default": "",
+          "type": "string"
+        },
+        "street": {
+          "x-title": "Street",
+          "description": "Street information for the user separated by comma",
+          "default": "",
+          "type": "string"
+        },
+        "user_name": {
+          "x-title": "Username",
+          "description": "A username associated with the user (e.g. user_name.123)",
+          "default": "",
+          "type": "string"
+        },
+        "zip": {
+          "x-title": "Zip Code",
+          "description": "Zip code for the user",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "dataToSend": {
+      "x-title": "Data to Send",
+      "default": "columns",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "tableRecord"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "mapInput",
+        "columns",
+        "nothing"
+      ],
+      "x-enumNames": [
+        "Auto-Map Input Data to Columns",
+        "Define Below for Each Column",
+        "Nothing"
+      ],
+      "x-enumDescriptions": [
+        "Use when node input names match destination field names",
+        "Set the value for each destination column",
+        "Don't send any column data"
+      ]
+    },
+    "inputsToIgnore": {
+      "x-title": "Inputs to Ignore",
+      "description": "List of input properties to avoid sending, separated by commas. Leave empty to send all inputs.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "tableRecord"
+          ],
+          "operation": [
+            "update"
+          ],
+          "dataToSend": [
+            "mapInput"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "fieldsToSend": {
+      "x-title": "Fields to Send",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "tableRecord"
+          ],
+          "operation": [
+            "update"
+          ],
+          "dataToSend": [
+            "columns"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "field": {
+          "x-title": "Field",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "column": {
+                "x-title": "Field Name or ID",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": "",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Field Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "getOption": {
+      "x-title": "Retrieve Identifier",
+      "description": "Unique identifier of the user",
+      "default": "id",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "id",
+        "user_name"
+      ],
+      "x-enumNames": [
+        "ID",
+        "Username"
+      ]
+    },
+    "user_name": {
+      "x-title": "Username",
+      "description": "Unique identifier of the user",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ],
+          "getOption": [
+            "user_name"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:servicenow.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "serviceNowOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    },
+    {
+      "name": "serviceNowBasicApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "basicAuth"
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Read/Write Files from Disk",
+  "description": "Read or write files from the computer that runs n8n",
+  "x-n8n-node-type": "readWriteFile",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "operation": {
+      "x-title": "Operation",
+      "default": "read",
+      "type": "string",
+      "enum": [
+        "read",
+        "write"
+      ],
+      "x-enumNames": [
+        "Read File(s) From Disk",
+        "Write File to Disk"
+      ],
+      "x-enumDescriptions": [
+        "Retrieve one or more files from the computer that runs n8n",
+        "Create a binary file on the computer that runs n8n"
+      ]
+    },
+    "fileSelector": {
+      "x-title": "File(s) Selector",
+      "description": "Specify a file's path or path pattern to read multiple files. Always use forward-slashes for path separator even on Windows.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "read"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "write"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "append": {
+          "x-title": "Append",
+          "description": "Whether to append to an existing file. While it's commonly used with text files, it's not limited to them, however, it wouldn't be applicable for file types that have a specific structure like most binary formats.",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "fileName": {
+      "x-title": "File Path and Name",
+      "description": "Path and name of the file that should be written. Also include the file extension.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "write"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "dataPropertyName": {
+      "x-title": "Input Binary Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "write"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-icon": "file:readWriteFile.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

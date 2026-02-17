@@ -1,0 +1,119 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Pushcut",
+  "description": "Consume Pushcut API",
+  "x-n8n-node-type": "pushcut",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "notification",
+      "type": "string",
+      "enum": [
+        "notification"
+      ],
+      "x-enumNames": [
+        "Notification"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "send",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "notification"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "send"
+      ],
+      "x-enumNames": [
+        "Send"
+      ],
+      "x-enumDescriptions": [
+        "Send a notification"
+      ]
+    },
+    "notificationName": {
+      "x-title": "Notification Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "notification"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "notification"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "devices": {
+          "x-title": "Device Names or IDs",
+          "description": "List of devices this notification is sent to. (default is all devices). Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "input": {
+          "x-title": "Input",
+          "description": "Value that is passed as input to the notification action",
+          "default": "",
+          "type": "string"
+        },
+        "text": {
+          "x-title": "Text",
+          "description": "Text that is used instead of the one defined in the app",
+          "default": "",
+          "type": "string"
+        },
+        "title": {
+          "x-title": "Title",
+          "description": "Title that is used instead of the one defined in the app",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:pushcut.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "pushcutApi",
+      "required": true
+    }
+  ]
+}

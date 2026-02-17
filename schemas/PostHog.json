@@ -1,0 +1,224 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PostHog",
+  "description": "Consume PostHog API",
+  "x-n8n-node-type": "postHog",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "event",
+      "type": "string",
+      "enum": [
+        "alias",
+        "event",
+        "identity",
+        "track"
+      ],
+      "x-enumNames": [
+        "Alias",
+        "Event",
+        "Identity",
+        "Track"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "page",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "track"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "page",
+        "screen"
+      ],
+      "x-enumNames": [
+        "Page",
+        "Screen"
+      ],
+      "x-enumDescriptions": [
+        "Track a page",
+        "Track a screen"
+      ]
+    },
+    "alias": {
+      "x-title": "Alias",
+      "description": "The name of the alias",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "alias"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "distinctId": {
+      "x-title": "Distinct ID",
+      "description": "The user's distinct ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "track"
+          ],
+          "operation": [
+            "page",
+            "screen"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "track"
+          ],
+          "operation": [
+            "page",
+            "screen"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "category": {
+          "x-title": "Category",
+          "default": "",
+          "type": "string"
+        },
+        "contextUi": {
+          "x-title": "Context",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "contextValues": {
+              "x-title": "Context",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "x-title": "Key",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "messageId": {
+          "x-title": "Message ID",
+          "default": "",
+          "type": "string"
+        },
+        "propertiesUi": {
+          "x-title": "Properties",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "propertyValues": {
+              "x-title": "Property",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "x-title": "Key",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "timestamp": {
+          "x-title": "Timestamp",
+          "description": "If not set, it'll automatically be set to the current time",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "eventName": {
+      "x-title": "Event",
+      "description": "The name of the event",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "name": {
+      "x-title": "Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "track"
+          ],
+          "operation": [
+            "page",
+            "screen"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:postHog.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "postHogApi",
+      "required": true
+    }
+  ]
+}

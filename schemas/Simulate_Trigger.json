@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Simulate Trigger",
+  "description": "Simulate a trigger node",
+  "x-n8n-node-type": "simulateTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "icon": {
+      "x-title": "Icon to Display on Canvas",
+      "description": "Select a type of node to show corresponding icon",
+      "default": "n8n-nodes-base.manualTrigger",
+      "type": "string"
+    },
+    "subtitle": {
+      "x-title": "Subtitle",
+      "default": "",
+      "type": "string"
+    },
+    "jsonOutput": {
+      "x-title": "Output (JSON)",
+      "default": "[\n  {\n  \"my_field_1\": \"value\",\n  \"my_field_2\": 1\n  }\n]",
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "executionDuration": {
+      "x-title": "Execution Duration (MS)",
+      "description": "Execution duration in milliseconds",
+      "default": 150,
+      "type": "number",
+      "minimum": 0
+    }
+  },
+  "x-subtitle": "={{$parameter.subtitle || undefined}}",
+  "x-icon": "fa:arrow-right",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ]
+}

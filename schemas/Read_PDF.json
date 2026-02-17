@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Read PDF",
+  "description": "Reads a PDF and extracts its content",
+  "x-n8n-node-type": "readPDF",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "binaryPropertyName": {
+      "x-title": "Input Binary Field",
+      "description": "Name of the binary property from which to read the PDF file",
+      "default": "data",
+      "x-required": true,
+      "type": "string"
+    },
+    "encrypted": {
+      "x-title": "Encrypted",
+      "default": false,
+      "x-required": true,
+      "type": "boolean"
+    },
+    "password": {
+      "x-title": "Password",
+      "description": "Password to decrypt the PDF file with",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "encrypted": [
+            true
+          ]
+        }
+      },
+      "type": "string",
+      "format": "password"
+    }
+  },
+  "x-icon": "fa:file-pdf",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

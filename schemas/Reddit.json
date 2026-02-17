@@ -1,0 +1,504 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Reddit",
+  "description": "Consume the Reddit API",
+  "x-n8n-node-type": "reddit",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "post",
+      "type": "string",
+      "enum": [
+        "post",
+        "postComment",
+        "profile",
+        "subreddit",
+        "user"
+      ],
+      "x-enumNames": [
+        "Post",
+        "Post Comment",
+        "Profile",
+        "Subreddit",
+        "User"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "get"
+      ],
+      "x-enumNames": [
+        "Get"
+      ]
+    },
+    "postId": {
+      "x-title": "Post ID",
+      "description": "ID of the post to retrieve. Found in the post URL: <code>/r/[subreddit_name]/comments/[post_id]/[post_title]</code>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "commentText": {
+      "x-title": "Comment Text",
+      "description": "Text of the comment. Markdown supported.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "postComment"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "subreddit": {
+      "x-title": "Subreddit",
+      "description": "The name of subreddit to search in",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "search"
+          ],
+          "location": [
+            "subreddit"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ],
+          "details": [
+            "overview",
+            "submitted",
+            "comments",
+            "gilded"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ],
+          "details": [
+            "comments",
+            "gilded",
+            "overview",
+            "submitted"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "commentId": {
+      "x-title": "Comment ID",
+      "description": "ID of the comment to reply to. To be found in the comment URL: <code>www.reddit.com/r/[subreddit_name]/comments/[post_id]/[post_title]/[comment_id]</code>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "postComment"
+          ],
+          "operation": [
+            "reply"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "replyText": {
+      "x-title": "Reply Text",
+      "description": "Text of the reply. Markdown supported.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "postComment"
+          ],
+          "operation": [
+            "reply"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "details": {
+      "x-title": "Details",
+      "description": "Details of the user to retrieve",
+      "default": "about",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "about",
+        "comments",
+        "gilded",
+        "overview",
+        "submitted"
+      ],
+      "x-enumNames": [
+        "About",
+        "Comments",
+        "Gilded",
+        "Overview",
+        "Submitted"
+      ]
+    },
+    "content": {
+      "x-title": "Content",
+      "description": "Subreddit content to retrieve",
+      "default": "about",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "subreddit"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "about",
+        "rules"
+      ],
+      "x-enumNames": [
+        "About",
+        "Rules"
+      ]
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "category": {
+          "x-title": "Category",
+          "description": "Category of the posts to retrieve",
+          "default": "top",
+          "type": "string",
+          "enum": [
+            "top",
+            "hot",
+            "new",
+            "rising"
+          ],
+          "x-enumNames": [
+            "Top Posts",
+            "Hot Posts",
+            "New Posts",
+            "Rising Posts"
+          ]
+        }
+      }
+    },
+    "kind": {
+      "x-title": "Kind",
+      "description": "The kind of the post to create",
+      "default": "self",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "self",
+        "link",
+        "image"
+      ],
+      "x-enumNames": [
+        "Text Post",
+        "Link Post",
+        "Image Post"
+      ]
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "Title of the post, up to 300 characters long",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "url": {
+      "x-title": "URL",
+      "description": "URL of the post",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ],
+          "kind": [
+            "link",
+            "image"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "text": {
+      "x-title": "Text",
+      "description": "Text of the post. Markdown supported.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ],
+          "kind": [
+            "self"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "resubmit": {
+      "x-title": "Resubmit",
+      "description": "Whether the URL will be posted even if it was already posted to the subreddit before. Otherwise, the re-posting will trigger an error.",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ],
+          "kind": [
+            "link",
+            "image"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "location": {
+      "x-title": "Location",
+      "description": "Location where to search for posts",
+      "default": "subreddit",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "allReddit",
+        "subreddit"
+      ],
+      "x-enumNames": [
+        "All Reddit",
+        "Subreddit"
+      ],
+      "x-enumDescriptions": [
+        "Search for posts in all of Reddit",
+        "Search for posts in a specific subreddit"
+      ]
+    },
+    "keyword": {
+      "x-title": "Keyword",
+      "description": "The keyword for the search",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "sort": {
+          "x-title": "Sort",
+          "description": "The category to sort results by",
+          "default": "relevance",
+          "type": "string",
+          "enum": [
+            "comments",
+            "hot",
+            "new",
+            "relevance",
+            "top"
+          ],
+          "x-enumNames": [
+            "Comments",
+            "Hot",
+            "New",
+            "Relevance",
+            "Top"
+          ]
+        }
+      }
+    },
+    "username": {
+      "x-title": "Username",
+      "description": "Reddit ID of the user to retrieve",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:reddit.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "redditOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "postComment",
+            "post",
+            "profile"
+          ]
+        }
+      }
+    }
+  ]
+}

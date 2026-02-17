@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Stop and Error",
+  "description": "Throw an error in the workflow",
+  "x-n8n-node-type": "stopAndError",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "errorType": {
+      "x-title": "Error Type",
+      "description": "Type of error to throw",
+      "default": "errorMessage",
+      "type": "string",
+      "enum": [
+        "errorMessage",
+        "errorObject"
+      ],
+      "x-enumNames": [
+        "Error Message",
+        "Error Object"
+      ]
+    },
+    "errorMessage": {
+      "x-title": "Error Message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "errorType": [
+            "errorMessage"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "errorObject": {
+      "x-title": "Error Object",
+      "description": "Object containing error properties",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "errorType": [
+            "errorObject"
+          ]
+        }
+      },
+      "x-required": true,
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    }
+  },
+  "x-icon": "fa:exclamation-triangle",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": []
+}

@@ -1,0 +1,403 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Segment",
+  "description": "Consume Segment API",
+  "x-n8n-node-type": "segment",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "identify",
+      "type": "string",
+      "enum": [
+        "group",
+        "identify",
+        "track"
+      ],
+      "x-enumNames": [
+        "Group",
+        "Identify",
+        "Track"
+      ],
+      "x-enumDescriptions": [
+        "Group lets you associate an identified user with a group",
+        "Identify lets you tie a user to their actions",
+        "Track lets you record events"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "event",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "track"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "event",
+        "page"
+      ],
+      "x-enumNames": [
+        "Event",
+        "Page"
+      ],
+      "x-enumDescriptions": [
+        "Record the actions your users perform. Every action triggers an event, which can also have associated properties.",
+        "Record page views on your website, along with optional extra information about the page being viewed"
+      ]
+    },
+    "userId": {
+      "x-title": "User ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "track"
+          ],
+          "operation": [
+            "page"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "groupId": {
+      "x-title": "Group ID",
+      "description": "A Group ID is the unique identifier which you recognize a group by in your own database",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "traits": {
+      "x-title": "Traits",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "identify"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "traitsUi": {
+          "x-title": "Trait",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "x-title": "Key",
+                "default": "",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "context": {
+      "x-title": "Context",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "track"
+          ],
+          "operation": [
+            "page"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "contextUi": {
+          "x-title": "Context",
+          "type": "object",
+          "properties": {
+            "active": {
+              "x-title": "Active",
+              "description": "Whether a user is active",
+              "default": false,
+              "type": "boolean"
+            },
+            "ip": {
+              "x-title": "IP",
+              "description": "Current user’s IP address",
+              "default": "",
+              "type": "string"
+            },
+            "locate": {
+              "x-title": "Locale",
+              "description": "Locale string for the current user, for example en-US",
+              "default": "",
+              "type": "string"
+            },
+            "page": {
+              "x-title": "Page",
+              "description": "Dictionary of information about the current page in the browser, containing hash, path, referrer, search, title and URL",
+              "default": "",
+              "type": "string"
+            },
+            "timezone": {
+              "x-title": "Timezone",
+              "description": "Timezones are sent as tzdata strings to add user timezone information which might be stripped from the timestamp, for example America/New_York",
+              "default": "",
+              "type": "string"
+            },
+            "app": {
+              "x-title": "App",
+              "default": {},
+              "type": "object",
+              "properties": {
+                "appUi": {
+                  "x-title": "App",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "x-title": "Name",
+                      "default": "",
+                      "type": "string"
+                    },
+                    "version": {
+                      "x-title": "Version",
+                      "default": "",
+                      "type": "string"
+                    },
+                    "build": {
+                      "x-title": "Build",
+                      "default": "",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "campaign": {
+              "x-title": "Campaign",
+              "default": {},
+              "type": "object",
+              "properties": {
+                "campaignUi": {
+                  "x-title": "Campaign",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "x-title": "Name",
+                      "default": "",
+                      "type": "string"
+                    },
+                    "source": {
+                      "x-title": "Source",
+                      "default": "",
+                      "type": "string"
+                    },
+                    "medium": {
+                      "x-title": "Medium",
+                      "default": "",
+                      "type": "string"
+                    },
+                    "term": {
+                      "x-title": "Term",
+                      "default": "",
+                      "type": "string"
+                    },
+                    "content": {
+                      "x-title": "Content",
+                      "default": "",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "device": {
+              "x-title": "Device",
+              "default": {},
+              "type": "object",
+              "properties": {
+                "deviceUi": {
+                  "x-title": "Device",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "x-title": "ID",
+                      "default": "",
+                      "type": "string"
+                    },
+                    "manufacturer": {
+                      "x-title": "Manufacturer",
+                      "default": "",
+                      "type": "string"
+                    },
+                    "model": {
+                      "x-title": "Model",
+                      "default": "",
+                      "type": "string"
+                    },
+                    "name": {
+                      "x-title": "Name",
+                      "default": "",
+                      "type": "string"
+                    },
+                    "type": {
+                      "x-title": "Type",
+                      "default": "",
+                      "type": "string"
+                    },
+                    "version": {
+                      "x-title": "Version",
+                      "default": "",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "integrations": {
+      "x-title": "Integration",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "track"
+          ],
+          "operation": [
+            "page"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "integrationsUi": {
+          "x-title": "Integration",
+          "type": "object",
+          "properties": {
+            "all": {
+              "x-title": "All",
+              "default": true,
+              "type": "boolean"
+            },
+            "salesforce": {
+              "x-title": "Salesforce",
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "event": {
+      "x-title": "Event",
+      "description": "Name of the action that a user has performed",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "track"
+          ],
+          "operation": [
+            "event"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "properties": {
+      "x-title": "Properties",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "track"
+          ],
+          "operation": [
+            "page"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "propertiesUi": {
+          "x-title": "Property",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "x-title": "Key",
+                "default": "",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "Name of the page For example, most sites have a “Signup” page that can be useful to tag, so you can see users as they move through your funnel",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "track"
+          ],
+          "operation": [
+            "page"
+          ]
+        }
+      },
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \":\" + $parameter[\"resource\"]}}",
+  "x-icon": "file:segment.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "segmentApi",
+      "required": true
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Redis Chat Memory",
+  "description": "Stores the chat history in Redis.",
+  "x-n8n-node-type": "memoryRedisChat",
+  "x-n8n-version": [
+    1,
+    1.1,
+    1.2,
+    1.3,
+    1.4,
+    1.5
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "sessionKey": {
+      "x-title": "Key",
+      "description": "The key to use to store session ID in the memory",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "sessionIdType": [
+            "customKey"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "sessionIdType": {
+      "x-title": "Session ID",
+      "default": "fromInput",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.2
+              }
+            }
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "fromInput",
+        "customKey"
+      ],
+      "x-enumNames": [
+        "Connected Chat Trigger Node",
+        "Define below"
+      ],
+      "x-enumDescriptions": [
+        "Looks for an input field called 'sessionId' that is coming from a directly connected Chat Trigger",
+        "Use an expression to reference data in previous nodes or enter static text"
+      ]
+    },
+    "sessionTTL": {
+      "x-title": "Session Time To Live",
+      "description": "For how long the session should be stored in seconds. If set to 0 it will not expire.",
+      "default": 0,
+      "type": "number"
+    },
+    "contextWindowLength": {
+      "x-title": "Context Window Length",
+      "default": 5,
+      "x-displayOptions": {
+        "hide": {
+          "@version": [
+            {
+              "_cnd": {
+                "lt": 1.3
+              }
+            }
+          ]
+        }
+      },
+      "type": "number"
+    }
+  },
+  "x-icon": "file:redis.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "ai_memory"
+  ],
+  "x-credentials": [
+    {
+      "name": "redis",
+      "required": true
+    }
+  ]
+}

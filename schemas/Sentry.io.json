@@ -1,0 +1,422 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Sentry.io",
+  "description": "Consume Sentry.io API",
+  "x-n8n-node-type": "sentryIo",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "accessToken",
+      "type": "string",
+      "enum": [
+        "accessToken",
+        "oAuth2",
+        "accessTokenServer"
+      ],
+      "x-enumNames": [
+        "Access Token (Cloud)",
+        "OAuth2 (Cloud)",
+        "Access Token (Self Hosted)"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "event",
+      "type": "string",
+      "enum": [
+        "event",
+        "issue",
+        "organization",
+        "project",
+        "release",
+        "team"
+      ],
+      "x-enumNames": [
+        "Event",
+        "Issue",
+        "Organization",
+        "Project",
+        "Release",
+        "Team"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "team"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a new team",
+        "Delete a team",
+        "Get team by slug",
+        "Get many teams",
+        "Update a team"
+      ]
+    },
+    "organizationSlug": {
+      "x-title": "Organization Slug Name or ID",
+      "description": "The slug of the organization the team belongs to. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "team"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "projectSlug": {
+      "x-title": "Project Slug Name or ID",
+      "description": "The slug of the project to delete. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "project"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "full": {
+      "x-title": "Full",
+      "description": "Whether the event payload will include the full event body, including the stack trace",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "team"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "team"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "eventId": {
+      "x-title": "Event ID",
+      "description": "The ID of the event to retrieve (either the numeric primary-key or the hexadecimal ID as reported by the raven client)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "issueId": {
+      "x-title": "Issue ID",
+      "description": "ID of issue to get",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "issue"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "team"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "slug": {
+          "x-title": "Slug",
+          "description": "The optional slug for this team. If not provided it will be auto generated from the name.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "The name of the team",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "team"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "agreeTerms": {
+      "x-title": "Agree to Terms",
+      "description": "Whether you agree to the applicable terms of service and privacy policy of Sentry.io",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "organization_slug": {
+      "x-title": "Slug Name or ID",
+      "description": "The slug of the organization to update. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "team"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "name": {
+          "x-title": "Name",
+          "description": "The new name of the team",
+          "default": "",
+          "type": "string"
+        },
+        "slug": {
+          "x-title": "Slug",
+          "description": "The new slug of the team. Must be unique and available.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "teamSlug": {
+      "x-title": "Team Slug Name or ID",
+      "description": "The slug of the team to delete. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "team"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "version": {
+      "x-title": "Version",
+      "description": "A version identifier for this release. Can be a version number, a commit hash etc.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "release"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "url": {
+      "x-title": "URL",
+      "description": "A URL that points to the release. This can be the path to an online interface to the sourcecode for instance.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "release"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "projects": {
+      "x-title": "Project Names or IDs",
+      "description": "A list of project slugs that are involved in this release. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "release"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": {
+    "light": "file:sentryio.svg",
+    "dark": "file:sentryio.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "sentryIoOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    },
+    {
+      "name": "sentryIoApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "accessToken"
+          ]
+        }
+      }
+    },
+    {
+      "name": "sentryIoServerApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "accessTokenServer"
+          ]
+        }
+      }
+    }
+  ]
+}

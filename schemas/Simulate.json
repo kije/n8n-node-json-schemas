@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Simulate",
+  "description": "Simulate a node",
+  "x-n8n-node-type": "simulate",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "organization"
+  ],
+  "type": "object",
+  "properties": {
+    "icon": {
+      "x-title": "Icon to Display on Canvas",
+      "description": "Select a type of node to show corresponding icon",
+      "default": "n8n-nodes-base.noOp",
+      "type": "string"
+    },
+    "subtitle": {
+      "x-title": "Subtitle",
+      "default": "",
+      "type": "string"
+    },
+    "output": {
+      "x-title": "Output",
+      "default": "all",
+      "type": "string",
+      "enum": [
+        "all",
+        "specify",
+        "custom"
+      ],
+      "x-enumNames": [
+        "Returns all input items",
+        "Specify how many of input items to return",
+        "Specify output as JSON"
+      ]
+    },
+    "numberOfItems": {
+      "x-title": "Number of Items",
+      "description": "Number input of items to return, if greater then input length all items will be returned",
+      "default": 1,
+      "x-displayOptions": {
+        "show": {
+          "output": [
+            "specify"
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "jsonOutput": {
+      "x-title": "JSON",
+      "default": "[\n  {\n  \"my_field_1\": \"value\",\n  \"my_field_2\": 1\n  }\n]",
+      "x-displayOptions": {
+        "show": {
+          "output": [
+            "custom"
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "executionDuration": {
+      "x-title": "Execution Duration (MS)",
+      "description": "Execution duration in milliseconds",
+      "default": 150,
+      "type": "number",
+      "minimum": 0
+    }
+  },
+  "x-subtitle": "={{$parameter.subtitle || undefined}}",
+  "x-icon": "fa:arrow-right",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Rename Keys",
+  "description": "Update item field names",
+  "x-n8n-node-type": "renameKeys",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "keys": {
+      "x-title": "Keys",
+      "description": "Adds a key which should be renamed",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "key": {
+          "x-title": "Key",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "currentKey": {
+                "x-title": "Current Key Name",
+                "description": "The current name of the key. It is also possible to define deep keys by using dot-notation like for example: \"level1.level2.currentKey\".",
+                "default": "",
+                "type": "string"
+              },
+              "newKey": {
+                "x-title": "New Key Name",
+                "description": "The name the key should be renamed to. It is also possible to define deep keys by using dot-notation like for example: \"level1.level2.newKey\".",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "additionalOptions": {
+      "x-title": "Additional Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "regexReplacement": {
+          "x-title": "Regex",
+          "description": "Adds a regular expression",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "replacements": {
+              "x-title": "Replacement",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "searchRegex": {
+                    "x-title": "Regular Expression",
+                    "description": "Regex to match the key name",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "replaceRegex": {
+                    "x-title": "Replace With",
+                    "description": "The name the key/s should be renamed to. It's possible to use regex captures e.g. $1, $2, ...",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "options": {
+                    "x-title": "Options",
+                    "default": {},
+                    "type": "object",
+                    "properties": {
+                      "caseInsensitive": {
+                        "x-title": "Case Insensitive",
+                        "description": "Whether to use case insensitive match",
+                        "default": false,
+                        "type": "boolean"
+                      },
+                      "depth": {
+                        "x-title": "Max Depth",
+                        "description": "Maximum depth to replace keys",
+                        "default": -1,
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-icon": "fa:edit",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QuestDB",
+  "description": "Get, add and update data in QuestDB",
+  "x-n8n-node-type": "questDb",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "operation": {
+      "x-title": "Operation",
+      "default": "insert",
+      "type": "string",
+      "enum": [
+        "executeQuery",
+        "insert"
+      ],
+      "x-enumNames": [
+        "Execute Query",
+        "Insert"
+      ],
+      "x-enumDescriptions": [
+        "Executes a SQL query",
+        "Insert rows in database"
+      ]
+    },
+    "query": {
+      "x-title": "Query",
+      "description": "The SQL query to execute. You can use n8n expressions or $1 and $2 in conjunction with query parameters.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "executeQuery"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-editor": "sqlEditor"
+    },
+    "schema": {
+      "x-title": "Schema",
+      "description": "Name of the schema the table belongs to",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "insert"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "table": {
+      "x-title": "Table",
+      "description": "Name of the table in which to insert data to",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "insert"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "columns": {
+      "x-title": "Columns",
+      "description": "Comma-separated list of the properties which should used as columns for the new rows",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "insert"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "returnFields": {
+      "x-title": "Return Fields",
+      "description": "Comma-separated list of the fields that the operation will return",
+      "default": "*",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "insert"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "insert"
+          ]
+        }
+      },
+      "type": "string"
+    }
+  },
+  "x-icon": "file:questdb.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "questDb",
+      "required": true
+    }
+  ]
+}

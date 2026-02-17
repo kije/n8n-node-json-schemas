@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Split In Batches",
+  "description": "Split data into batches and iterate over each batch",
+  "x-n8n-node-type": "splitInBatches",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "organization"
+  ],
+  "type": "object",
+  "properties": {
+    "batchSize": {
+      "x-title": "Batch Size",
+      "description": "The number of items to return with each call",
+      "default": 10,
+      "type": "number",
+      "minimum": 1
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "reset": {
+          "x-title": "Reset",
+          "description": "Whether the node will be reset and so with the current input-data newly initialized",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-icon": "fa:th-large",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

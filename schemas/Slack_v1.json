@@ -1,0 +1,1654 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Slack",
+  "description": "Consume Slack API",
+  "x-n8n-node-type": "slack",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "accessToken",
+      "type": "string",
+      "enum": [
+        "accessToken",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "Access Token",
+        "OAuth2"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "message",
+      "type": "string",
+      "enum": [
+        "channel",
+        "file",
+        "message",
+        "reaction",
+        "star",
+        "user",
+        "userGroup",
+        "userProfile"
+      ],
+      "x-enumNames": [
+        "Channel",
+        "File",
+        "Message",
+        "Reaction",
+        "Star",
+        "User",
+        "User Group",
+        "User Profile"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "userProfile"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "get",
+        "update"
+      ],
+      "x-enumNames": [
+        "Get",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Get your user's profile",
+        "Update user's profile"
+      ]
+    },
+    "channelId": {
+      "x-title": "Channel Name or ID",
+      "description": "Channel containing the message. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "reaction"
+          ],
+          "operation": [
+            "add",
+            "get",
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "userProfile"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "include_labels": {
+          "x-title": "Include Labels",
+          "description": "Whether to include labels for each ID in custom profile fields",
+          "default": false,
+          "type": "boolean"
+        },
+        "user": {
+          "x-title": "User ID",
+          "description": "User to retrieve profile info for",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "userIds": {
+      "x-title": "User Names or IDs",
+      "description": "The ID of the user to invite into channel. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "invite"
+          ],
+          "resource": [
+            "channel"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "userId": {
+      "x-title": "User Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "kick"
+          ],
+          "resource": [
+            "channel"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "userGroup"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "userGroup"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "channelId": {
+          "x-title": "Channel Name or ID",
+          "description": "Channel containing the file to be listed. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "showFilesHidden": {
+          "x-title": "Show Files Hidden By Limit",
+          "description": "Whether to show truncated file info for files hidden due to being too old, and the team who owns the file being over the file limit",
+          "default": false,
+          "type": "boolean"
+        },
+        "tsFrom": {
+          "x-title": "Timestamp From",
+          "description": "Filter files created after this timestamp (inclusive)",
+          "default": "",
+          "type": "string"
+        },
+        "tsTo": {
+          "x-title": "Timestamp To",
+          "description": "Filter files created before this timestamp (inclusive)",
+          "default": "",
+          "type": "string"
+        },
+        "types": {
+          "x-title": "Types",
+          "description": "Filter files by type",
+          "default": [
+            "all"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "all",
+              "gdocs",
+              "images",
+              "pdfs",
+              "snippets",
+              "spaces",
+              "zips"
+            ]
+          },
+          "x-enumNames": [
+            "All",
+            "Google Docs",
+            "Images",
+            "PDFs",
+            "Snippets",
+            "Spaces",
+            "zips"
+          ]
+        },
+        "userId": {
+          "x-title": "User Name or ID",
+          "description": "Filter files created by a single user. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "resolveData": {
+      "x-title": "Resolve Data",
+      "description": "Whether to resolve the data automatically. By default the response only contain the ID to resource.",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "channel"
+          ],
+          "operation": [
+            "member"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "options": {
+      "x-title": "Options",
+      "description": "Other options to set",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "channelIds": {
+          "x-title": "Channel Names or IDs",
+          "description": "The channels to send the file to. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fileName": {
+          "x-title": "File Name",
+          "description": "Filename of file",
+          "default": "",
+          "type": "string"
+        },
+        "initialComment": {
+          "x-title": "Initial Comment",
+          "description": "The message text introducing the file in specified channels",
+          "default": "",
+          "type": "string"
+        },
+        "threadTs": {
+          "x-title": "Thread TS",
+          "description": "Provide another message's ts value to upload this file as a reply. Never use a reply's ts value; use its parent instead.",
+          "default": "",
+          "type": "string"
+        },
+        "title": {
+          "x-title": "Title",
+          "description": "Title of file",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "A name for the User Group. Must be unique among User Groups.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "userGroup"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "ts": {
+      "x-title": "TS",
+      "description": "Timestamp of the message to be updated",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "purpose": {
+      "x-title": "Purpose",
+      "description": "A new, specialer purpose",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "setPurpose"
+          ],
+          "resource": [
+            "channel"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "topic": {
+      "x-title": "Topic",
+      "description": "The new topic string. Does not support formatting or linkification.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "setTopic"
+          ],
+          "resource": [
+            "channel"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "timestamp": {
+      "x-title": "Timestamp",
+      "description": "Timestamp of the message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "reaction"
+          ],
+          "operation": [
+            "add",
+            "get",
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "channel": {
+      "x-title": "Channel",
+      "description": "The channel to send the message to",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "post",
+            "postEphemeral"
+          ],
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "user": {
+      "x-title": "User ID",
+      "description": "The ID of the user to get the online status of",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getPresence"
+          ],
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "text": {
+      "x-title": "Text",
+      "description": "New text for the message, using the default formatting rules. It's not required when presenting attachments.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "jsonParameters": {
+      "x-title": "JSON Parameters",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "otherOptions": {
+      "x-title": "Options",
+      "description": "Other options to set",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "post",
+            "postEphemeral"
+          ],
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "icon_emoji": {
+          "x-title": "Icon Emoji",
+          "description": "Emoji to use as the icon for this message. Overrides icon_url.",
+          "default": "",
+          "type": "string"
+        },
+        "icon_url": {
+          "x-title": "Icon URL",
+          "description": "URL to an image to use as the icon for this message",
+          "default": "",
+          "type": "string"
+        },
+        "link_names": {
+          "x-title": "Link Names",
+          "description": "Whether to find and link channel names and usernames",
+          "default": false,
+          "type": "boolean"
+        },
+        "thread_ts": {
+          "x-title": "Make Reply",
+          "description": "Provide another message's ts value to make this message a reply",
+          "default": "",
+          "type": "string"
+        },
+        "mrkdwn": {
+          "x-title": "Markdown",
+          "description": "Whether to use Slack Markdown parsing",
+          "default": true,
+          "type": "boolean"
+        },
+        "reply_broadcast": {
+          "x-title": "Reply Broadcast",
+          "description": "Whether the reply should be made visible to everyone in the channel or conversation. Use in conjunction with thread_ts.",
+          "default": false,
+          "type": "boolean"
+        },
+        "unfurl_links": {
+          "x-title": "Unfurl Links",
+          "description": "Whether to enable unfurling of primarily text-based content",
+          "default": false,
+          "type": "boolean"
+        },
+        "unfurl_media": {
+          "x-title": "Unfurl Media",
+          "description": "Whether to disable unfurling of media content",
+          "default": true,
+          "type": "boolean"
+        },
+        "sendAsUser": {
+          "x-title": "Send as User",
+          "description": "The message will be sent from this username (i.e. as if this individual sent the message).",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/authentication": [
+                "accessToken"
+              ]
+            }
+          },
+          "type": "string"
+        }
+      }
+    },
+    "attachments": {
+      "x-title": "Attachments",
+      "description": "The attachment to add",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "jsonParameters": [
+            false
+          ],
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "fallback": {
+          "x-title": "Fallback Text",
+          "description": "Required plain-text summary of the attachment",
+          "default": "",
+          "type": "string"
+        },
+        "text": {
+          "x-title": "Text",
+          "description": "Text to send",
+          "default": "",
+          "type": "string"
+        },
+        "title": {
+          "x-title": "Title",
+          "description": "Title of the message",
+          "default": "",
+          "type": "string"
+        },
+        "title_link": {
+          "x-title": "Title Link",
+          "description": "Link of the title",
+          "default": "",
+          "type": "string"
+        },
+        "color": {
+          "x-title": "Color",
+          "description": "Color of the line left of text",
+          "default": "#ff0000",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$",
+          "x-format": "color"
+        },
+        "pretext": {
+          "x-title": "Pretext",
+          "description": "Text which appears before the message block",
+          "default": "",
+          "type": "string"
+        },
+        "author_name": {
+          "x-title": "Author Name",
+          "description": "Name that should appear",
+          "default": "",
+          "type": "string"
+        },
+        "author_link": {
+          "x-title": "Author Link",
+          "description": "Link for the author",
+          "default": "",
+          "type": "string"
+        },
+        "author_icon": {
+          "x-title": "Author Icon",
+          "description": "Icon which should appear for the user",
+          "default": "",
+          "type": "string"
+        },
+        "image_url": {
+          "x-title": "Image URL",
+          "description": "URL of image",
+          "default": "",
+          "type": "string"
+        },
+        "thumb_url": {
+          "x-title": "Thumbnail URL",
+          "description": "URL of thumbnail",
+          "default": "",
+          "type": "string"
+        },
+        "footer": {
+          "x-title": "Footer",
+          "description": "Text of footer to add",
+          "default": "",
+          "type": "string"
+        },
+        "footer_icon": {
+          "x-title": "Footer Icon",
+          "description": "Icon which should appear next to footer",
+          "default": "",
+          "type": "string"
+        },
+        "ts": {
+          "x-title": "Timestamp",
+          "description": "Time message relates to",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "fields": {
+          "x-title": "Fields",
+          "description": "Fields to add to message",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "item": {
+              "x-title": "Item",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "x-title": "Title",
+                    "description": "Title of the item",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "Value of the item",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "short": {
+                    "x-title": "Short",
+                    "description": "Whether items can be displayed next to each other",
+                    "default": true,
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "userGroup"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "channels": {
+          "x-title": "Channel Names or IDs",
+          "description": "A comma-separated string of encoded channel IDs for which the User Group uses as a default. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "description": {
+          "x-title": "Description",
+          "description": "A short description of the User Group",
+          "default": "",
+          "type": "string"
+        },
+        "handle": {
+          "x-title": "Handle",
+          "description": "A mention handle. Must be unique among channels, users and User Groups.",
+          "default": "",
+          "type": "string"
+        },
+        "include_count": {
+          "x-title": "Include Count",
+          "description": "Whether to include the number of users in each User Group",
+          "default": true,
+          "type": "boolean"
+        },
+        "name": {
+          "x-title": "Name",
+          "description": "A name for the User Group. Must be unique among User Groups.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "attachmentsJson": {
+      "x-title": "Attachments",
+      "description": "The attachments to add",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "post"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "blocksJson": {
+      "x-title": "Blocks",
+      "description": "The blocks to add",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "post"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "blocksUi": {
+      "x-title": "Blocks",
+      "description": "The blocks to add",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "post"
+          ],
+          "resource": [
+            "message"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "blocksValues": {
+          "x-title": "Block",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "x-title": "Type",
+                "default": "actions",
+                "type": "string",
+                "enum": [
+                  "actions",
+                  "section"
+                ],
+                "x-enumNames": [
+                  "Actions",
+                  "Section"
+                ]
+              },
+              "blockId": {
+                "x-title": "Block ID",
+                "description": "A string acting as a unique identifier for a block. You can use this block_id when you receive an interaction payload to identify the source of the action. If not specified, a block_id will be generated. Maximum length for this field is 255 characters.",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "section"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "elementsUi": {
+                "x-title": "Elements",
+                "default": {},
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "actions"
+                    ]
+                  }
+                },
+                "type": "object",
+                "properties": {
+                  "elementsValues": {
+                    "x-title": "Element",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "x-title": "Type",
+                          "description": "The type of element",
+                          "default": "button",
+                          "type": "string",
+                          "enum": [
+                            "button"
+                          ],
+                          "x-enumNames": [
+                            "Button"
+                          ]
+                        },
+                        "text": {
+                          "x-title": "Text",
+                          "description": "The text for the block",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "type": [
+                                "button"
+                              ]
+                            }
+                          },
+                          "type": "string"
+                        },
+                        "emoji": {
+                          "x-title": "Emoji",
+                          "description": "Whether emojis in a text field should be escaped into the colon emoji format",
+                          "default": false,
+                          "x-displayOptions": {
+                            "show": {
+                              "type": [
+                                "button"
+                              ]
+                            }
+                          },
+                          "type": "boolean"
+                        },
+                        "actionId": {
+                          "x-title": "Action ID",
+                          "description": "An identifier for this action. You can use this when you receive an interaction payload to identify the source of the action. Should be unique among all other action_ids used elsewhere by your app.",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "type": [
+                                "button"
+                              ]
+                            }
+                          },
+                          "type": "string"
+                        },
+                        "url": {
+                          "x-title": "URL",
+                          "description": "A URL to load in the user's browser when the button is clicked. Maximum length for this field is 3000 characters. If you're using URL, you'll still receive an interaction payload and will need to send an acknowledgement response.",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "type": [
+                                "button"
+                              ]
+                            }
+                          },
+                          "type": "string"
+                        },
+                        "value": {
+                          "x-title": "Value",
+                          "description": "The value to send along with the interaction payload",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "type": [
+                                "button"
+                              ]
+                            }
+                          },
+                          "type": "string"
+                        },
+                        "style": {
+                          "x-title": "Style",
+                          "description": "Decorates buttons with alternative visual color schemes",
+                          "default": "default",
+                          "x-displayOptions": {
+                            "show": {
+                              "type": [
+                                "button"
+                              ]
+                            }
+                          },
+                          "type": "string",
+                          "enum": [
+                            "danger",
+                            "default",
+                            "primary"
+                          ],
+                          "x-enumNames": [
+                            "Danger",
+                            "Default",
+                            "Primary"
+                          ]
+                        },
+                        "confirmUi": {
+                          "x-title": "Confirm",
+                          "description": "Defines an optional confirmation dialog after the button is clicked",
+                          "default": {},
+                          "type": "object",
+                          "properties": {
+                            "confirmValue": {
+                              "x-title": "Confirm",
+                              "type": "object",
+                              "properties": {
+                                "titleUi": {
+                                  "x-title": "Title",
+                                  "description": "Defines the dialog's title",
+                                  "default": {},
+                                  "type": "object",
+                                  "properties": {
+                                    "titleValue": {
+                                      "x-title": "Title",
+                                      "type": "object",
+                                      "properties": {
+                                        "text": {
+                                          "x-title": "Text",
+                                          "description": "Text of the title",
+                                          "default": "",
+                                          "type": "string"
+                                        },
+                                        "emoji": {
+                                          "x-title": "Emoji",
+                                          "description": "Whether emojis in a text field should be escaped into the colon emoji format",
+                                          "default": false,
+                                          "type": "boolean"
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "textUi": {
+                                  "x-title": "Text",
+                                  "description": "Defines the explanatory text that appears in the confirm dialog",
+                                  "default": {},
+                                  "type": "object",
+                                  "properties": {
+                                    "textValue": {
+                                      "x-title": "Text",
+                                      "type": "object",
+                                      "properties": {
+                                        "text": {
+                                          "x-title": "Text",
+                                          "description": "The text for the block",
+                                          "default": "",
+                                          "type": "string"
+                                        },
+                                        "emoji": {
+                                          "x-title": "Emoji",
+                                          "description": "Whether emojis in a text field should be escaped into the colon emoji format",
+                                          "default": false,
+                                          "type": "boolean"
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "confirmTextUi": {
+                                  "x-title": "Confirm",
+                                  "description": "Defines the text of the button that confirms the action",
+                                  "default": {},
+                                  "type": "object",
+                                  "properties": {
+                                    "confirmValue": {
+                                      "x-title": "Confirm",
+                                      "type": "object",
+                                      "properties": {
+                                        "text": {
+                                          "x-title": "Text",
+                                          "description": "Defines the explanatory text that appears in the confirm dialog",
+                                          "default": "",
+                                          "type": "string"
+                                        },
+                                        "emoji": {
+                                          "x-title": "Emoji",
+                                          "description": "Whether emojis in a text field should be escaped into the colon emoji format",
+                                          "default": false,
+                                          "type": "boolean"
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "denyUi": {
+                                  "x-title": "Deny",
+                                  "description": "Defines the text of the button that cancels the action",
+                                  "default": {},
+                                  "type": "object",
+                                  "properties": {
+                                    "denyValue": {
+                                      "x-title": "Deny",
+                                      "type": "object",
+                                      "properties": {
+                                        "text": {
+                                          "x-title": "Text",
+                                          "description": "Defines the text of the button that cancels the action",
+                                          "default": "",
+                                          "type": "string"
+                                        },
+                                        "emoji": {
+                                          "x-title": "Emoji",
+                                          "description": "Whether emojis in a text field should be escaped into the colon emoji format",
+                                          "default": false,
+                                          "type": "boolean"
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "style": {
+                                  "x-title": "Style",
+                                  "description": "Defines the color scheme applied to the confirm button",
+                                  "default": "default",
+                                  "type": "string",
+                                  "enum": [
+                                    "danger",
+                                    "default",
+                                    "primary"
+                                  ],
+                                  "x-enumNames": [
+                                    "Danger",
+                                    "Default",
+                                    "Primary"
+                                  ]
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "textUi": {
+                "x-title": "Text",
+                "description": "Define the text of the button that cancels the action",
+                "default": {},
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "section"
+                    ]
+                  }
+                },
+                "type": "object",
+                "properties": {
+                  "textValue": {
+                    "x-title": "Text",
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "x-title": "Type",
+                        "description": "The formatting to use for this text object",
+                        "default": "mrkwdn",
+                        "type": "string",
+                        "enum": [
+                          "mrkwdn",
+                          "plainText"
+                        ],
+                        "x-enumNames": [
+                          "Markdown",
+                          "Plain Text"
+                        ]
+                      },
+                      "text": {
+                        "x-title": "Text",
+                        "description": "The text for the block. This field accepts any of the standard text formatting markup when type is mrkdwn.",
+                        "default": "",
+                        "type": "string"
+                      },
+                      "emoji": {
+                        "x-title": "Emoji",
+                        "description": "Whether emojis in a text field should be escaped into the colon emoji format. This field is only usable when type is plain_text.",
+                        "default": false,
+                        "x-displayOptions": {
+                          "show": {
+                            "type": [
+                              "plainText"
+                            ]
+                          }
+                        },
+                        "type": "boolean"
+                      },
+                      "verbatim": {
+                        "x-title": "Verbatim",
+                        "description": "Whether to set to false (as is default) URLs will be auto-converted into links, conversation names will be link-ified, and certain mentions will be automatically parsed",
+                        "default": false,
+                        "x-displayOptions": {
+                          "show": {
+                            "type": [
+                              "mrkwdn"
+                            ]
+                          }
+                        },
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                }
+              },
+              "fieldsUi": {
+                "x-title": "Fields",
+                "description": "An array of text objects. Any text objects included with fields will be rendered in a compact format that allows for 2 columns of side-by-side text. Maximum number of items is 10.",
+                "default": {},
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "section"
+                    ]
+                  }
+                },
+                "type": "object",
+                "properties": {
+                  "fieldsValues": {
+                    "x-title": "Text",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "x-title": "Type",
+                          "description": "The formatting to use for this text object",
+                          "default": "mrkwdn",
+                          "type": "string",
+                          "enum": [
+                            "mrkwdn",
+                            "plainText"
+                          ],
+                          "x-enumNames": [
+                            "Markdown",
+                            "Plain Text"
+                          ]
+                        },
+                        "text": {
+                          "x-title": "Text",
+                          "description": "The text for the block. This field accepts any of the standard text formatting markup when type is mrkdwn.",
+                          "default": "",
+                          "type": "string"
+                        },
+                        "emoji": {
+                          "x-title": "Emoji",
+                          "description": "Whether emojis in a text field should be escaped into the colon emoji format. This field is only usable when type is plain_text.",
+                          "default": false,
+                          "x-displayOptions": {
+                            "show": {
+                              "type": [
+                                "plainText"
+                              ]
+                            }
+                          },
+                          "type": "boolean"
+                        },
+                        "verbatim": {
+                          "x-title": "Verbatim",
+                          "description": "When set to false (as is default) URLs will be auto-converted into links, conversation names will be link-ified, and certain mentions will be automatically parsed",
+                          "default": false,
+                          "x-displayOptions": {
+                            "show": {
+                              "type": [
+                                "mrkwdn"
+                              ]
+                            }
+                          },
+                          "type": "boolean"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "accessoryUi": {
+                "x-title": "Accessory",
+                "default": {},
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "section"
+                    ]
+                  }
+                },
+                "type": "object",
+                "properties": {
+                  "accessoriesValues": {
+                    "x-title": "Accessory",
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "x-title": "Type",
+                        "description": "The type of element",
+                        "default": "button",
+                        "type": "string",
+                        "enum": [
+                          "button"
+                        ],
+                        "x-enumNames": [
+                          "Button"
+                        ]
+                      },
+                      "text": {
+                        "x-title": "Text",
+                        "description": "The text for the block",
+                        "default": "",
+                        "x-displayOptions": {
+                          "show": {
+                            "type": [
+                              "button"
+                            ]
+                          }
+                        },
+                        "type": "string"
+                      },
+                      "emoji": {
+                        "x-title": "Emoji",
+                        "description": "Whether emojis in a text field should be escaped into the colon emoji format",
+                        "default": false,
+                        "x-displayOptions": {
+                          "show": {
+                            "type": [
+                              "button"
+                            ]
+                          }
+                        },
+                        "type": "boolean"
+                      },
+                      "actionId": {
+                        "x-title": "Action ID",
+                        "description": "An identifier for this action. You can use this when you receive an interaction payload to identify the source of the action. Should be unique among all other action_ids used elsewhere by your app.",
+                        "default": "",
+                        "x-displayOptions": {
+                          "show": {
+                            "type": [
+                              "button"
+                            ]
+                          }
+                        },
+                        "type": "string"
+                      },
+                      "url": {
+                        "x-title": "URL",
+                        "description": "A URL to load in the user's browser when the button is clicked. Maximum length for this field is 3000 characters. If you're using URL, you'll still receive an interaction payload and will need to send an acknowledgement response.",
+                        "default": "",
+                        "x-displayOptions": {
+                          "show": {
+                            "type": [
+                              "button"
+                            ]
+                          }
+                        },
+                        "type": "string"
+                      },
+                      "value": {
+                        "x-title": "Value",
+                        "description": "The value to send along with the interaction payload",
+                        "default": "",
+                        "x-displayOptions": {
+                          "show": {
+                            "type": [
+                              "button"
+                            ]
+                          }
+                        },
+                        "type": "string"
+                      },
+                      "style": {
+                        "x-title": "Style",
+                        "description": "Decorates buttons with alternative visual color schemes",
+                        "default": "default",
+                        "x-displayOptions": {
+                          "show": {
+                            "type": [
+                              "button"
+                            ]
+                          }
+                        },
+                        "type": "string",
+                        "enum": [
+                          "danger",
+                          "default",
+                          "primary"
+                        ],
+                        "x-enumNames": [
+                          "Danger",
+                          "Default",
+                          "Primary"
+                        ]
+                      },
+                      "confirmUi": {
+                        "x-title": "Confirm",
+                        "description": "Defines an optional confirmation dialog after the button is clicked",
+                        "default": {},
+                        "x-displayOptions": {
+                          "show": {
+                            "type": [
+                              "button"
+                            ]
+                          }
+                        },
+                        "type": "object",
+                        "properties": {
+                          "confirmValue": {
+                            "x-title": "Confirm",
+                            "type": "object",
+                            "properties": {
+                              "titleUi": {
+                                "x-title": "Title",
+                                "description": "Defines an optional confirmation dialog after the button is clicked",
+                                "default": {},
+                                "type": "object",
+                                "properties": {
+                                  "titleValue": {
+                                    "x-title": "Title",
+                                    "type": "object",
+                                    "properties": {
+                                      "text": {
+                                        "x-title": "Text",
+                                        "description": "Text of the title",
+                                        "default": "",
+                                        "type": "string"
+                                      },
+                                      "emoji": {
+                                        "x-title": "Emoji",
+                                        "description": "Whether emojis in a text field should be escaped into the colon emoji format",
+                                        "default": false,
+                                        "type": "boolean"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "textUi": {
+                                "x-title": "Text",
+                                "description": "Defines the explanatory text that appears in the confirm dialog",
+                                "default": {},
+                                "type": "object",
+                                "properties": {
+                                  "textValue": {
+                                    "x-title": "Text",
+                                    "type": "object",
+                                    "properties": {
+                                      "text": {
+                                        "x-title": "Text",
+                                        "description": "The text for the block",
+                                        "default": "",
+                                        "type": "string"
+                                      },
+                                      "emoji": {
+                                        "x-title": "Emoji",
+                                        "description": "Whether emojis in a text field should be escaped into the colon emoji format",
+                                        "default": false,
+                                        "type": "boolean"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "confirmTextUi": {
+                                "x-title": "Confirm",
+                                "description": "Defines the explanatory text that appears in the confirm dialog",
+                                "default": {},
+                                "type": "object",
+                                "properties": {
+                                  "confirmValue": {
+                                    "x-title": "Confirm",
+                                    "type": "object",
+                                    "properties": {
+                                      "text": {
+                                        "x-title": "Text",
+                                        "description": "Defines the explanatory text that appears in the confirm dialog",
+                                        "default": "",
+                                        "type": "string"
+                                      },
+                                      "emoji": {
+                                        "x-title": "Emoji",
+                                        "description": "Whether emojis in a text field should be escaped into the colon emoji format",
+                                        "default": false,
+                                        "type": "boolean"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "denyUi": {
+                                "x-title": "Deny",
+                                "description": "Define the text of the button that cancels the action",
+                                "default": {},
+                                "type": "object",
+                                "properties": {
+                                  "denyValue": {
+                                    "x-title": "Deny",
+                                    "type": "object",
+                                    "properties": {
+                                      "text": {
+                                        "x-title": "Text",
+                                        "description": "Define the text of the button that cancels the action",
+                                        "default": "",
+                                        "type": "string"
+                                      },
+                                      "emoji": {
+                                        "x-title": "Emoji",
+                                        "description": "Whether emojis in a text field should be escaped into the colon emoji format",
+                                        "default": false,
+                                        "type": "boolean"
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "style": {
+                                "x-title": "Style",
+                                "description": "Defines the color scheme applied to the confirm button",
+                                "default": "default",
+                                "type": "string",
+                                "enum": [
+                                  "danger",
+                                  "default",
+                                  "primary"
+                                ],
+                                "x-enumNames": [
+                                  "Danger",
+                                  "Default",
+                                  "Primary"
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "binaryData": {
+      "x-title": "Binary File",
+      "description": "Whether the data to upload should be taken from binary field",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "fileContent": {
+      "x-title": "File Content",
+      "description": "The text content of the file to upload",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ],
+          "binaryData": [
+            false
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "binaryPropertyName": {
+      "x-title": "Input Binary Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ],
+          "binaryData": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "fileId": {
+      "x-title": "File ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "userGroupId": {
+      "x-title": "User Group ID",
+      "description": "The encoded ID of the User Group to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "userGroup"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:slack.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "slackApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "accessToken"
+          ]
+        }
+      }
+    },
+    {
+      "name": "slackOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

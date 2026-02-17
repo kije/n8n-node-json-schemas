@@ -1,0 +1,360 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Raindrop",
+  "description": "Consume the Raindrop API",
+  "x-n8n-node-type": "raindrop",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "collection",
+      "type": "string",
+      "enum": [
+        "bookmark",
+        "collection",
+        "tag",
+        "user"
+      ],
+      "x-enumNames": [
+        "Bookmark",
+        "Collection",
+        "Tag",
+        "User"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "get"
+      ],
+      "x-enumNames": [
+        "Get"
+      ]
+    },
+    "collectionId": {
+      "x-title": "Collection ID",
+      "description": "The ID of the collection to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "collection"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "link": {
+      "x-title": "Link",
+      "description": "Link of the bookmark to be created",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "bookmark"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "collectionId": {
+          "x-title": "Collection Name or ID",
+          "description": "It's possible to restrict remove action to just one collection. It's optional. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "bookmarkId": {
+      "x-title": "Bookmark ID",
+      "description": "The ID of the bookmark to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "bookmark"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 5,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 10
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "collection"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "cover": {
+          "x-title": "Cover",
+          "description": "Name of the binary property containing the data for the image to upload as a cover",
+          "default": "data",
+          "type": "string"
+        },
+        "public": {
+          "x-title": "Public",
+          "description": "Whether the collection will be accessible without authentication",
+          "default": false,
+          "type": "boolean"
+        },
+        "parentId": {
+          "x-title": "Parent ID",
+          "description": "ID of this collection's parent collection, if it is a child collection",
+          "default": "",
+          "type": "string"
+        },
+        "sort": {
+          "x-title": "Sort Order",
+          "description": "Descending sort order of this collection. The number is the position of the collection among all the collections with the same parent ID.",
+          "default": 1,
+          "type": "number"
+        },
+        "title": {
+          "x-title": "Title",
+          "description": "Title of the collection to update",
+          "default": "",
+          "type": "string"
+        },
+        "view": {
+          "x-title": "View",
+          "description": "View style of this collection",
+          "default": "list",
+          "type": "string",
+          "enum": [
+            "list",
+            "simple",
+            "grid",
+            "Masonry"
+          ],
+          "x-enumNames": [
+            "List",
+            "Simple",
+            "Grid",
+            "Masonry"
+          ]
+        }
+      }
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "Title of the collection to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "collection"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "type": {
+      "x-title": "Type",
+      "default": "parent",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "collection"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "parent",
+        "children"
+      ],
+      "x-enumNames": [
+        "Parent",
+        "Children"
+      ],
+      "x-enumDescriptions": [
+        "Root-level collections",
+        "Nested collections"
+      ]
+    },
+    "tags": {
+      "x-title": "Tags",
+      "description": "One or more tags to delete. Enter comma-separated values to delete multiple tags.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "collectionId": {
+          "x-title": "Collection Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "self": {
+      "x-title": "Self",
+      "description": "Whether to return details on the logged-in user",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "userId": {
+      "x-title": "User ID",
+      "description": "The ID of the user to retrieve",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ],
+          "self": [
+            false
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:raindrop.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "raindropOAuth2Api",
+      "required": true
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Sentiment Analysis",
+  "description": "Analyze the sentiment of your text",
+  "x-n8n-node-type": "sentimentAnalysis",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "inputText": {
+      "x-title": "Text to Analyze",
+      "description": "Use an expression to reference data in previous nodes or enter static text",
+      "default": "",
+      "x-required": true,
+      "type": "string",
+      "x-rows": 2
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "categories": {
+          "x-title": "Sentiment Categories",
+          "description": "A comma-separated list of categories to analyze",
+          "default": "Positive, Neutral, Negative",
+          "type": "string",
+          "x-rows": 2
+        },
+        "systemPromptTemplate": {
+          "x-title": "System Prompt Template",
+          "description": "String to use directly as the system prompt template",
+          "default": "You are highly intelligent and accurate sentiment analyzer. Analyze the sentiment of the provided text. Categorize it into one of the following: {categories}. Use the provided formatting instructions. Only output the JSON.",
+          "type": "string",
+          "x-rows": 6
+        },
+        "includeDetailedResults": {
+          "x-title": "Include Detailed Results",
+          "description": "Whether to include sentiment strength and confidence scores in the output",
+          "default": false,
+          "type": "boolean"
+        },
+        "enableAutoFixing": {
+          "x-title": "Enable Auto-Fixing",
+          "description": "Whether to enable auto-fixing (may trigger an additional LLM call if output is broken)",
+          "default": true,
+          "type": "boolean"
+        },
+        "batching": {
+          "x-title": "Batch Processing",
+          "description": "Batch processing options for rate limiting",
+          "default": {},
+          "x-displayOptions": {
+            "show": {
+              "@version": [
+                {
+                  "_cnd": {
+                    "gte": 1.1
+                  }
+                }
+              ]
+            }
+          },
+          "type": "object",
+          "properties": {
+            "batchSize": {
+              "x-title": "Batch Size",
+              "description": "How many items to process in parallel. This is useful for rate limiting, but might impact the log output ordering.",
+              "default": 5,
+              "type": "number"
+            },
+            "delayBetweenBatches": {
+              "x-title": "Delay Between Batches",
+              "description": "Delay in milliseconds between batches. This is useful for rate limiting.",
+              "default": 0,
+              "type": "number"
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-icon": "fa:balance-scale-left",
+  "x-inputs": [
+    {
+      "displayName": "",
+      "type": "main"
+    },
+    {
+      "displayName": "Model",
+      "maxConnections": 1,
+      "type": "ai_languageModel",
+      "required": true
+    }
+  ],
+  "x-outputs": "={{((parameters, defaultCategories) => {\n    const options = (parameters?.options ?? {});\n    const categories = options?.categories ?? defaultCategories;\n    const categoriesArray = categories.split(',').map((cat) => cat.trim());\n    const ret = categoriesArray.map((cat) => ({ type: 'main', displayName: cat }));\n    return ret;\n})($parameter, \"Positive, Neutral, Negative\")}}"
+}

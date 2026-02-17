@@ -1,0 +1,575 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SendGrid",
+  "description": "Consume SendGrid API",
+  "x-n8n-node-type": "sendGrid",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "list",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "contact",
+        "list",
+        "mail"
+      ],
+      "x-enumNames": [
+        "Contact",
+        "List",
+        "Mail"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "send",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "mail"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "send"
+      ],
+      "x-enumNames": [
+        "Send"
+      ],
+      "x-enumDescriptions": [
+        "Send an email"
+      ]
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 1000
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "Name of the list",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "listId": {
+      "x-title": "List ID",
+      "description": "ID of the list",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "deleteContacts": {
+      "x-title": "Delete Contacts",
+      "description": "Whether to delete all contacts on the list",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "contactSample": {
+      "x-title": "Contact Sample",
+      "description": "Whether to return the contact sample",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "query": {
+          "x-title": "Query",
+          "description": "The query field accepts valid <a href=\"https://sendgrid.com/docs/for-developers/sending-email/segmentation-query-language/\">SGQL</a> for searching for a contact",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "Email of the contact",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "contact"
+          ],
+          "by": [
+            "email"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "attachments": {
+          "x-title": "Attachments",
+          "description": "Comma-separated list of binary properties",
+          "default": "",
+          "type": "string"
+        },
+        "bccEmail": {
+          "x-title": "BCC Email",
+          "description": "Comma-separated list of emails of the recipients of a blind carbon copy of the email",
+          "default": "",
+          "type": "string"
+        },
+        "categories": {
+          "x-title": "Categories",
+          "description": "Comma-separated list of categories. Each category name may not exceed 255 characters.",
+          "default": "",
+          "type": "string"
+        },
+        "ccEmail": {
+          "x-title": "CC Email",
+          "description": "Comma-separated list of emails of the recipients of a carbon copy of the email",
+          "default": "",
+          "type": "string"
+        },
+        "enableSandbox": {
+          "x-title": "Enable Sandbox",
+          "description": "Whether to use to the sandbox for testing out email-sending functionality",
+          "default": false,
+          "type": "boolean"
+        },
+        "ipPoolName": {
+          "x-title": "IP Pool Name",
+          "description": "The IP Pool that you would like to send this email from",
+          "default": "",
+          "type": "string"
+        },
+        "replyToEmail": {
+          "x-title": "Reply-To Email",
+          "description": "Comma-separated list of email addresses that will appear in the reply-to field of the email",
+          "default": "",
+          "type": "string"
+        },
+        "headers": {
+          "x-title": "Headers",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "details": {
+              "x-title": "Details",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "x-title": "Key",
+                    "description": "Key to set in the header object",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "Value to set in the header object",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "sendAt": {
+          "x-title": "Send At",
+          "description": "When to deliver the email. Scheduling more than 72 hours in advance is forbidden.",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "ids": {
+      "x-title": "Contact IDs",
+      "description": "ID of the contact. Multiple can be added separated by comma.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "delete"
+          ],
+          "deleteAll": [
+            false
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "deleteAll": {
+      "x-title": "Delete All",
+      "description": "Whether all contacts will be deleted",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "by": {
+      "x-title": "By",
+      "description": "Search the user by ID or email",
+      "default": "id",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "id",
+        "email"
+      ],
+      "x-enumNames": [
+        "ID",
+        "Email"
+      ]
+    },
+    "contactId": {
+      "x-title": "Contact ID",
+      "description": "ID of the contact",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "contact"
+          ],
+          "by": [
+            "id"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "fromEmail": {
+      "x-title": "Sender Email",
+      "description": "Email address of the sender of the email",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "fromName": {
+      "x-title": "Sender Name",
+      "description": "Name of the sender of the email",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "toEmail": {
+      "x-title": "Recipient Email",
+      "description": "Comma-separated list of recipient email addresses",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "subject": {
+      "x-title": "Subject",
+      "description": "Subject of the email to send",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ],
+          "dynamicTemplate": [
+            false
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "dynamicTemplate": {
+      "x-title": "Dynamic Template",
+      "description": "Whether this email will contain a dynamic template",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "contentType": {
+      "x-title": "MIME Type",
+      "description": "MIME type of the email to send",
+      "default": "text/plain",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ],
+          "dynamicTemplate": [
+            false
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "text/plain",
+        "text/html"
+      ],
+      "x-enumNames": [
+        "Plain Text",
+        "HTML"
+      ]
+    },
+    "contentValue": {
+      "x-title": "Message Body",
+      "description": "Message body of the email to send",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ],
+          "dynamicTemplate": [
+            false
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "templateId": {
+      "x-title": "Template Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ],
+          "dynamicTemplate": [
+            true
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "dynamicTemplateFields": {
+      "x-title": "Dynamic Template Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "mail"
+          ],
+          "operation": [
+            "send"
+          ],
+          "dynamicTemplate": [
+            true
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "fields": {
+          "x-title": "Fields",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "x-title": "Key",
+                "description": "Key of the dynamic template field",
+                "default": "",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "Value for the field",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \":\" + $parameter[\"resource\"]}}",
+  "x-icon": "file:sendGrid.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "sendGridApi",
+      "required": true
+    }
+  ]
+}

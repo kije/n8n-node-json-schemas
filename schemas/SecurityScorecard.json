@@ -1,0 +1,661 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SecurityScorecard",
+  "description": "Consume SecurityScorecard API",
+  "x-n8n-node-type": "securityScorecard",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "company",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "company",
+        "industry",
+        "invite",
+        "portfolio",
+        "portfolioCompany",
+        "report"
+      ],
+      "x-enumNames": [
+        "Company",
+        "Industry",
+        "Invite",
+        "Portfolio",
+        "Portfolio Company",
+        "Report"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "download",
+        "generate",
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Download",
+        "Generate",
+        "Get Many"
+      ],
+      "x-enumDescriptions": [
+        "Download a generated report",
+        "Generate a report",
+        "Get list of recently generated report"
+      ]
+    },
+    "scorecardIdentifier": {
+      "x-title": "Scorecard Identifier",
+      "description": "Primary identifier of a company or scorecard, i.e. domain.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "generate"
+          ],
+          "report": [
+            "detailed",
+            "events-json",
+            "full-scorecard-json",
+            "issues",
+            "partnership",
+            "scorecard-footprint",
+            "summary"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "score": {
+      "x-title": "Score",
+      "description": "Score target",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getScorePlan"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "simple": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "industry"
+          ],
+          "operation": [
+            "getFactor",
+            "getFactorHistorical"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "portfolioCompany"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "grade": {
+          "x-title": "Grade",
+          "description": "Company score grade filter",
+          "default": "",
+          "type": "string"
+        },
+        "industry": {
+          "x-title": "Industry",
+          "description": "Industry filter",
+          "default": "",
+          "type": "string"
+        },
+        "issueType": {
+          "x-title": "Issue Type",
+          "description": "Issue type filter",
+          "default": "",
+          "type": "string"
+        },
+        "status": {
+          "x-title": "Status",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "active",
+            "inactive"
+          ],
+          "x-enumNames": [
+            "Active",
+            "Inactive"
+          ]
+        },
+        "vulnerability": {
+          "x-title": "Vulnerability",
+          "description": "CVE vulnerability filter",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "generate"
+          ],
+          "report": [
+            "scorecard-footprint"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "countries": {
+          "x-title": "Countries",
+          "default": [],
+          "type": "string"
+        },
+        "format": {
+          "x-title": "Format",
+          "default": "pdf",
+          "type": "string",
+          "enum": [
+            "csv",
+            "pdf"
+          ],
+          "x-enumNames": [
+            "CSV",
+            "PDF"
+          ]
+        },
+        "ips": {
+          "x-title": "IPs",
+          "default": [],
+          "type": "string"
+        },
+        "subdomains": {
+          "x-title": "Subdomains",
+          "default": [],
+          "type": "string"
+        }
+      }
+    },
+    "industry": {
+      "x-title": "Industry",
+      "default": "food",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "industry"
+          ],
+          "operation": [
+            "getScore",
+            "getFactor",
+            "getFactorHistorical"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "food",
+        "healthcare",
+        "manofacturing",
+        "retail",
+        "technology"
+      ],
+      "x-enumNames": [
+        "Food",
+        "Healthcare",
+        "Manofacturing",
+        "Retail",
+        "Technology"
+      ]
+    },
+    "email": {
+      "x-title": "Email",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "invite"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "firstName": {
+      "x-title": "First Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "invite"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "lastName": {
+      "x-title": "Last Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "invite"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "message": {
+      "x-title": "Message",
+      "description": "Message for the invitee",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "invite"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "invite"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "days_to_resolve_issue": {
+          "x-title": "Days to Resolve Issue",
+          "description": "Minimum days to resolve a scorecard issue",
+          "default": 0,
+          "type": "number"
+        },
+        "domain": {
+          "x-title": "Domain",
+          "description": "Invitee company domain",
+          "default": "",
+          "type": "string"
+        },
+        "grade_to_maintain": {
+          "x-title": "Grade to Maintain",
+          "description": "Request the invitee's organisation to maintain a minimum grade",
+          "default": "",
+          "type": "string"
+        },
+        "is_organization_point_of_contact": {
+          "x-title": "Is Organisation Point of Contact",
+          "description": "Is the invitee organisation's point of contact",
+          "default": false,
+          "type": "boolean"
+        },
+        "issue_desc": {
+          "x-title": "Issue Description",
+          "default": "",
+          "type": "string"
+        },
+        "issue_title": {
+          "x-title": "Issue Title",
+          "default": "",
+          "type": "string"
+        },
+        "issue_type": {
+          "x-title": "Issue Type",
+          "default": "",
+          "type": "string"
+        },
+        "sendme_copy": {
+          "x-title": "Send Me a Copy",
+          "description": "Whether to send a copy of the invite to the requesting user",
+          "default": false,
+          "type": "boolean"
+        },
+        "target_url": {
+          "x-title": "Target URL",
+          "description": "Optional URL to take the invitee to when arriving to the platform",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "portfolioId": {
+      "x-title": "Portfolio ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "generate"
+          ],
+          "report": [
+            "portfolio"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "name": {
+      "x-title": "Portfolio Name",
+      "description": "Name of the portfolio",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "portfolio"
+          ],
+          "operation": [
+            "create",
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "description": {
+      "x-title": "Description",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "portfolio"
+          ],
+          "operation": [
+            "create",
+            "update"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "privacy": {
+      "x-title": "Privacy",
+      "default": "shared",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "portfolio"
+          ],
+          "operation": [
+            "create",
+            "update"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "private",
+        "shared",
+        "team"
+      ],
+      "x-enumNames": [
+        "Private",
+        "Shared",
+        "Team"
+      ],
+      "x-enumDescriptions": [
+        "Only visible to you",
+        "Visible to everyone in your company",
+        "Visible to the people on your team"
+      ]
+    },
+    "domain": {
+      "x-title": "Domain",
+      "description": "Company's domain name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "portfolioCompany"
+          ],
+          "operation": [
+            "add",
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "report": {
+      "x-title": "Report",
+      "default": "detailed",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "generate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "detailed",
+        "events-json",
+        "issues",
+        "partnership",
+        "summary",
+        "full-scorecard-json",
+        "portfolio",
+        "scorecard-footprint"
+      ],
+      "x-enumNames": [
+        "Company Detailed",
+        "Company Events",
+        "Company Issues",
+        "Company Partnership",
+        "Company Summary",
+        "Full Scorecard",
+        "Portfolio",
+        "Scorecard Footprint"
+      ]
+    },
+    "branding": {
+      "x-title": "Branding",
+      "default": "securityscorecard",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "generate"
+          ],
+          "report": [
+            "detailed",
+            "summary"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "securityscorecard",
+        "company_and_securityscorecard",
+        "company"
+      ],
+      "x-enumNames": [
+        "SecurityScorecard",
+        "Company and SecurityScorecard",
+        "Company"
+      ]
+    },
+    "date": {
+      "x-title": "Date",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "generate"
+          ],
+          "report": [
+            "events-json"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "url": {
+      "x-title": "Report URL",
+      "description": "URL to a generated report",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "download"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "binaryPropertyName": {
+      "x-title": "Put Output File in Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "download"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"]}} : {{$parameter[\"resource\"]}}",
+  "x-icon": "file:securityScorecard.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "securityScorecardApi",
+      "required": true
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Send Email",
+  "description": "Sends an Email",
+  "x-n8n-node-type": "emailSend",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "fromEmail": {
+      "x-title": "From Email",
+      "description": "Email address of the sender optional with name",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "toEmail": {
+      "x-title": "To Email",
+      "description": "Email address of the recipient",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "ccEmail": {
+      "x-title": "CC Email",
+      "description": "Email address of CC recipient",
+      "default": "",
+      "type": "string"
+    },
+    "bccEmail": {
+      "x-title": "BCC Email",
+      "description": "Email address of BCC recipient",
+      "default": "",
+      "type": "string"
+    },
+    "subject": {
+      "x-title": "Subject",
+      "description": "Subject line of the email",
+      "default": "",
+      "type": "string"
+    },
+    "text": {
+      "x-title": "Text",
+      "description": "Plain text message of email",
+      "default": "",
+      "type": "string",
+      "x-rows": 5
+    },
+    "html": {
+      "x-title": "HTML",
+      "description": "HTML text message of email",
+      "default": "",
+      "type": "string",
+      "x-rows": 5
+    },
+    "attachments": {
+      "x-title": "Attachments",
+      "description": "Name of the binary properties that contain data to add to email as attachment. Multiple ones can be comma-separated.",
+      "default": "",
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "allowUnauthorizedCerts": {
+          "x-title": "Ignore SSL Issues (Insecure)",
+          "description": "Whether to connect even if SSL certificate validation is not possible",
+          "default": false,
+          "type": "boolean"
+        },
+        "replyTo": {
+          "x-title": "Reply To",
+          "description": "The email address to send the reply to",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-icon": "fa:envelope",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "smtp",
+      "required": true
+    }
+  ]
+}

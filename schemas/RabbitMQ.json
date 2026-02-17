@@ -1,0 +1,282 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RabbitMQ",
+  "description": "Sends messages to a RabbitMQ topic",
+  "x-n8n-node-type": "rabbitmq",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "operation": {
+      "x-title": "Operation",
+      "default": "sendMessage",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            1.1
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "sendMessage",
+        "deleteMessage"
+      ],
+      "x-enumNames": [
+        "Send a Message to RabbitMQ",
+        "Delete From Queue"
+      ]
+    },
+    "mode": {
+      "x-title": "Mode",
+      "description": "To where data should be moved",
+      "default": "queue",
+      "x-displayOptions": {
+        "hide": {
+          "operation": [
+            "deleteMessage"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "queue",
+        "exchange"
+      ],
+      "x-enumNames": [
+        "Queue",
+        "Exchange"
+      ],
+      "x-enumDescriptions": [
+        "Publish data to queue",
+        "Publish data to exchange"
+      ]
+    },
+    "queue": {
+      "x-title": "Queue / Topic",
+      "description": "Name of the queue to publish to",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "queue"
+          ]
+        },
+        "hide": {
+          "operation": [
+            "deleteMessage"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "exchange": {
+      "x-title": "Exchange",
+      "description": "Name of the exchange to publish to",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "exchange"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "exchangeType": {
+      "x-title": "Type",
+      "description": "Type of exchange",
+      "default": "fanout",
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "exchange"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "direct",
+        "topic",
+        "headers",
+        "fanout"
+      ],
+      "x-enumNames": [
+        "Direct",
+        "Topic",
+        "Headers",
+        "Fanout"
+      ],
+      "x-enumDescriptions": [
+        "Direct exchange type",
+        "Topic exchange type",
+        "Headers exchange type",
+        "Fanout exchange type"
+      ]
+    },
+    "routingKey": {
+      "x-title": "Routing Key",
+      "description": "The routing key for the message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "exchange"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "sendInputData": {
+      "x-title": "Send Input Data",
+      "description": "Whether to send the data the node receives as JSON",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "sendMessage"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "message": {
+      "x-title": "Message",
+      "description": "The message to be sent",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "sendInputData": [
+            false
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "sendMessage"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "alternateExchange": {
+          "x-title": "Alternate Exchange",
+          "description": "An exchange to send messages to if this exchange can’t route them to any queues",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/mode": [
+                "exchange"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "arguments": {
+          "x-title": "Arguments",
+          "description": "Arguments to add, See <a href=\"https://amqp-node.github.io/amqplib/channel_api.html#channel_publish\" target=\"_blank\">here</a> for valid options",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "argument": {
+              "x-title": "Argument",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "x-title": "Key",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "autoDelete": {
+          "x-title": "Auto Delete Queue",
+          "description": "Whether the queue will be deleted when the number of consumers drops to zero",
+          "default": false,
+          "type": "boolean"
+        },
+        "durable": {
+          "x-title": "Durable",
+          "description": "Whether the queue will survive broker restarts",
+          "default": true,
+          "type": "boolean"
+        },
+        "exclusive": {
+          "x-title": "Exclusive",
+          "description": "Whether to scope the queue to the connection",
+          "default": false,
+          "x-displayOptions": {
+            "show": {
+              "/mode": [
+                "queue"
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "headers": {
+          "x-title": "Headers",
+          "description": "Headers to add",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "header": {
+              "x-title": "Header",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "x-title": "Key",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-icon": "file:rabbitmq.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "rabbitmq",
+      "required": true,
+      "testedBy": "rabbitmqConnectionTest"
+    }
+  ]
+}

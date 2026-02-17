@@ -1,0 +1,137 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Stackby",
+  "description": "Read, write, and delete data in Stackby",
+  "x-n8n-node-type": "stackby",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "operation": {
+      "x-title": "Operation",
+      "default": "append",
+      "type": "string",
+      "enum": [
+        "append",
+        "delete",
+        "list",
+        "read"
+      ],
+      "x-enumNames": [
+        "Append",
+        "Delete",
+        "List",
+        "Read"
+      ]
+    },
+    "stackId": {
+      "x-title": "Stack ID",
+      "description": "The ID of the stack to access",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "table": {
+      "x-title": "Table",
+      "description": "Enter Table Name",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "id": {
+      "x-title": "ID",
+      "description": "ID of the record to return",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "read",
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "list"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 1000,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "list"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 1000
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "list"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "view": {
+          "x-title": "View",
+          "description": "The name or ID of a view in the Stories table. If set, only the records in that view will be returned. The records will be sorted according to the order of the view.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "columns": {
+      "x-title": "Columns",
+      "description": "Comma-separated list of the properties which should used as columns for the new rows",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "append"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-icon": "file:stackby.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "stackbyApi",
+      "required": true
+    }
+  ]
+}

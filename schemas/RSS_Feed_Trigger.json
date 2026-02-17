@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RSS Feed Trigger",
+  "description": "Starts a workflow when an RSS feed is updated",
+  "x-n8n-node-type": "rssFeedReadTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "feedUrl": {
+      "x-title": "Feed URL",
+      "description": "URL of the RSS feed to poll",
+      "default": "https://blog.n8n.io/rss/",
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"event\"]}}",
+  "x-icon": "fa:rss",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ]
+}

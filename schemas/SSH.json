@@ -1,0 +1,187 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SSH",
+  "description": "Execute commands via SSH",
+  "x-n8n-node-type": "ssh",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "password",
+      "type": "string",
+      "enum": [
+        "password",
+        "privateKey"
+      ],
+      "x-enumNames": [
+        "Password",
+        "Private Key"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "command",
+      "type": "string",
+      "enum": [
+        "command",
+        "file"
+      ],
+      "x-enumNames": [
+        "Command",
+        "File"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "upload",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "download",
+        "upload"
+      ],
+      "x-enumNames": [
+        "Download",
+        "Upload"
+      ],
+      "x-enumDescriptions": [
+        "Download a file",
+        "Upload a file"
+      ]
+    },
+    "command": {
+      "x-title": "Command",
+      "description": "The command to be executed on a remote device",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "command"
+          ],
+          "operation": [
+            "execute"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "cwd": {
+      "x-title": "Working Directory",
+      "default": "/",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "command"
+          ],
+          "operation": [
+            "execute"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "binaryPropertyName": {
+      "x-title": "File Property",
+      "description": "Object property name which holds binary data",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "download"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "path": {
+      "x-title": "Path",
+      "description": "The file path of the file to download. Has to contain the full path including file name.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "download"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload",
+            "download"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "fileName": {
+          "x-title": "File Name",
+          "description": "Overrides the binary data file name",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "fa:terminal",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "sshPassword",
+      "required": true,
+      "testedBy": "sshConnectionTest",
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "password"
+          ]
+        }
+      }
+    },
+    {
+      "name": "sshPrivateKey",
+      "required": true,
+      "testedBy": "sshConnectionTest",
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "privateKey"
+          ]
+        }
+      }
+    }
+  ]
+}

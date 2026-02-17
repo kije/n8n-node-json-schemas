@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SSE Trigger",
+  "description": "Triggers the workflow when Server-Sent Events occur",
+  "x-n8n-node-type": "sseTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "url": {
+      "x-title": "URL",
+      "description": "The URL to receive the SSE from",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-icon": "fa:cloud-download-alt",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ]
+}

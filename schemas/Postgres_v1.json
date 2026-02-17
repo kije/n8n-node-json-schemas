@@ -1,0 +1,188 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Postgres",
+  "description": "Get, add and update data in Postgres",
+  "x-n8n-node-type": "postgres",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "operation": {
+      "x-title": "Operation",
+      "default": "insert",
+      "type": "string",
+      "enum": [
+        "executeQuery",
+        "insert",
+        "update"
+      ],
+      "x-enumNames": [
+        "Execute Query",
+        "Insert",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Execute an SQL query",
+        "Insert rows in database",
+        "Update rows in database"
+      ]
+    },
+    "query": {
+      "x-title": "Query",
+      "description": "The SQL query to execute. You can use n8n expressions or $1 and $2 in conjunction with query parameters.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "executeQuery"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-editor": "sqlEditor"
+    },
+    "schema": {
+      "x-title": "Schema",
+      "description": "Name of the schema the table belongs to",
+      "default": "public",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "table": {
+      "x-title": "Table",
+      "description": "Name of the table in which to update data in",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "columns": {
+      "x-title": "Columns",
+      "description": "Comma-separated list of the properties which should used as columns for rows to update. You can use type casting with colons (:) like id:int.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "updateKey": {
+      "x-title": "Update Key",
+      "description": "Comma-separated list of the properties which decides which rows in the database should be updated. Normally that would be \"id\".",
+      "default": "id",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnFields": {
+      "x-title": "Return Fields",
+      "description": "Comma-separated list of the fields that the operation will return",
+      "default": "*",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "insert",
+            "update"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "mode": {
+          "x-title": "Mode",
+          "description": "The way queries should be sent to database. Can be used in conjunction with <b>Continue on Fail</b>. See <a href=\"https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.postgres/\">the docs</a> for more examples",
+          "default": "multiple",
+          "type": "string",
+          "enum": [
+            "independently",
+            "multiple",
+            "transaction"
+          ],
+          "x-enumNames": [
+            "Independently",
+            "Multiple Queries",
+            "Transaction"
+          ],
+          "x-enumDescriptions": [
+            "Execute each query independently",
+            "<b>Default</b>. Sends multiple queries at once to database.",
+            "Executes all queries in a single transaction"
+          ]
+        },
+        "largeNumbersOutput": {
+          "x-title": "Output Large-Format Numbers As",
+          "default": "text",
+          "type": "string",
+          "enum": [
+            "numbers",
+            "text"
+          ],
+          "x-enumNames": [
+            "Numbers",
+            "Text"
+          ],
+          "x-enumDescriptions": [
+            "",
+            "Use this if you expect numbers longer than 16 digits (otherwise numbers may be incorrect)"
+          ]
+        },
+        "queryParams": {
+          "x-title": "Query Parameters",
+          "description": "Comma-separated list of properties which should be used as query parameters",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/operation": [
+                "executeQuery"
+              ]
+            }
+          },
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-icon": "file:postgres.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "postgres",
+      "required": true,
+      "testedBy": "postgresConnectionTest"
+    }
+  ]
+}

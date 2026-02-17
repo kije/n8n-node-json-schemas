@@ -1,0 +1,325 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Quick Base",
+  "description": "Integrate with the Quick Base RESTful API",
+  "x-n8n-node-type": "quickbase",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "record",
+      "type": "string",
+      "enum": [
+        "field",
+        "file",
+        "record",
+        "report"
+      ],
+      "x-enumNames": [
+        "Field",
+        "File",
+        "Record",
+        "Report"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "get",
+        "run"
+      ],
+      "x-enumNames": [
+        "Get",
+        "Run"
+      ],
+      "x-enumDescriptions": [
+        "Get a report",
+        "Run a report"
+      ]
+    },
+    "tableId": {
+      "x-title": "Table ID",
+      "description": "The table identifier",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "run"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "run"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "run"
+          ]
+        },
+        "hide": {
+          "returnAll": [
+            true
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "record"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "fields": {
+          "x-title": "Field Names or IDs",
+          "description": "Specify an array of field IDs that will return data for any updates or added record. Record ID (FID 3) is always returned if any field ID is requested. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "useFieldIDs": {
+          "x-title": "Use Field IDs",
+          "description": "Whether to use Field IDs instead of Field Names in Columns",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "recordId": {
+      "x-title": "Record ID",
+      "description": "The unique identifier of the record",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "download",
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "fieldId": {
+      "x-title": "Field ID",
+      "description": "The unique identifier of the field",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "download",
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "versionNumber": {
+      "x-title": "Version Number",
+      "description": "The file attachment version number",
+      "default": 1,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "download",
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "binaryPropertyName": {
+      "x-title": "Input Binary Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "download"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "columns": {
+      "x-title": "Columns",
+      "description": "Comma-separated list of the properties which should used as columns for the new rows",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "record"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "simple": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "record"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "where": {
+      "x-title": "Where",
+      "description": "The filter to delete records. To delete all records specify a filter that will include all records, for example {3.GT.0} where 3 is the ID of the Record ID field.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "record"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "updateKey": {
+      "x-title": "Update Key",
+      "description": "Update can use the key field on the table, or any other supported unique field",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "record"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "mergeFieldId": {
+      "x-title": "Merge Field Name or ID",
+      "description": "<p>You're updating records in a Quick Base table with data from an external file. In order for a merge like this to work, Quick Base needs a way to match records in the source data with corresponding records in the destination table.</p><p>You make this possible by choosing the field in the app table that holds unique matching values. This is called a merge field.</p>. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "record"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "reportId": {
+      "x-title": "Report ID",
+      "description": "The identifier of the report, unique to the table",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "run"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:quickbase.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "quickbaseApi",
+      "required": true
+    }
+  ]
+}

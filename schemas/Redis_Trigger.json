@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Redis Trigger",
+  "description": "Subscribe to redis channel",
+  "x-n8n-node-type": "redisTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "channels": {
+      "x-title": "Channels",
+      "description": "Channels to subscribe to, multiple channels be defined with comma. Wildcard character(*) is supported.",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "jsonParseBody": {
+          "x-title": "JSON Parse Body",
+          "description": "Whether to try to parse the message to an object",
+          "default": false,
+          "type": "boolean"
+        },
+        "onlyMessage": {
+          "x-title": "Only Message",
+          "description": "Whether to return only the message property",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-icon": "file:redis.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "redis",
+      "required": true,
+      "testedBy": "redisConnectionTest"
+    }
+  ]
+}

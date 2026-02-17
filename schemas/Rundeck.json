@@ -1,0 +1,124 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Rundeck",
+  "description": "Manage Rundeck API",
+  "x-n8n-node-type": "rundeck",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "job",
+      "type": "string",
+      "enum": [
+        "job"
+      ],
+      "x-enumNames": [
+        "Job"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "execute",
+      "type": "string",
+      "enum": [
+        "execute",
+        "getMetadata"
+      ],
+      "x-enumNames": [
+        "Execute",
+        "Get Metadata"
+      ],
+      "x-enumDescriptions": [
+        "Execute a job",
+        "Get metadata of a job"
+      ]
+    },
+    "jobid": {
+      "x-title": "Job ID",
+      "description": "The job ID to get metadata off",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getMetadata"
+          ],
+          "resource": [
+            "job"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "arguments": {
+      "x-title": "Arguments",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "execute"
+          ],
+          "resource": [
+            "job"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "arguments": {
+          "x-title": "Arguments",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Name",
+                "default": "",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "filter": {
+      "x-title": "Filter",
+      "description": "Filter Rundeck nodes by name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "execute"
+          ],
+          "resource": [
+            "job"
+          ]
+        }
+      },
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:rundeck.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "rundeckApi",
+      "required": true
+    }
+  ]
+}

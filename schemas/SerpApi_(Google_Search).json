@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SerpApi (Google Search)",
+  "description": "Search in Google using SerpAPI",
+  "x-n8n-node-type": "toolSerpApi",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "gl": {
+          "x-title": "Country",
+          "description": "Defines the country to use for search. Head to <a href=\"https://serpapi.com/google-countries\">Google countries page</a> for a full list of supported countries.",
+          "default": "us",
+          "type": "string"
+        },
+        "device": {
+          "x-title": "Device",
+          "description": "Device to use to get the results",
+          "default": "desktop",
+          "type": "string",
+          "enum": [
+            "desktop",
+            "mobile",
+            "tablet"
+          ],
+          "x-enumNames": [
+            "Desktop",
+            "Mobile",
+            "Tablet"
+          ]
+        },
+        "no_cache": {
+          "x-title": "Explicit Array",
+          "description": "Whether to force SerpApi to fetch the Google results even if a cached version is already present. Cache expires after 1h. Cached searches are free, and are not counted towards your searches per month.",
+          "default": false,
+          "type": "boolean"
+        },
+        "google_domain": {
+          "x-title": "Google Domain",
+          "description": "Defines the domain to use for search. Head to <a href=\"https://serpapi.com/google-domains\">Google domains page</a> for a full list of supported domains.",
+          "default": "google.com",
+          "type": "string"
+        },
+        "hl": {
+          "x-title": "Language",
+          "description": "Defines the language to use. It's a two-letter language code. (e.g., `en` for English, `es` for Spanish, or `fr` for French). Head to <a href=\"https://serpapi.com/google-languages\">Google languages page</a> for a full list of supported languages.",
+          "default": "en",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-icon": "file:serpApi.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "ai_tool"
+  ],
+  "x-credentials": [
+    {
+      "name": "serpApi",
+      "required": true
+    }
+  ]
+}

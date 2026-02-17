@@ -1,0 +1,241 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Pushover",
+  "description": "Consume Pushover API",
+  "x-n8n-node-type": "pushover",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "message",
+      "type": "string",
+      "enum": [
+        "message"
+      ],
+      "x-enumNames": [
+        "Message"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "push",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "push"
+      ],
+      "x-enumNames": [
+        "Push"
+      ]
+    },
+    "userKey": {
+      "x-title": "User Key",
+      "description": "The user/group key (not e-mail address) of your user (or you), viewable when logged into the <a href=\"https://pushover.net/\">dashboard</a> (often referred to as <code>USER_KEY</code> in the <a href=\"https://support.pushover.net/i44-example-code-and-pushover-libraries\">libraries</a> and code examples)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "push"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "message": {
+      "x-title": "Message",
+      "description": "Your message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "push"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "priority": {
+      "x-title": "Priority",
+      "description": "Send as -2 to generate no notification/alert, -1 to always send as a quiet notification, 1 to display as high-priority and bypass the user's quiet hours, or 2 to also require confirmation from the user",
+      "default": -2,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "push"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        -2,
+        -1,
+        0,
+        1,
+        2
+      ],
+      "x-enumNames": [
+        "Lowest Priority",
+        "Low Priority",
+        "Normal Priority",
+        "High Priority",
+        "Emergency Priority"
+      ]
+    },
+    "retry": {
+      "x-title": "Retry (Seconds)",
+      "description": "Specifies how often (in seconds) the Pushover servers will send the same notification to the user. This parameter must have a value of at least 30 seconds between retries.",
+      "default": 30,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "push"
+          ],
+          "priority": [
+            2
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number",
+      "minimum": 0
+    },
+    "expire": {
+      "x-title": "Expire (Seconds)",
+      "description": "Specifies how many seconds your notification will continue to be retried for (every retry seconds)",
+      "default": 30,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "push"
+          ],
+          "priority": [
+            2
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number",
+      "minimum": 0,
+      "maximum": 10800
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "push"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "attachmentsUi": {
+          "x-title": "Attachment",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "attachmentsValues": {
+              "x-title": "Attachment Property",
+              "type": "object",
+              "properties": {
+                "binaryPropertyName": {
+                  "x-title": "Input Binary Field",
+                  "default": "",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "device": {
+          "x-title": "Device",
+          "description": "Your user's device name to send the message directly to that device, rather than all of the user's devices (multiple devices may be separated by a comma)",
+          "default": "",
+          "type": "string"
+        },
+        "html": {
+          "x-title": "HTML Formatting",
+          "description": "Whether to enable messages formatting with HTML tags",
+          "default": false,
+          "type": "boolean"
+        },
+        "sound": {
+          "x-title": "Sound Name or ID",
+          "description": "The name of one of the sounds supported by device clients to override the user's default sound choice. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "timestamp": {
+          "x-title": "Timestamp",
+          "description": "A Unix timestamp of your message's date and time to display to the user, rather than the time your message is received by our API",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "title": {
+          "x-title": "Title",
+          "description": "Your message's title, otherwise your app's name is used",
+          "default": "",
+          "type": "string"
+        },
+        "url": {
+          "x-title": "URL",
+          "description": "A supplementary URL to show with your message",
+          "default": "",
+          "type": "string"
+        },
+        "url_title": {
+          "x-title": "URL Title",
+          "description": "A title for your supplementary URL, otherwise just the URL is shown",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:pushover.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "pushoverApi",
+      "required": true
+    }
+  ]
+}

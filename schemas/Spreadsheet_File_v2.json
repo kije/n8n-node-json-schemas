@@ -1,0 +1,142 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Spreadsheet File",
+  "description": "Reads and writes data from a spreadsheet file like CSV, XLS, ODS, etc",
+  "x-n8n-node-type": "spreadsheetFile",
+  "x-n8n-version": 2,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "operation": {
+      "x-title": "Operation",
+      "default": "fromFile",
+      "type": "string",
+      "enum": [
+        "fromFile",
+        "toFile"
+      ],
+      "x-enumNames": [
+        "Read From File",
+        "Write to File"
+      ],
+      "x-enumDescriptions": [
+        "Reads data from a spreadsheet file",
+        "Writes the workflow data to a spreadsheet file"
+      ]
+    },
+    "binaryPropertyName": {
+      "x-title": "Put Output File in Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "toFile"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "fileFormat": {
+      "x-title": "File Format",
+      "description": "The format of the file to save the data as",
+      "default": "xls",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "toFile"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "csv",
+        "html",
+        "ods",
+        "rtf",
+        "xls",
+        "xlsx"
+      ],
+      "x-enumNames": [
+        "CSV",
+        "HTML",
+        "ODS",
+        "RTF",
+        "XLS",
+        "XLSX"
+      ],
+      "x-enumDescriptions": [
+        "Comma-separated values",
+        "HTML Table",
+        "OpenDocument Spreadsheet",
+        "Rich Text Format",
+        "Excel",
+        "Excel"
+      ]
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "toFile"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "compression": {
+          "x-title": "Compression",
+          "description": "Whether compression will be applied or not",
+          "default": false,
+          "x-displayOptions": {
+            "show": {
+              "/fileFormat": [
+                "xlsx",
+                "ods"
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "fileName": {
+          "x-title": "File Name",
+          "description": "File name to set in binary data. By default will \"spreadsheet.&lt;fileFormat&gt;\" be used.",
+          "default": "",
+          "type": "string"
+        },
+        "headerRow": {
+          "x-title": "Header Row",
+          "description": "Whether the first row of the file contains the header names",
+          "default": true,
+          "type": "boolean"
+        },
+        "sheetName": {
+          "x-title": "Sheet Name",
+          "description": "Name of the sheet to create in the spreadsheet",
+          "default": "Sheet",
+          "x-displayOptions": {
+            "show": {
+              "/fileFormat": [
+                "ods",
+                "xls",
+                "xlsx"
+              ]
+            }
+          },
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-icon": "fa:table",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

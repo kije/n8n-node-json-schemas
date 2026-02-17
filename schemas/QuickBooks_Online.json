@@ -1,0 +1,773 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QuickBooks Online",
+  "description": "Consume the QuickBooks Online API",
+  "x-n8n-node-type": "quickbooks",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "customer",
+      "type": "string",
+      "enum": [
+        "bill",
+        "customer",
+        "employee",
+        "estimate",
+        "invoice",
+        "item",
+        "payment",
+        "purchase",
+        "transaction",
+        "vendor"
+      ],
+      "x-enumNames": [
+        "Bill",
+        "Customer",
+        "Employee",
+        "Estimate",
+        "Invoice",
+        "Item",
+        "Payment",
+        "Purchase",
+        "Transaction",
+        "Vendor"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "vendor"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Get",
+        "Get Many",
+        "Update"
+      ]
+    },
+    "VendorRef": {
+      "x-title": "For Vendor Name or ID",
+      "description": "The ID of the vendor who the bill is for. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "bill"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "Line": {
+      "x-title": "Line",
+      "description": "Individual line item of a transaction",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "invoice"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "Amount": {
+          "x-title": "Amount",
+          "description": "Monetary amount of the line item",
+          "default": 0,
+          "type": "number"
+        },
+        "Description": {
+          "x-title": "Description",
+          "description": "Textual description of the line item",
+          "default": "",
+          "type": "string"
+        },
+        "DetailType": {
+          "x-title": "Detail Type",
+          "default": "SalesItemLineDetail",
+          "type": "string",
+          "enum": [
+            "SalesItemLineDetail"
+          ],
+          "x-enumNames": [
+            "Sales Item Line Detail"
+          ]
+        },
+        "itemId": {
+          "x-title": "Item Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "type": "string"
+        },
+        "LineNum": {
+          "x-title": "Position",
+          "description": "Position of the line item relative to others",
+          "default": 1,
+          "type": "number"
+        },
+        "TaxCodeRef": {
+          "x-title": "Tax Code Ref Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "type": "string"
+        },
+        "Qty": {
+          "x-title": "Quantity",
+          "description": "Number of units of the line item",
+          "default": 0,
+          "type": "number"
+        }
+      }
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "vendor"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "AcctNum": {
+          "x-title": "Account Number",
+          "default": "",
+          "type": "string"
+        },
+        "Active": {
+          "x-title": "Active",
+          "description": "Whether the employee is currently enabled for use by QuickBooks",
+          "default": false,
+          "type": "boolean"
+        },
+        "Balance": {
+          "x-title": "Balance",
+          "description": "The balance reflecting any payments made against the transaction",
+          "default": 0,
+          "type": "number"
+        },
+        "BillAddr": {
+          "x-title": "Billing Address",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "details": {
+              "x-title": "Details",
+              "type": "object",
+              "properties": {
+                "City": {
+                  "x-title": "City",
+                  "default": "",
+                  "type": "string"
+                },
+                "Line1": {
+                  "x-title": "Line 1",
+                  "default": "",
+                  "type": "string"
+                },
+                "PostalCode": {
+                  "x-title": "Postal Code",
+                  "default": "",
+                  "type": "string"
+                },
+                "Lat": {
+                  "x-title": "Latitude",
+                  "default": "",
+                  "type": "string"
+                },
+                "Long": {
+                  "x-title": "Longitude",
+                  "default": "",
+                  "type": "string"
+                },
+                "CountrySubDivisionCode": {
+                  "x-title": "Country Subdivision Code",
+                  "default": "",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "CompanyName": {
+          "x-title": "Company Name",
+          "default": "",
+          "type": "string"
+        },
+        "FamilyName": {
+          "x-title": "Family Name",
+          "default": "",
+          "type": "string"
+        },
+        "GivenName": {
+          "x-title": "Given Name",
+          "default": "",
+          "type": "string"
+        },
+        "PrimaryEmailAddr": {
+          "x-title": "Primary Email Address",
+          "default": "",
+          "type": "string"
+        },
+        "PrimaryPhone": {
+          "x-title": "Primary Phone",
+          "default": "",
+          "type": "string"
+        },
+        "PrintOnCheckName": {
+          "x-title": "Print-On-Check Name",
+          "description": "Name of the vendor as printed on a check",
+          "default": "",
+          "type": "string"
+        },
+        "Vendor1099": {
+          "x-title": "Vendor 1099",
+          "description": "Whether the vendor is an independent contractor, given a 1099-MISC form at the end of the year",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "billId": {
+      "x-title": "Bill ID",
+      "description": "The ID of the bill to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "bill"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "vendor"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "vendor"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 1000
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "vendor"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "query": {
+          "x-title": "Query",
+          "description": "The condition for selecting vendors. See the <a href=\"https://developer.intuit.com/app/developer/qbo/docs/develop/explore-the-quickbooks-online-api/data-queries\">guide</a> for supported syntax.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "vendor"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "AcctNum": {
+          "x-title": "Account Number",
+          "default": "",
+          "type": "string"
+        },
+        "Active": {
+          "x-title": "Active",
+          "description": "Whether the employee is currently enabled for use by QuickBooks",
+          "default": false,
+          "type": "boolean"
+        },
+        "Balance": {
+          "x-title": "Balance",
+          "description": "The balance reflecting any payments made against the transaction",
+          "default": 0,
+          "type": "number"
+        },
+        "BillAddr": {
+          "x-title": "Billing Address",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "details": {
+              "x-title": "Details",
+              "type": "object",
+              "properties": {
+                "City": {
+                  "x-title": "City",
+                  "default": "",
+                  "type": "string"
+                },
+                "Line1": {
+                  "x-title": "Line 1",
+                  "default": "",
+                  "type": "string"
+                },
+                "PostalCode": {
+                  "x-title": "Postal Code",
+                  "default": "",
+                  "type": "string"
+                },
+                "Lat": {
+                  "x-title": "Latitude",
+                  "default": "",
+                  "type": "string"
+                },
+                "Long": {
+                  "x-title": "Longitude",
+                  "default": "",
+                  "type": "string"
+                },
+                "CountrySubDivisionCode": {
+                  "x-title": "Country Subdivision Code",
+                  "default": "",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "CompanyName": {
+          "x-title": "Company Name",
+          "default": "",
+          "type": "string"
+        },
+        "FamilyName": {
+          "x-title": "Family Name",
+          "default": "",
+          "type": "string"
+        },
+        "GivenName": {
+          "x-title": "Given Name",
+          "default": "",
+          "type": "string"
+        },
+        "PrimaryEmailAddr": {
+          "x-title": "Primary Email Address",
+          "default": "",
+          "type": "string"
+        },
+        "PrimaryPhone": {
+          "x-title": "Primary Phone",
+          "default": "",
+          "type": "string"
+        },
+        "PrintOnCheckName": {
+          "x-title": "Print-On-Check Name",
+          "description": "Name of the vendor as printed on a check",
+          "default": "",
+          "type": "string"
+        },
+        "Vendor1099": {
+          "x-title": "Vendor 1099",
+          "description": "Whether the vendor is an independent contractor, given a 1099-MISC form at the end of the year",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "displayName": {
+      "x-title": "Display Name",
+      "description": "The display name of the vendor to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "vendor"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "customerId": {
+      "x-title": "Customer ID",
+      "description": "The ID of the customer to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customer"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "FamilyName": {
+      "x-title": "Family Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "GivenName": {
+      "x-title": "Given Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "employeeId": {
+      "x-title": "Employee ID",
+      "description": "The ID of the employee to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "CustomerRef": {
+      "x-title": "For Customer Name or ID",
+      "description": "The ID of the customer who the payment is for. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "estimateId": {
+      "x-title": "Estimate ID",
+      "description": "The ID of the estimate to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "estimate"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "download": {
+      "x-title": "Download",
+      "description": "Whether to download estimate as PDF file",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "binaryProperty": {
+      "x-title": "Put Output File in Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "get"
+          ],
+          "download": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "fileName": {
+      "x-title": "File Name",
+      "description": "Name of the file that will be downloaded",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "get"
+          ],
+          "download": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "The email of the recipient of the payment",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "invoiceId": {
+      "x-title": "Invoice ID",
+      "description": "The ID of the invoice to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "invoice"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "itemId": {
+      "x-title": "Item ID",
+      "description": "The ID of the item to retrieve",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "TotalAmt": {
+      "x-title": "Total Amount",
+      "description": "Total amount of the transaction",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "paymentId": {
+      "x-title": "Payment ID",
+      "description": "The ID of the payment to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "payment"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "purchaseId": {
+      "x-title": "Purchase ID",
+      "description": "The ID of the purchase to retrieve",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "purchase"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "simple": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "transaction"
+          ],
+          "operation": [
+            "getReport"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "vendorId": {
+      "x-title": "Vendor ID",
+      "description": "The ID of the vendor to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "vendor"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:quickbooks.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "quickBooksOAuth2Api",
+      "required": true
+    }
+  ]
+}

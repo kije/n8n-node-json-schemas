@@ -1,0 +1,282 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Remove Duplicates",
+  "description": "Delete items with matching field values",
+  "x-n8n-node-type": "removeDuplicates",
+  "x-n8n-version": 2,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "operation": {
+      "x-title": "Operation",
+      "default": "removeDuplicateInputItems",
+      "type": "string",
+      "enum": [
+        "removeDuplicateInputItems",
+        "removeItemsSeenInPreviousExecutions",
+        "clearDeduplicationHistory"
+      ],
+      "x-enumNames": [
+        "Remove Items Repeated Within Current Input",
+        "Remove Items Processed in Previous Executions",
+        "Clear Deduplication History"
+      ],
+      "x-enumDescriptions": [
+        "Remove duplicates from incoming items",
+        "Deduplicate items already seen in previous executions",
+        "Wipe the store of previous items"
+      ]
+    },
+    "compare": {
+      "x-title": "Compare",
+      "description": "The fields of the input items to compare to see if they are the same",
+      "default": "allFields",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "removeDuplicateInputItems"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "allFields",
+        "allFieldsExcept",
+        "selectedFields"
+      ],
+      "x-enumNames": [
+        "All Fields",
+        "All Fields Except",
+        "Selected Fields"
+      ]
+    },
+    "fieldsToExclude": {
+      "x-title": "Fields To Exclude",
+      "description": "Fields in the input to exclude from the comparison",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "compare": [
+            "allFieldsExcept"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "fieldsToCompare": {
+      "x-title": "Fields To Compare",
+      "description": "Fields in the input to add to the comparison",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "compare": [
+            "selectedFields"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "logic": {
+      "x-title": "Keep Items Where",
+      "description": "How to select input items to remove by comparing them with key values previously processed",
+      "default": "removeItemsWithAlreadySeenKeyValues",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "removeItemsSeenInPreviousExecutions"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "removeItemsWithAlreadySeenKeyValues",
+        "removeItemsUpToStoredIncrementalKey",
+        "removeItemsUpToStoredDate"
+      ],
+      "x-enumNames": [
+        "Value Is New",
+        "Value Is Higher than Any Previous Value",
+        "Value Is a Date Later than Any Previous Date"
+      ],
+      "x-enumDescriptions": [
+        "Remove all input items with values matching those already processed",
+        "Works with incremental values, removes all input items with values up to the stored value",
+        "Works with date values, removes all input items with values up to the stored date"
+      ]
+    },
+    "dedupeValue": {
+      "x-title": "Value to Dedupe On",
+      "description": "Use an input field (or a combination of fields) that has a unique ID value",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "logic": [
+            "removeItemsWithAlreadySeenKeyValues"
+          ],
+          "/operation": [
+            "removeItemsSeenInPreviousExecutions"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "incrementalDedupeValue": {
+      "x-title": "Value to Dedupe On",
+      "description": "Use an input field (or a combination of fields) that has an incremental value",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "logic": [
+            "removeItemsUpToStoredIncrementalKey"
+          ],
+          "/operation": [
+            "removeItemsSeenInPreviousExecutions"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "dateDedupeValue": {
+      "x-title": "Value to Dedupe On",
+      "description": "Use an input field that has a date value in ISO format",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "logic": [
+            "removeItemsUpToStoredDate"
+          ],
+          "/operation": [
+            "removeItemsSeenInPreviousExecutions"
+          ]
+        }
+      },
+      "type": "string",
+      "format": "date-time"
+    },
+    "mode": {
+      "x-title": "Mode",
+      "description": "How you want to modify the key values stored on the database. None of these modes removes input items.",
+      "default": "cleanDatabase",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "clearDeduplicationHistory"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "cleanDatabase"
+      ],
+      "x-enumNames": [
+        "Clean Database"
+      ],
+      "x-enumDescriptions": [
+        "Clear all values stored for a key in the database"
+      ]
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "removeDuplicateInputItems",
+            "removeItemsSeenInPreviousExecutions",
+            "clearDeduplicationHistory"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "disableDotNotation": {
+          "x-title": "Disable Dot Notation",
+          "description": "Whether to disallow referencing child fields using `parent.child` in the field name",
+          "default": false,
+          "x-displayOptions": {
+            "show": {
+              "/operation": [
+                "removeDuplicateInputItems"
+              ]
+            },
+            "hide": {
+              "/compare": [
+                "allFields"
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "removeOtherFields": {
+          "x-title": "Remove Other Fields",
+          "description": "Whether to remove any fields that are not being compared. If disabled, will keep the values from the first of the duplicates.",
+          "default": false,
+          "x-displayOptions": {
+            "show": {
+              "/operation": [
+                "removeDuplicateInputItems"
+              ]
+            },
+            "hide": {
+              "/compare": [
+                "allFields"
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "scope": {
+          "x-title": "Scope",
+          "description": "If set to ‘workflow,’ key values will be shared across all nodes in the workflow. If set to ‘node,’ key values will be specific to this node.",
+          "default": "node",
+          "x-displayOptions": {
+            "show": {
+              "/operation": [
+                "clearDeduplicationHistory",
+                "removeItemsSeenInPreviousExecutions"
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "workflow",
+            "node"
+          ],
+          "x-enumNames": [
+            "Workflow",
+            "Node"
+          ],
+          "x-enumDescriptions": [
+            "Deduplication info will be shared by all the nodes in the workflow",
+            "Deduplication info will be stored only for this node"
+          ]
+        },
+        "historySize": {
+          "x-title": "History Size",
+          "default": 10000,
+          "x-displayOptions": {
+            "show": {
+              "/logic": [
+                "removeItemsWithAlreadySeenKeyValues"
+              ],
+              "/operation": [
+                "removeItemsSeenInPreviousExecutions"
+              ]
+            }
+          },
+          "type": "number"
+        }
+      }
+    }
+  },
+  "x-icon": "file:removeDuplicates.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

@@ -1,0 +1,422 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SeaTable",
+  "description": "Consume the SeaTable API",
+  "x-n8n-node-type": "seaTable",
+  "x-n8n-version": 2,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "row",
+      "type": "string",
+      "enum": [
+        "row",
+        "base",
+        "link",
+        "asset"
+      ],
+      "x-enumNames": [
+        "Row",
+        "Base",
+        "Link",
+        "Asset"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "upload",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "asset"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "getPublicURL",
+        "upload"
+      ],
+      "x-enumNames": [
+        "Public URL",
+        "Upload"
+      ],
+      "x-enumDescriptions": [
+        "Get the public URL from asset path",
+        "Add a file/image to an existing row"
+      ]
+    },
+    "tableName": {
+      "x-title": "Table Name",
+      "description": "Choose from the list, or specify a name using an <a href=\"https://docs.n8n.io/code-examples/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "asset"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "rowId": {
+      "x-title": "Row ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "asset"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "fieldsToSend": {
+      "x-title": "Data to Send",
+      "description": "Whether to insert the input data this node receives in the new row",
+      "default": "defineBelow",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "autoMapInputData",
+        "defineBelow"
+      ],
+      "x-enumNames": [
+        "Auto-Map Input Data to Columns",
+        "Define Below for Each Column"
+      ],
+      "x-enumDescriptions": [
+        "Use when node input properties match destination column names",
+        "Set the value for each destination column"
+      ]
+    },
+    "apply_default": {
+      "x-title": "Apply Column Default Values",
+      "description": "Whether to use the column default values to populate new rows during creation (only available for normal backend)",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "bigdata": [
+            false
+          ],
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "inputsToIgnore": {
+      "x-title": "Inputs to Ignore",
+      "description": "List of input properties to avoid sending, separated by commas. Leave empty to send all properties.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "update"
+          ],
+          "fieldsToSend": [
+            "autoMapInputData"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "columnsUi": {
+      "x-title": "Columns to Send",
+      "description": "Add destination column with its value. Provide the value in this way:Date: YYYY-MM-DD or YYYY-MM-DD hh:mmDuration: time in secondsCheckbox: true, on or 1Multi-Select: comma-separated list.",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "update"
+          ],
+          "fieldsToSend": [
+            "defineBelow"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "columnValues": {
+          "x-title": "Column",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "columnName": {
+                "x-title": "Column Name or ID",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": "",
+                "type": "string"
+              },
+              "columnValue": {
+                "x-title": "Column Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "bigdata": {
+      "x-title": "Save to \"Big Data\" Backend",
+      "description": "Whether write to Big Data backend (true) or not (false). True requires the activation of the Big Data backend in the base.",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "asset"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "replace": {
+          "x-title": "Replace Existing File",
+          "description": "Whether to replace the existing asset with the same name (true). Otherwise, a new version with a different name (numeral in parentheses) will be uploaded (false).",
+          "default": true,
+          "type": "boolean"
+        },
+        "append": {
+          "x-title": "Append to Column",
+          "description": "Whether to keep existing files/images in the column and append the new asset (true). Otherwise, the existing files/images are removed from the column (false).",
+          "default": true,
+          "type": "boolean"
+        }
+      }
+    },
+    "viewName": {
+      "x-title": "View Name",
+      "description": "The name of SeaTable view to access, or specify by using an expression. Provide it in the way \"col.name:::col.type\".",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "list"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "searchColumn": {
+      "x-title": "Column Name or ID",
+      "description": "Select the column to be searched. Not all column types are supported for search. Choose from the list, or specify a name using an <a href=\"https://docs.n8n.io/code-examples/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "searchTerm": {
+      "x-title": "Search Term",
+      "description": "What to look for?",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "searchString": {
+      "x-title": "Name or email of the collaborator",
+      "description": "SeaTable identifies users with a unique username like 244b43hr6fy54bb4afa2c2cb7369d244@auth.local. Get this username from an email or the name of a collaborator.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "base"
+          ],
+          "operation": [
+            "collaborator"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "linkColumn": {
+      "x-title": "Link Column",
+      "description": "Choose from the list of specify the Link Column by using an expression. You have to provide it in the way \"column_name:::link_id:::other_table_id\".",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "link"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "linkColumnSourceId": {
+      "x-title": "Row ID From the Source Table",
+      "description": "Provide the row ID of table you selected",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "link"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "linkColumnTargetId": {
+      "x-title": "Row ID From the Target Table",
+      "description": "Provide the row ID of table you want to link",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "link"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "uploadColumn": {
+      "x-title": "Column Name",
+      "description": "Choose from the list, or specify the name using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "asset"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "dataPropertyName": {
+      "x-title": "Property Name",
+      "description": "Name of the binary property which contains the data for the file to be written",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "asset"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "assetPath": {
+      "x-title": "Asset Path",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "asset"
+          ],
+          "operation": [
+            "getPublicURL"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"resource\"] + \": \" + $parameter[\"operation\"]}}",
+  "x-icon": "file:seaTable.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "seaTableApi",
+      "required": true
+    }
+  ]
+}

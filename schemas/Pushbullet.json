@@ -1,0 +1,331 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Pushbullet",
+  "description": "Consume Pushbullet API",
+  "x-n8n-node-type": "pushbullet",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "push",
+      "type": "string",
+      "enum": [
+        "push"
+      ],
+      "x-enumNames": [
+        "Push"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "push"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a push",
+        "Delete a push",
+        "Get many pushes",
+        "Update a push"
+      ]
+    },
+    "type": {
+      "x-title": "Type",
+      "default": "note",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "push"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "file",
+        "link",
+        "note"
+      ],
+      "x-enumNames": [
+        "File",
+        "Link",
+        "Note"
+      ]
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "Title of the push",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "push"
+          ],
+          "operation": [
+            "create"
+          ],
+          "type": [
+            "note",
+            "link"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "body": {
+      "x-title": "Body",
+      "description": "Body of the push",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "push"
+          ],
+          "operation": [
+            "create"
+          ],
+          "type": [
+            "note",
+            "link",
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "url": {
+      "x-title": "URL",
+      "description": "URL of the push",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "push"
+          ],
+          "operation": [
+            "create"
+          ],
+          "type": [
+            "link"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "binaryPropertyName": {
+      "x-title": "Input Binary Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "push"
+          ],
+          "operation": [
+            "create"
+          ],
+          "type": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "target": {
+      "x-title": "Target",
+      "description": "Define the medium that will be used to send the push",
+      "default": "default",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "push"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "channel_tag",
+        "default",
+        "device_iden",
+        "email"
+      ],
+      "x-enumNames": [
+        "Channel Tag",
+        "Default",
+        "Device ID",
+        "Email"
+      ],
+      "x-enumDescriptions": [
+        "Send the push to all subscribers to your channel that has this tag",
+        "Broadcast it to all of the user's devices",
+        "Send the push to a specific device",
+        "Send the push to this email address"
+      ]
+    },
+    "value": {
+      "x-title": "Value Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "push"
+          ],
+          "operation": [
+            "create"
+          ],
+          "target": [
+            "device_iden"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "pushId": {
+      "x-title": "Push ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "push"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "push"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "push"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "push"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "active": {
+          "x-title": "Active",
+          "description": "Don't return deleted pushes",
+          "default": false,
+          "type": "boolean"
+        },
+        "modified_after": {
+          "x-title": "Modified After",
+          "description": "Request pushes modified after this timestamp",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "dismissed": {
+      "x-title": "Dismissed",
+      "description": "Whether to mark a push as having been dismissed by the user, will cause any notifications for the push to be hidden if possible",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "push"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:pushbullet.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "pushbulletOAuth2Api",
+      "required": true
+    }
+  ]
+}

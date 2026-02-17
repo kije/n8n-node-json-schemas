@@ -1,0 +1,295 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Sendy",
+  "description": "Consume Sendy API",
+  "x-n8n-node-type": "sendy",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "subscriber",
+      "type": "string",
+      "enum": [
+        "campaign",
+        "subscriber"
+      ],
+      "x-enumNames": [
+        "Campaign",
+        "Subscriber"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "add",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "subscriber"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "add",
+        "count",
+        "delete",
+        "remove",
+        "status"
+      ],
+      "x-enumNames": [
+        "Add",
+        "Count",
+        "Delete",
+        "Remove",
+        "Status"
+      ],
+      "x-enumDescriptions": [
+        "Add a subscriber to a list",
+        "Count subscribers",
+        "Delete a subscriber from a list",
+        "Unsubscribe user from a list",
+        "Get the status of subscriber"
+      ]
+    },
+    "fromName": {
+      "x-title": "From Name",
+      "description": "The 'From name' of your campaign",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "campaign"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "fromEmail": {
+      "x-title": "From Email",
+      "description": "The 'From email' of your campaign",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "campaign"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "replyTo": {
+      "x-title": "Reply To",
+      "description": "The 'Reply to' of your campaign",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "campaign"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "The 'Title' of your campaign",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "campaign"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "subject": {
+      "x-title": "Subject",
+      "description": "The 'Subject' of your campaign",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "campaign"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "htmlText": {
+      "x-title": "HTML Text",
+      "description": "The 'HTML version' of your campaign",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "campaign"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "sendCampaign": {
+      "x-title": "Send Campaign",
+      "description": "Whether to send the campaign as well and not just create a draft. Default is false.",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "campaign"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "brandId": {
+      "x-title": "Brand ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "campaign"
+          ],
+          "sendCampaign": [
+            false
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "subscriber"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "country": {
+          "x-title": "Country",
+          "description": "User's 2 letter country code",
+          "default": "",
+          "type": "string"
+        },
+        "gdpr": {
+          "x-title": "GDPR",
+          "description": "Whether you're signing up EU users in a GDPR compliant manner",
+          "default": false,
+          "type": "boolean"
+        },
+        "hp": {
+          "x-title": "Honeypot",
+          "description": "Include this 'honeypot' field to prevent spambots from signing up via this API call. When spambots fills in this field, this API call will exit, preventing them from signing up fake addresses to your form. This parameter is only supported in Sendy 3.0 onwards.",
+          "default": false,
+          "type": "boolean"
+        },
+        "ipaddress": {
+          "x-title": "IP Address",
+          "description": "User's IP address",
+          "default": "",
+          "type": "string"
+        },
+        "name": {
+          "x-title": "Name",
+          "description": "User's name",
+          "default": "",
+          "type": "string"
+        },
+        "referrer": {
+          "x-title": "Referrer",
+          "description": "The URL where the user signed up from",
+          "default": "",
+          "type": "string"
+        },
+        "silent": {
+          "x-title": "Silent",
+          "description": "Set to \"true\" if your list is 'Double opt-in' but you want to bypass that and signup the user to the list as 'Single Opt-in instead' (optional)",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "Email address of the subscriber",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "subscriber"
+          ],
+          "operation": [
+            "status"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "listId": {
+      "x-title": "List ID",
+      "description": "The list ID you want to subscribe a user to. This encrypted & hashed ID can be found under View all lists section named ID.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "subscriber"
+          ],
+          "operation": [
+            "status"
+          ]
+        }
+      },
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:sendy.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "sendyApi",
+      "required": true
+    }
+  ]
+}

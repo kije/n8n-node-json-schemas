@@ -1,0 +1,318 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RocketChat",
+  "description": "Consume RocketChat API",
+  "x-n8n-node-type": "rocketchat",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "chat",
+      "type": "string",
+      "enum": [
+        "chat"
+      ],
+      "x-enumNames": [
+        "Chat"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "postMessage",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "chat"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "postMessage"
+      ],
+      "x-enumNames": [
+        "Post Message"
+      ],
+      "x-enumDescriptions": [
+        "Post a message to a channel or a direct message"
+      ]
+    },
+    "channel": {
+      "x-title": "Channel",
+      "description": "The channel name with the prefix in front of it",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "chat"
+          ],
+          "operation": [
+            "postMessage"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "text": {
+      "x-title": "Text",
+      "description": "The text of the message to send, is optional because of attachments",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "chat"
+          ],
+          "operation": [
+            "postMessage"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "jsonParameters": {
+      "x-title": "JSON Parameters",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "chat"
+          ],
+          "operation": [
+            "postMessage"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "chat"
+          ],
+          "operation": [
+            "postMessage"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "alias": {
+          "x-title": "Alias",
+          "description": "This will cause the message’s name to appear as the given alias, but your username will still display",
+          "default": "",
+          "type": "string"
+        },
+        "avatar": {
+          "x-title": "Avatar",
+          "description": "If provided, this will make the avatar use the provided image URL",
+          "default": "",
+          "type": "string"
+        },
+        "emoji": {
+          "x-title": "Emoji",
+          "description": "This will cause the message’s name to appear as the given alias, but your username will still display",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "attachments": {
+      "x-title": "Attachments",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "chat"
+          ],
+          "operation": [
+            "postMessage"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "color": {
+          "x-title": "Color",
+          "description": "The color you want the order on the left side to be, any value background-css supports",
+          "default": "#ff0000",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$",
+          "x-format": "color"
+        },
+        "text": {
+          "x-title": "Text",
+          "description": "The text to display for this attachment, it is different than the message’s text",
+          "default": "",
+          "type": "string"
+        },
+        "ts": {
+          "x-title": "Timestamp",
+          "description": "Displays the time next to the text portion",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "thumbUrl": {
+          "x-title": "Thumb URL",
+          "description": "An image that displays to the left of the text, looks better when this is relatively small",
+          "default": "",
+          "type": "string"
+        },
+        "messageLink": {
+          "x-title": "Message Link",
+          "description": "Only applicable if the timestamp is provided, as it makes the time clickable to this link",
+          "default": "",
+          "type": "string"
+        },
+        "collapsed": {
+          "x-title": "Collapsed",
+          "description": "Causes the image, audio, and video sections to be hiding when collapsed is true",
+          "default": false,
+          "type": "boolean"
+        },
+        "authorName": {
+          "x-title": "Author Name",
+          "description": "Name of the author",
+          "default": "",
+          "type": "string"
+        },
+        "authorLink": {
+          "x-title": "Author Link",
+          "description": "Providing this makes the author name clickable and points to this link",
+          "default": "",
+          "type": "string"
+        },
+        "authorIcon": {
+          "x-title": "Author Icon",
+          "description": "Displays a tiny icon to the left of the Author’s name",
+          "default": "",
+          "type": "string"
+        },
+        "title": {
+          "x-title": "Title",
+          "description": "Title to display for this attachment, displays under the author",
+          "default": "",
+          "type": "string"
+        },
+        "titleLink": {
+          "x-title": "Title Link",
+          "description": "Providing this makes the title clickable, pointing to this link",
+          "default": "",
+          "type": "string"
+        },
+        "titleLinkDownload": {
+          "x-title": "Title Link Download",
+          "description": "When this is true, a download icon appears and clicking this saves the link to file",
+          "default": false,
+          "type": "boolean"
+        },
+        "imageUrl": {
+          "x-title": "Image URL",
+          "description": "The image to display, will be “big” and easy to see",
+          "default": "",
+          "type": "string"
+        },
+        "audioUrl": {
+          "x-title": "Audio URL",
+          "description": "Audio file to play, only supports what html audio does",
+          "default": "",
+          "type": "string"
+        },
+        "videoUrl": {
+          "x-title": "Video URL",
+          "description": "Video file to play, only supports what html video does",
+          "default": "",
+          "type": "string"
+        },
+        "fields": {
+          "x-title": "Fields",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "fieldsValues": {
+              "x-title": "Fields",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "short": {
+                    "x-title": "Short",
+                    "description": "Whether this field should be a short field",
+                    "default": false,
+                    "type": "boolean"
+                  },
+                  "title": {
+                    "x-title": "Title",
+                    "description": "The title of this field",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "The value of this field, displayed underneath the title value",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "attachmentsJson": {
+      "x-title": "Attachments",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "chat"
+          ],
+          "operation": [
+            "postMessage"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    }
+  },
+  "x-subtitle": "={{$parameter[\"resource\"] + \": \" + $parameter[\"operation\"]}}",
+  "x-icon": "file:rocketchat.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "rocketchatApi",
+      "required": true
+    }
+  ]
+}

@@ -1,0 +1,734 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Salesmate",
+  "description": "Consume Salesmate API",
+  "x-n8n-node-type": "salesmate",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "activity",
+      "type": "string",
+      "enum": [
+        "activity",
+        "company",
+        "deal"
+      ],
+      "x-enumNames": [
+        "Activity",
+        "Company",
+        "Deal"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a deal",
+        "Delete a deal",
+        "Get a deal",
+        "Get many deals",
+        "Update a deal"
+      ]
+    },
+    "name": {
+      "x-title": "Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "owner": {
+      "x-title": "Owner Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "rawData": {
+      "x-title": "RAW Data",
+      "description": "Whether the data should include the fields details",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "description": {
+          "x-title": "Description",
+          "description": "This field contains details related to the deal",
+          "default": "",
+          "type": "string"
+        },
+        "tags": {
+          "x-title": "Tags",
+          "description": "This field contains tags associated with an deal",
+          "default": "",
+          "type": "string"
+        },
+        "primaryCompany": {
+          "x-title": "Primary Company Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "source": {
+          "x-title": "Source",
+          "default": "Ads",
+          "type": "string",
+          "enum": [
+            "Ads",
+            "Referrals",
+            "Website",
+            "Word of mouth"
+          ],
+          "x-enumNames": [
+            "Ads",
+            "Referrals",
+            "Website",
+            "Word of Mouth"
+          ]
+        },
+        "estimatedCloseDate": {
+          "x-title": "Estimated Close Date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "dealValue": {
+          "x-title": "Deal Value",
+          "default": 0,
+          "type": "number",
+          "x-precision": 2
+        },
+        "priority": {
+          "x-title": "Priority",
+          "default": "Medium",
+          "type": "string",
+          "enum": [
+            "High",
+            "Medium",
+            "Low"
+          ],
+          "x-enumNames": [
+            "High",
+            "Medium",
+            "Low"
+          ]
+        }
+      }
+    },
+    "id": {
+      "x-title": "Deal ID",
+      "description": "If more than one deal add them separated by ,",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "title": {
+          "x-title": "Title",
+          "default": "",
+          "type": "string"
+        },
+        "owner": {
+          "x-title": "Owner Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "primaryContact": {
+          "x-title": "Primary Contact Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "pipeline": {
+          "x-title": "Pipeline",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "Sales"
+          ],
+          "x-enumNames": [
+            "Sales"
+          ]
+        },
+        "status": {
+          "x-title": "Status",
+          "default": "Open",
+          "type": "string",
+          "enum": [
+            "Open",
+            "Close",
+            "Lost"
+          ],
+          "x-enumNames": [
+            "Open",
+            "Close",
+            "Lost"
+          ]
+        },
+        "stage": {
+          "x-title": "Stage",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "Contacted",
+            "In Negotiation",
+            "New (Untouched)",
+            "Proposal Presented",
+            "Qualified"
+          ],
+          "x-enumNames": [
+            "Contacted",
+            "In Negotiation",
+            "New (Untouched)",
+            "Proposal Presented",
+            "Qualified"
+          ]
+        },
+        "currency": {
+          "x-title": "Currency",
+          "default": "",
+          "type": "string"
+        },
+        "description": {
+          "x-title": "Description",
+          "description": "This field contains details related to the deal",
+          "default": "",
+          "type": "string"
+        },
+        "tags": {
+          "x-title": "Tags",
+          "description": "This field contains tags associated with an deal",
+          "default": "",
+          "type": "string"
+        },
+        "primaryCompany": {
+          "x-title": "Primary Company Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "source": {
+          "x-title": "Source",
+          "default": "Ads",
+          "type": "string",
+          "enum": [
+            "Ads",
+            "Referrals",
+            "Website",
+            "Word of mouth"
+          ],
+          "x-enumNames": [
+            "Ads",
+            "Referrals",
+            "Website",
+            "Word of Mouth"
+          ]
+        },
+        "estimatedCloseDate": {
+          "x-title": "Estimated Close Date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "dealValue": {
+          "x-title": "Deal Value",
+          "default": 0,
+          "type": "number",
+          "x-precision": 2
+        },
+        "priority": {
+          "x-title": "Priority",
+          "default": "Medium",
+          "type": "string",
+          "enum": [
+            "High",
+            "Medium",
+            "Low"
+          ],
+          "x-enumNames": [
+            "High",
+            "Medium",
+            "Low"
+          ]
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 10,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 25
+    },
+    "jsonParameters": {
+      "x-title": "JSON Parameters",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "deal"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "fields": {
+          "x-title": "Fields",
+          "description": "Comma-separated list of fields to return",
+          "default": "",
+          "type": "string"
+        },
+        "sortBy": {
+          "x-title": "Sort By",
+          "description": "The field to sort by",
+          "default": "",
+          "type": "string"
+        },
+        "sortOrder": {
+          "x-title": "Sort Order",
+          "default": "desc",
+          "type": "string",
+          "enum": [
+            "asc",
+            "desc"
+          ],
+          "x-enumNames": [
+            "ASC",
+            "DESC"
+          ]
+        }
+      }
+    },
+    "filtersJson": {
+      "x-title": "Filters",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "deal"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "filtersUi": {
+          "x-title": "Filters",
+          "type": "object",
+          "properties": {
+            "operator": {
+              "x-title": "Operator",
+              "default": "AND",
+              "type": "string",
+              "enum": [
+                "AND",
+                "OR"
+              ],
+              "x-enumNames": [
+                "AND",
+                "OR"
+              ]
+            },
+            "conditions": {
+              "x-title": "Conditions",
+              "default": {},
+              "type": "object",
+              "properties": {
+                "conditionsUi": {
+                  "x-title": "Conditions",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "field": {
+                        "x-title": "Field",
+                        "default": "title",
+                        "type": "string",
+                        "enum": [
+                          "title",
+                          "tags",
+                          "lastCommunicationMode"
+                        ],
+                        "x-enumNames": [
+                          "Title",
+                          "Tags",
+                          "Last Communication Mode"
+                        ]
+                      },
+                      "condition": {
+                        "x-title": "Condition",
+                        "description": "Value of the property to set",
+                        "default": "EQUALS",
+                        "type": "string",
+                        "enum": [
+                          "EQUALS",
+                          "NOT_EQUALS",
+                          "Contains",
+                          "DOES_NOT_CONTAINS",
+                          "EMPTY",
+                          "NOT_EMPTY",
+                          "STARTS_WITH",
+                          "ENDS_WITH"
+                        ],
+                        "x-enumNames": [
+                          "Equals",
+                          "Not Equals",
+                          "CONTAINS",
+                          "Does Not Contains",
+                          "Empty",
+                          "Not Empty",
+                          "Starts With",
+                          "Ends With"
+                        ]
+                      },
+                      "value": {
+                        "x-title": "Value",
+                        "default": "",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "title": {
+      "x-title": "Title",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "type": {
+      "x-title": "Type",
+      "description": "This field displays activity type such as call, meeting etc",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "primaryContact": {
+      "x-title": "Primary Contact Name or ID",
+      "description": "Primary contact for the deal. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "pipeline": {
+      "x-title": "Pipeline",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "Sales"
+      ],
+      "x-enumNames": [
+        "Sales"
+      ]
+    },
+    "status": {
+      "x-title": "Status",
+      "default": "Open",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "Open",
+        "Close",
+        "Lost"
+      ],
+      "x-enumNames": [
+        "Open",
+        "Close",
+        "Lost"
+      ]
+    },
+    "stage": {
+      "x-title": "Stage",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "New (Untouched)",
+        "Contacted",
+        "Qualified",
+        "In Negotiation",
+        "Proposal Presented"
+      ],
+      "x-enumNames": [
+        "New (Untouched)",
+        "Contacted",
+        "Qualified",
+        "In Negotiation",
+        "Proposal Presented"
+      ]
+    },
+    "currency": {
+      "x-title": "Currency",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \":\" + $parameter[\"resource\"]}}",
+  "x-icon": "file:salesmate.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "salesmateApi",
+      "required": true
+    }
+  ]
+}

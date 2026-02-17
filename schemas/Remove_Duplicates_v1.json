@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Remove Duplicates",
+  "description": "Delete items with matching field values",
+  "x-n8n-node-type": "removeDuplicates",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "compare": {
+      "x-title": "Compare",
+      "description": "The fields of the input items to compare to see if they are the same",
+      "default": "allFields",
+      "type": "string",
+      "enum": [
+        "allFields",
+        "allFieldsExcept",
+        "selectedFields"
+      ],
+      "x-enumNames": [
+        "All Fields",
+        "All Fields Except",
+        "Selected Fields"
+      ]
+    },
+    "fieldsToExclude": {
+      "x-title": "Fields To Exclude",
+      "description": "Fields in the input to exclude from the comparison",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "compare": [
+            "allFieldsExcept"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "fieldsToCompare": {
+      "x-title": "Fields To Compare",
+      "description": "Fields in the input to add to the comparison",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "compare": [
+            "selectedFields"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "compare": [
+            "allFieldsExcept",
+            "selectedFields"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "disableDotNotation": {
+          "x-title": "Disable Dot Notation",
+          "description": "Whether to disallow referencing child fields using `parent.child` in the field name",
+          "default": false,
+          "type": "boolean"
+        },
+        "removeOtherFields": {
+          "x-title": "Remove Other Fields",
+          "description": "Whether to remove any fields that are not being compared. If disabled, will keep the values from the first of the duplicates.",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-icon": "file:removeDuplicates.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

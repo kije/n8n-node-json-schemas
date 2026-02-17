@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Postmark Trigger",
+  "description": "Starts the workflow when Postmark events occur",
+  "x-n8n-node-type": "postmarkTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "events": {
+      "x-title": "Events",
+      "description": "Webhook events that will be enabled for that endpoint",
+      "default": [],
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "bounce",
+          "click",
+          "delivery",
+          "open",
+          "spamComplaint",
+          "subscriptionChange"
+        ]
+      },
+      "x-enumNames": [
+        "Bounce",
+        "Click",
+        "Delivery",
+        "Open",
+        "Spam Complaint",
+        "Subscription Change"
+      ]
+    },
+    "firstOpen": {
+      "x-title": "First Open",
+      "description": "Only fires on first open for event \"Open\"",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "events": [
+            "open"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "includeContent": {
+      "x-title": "Include Content",
+      "description": "Whether to include message content for events \"Bounce\" and \"Spam Complaint\"",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "events": [
+            "bounce",
+            "spamComplaint"
+          ]
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "x-icon": "file:postmark.png",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "postmarkApi",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

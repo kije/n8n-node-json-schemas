@@ -1,0 +1,873 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Salesforce",
+  "description": "Consume Salesforce API",
+  "x-n8n-node-type": "salesforce",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "description": "OAuth Authorization Flow",
+      "default": "oAuth2",
+      "type": "string",
+      "enum": [
+        "oAuth2",
+        "jwt"
+      ],
+      "x-enumNames": [
+        "OAuth2",
+        "OAuth2 JWT"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "lead",
+      "type": "string",
+      "enum": [
+        "account",
+        "attachment",
+        "case",
+        "contact",
+        "customObject",
+        "document",
+        "flow",
+        "lead",
+        "opportunity",
+        "search",
+        "task",
+        "user"
+      ],
+      "x-enumNames": [
+        "Account",
+        "Attachment",
+        "Case",
+        "Contact",
+        "Custom Object",
+        "Document",
+        "Flow",
+        "Lead",
+        "Opportunity",
+        "Search",
+        "Task",
+        "User"
+      ],
+      "x-enumDescriptions": [
+        "Represents an individual account, which is an organization or person involved with your business (such as customers, competitors, and partners)",
+        "Represents a file that a has uploaded and attached to a parent object",
+        "Represents a case, which is a customer issue or problem",
+        "Represents a contact, which is an individual associated with an account",
+        "Represents a custom object",
+        "Represents a document",
+        "Represents an autolaunched flow",
+        "Represents a prospect or potential",
+        "Represents an opportunity, which is a sale or pending deal",
+        "Search records",
+        "Represents a business activity such as making a phone call or other to-do items. In the user interface, and records are collectively referred to as activities.",
+        "Represents a person, which is one user in system"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "invoke",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "flow"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "getAll",
+        "invoke"
+      ],
+      "x-enumNames": [
+        "Get Many",
+        "Invoke"
+      ],
+      "x-enumDescriptions": [
+        "Get many flows",
+        "Invoke a flow"
+      ]
+    },
+    "externalId": {
+      "x-title": "Match Against",
+      "description": "The field to check to see if the account already exists. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "account"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "externalIdValue": {
+      "x-title": "Value to Match",
+      "description": "If this value exists in the 'match against' field, update the account. Otherwise create a new one.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "account"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "company": {
+      "x-title": "Company",
+      "description": "Company of the lead. If person account record types have been enabled, and if the value of Company is null, the lead converts to a person account.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "lead"
+          ],
+          "operation": [
+            "create",
+            "upsert"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "lastname": {
+      "x-title": "Last Name",
+      "description": "Required. Last name of the contact. Limited to 80 characters.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create",
+            "upsert"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "attachment"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "description": {
+          "x-title": "Description",
+          "description": "Text description of the Document. Limit: 255 characters.",
+          "default": "",
+          "type": "string"
+        },
+        "isPrivate": {
+          "x-title": "Is Private",
+          "description": "Whether this record is viewable only by the owner and administrators (true) or viewable by all otherwise-allowed users (false)",
+          "default": false,
+          "type": "boolean"
+        },
+        "owner": {
+          "x-title": "Owner Name or ID",
+          "description": "ID of the User who owns the attachment. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "leadId": {
+      "x-title": "Lead ID",
+      "description": "ID of lead that needs to be fetched",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "lead"
+          ],
+          "operation": [
+            "addNote"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "attachment"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "binaryPropertyName": {
+          "x-title": "Input Binary Field",
+          "default": "data",
+          "type": "string"
+        },
+        "description": {
+          "x-title": "Description",
+          "description": "Text description of the Document. Limit: 255 characters.",
+          "default": "",
+          "type": "string"
+        },
+        "isPrivate": {
+          "x-title": "Is Private",
+          "description": "Whether this record is viewable only by the owner and administrators (true) or viewable by all otherwise-allowed users (false)",
+          "default": false,
+          "type": "boolean"
+        },
+        "name": {
+          "x-title": "Name",
+          "description": "Required. Name of the attached file. Maximum size is 255 characters. Label is File Name.",
+          "default": "",
+          "type": "string"
+        },
+        "owner": {
+          "x-title": "Owner Name or ID",
+          "description": "ID of the User who owns the attachment. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "flow"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "flow"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "conditionsUi": {
+          "x-title": "Conditions",
+          "description": "The condition to set",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "conditionValues": {
+              "x-title": "Condition",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "x-title": "Field Name or ID",
+                    "description": "For date, number, or boolean, please use expressions. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "operation": {
+                    "x-title": "Operation",
+                    "default": "equal",
+                    "type": "string",
+                    "enum": [
+                      "<",
+                      "<=",
+                      "equal",
+                      ">",
+                      ">="
+                    ],
+                    "x-enumNames": [
+                      "<",
+                      "<=",
+                      "=",
+                      ">",
+                      ">="
+                    ]
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "fields": {
+          "x-title": "Fields",
+          "description": "Fields to include separated by ,",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "campaignId": {
+      "x-title": "Campaign Name or ID",
+      "description": "ID of the campaign that needs to be fetched. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "addToCampaign"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "Title of the note",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "account"
+          ],
+          "operation": [
+            "addNote"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "contactId": {
+      "x-title": "Contact ID",
+      "description": "ID of contact that needs to be fetched",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "addNote"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "customObject": {
+      "x-title": "Custom Object Name or ID",
+      "description": "Name of the custom object. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customObject"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "customFieldsUi": {
+      "x-title": "Fields",
+      "description": "Filter by custom fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customObject"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "customFieldsValues": {
+          "x-title": "Custom Field",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "fieldId": {
+                "x-title": "Field Name or ID",
+                "description": "The ID of the field. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                "default": "",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "The value to set on custom field",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "recordId": {
+      "x-title": "Record ID",
+      "description": "Record ID to be deleted",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customObject"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "binaryPropertyName": {
+      "x-title": "Input Binary Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "attachment"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "Required. Name of the attached file. Maximum size is 255 characters. Label is File Name.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "attachment"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "closeDate": {
+      "x-title": "Close Date",
+      "description": "Required. Date when the opportunity is expected to close.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "create",
+            "upsert"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "stageName": {
+      "x-title": "Stage Name or ID",
+      "description": "Required. Date when the opportunity is expected to close. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "create",
+            "upsert"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "opportunityId": {
+      "x-title": "Opportunity ID",
+      "description": "ID of opportunity that needs to be fetched",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "addNote"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "accountId": {
+      "x-title": "Account ID",
+      "description": "ID of account that needs to be fetched",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "account"
+          ],
+          "operation": [
+            "addNote"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "query": {
+      "x-title": "Query",
+      "description": "A SOQL query. An example query parameter string might look like: “SELECT+Name+FROM+MyObject”. If the SOQL query string is invalid, a MALFORMED_QUERY response is returned.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "search"
+          ],
+          "operation": [
+            "query"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "type": {
+      "x-title": "Type Name or ID",
+      "description": "The type of case. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "case"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "caseId": {
+      "x-title": "Case ID",
+      "description": "ID of case that needs to be fetched",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "case"
+          ],
+          "operation": [
+            "addComment"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "status": {
+      "x-title": "Status Name or ID",
+      "description": "The current status of the task, such as In Progress or Completed. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "taskId": {
+      "x-title": "Task ID",
+      "description": "ID of task that needs to be fetched",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "parentId": {
+      "x-title": "Parent ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "attachment"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "attachmentId": {
+      "x-title": "Attachment ID",
+      "description": "ID of attachment that needs to be fetched",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "attachment"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "userId": {
+      "x-title": "User ID",
+      "description": "ID of user that needs to be fetched",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "apiName": {
+      "x-title": "API Name",
+      "description": "Required. API name of the flow.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "flow"
+          ],
+          "operation": [
+            "invoke"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "jsonParameters": {
+      "x-title": "JSON Parameters",
+      "description": "Whether the input variables should be set via the value-key pair UI or JSON/RAW",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "flow"
+          ],
+          "operation": [
+            "invoke"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "variablesJson": {
+      "x-title": "Variables",
+      "description": "Input variables as JSON object",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "flow"
+          ],
+          "operation": [
+            "invoke"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "variablesUi": {
+      "x-title": "Variables",
+      "description": "The input variable to send",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "flow"
+          ],
+          "operation": [
+            "invoke"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "variablesValues": {
+          "x-title": "Variable",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Name",
+                "description": "Name of the input variable",
+                "default": "",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "Value of the input variable",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:salesforce.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "salesforceOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    },
+    {
+      "name": "salesforceJwtApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "jwt"
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,269 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QuickChart",
+  "description": "Create a chart via QuickChart",
+  "x-n8n-node-type": "quickChart",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "chartType": {
+      "x-title": "Chart Type",
+      "description": "The type of chart to create",
+      "default": "bar",
+      "type": "string",
+      "enum": [
+        "bar",
+        "doughnut",
+        "line",
+        "pie",
+        "polarArea"
+      ],
+      "x-enumNames": [
+        "Bar Chart",
+        "Doughnut Chart",
+        "Line Chart",
+        "Pie Chart",
+        "Polar Chart"
+      ]
+    },
+    "labelsMode": {
+      "x-title": "Add Labels",
+      "default": "manually",
+      "type": "string",
+      "enum": [
+        "manually",
+        "array"
+      ],
+      "x-enumNames": [
+        "Manually",
+        "From Array"
+      ]
+    },
+    "labelsUi": {
+      "x-title": "Labels",
+      "description": "Labels to use in the chart",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "labelsMode": [
+            "manually"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "labelsValues": {
+          "x-title": "Labels",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "x-title": "Label",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "labelsArray": {
+      "x-title": "Labels Array",
+      "description": "The array of labels to be used in the chart",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "labelsMode": [
+            "array"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "data": {
+      "x-title": "Data",
+      "description": "Data to use for the dataset, documentation and examples <a href=\"https://quickchart.io/documentation/chart-types/\" target=\"_blank\">here</a>",
+      "default": "",
+      "x-required": true,
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "output": {
+      "x-title": "Put Output In Field",
+      "description": "The binary data will be displayed in the Output panel on the right, under the Binary tab",
+      "default": "data",
+      "x-required": true,
+      "type": "string"
+    },
+    "chartOptions": {
+      "x-title": "Chart Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "backgroundColor": {
+          "x-title": "Background Color",
+          "description": "Background color of the chart",
+          "default": "",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$",
+          "x-format": "color"
+        },
+        "devicePixelRatio": {
+          "x-title": "Device Pixel Ratio",
+          "description": "Pixel ratio of the chart",
+          "default": 2,
+          "type": "number",
+          "minimum": 1,
+          "maximum": 2
+        },
+        "format": {
+          "x-title": "Format",
+          "description": "File format of the resulting chart",
+          "default": "png",
+          "type": "string",
+          "enum": [
+            "png",
+            "pdf",
+            "svg",
+            "webp"
+          ],
+          "x-enumNames": [
+            "PNG",
+            "PDF",
+            "SVG",
+            "WebP"
+          ]
+        },
+        "height": {
+          "x-title": "Height",
+          "description": "Height of the chart",
+          "default": 300,
+          "type": "number"
+        },
+        "horizontal": {
+          "x-title": "Horizontal",
+          "description": "Whether the chart should use its Y axis horizontal",
+          "default": false,
+          "x-displayOptions": {
+            "show": {
+              "/chartType": [
+                "bar",
+                "boxplot",
+                "violin"
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "width": {
+          "x-title": "Width",
+          "description": "Width of the chart",
+          "default": 500,
+          "type": "number"
+        }
+      }
+    },
+    "datasetOptions": {
+      "x-title": "Dataset Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "backgroundColor": {
+          "x-title": "Background Color",
+          "description": "Color used for the background the dataset (area of a line graph, fill of a bar chart, etc.)",
+          "default": "",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$",
+          "x-format": "color"
+        },
+        "borderColor": {
+          "x-title": "Border Color",
+          "description": "Color used for lines of the dataset",
+          "default": "",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$",
+          "x-format": "color"
+        },
+        "fill": {
+          "x-title": "Fill",
+          "description": "Whether to fill area of the dataset",
+          "default": true,
+          "x-displayOptions": {
+            "show": {
+              "/chartType": [
+                "line"
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "label": {
+          "x-title": "Label",
+          "description": "The label of the dataset",
+          "default": "",
+          "type": "string"
+        },
+        "pointStyle": {
+          "x-title": "Point Style",
+          "description": "Style to use for points of the dataset",
+          "default": "circle",
+          "x-displayOptions": {
+            "show": {
+              "/chartType": [
+                "line"
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "circle",
+            "cross",
+            "crossRot",
+            "dash",
+            "line",
+            "rect",
+            "rectRot",
+            "rectRounded",
+            "star",
+            "triangle"
+          ],
+          "x-enumNames": [
+            "Circle",
+            "Cross",
+            "CrossRot",
+            "Dash",
+            "Line",
+            "Rect",
+            "Rect Rot",
+            "Rect Rounded",
+            "Star",
+            "Triangle"
+          ]
+        }
+      }
+    }
+  },
+  "x-icon": "file:quickChart.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

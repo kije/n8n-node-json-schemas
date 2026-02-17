@@ -1,0 +1,217 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RabbitMQ Trigger",
+  "description": "Listens to RabbitMQ messages",
+  "x-n8n-node-type": "rabbitmqTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "queue": {
+      "x-title": "Queue / Topic",
+      "description": "The name of the queue to read from",
+      "default": "",
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "arguments": {
+          "x-title": "Arguments",
+          "description": "Arguments to add",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "argument": {
+              "x-title": "Argument",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "x-title": "Key",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "assertExchange": {
+          "x-title": "Assert Exchange",
+          "description": "Whether to assert the exchange exists before sending",
+          "default": true,
+          "type": "boolean"
+        },
+        "assertQueue": {
+          "x-title": "Assert Queue",
+          "description": "Whether to assert the queue exists before sending",
+          "default": true,
+          "type": "boolean"
+        },
+        "autoDelete": {
+          "x-title": "Auto Delete Queue",
+          "description": "Whether the queue will be deleted when the number of consumers drops to zero",
+          "default": false,
+          "type": "boolean"
+        },
+        "binding": {
+          "x-title": "Binding",
+          "description": "Add binding to queu",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "bindings": {
+              "x-title": "Binding",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "exchange": {
+                    "x-title": "Exchange",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "routingKey": {
+                    "x-title": "RoutingKey",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "contentIsBinary": {
+          "x-title": "Content Is Binary",
+          "description": "Whether to save the content as binary",
+          "default": false,
+          "type": "boolean"
+        },
+        "acknowledge": {
+          "x-title": "Delete From Queue When",
+          "description": "When to acknowledge the message",
+          "default": "immediately",
+          "type": "string",
+          "enum": [
+            "executionFinishes",
+            "executionFinishesSuccessfully",
+            "immediately",
+            "laterMessageNode"
+          ],
+          "x-enumNames": [
+            "Execution Finishes",
+            "Execution Finishes Successfully",
+            "Immediately",
+            "Specified Later in Workflow"
+          ],
+          "x-enumDescriptions": [
+            "After the workflow execution finished. No matter if the execution was successful or not.",
+            "After the workflow execution finished successfully",
+            "As soon as the message got received",
+            "Using a RabbitMQ node to remove the item from the queue"
+          ]
+        },
+        "durable": {
+          "x-title": "Durable",
+          "description": "Whether the queue will survive broker restarts",
+          "default": true,
+          "type": "boolean"
+        },
+        "exclusive": {
+          "x-title": "Exclusive",
+          "description": "Whether to scope the queue to the connection",
+          "default": false,
+          "type": "boolean"
+        },
+        "headers": {
+          "x-title": "Headers",
+          "description": "Headers to add",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "header": {
+              "x-title": "Header",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "x-title": "Key",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "jsonParseBody": {
+          "x-title": "JSON Parse Body",
+          "description": "Whether to parse the body to an object",
+          "default": false,
+          "x-displayOptions": {
+            "hide": {
+              "contentIsBinary": [
+                true
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "onlyContent": {
+          "x-title": "Only Content",
+          "description": "Whether to return only the content property",
+          "default": false,
+          "x-displayOptions": {
+            "hide": {
+              "contentIsBinary": [
+                true
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "parallelMessages": {
+          "x-title": "Parallel Message Processing Limit",
+          "description": "Max number of executions at a time. Use -1 for no limit.",
+          "default": -1,
+          "x-displayOptions": {
+            "hide": {
+              "acknowledge": [
+                "immediately"
+              ]
+            }
+          },
+          "type": "number"
+        }
+      }
+    }
+  },
+  "x-icon": "file:rabbitmq.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "rabbitmq",
+      "required": true
+    }
+  ]
+}

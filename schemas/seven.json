@@ -1,0 +1,136 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "seven",
+  "description": "Send SMS and make text-to-speech calls",
+  "x-n8n-node-type": "sms77",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "sms",
+      "type": "string",
+      "enum": [
+        "sms",
+        "voice"
+      ],
+      "x-enumNames": [
+        "SMS",
+        "Voice Call"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "send",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "voice"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "send"
+      ],
+      "x-enumNames": [
+        "Send"
+      ],
+      "x-enumDescriptions": [
+        "Converts text to voice and calls a given number"
+      ]
+    },
+    "from": {
+      "x-title": "From",
+      "description": "The caller ID displayed in the receivers display. Max 16 numeric or 11 alphanumeric characters.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "sms"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "to": {
+      "x-title": "To",
+      "description": "The number of your recipient(s) separated by comma. Can be regular numbers or contact/groups from seven.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "sms",
+            "voice"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "message": {
+      "x-title": "Message",
+      "description": "The message to send. Max. 1520 characters",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "sms",
+            "voice"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "voice"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "from": {
+          "x-title": "From",
+          "description": "The caller ID. Please use only verified sender IDs, one of your virtual inbound numbers or one of our shared virtual numbers.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:seven.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "sms77Api",
+      "required": true
+    }
+  ]
+}

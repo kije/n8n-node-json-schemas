@@ -1,0 +1,277 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SeaTable",
+  "description": "Consume the SeaTable API",
+  "x-n8n-node-type": "seaTable",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "row",
+      "type": "string",
+      "enum": [
+        "row"
+      ],
+      "x-enumNames": [
+        "Row"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "description": "The operation being performed",
+      "default": "create",
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a row",
+        "Delete a row",
+        "Get a row",
+        "Get many rows",
+        "Update a row"
+      ]
+    },
+    "tableName": {
+      "x-title": "Table Name",
+      "description": "The name of SeaTable table to access. Choose from the list, or specify the name using an <a href=\"https://docs.n8n.io/code-examples/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "hide": {
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "tableId": {
+      "x-title": "Table ID",
+      "description": "The name of SeaTable table to access. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "rowId": {
+      "x-title": "Row ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "fieldsToSend": {
+      "x-title": "Data to Send",
+      "description": "Whether to insert the input data this node receives in the new row",
+      "default": "defineBelow",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "update"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "autoMapInputData",
+        "defineBelow"
+      ],
+      "x-enumNames": [
+        "Auto-Map Input Data to Columns",
+        "Define Below for Each Column"
+      ],
+      "x-enumDescriptions": [
+        "Use when node input properties match destination column names",
+        "Set the value for each destination column"
+      ]
+    },
+    "inputsToIgnore": {
+      "x-title": "Inputs to Ignore",
+      "description": "List of input properties to avoid sending, separated by commas. Leave empty to send all properties.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "update"
+          ],
+          "fieldsToSend": [
+            "autoMapInputData"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "columnsUi": {
+      "x-title": "Columns to Send",
+      "description": "Add destination column with its value",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "update"
+          ],
+          "fieldsToSend": [
+            "defineBelow"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "columnValues": {
+          "x-title": "Column",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "columnName": {
+                "x-title": "Column Name",
+                "description": "Choose from the list, or specify the name using an <a href=\"https://docs.n8n.io/code-examples/expressions/\">expression</a>",
+                "default": "",
+                "type": "string"
+              },
+              "columnValue": {
+                "x-title": "Column Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "view_name": {
+          "x-title": "View Name",
+          "description": "Choose from the list, or specify an View Name using an <a href=\"https://docs.n8n.io/code-examples/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "convert_link_id": {
+          "x-title": "Convert Link ID",
+          "description": "Whether the ID of the linked row is returned in the link column (true). Otherwise, it return the name of the linked row (false).",
+          "default": false,
+          "type": "boolean"
+        },
+        "direction": {
+          "x-title": "Direction",
+          "description": "The direction of the sort, ascending (asc) or descending (desc)",
+          "default": "asc",
+          "type": "string",
+          "enum": [
+            "asc",
+            "desc"
+          ],
+          "x-enumNames": [
+            "Ascending",
+            "Descending"
+          ]
+        },
+        "order_by": {
+          "x-title": "Order By Column",
+          "description": "Choose from the list, or specify a Column using an <a href=\"https://docs.n8n.io/code-examples/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"resource\"] + \": \" + $parameter[\"operation\"]}}",
+  "x-icon": "file:seaTable.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "seaTableApi",
+      "required": true
+    }
+  ]
+}

@@ -1,0 +1,289 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Redis",
+  "description": "Get, send and update data in Redis",
+  "x-n8n-node-type": "redis",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "operation": {
+      "x-title": "Operation",
+      "default": "info",
+      "type": "string",
+      "enum": [
+        "delete",
+        "get",
+        "incr",
+        "info",
+        "keys",
+        "llen",
+        "pop",
+        "publish",
+        "push",
+        "set"
+      ],
+      "x-enumNames": [
+        "Delete",
+        "Get",
+        "Increment",
+        "Info",
+        "Keys",
+        "List Length",
+        "Pop",
+        "Publish",
+        "Push",
+        "Set"
+      ],
+      "x-enumDescriptions": [
+        "Delete a key from Redis",
+        "Get the value of a key from Redis",
+        "Atomically increments a key by 1. Creates the key if it does not exist.",
+        "Returns generic information about the Redis instance",
+        "Returns all the keys matching a pattern",
+        "Returns the length of a list",
+        "Pop data from a redis list",
+        "Publish message to redis channel",
+        "Push data to a redis list",
+        "Set the value of a key in redis"
+      ]
+    },
+    "key": {
+      "x-title": "Key",
+      "description": "Name of the key to set in Redis",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "set"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "propertyName": {
+      "x-title": "Name",
+      "description": "Optional name of the property to write received data to. Supports dot-notation. Example: \"data.person[0].name\".",
+      "default": "propertyName",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "pop"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "keyType": {
+      "x-title": "Key Type",
+      "description": "The type of the key to set",
+      "default": "automatic",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "set"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "automatic",
+        "hash",
+        "list",
+        "sets",
+        "string"
+      ],
+      "x-enumNames": [
+        "Automatic",
+        "Hash",
+        "List",
+        "Sets",
+        "String"
+      ],
+      "x-enumDescriptions": [
+        "Tries to figure out the type automatically depending on the data",
+        "Data in key is of type 'hash'",
+        "Data in key is of type 'lists'",
+        "Data in key is of type 'sets'",
+        "Data in key is of type 'string'"
+      ]
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "pop"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "dotNotation": {
+          "x-title": "Dot Notation",
+          "description": "<p>By default, dot-notation is used in property names. This means that \"a.b\" will set the property \"b\" underneath \"a\" so { \"a\": { \"b\": value} }.<p></p>If that is not intended this can be deactivated, it will then set { \"a.b\": value } instead.</p>.",
+          "default": true,
+          "type": "boolean"
+        }
+      }
+    },
+    "expire": {
+      "x-title": "Expire",
+      "description": "Whether to set a timeout on key",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "set"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "ttl": {
+      "x-title": "TTL",
+      "description": "Number of seconds before key expiration",
+      "default": 60,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "set"
+          ],
+          "expire": [
+            true
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "keyPattern": {
+      "x-title": "Key Pattern",
+      "description": "The key pattern for the keys to return",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "keys"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "getValues": {
+      "x-title": "Get Values",
+      "description": "Whether to get the value of matching keys",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "keys"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "list": {
+      "x-title": "List",
+      "description": "Name of the list in Redis",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "push",
+            "pop"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "value": {
+      "x-title": "Value",
+      "description": "The value to write in Redis",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "set"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "valueIsJSON": {
+      "x-title": "Value Is JSON",
+      "description": "Whether the value is JSON or key value pairs",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "keyType": [
+            "hash"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "channel": {
+      "x-title": "Channel",
+      "description": "Channel name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "publish"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "messageData": {
+      "x-title": "Data",
+      "description": "Data to push",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "push"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "tail": {
+      "x-title": "Tail",
+      "description": "Whether to push or pop data from the end of the list",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "push",
+            "pop"
+          ]
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "x-icon": "file:redis.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "redis",
+      "required": true,
+      "testedBy": "redisConnectionTest"
+    }
+  ]
+}

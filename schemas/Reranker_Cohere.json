@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Reranker Cohere",
+  "description": "Use Cohere Reranker to reorder documents after retrieval from a vector store by relevance to the given query.",
+  "x-n8n-node-type": "rerankerCohere",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "modelName": {
+      "x-title": "Model",
+      "description": "The model that should be used to rerank the documents. <a href=\"https://docs.cohere.com/docs/models\">Learn more</a>.",
+      "default": "rerank-v3.5",
+      "type": "string",
+      "enum": [
+        "rerank-v3.5",
+        "rerank-english-v3.0",
+        "rerank-multilingual-v3.0"
+      ],
+      "x-enumNames": [
+        "rerank-v3.5",
+        "rerank-english-v3.0",
+        "rerank-multilingual-v3.0"
+      ]
+    },
+    "topN": {
+      "x-title": "Top N",
+      "description": "The maximum number of documents to return after reranking",
+      "default": 3,
+      "type": "number"
+    }
+  },
+  "x-icon": {
+    "light": "file:cohere.svg",
+    "dark": "file:cohere.dark.svg"
+  },
+  "x-inputs": [],
+  "x-outputs": [
+    "ai_reranker"
+  ],
+  "x-credentials": [
+    {
+      "name": "cohereApi",
+      "required": true
+    }
+  ]
+}

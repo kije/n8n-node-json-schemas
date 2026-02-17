@@ -1,0 +1,742 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Shopify",
+  "description": "Consume Shopify API",
+  "x-n8n-node-type": "shopify",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "apiKey",
+      "type": "string",
+      "enum": [
+        "accessToken",
+        "oAuth2",
+        "apiKey"
+      ],
+      "x-enumNames": [
+        "Access Token",
+        "OAuth2",
+        "API Key"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "order",
+      "type": "string",
+      "enum": [
+        "order",
+        "product"
+      ],
+      "x-enumNames": [
+        "Order",
+        "Product"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "product"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a product",
+        "Delete a product",
+        "Get a product",
+        "Get many products",
+        "Update a product"
+      ]
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "product"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "collection_id": {
+          "x-title": "Collection ID",
+          "description": "Filter results by product collection ID",
+          "default": "",
+          "type": "string"
+        },
+        "created_at_max": {
+          "x-title": "Created At Max",
+          "description": "Show products created before date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "created_at_min": {
+          "x-title": "Created At Min",
+          "description": "Show products created after date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "fields": {
+          "x-title": "Fields",
+          "description": "Show only certain fields, specified by a comma-separated list of field names",
+          "default": "",
+          "type": "string"
+        },
+        "handle": {
+          "x-title": "Handle",
+          "description": "Filter results by product handle",
+          "default": "",
+          "type": "string"
+        },
+        "ids": {
+          "x-title": "IDs",
+          "description": "Return only products specified by a comma-separated list of product IDs",
+          "default": "",
+          "type": "string"
+        },
+        "presentment_currencies": {
+          "x-title": "Presentment Currencies",
+          "description": "Return presentment prices in only certain currencies, specified by a comma-separated list of ISO 4217 currency codes",
+          "default": "",
+          "type": "string"
+        },
+        "product_type": {
+          "x-title": "Product Type",
+          "description": "Filter results by product type",
+          "default": "",
+          "type": "string"
+        },
+        "published_at_max": {
+          "x-title": "Published At Max",
+          "description": "Show products published before date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "published_at_min": {
+          "x-title": "Published At Min",
+          "description": "Show products published after date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "published_status": {
+          "x-title": "Published Status",
+          "description": "Return products by their published status",
+          "default": "any",
+          "type": "string",
+          "enum": [
+            "any",
+            "published",
+            "unpublished"
+          ],
+          "x-enumNames": [
+            "Any",
+            "Published",
+            "Unpublished"
+          ],
+          "x-enumDescriptions": [
+            "Show all products",
+            "Show only published products",
+            "Show only unpublished products"
+          ]
+        },
+        "title": {
+          "x-title": "Title",
+          "description": "Filter results by product title",
+          "default": "",
+          "type": "string"
+        },
+        "updated_at_max": {
+          "x-title": "Updated At Max",
+          "description": "Show products last updated before date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at_min": {
+          "x-title": "Updated At Min",
+          "description": "Show products last updated after date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "vendor": {
+          "x-title": "Vendor",
+          "description": "Filter results by product vendor",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "limeItemsUi": {
+      "x-title": "Line Items",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "order"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "lineItemValues": {
+          "x-title": "Line Item",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "productId": {
+                "x-title": "Product Name or ID",
+                "description": "The ID of the product that the line item belongs to. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                "default": "",
+                "type": "string"
+              },
+              "variantId": {
+                "x-title": "Variant ID",
+                "description": "The ID of the product variant",
+                "default": "",
+                "type": "string"
+              },
+              "title": {
+                "x-title": "Title",
+                "description": "The title of the product",
+                "default": "",
+                "type": "string"
+              },
+              "grams": {
+                "x-title": "Grams",
+                "description": "The weight of the item in grams",
+                "default": "",
+                "type": "string"
+              },
+              "quantity": {
+                "x-title": "Quantity",
+                "description": "The number of items that were purchased",
+                "default": 1,
+                "type": "number",
+                "minimum": 1
+              },
+              "price": {
+                "x-title": "Price",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "orderId": {
+      "x-title": "Order ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "order"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "order"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "attributionAppId": {
+          "x-title": "Attribution App ID",
+          "description": "Show orders attributed to a certain app, specified by the app ID. Set as current to show orders for the app currently consuming the API.",
+          "default": "",
+          "type": "string"
+        },
+        "createdAtMin": {
+          "x-title": "Created At Min",
+          "description": "Show orders created at or after date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdAtMax": {
+          "x-title": "Created At Max",
+          "description": "Show orders created at or before date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "financialStatus": {
+          "x-title": "Financial Status",
+          "description": "Filter orders by their financial status",
+          "default": "any",
+          "type": "string",
+          "enum": [
+            "any",
+            "authorized",
+            "paid",
+            "partiallyPaid",
+            "partiallyRefunded",
+            "pending",
+            "refunded",
+            "unpaid",
+            "voided"
+          ],
+          "x-enumNames": [
+            "Any",
+            "Authorized",
+            "Paid",
+            "Partially Paid",
+            "Partially Refunded",
+            "Pending",
+            "Refunded",
+            "Unpaid",
+            "Voided"
+          ],
+          "x-enumDescriptions": [
+            "Show orders of any financial status",
+            "Show only authorized orders",
+            "Show only paid orders",
+            "Show only partially paid orders",
+            "Show only partially refunded orders",
+            "Show only pending orders",
+            "Show only refunded orders",
+            "Show authorized and partially paid orders",
+            "Show only voided orders"
+          ]
+        },
+        "fulfillmentStatus": {
+          "x-title": "Fulfillment Status",
+          "description": "Filter orders by their fulfillment status",
+          "default": "any",
+          "type": "string",
+          "enum": [
+            "any",
+            "partial",
+            "shipped",
+            "unfulfilled",
+            "unshipped"
+          ],
+          "x-enumNames": [
+            "Any",
+            "Partial",
+            "Shipped",
+            "Unfulfilled",
+            "Unshipped"
+          ],
+          "x-enumDescriptions": [
+            "Show orders of any fulfillment status",
+            "Show partially shipped orders",
+            "Show orders that have been shipped. Returns orders with fulfillment_status of fulfilled.",
+            "Returns orders with fulfillment_status of null or partial",
+            "Show orders that have not yet been shipped. Returns orders with fulfillment_status of null."
+          ]
+        },
+        "fields": {
+          "x-title": "Fields",
+          "description": "Fields the orders will return, formatted as a string of comma-separated values. By default all the fields are returned.",
+          "default": "",
+          "type": "string"
+        },
+        "ids": {
+          "x-title": "IDs",
+          "description": "Retrieve only orders specified by a comma-separated list of order IDs",
+          "default": "",
+          "type": "string"
+        },
+        "processedAtMax": {
+          "x-title": "Processed At Max",
+          "description": "Show orders imported at or before date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "processedAtMin": {
+          "x-title": "Processed At Min",
+          "description": "Show orders imported at or after date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "x-title": "Status",
+          "description": "Filter orders by their status",
+          "default": "open",
+          "type": "string",
+          "enum": [
+            "any",
+            "Cancelled",
+            "closed",
+            "open"
+          ],
+          "x-enumNames": [
+            "Any",
+            "Cancelled",
+            "Closed",
+            "Open"
+          ],
+          "x-enumDescriptions": [
+            "Show orders of any status, including archived orders",
+            "Show only canceled orders",
+            "Show only closed orders",
+            "Show only open orders"
+          ]
+        },
+        "sinceId": {
+          "x-title": "Since ID",
+          "description": "Show orders after the specified ID",
+          "default": "",
+          "type": "string"
+        },
+        "updatedAtMax": {
+          "x-title": "Updated At Max",
+          "description": "Show orders last updated at or after date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAtMin": {
+          "x-title": "Updated At Min",
+          "description": "Show orders last updated at or before date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "product"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "product"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 250
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "product"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "body_html": {
+          "x-title": "Body HTML",
+          "description": "A description of the product. Supports HTML formatting.",
+          "default": "",
+          "type": "string"
+        },
+        "handle": {
+          "x-title": "Handle",
+          "description": "A unique human-friendly string for the product. Automatically generated from the product's title. Used by the Liquid templating language to refer to objects.",
+          "default": "",
+          "type": "string"
+        },
+        "images": {
+          "x-title": "Images",
+          "description": "A list of product image objects, each one representing an image associated with the product",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "created_at": {
+              "x-title": "Created At",
+              "description": "The date and time when the product image was created",
+              "default": "",
+              "type": "string",
+              "format": "date-time"
+            },
+            "id": {
+              "x-title": "ID",
+              "description": "A unique numeric identifier for the product image",
+              "default": "",
+              "type": "number"
+            },
+            "position": {
+              "x-title": "Position",
+              "description": "The order of the product image in the list. The first product image is at position 1 and is the \"main\" image for the product.",
+              "default": "",
+              "type": "number"
+            },
+            "product_id": {
+              "x-title": "Product ID",
+              "description": "The ID of the product associated with the image",
+              "default": "",
+              "type": "number"
+            },
+            "variant_ids": {
+              "x-title": "Variant IDs",
+              "description": "An array of variant IDs associated with the image",
+              "default": "",
+              "type": "number"
+            },
+            "src": {
+              "x-title": "Source",
+              "description": "<p>Specifies the location of the product image. This parameter supports URL filters that you can use to retrieve modified copies of the image.</p><p>For example, add _small, to the filename to retrieve a scaled copy of the image at 100 x 100 px (for example, ipod-nano_small.png), or add _2048x2048 to retrieve a copy of the image constrained at 2048 x 2048 px resolution (for example, ipod-nano_2048x2048.png).</p>.",
+              "default": "",
+              "type": "string"
+            },
+            "width": {
+              "x-title": "Width",
+              "description": "Width dimension of the image which is determined on upload",
+              "default": "",
+              "type": "number"
+            },
+            "height": {
+              "x-title": "Height",
+              "description": "Height dimension of the image which is determined on upload",
+              "default": "",
+              "type": "number"
+            },
+            "updated_at": {
+              "x-title": "Updated At",
+              "description": "The date and time when the product image was last modified",
+              "default": "",
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        },
+        "productOptions": {
+          "x-title": "Options",
+          "description": "The custom product property names like Size, Color, and Material. You can add up to 3 options of up to 255 characters each.",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "option": {
+              "x-title": "Option",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "x-title": "Name",
+                    "description": "Option's name",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "Option's values",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "product_type": {
+          "x-title": "Product Type",
+          "description": "A categorization for the product used for filtering and searching products",
+          "default": "",
+          "type": "string"
+        },
+        "published_at": {
+          "x-title": "Published At",
+          "description": "The date and time (ISO 8601 format) when the product was published. Can be set to null to unpublish the product from the Online Store channel.",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "published_scope": {
+          "x-title": "Published Scope",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "global",
+            "web"
+          ],
+          "x-enumNames": [
+            "Global",
+            "Web"
+          ],
+          "x-enumDescriptions": [
+            "The product is published to both the Online Store channel and the Point of Sale channel",
+            "The product is published to the Online Store channel but not published to the Point of Sale channel"
+          ]
+        },
+        "tags": {
+          "x-title": "Tags",
+          "description": "A string of comma-separated tags that are used for filtering and search. A product can have up to 250 tags. Each tag can have up to 255 characters.",
+          "default": "",
+          "type": "string"
+        },
+        "template_suffix": {
+          "x-title": "Template Suffix",
+          "description": "The suffix of the Liquid template used for the product page. If this property is specified, then the product page uses a template called \"product.suffix.liquid\", where \"suffix\" is the value of this property. If this property is \"\" or null, then the product page uses the default template \"product.liquid\". (default: null)",
+          "default": "",
+          "type": "string"
+        },
+        "title": {
+          "x-title": "Title",
+          "description": "The name of the product",
+          "default": "",
+          "type": "string"
+        },
+        "vendor": {
+          "x-title": "Vendor",
+          "description": "The name of the product's vendor",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "The name of the product",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "product"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "productId": {
+      "x-title": "Product ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "product"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:shopify.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "shopifyApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "apiKey"
+          ]
+        }
+      }
+    },
+    {
+      "name": "shopifyAccessTokenApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "accessToken"
+          ]
+        }
+      }
+    },
+    {
+      "name": "shopifyOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

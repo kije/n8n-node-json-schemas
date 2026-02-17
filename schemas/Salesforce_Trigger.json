@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Salesforce Trigger",
+  "description": "Fetches data from Salesforce and starts the workflow on specified polling intervals.",
+  "x-n8n-node-type": "salesforceTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "triggerOn": {
+      "x-title": "Trigger On",
+      "description": "Which Salesforce event should trigger the node",
+      "default": "",
+      "type": "string",
+      "enum": [
+        "accountCreated",
+        "accountUpdated",
+        "attachmentCreated",
+        "attachmentUpdated",
+        "caseCreated",
+        "caseUpdated",
+        "contactCreated",
+        "contactUpdated",
+        "customObjectCreated",
+        "customObjectUpdated",
+        "leadCreated",
+        "leadUpdated",
+        "opportunityCreated",
+        "opportunityUpdated",
+        "taskCreated",
+        "taskUpdated",
+        "userCreated",
+        "userUpdated"
+      ],
+      "x-enumNames": [
+        "Account Created",
+        "Account Updated",
+        "Attachment Created",
+        "Attachment Updated",
+        "Case Created",
+        "Case Updated",
+        "Contact Created",
+        "Contact Updated",
+        "Custom Object Created",
+        "Custom Object Updated",
+        "Lead Created",
+        "Lead Updated",
+        "Opportunity Created",
+        "Opportunity Updated",
+        "Task Created",
+        "Task Updated",
+        "User Created",
+        "User Updated"
+      ],
+      "x-enumDescriptions": [
+        "When a new account is created",
+        "When an existing account is modified",
+        "When a file is uploaded and attached to an object",
+        "When an existing file is modified",
+        "When a new case is created",
+        "When an existing case is modified",
+        "When a new contact is created",
+        "When an existing contact is modified",
+        "When a new object of a given type is created",
+        "When an object of a given type is modified",
+        "When a new lead is created",
+        "When an existing lead is modified",
+        "When a new opportunity is created",
+        "When an existing opportunity is modified",
+        "When a new task is created",
+        "When an existing task is modified",
+        "When a new user is created",
+        "When an existing user is modified"
+      ]
+    },
+    "customObject": {
+      "x-title": "Custom Object Name or ID",
+      "description": "Name of the custom object. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "triggerOn": [
+            "customObjectUpdated",
+            "customObjectCreated"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{($parameter[\"triggerOn\"])}}",
+  "x-icon": "file:salesforce.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "salesforceOAuth2Api",
+      "required": true
+    }
+  ]
+}

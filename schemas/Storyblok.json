@@ -1,0 +1,274 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Storyblok",
+  "description": "Consume Storyblok API",
+  "x-n8n-node-type": "storyblok",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "source": {
+      "x-title": "Source",
+      "description": "Pick where your data comes from, Content or Management API",
+      "default": "contentApi",
+      "type": "string",
+      "enum": [
+        "contentApi",
+        "managementApi"
+      ],
+      "x-enumNames": [
+        "Content API",
+        "Management API"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "story",
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "managementApi"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "story"
+      ],
+      "x-enumNames": [
+        "Story"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "managementApi"
+          ],
+          "resource": [
+            "story"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "delete",
+        "get",
+        "getAll",
+        "publish",
+        "unpublish"
+      ],
+      "x-enumNames": [
+        "Delete",
+        "Get",
+        "Get Many",
+        "Publish",
+        "Unpublish"
+      ],
+      "x-enumDescriptions": [
+        "Delete a story",
+        "Get a story",
+        "Get many stories",
+        "Publish a story",
+        "Unpublish a story"
+      ]
+    },
+    "identifier": {
+      "x-title": "Identifier",
+      "description": "The ID or slug of the story to get",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "contentApi"
+          ],
+          "resource": [
+            "story"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "managementApi"
+          ],
+          "resource": [
+            "story"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "managementApi"
+          ],
+          "resource": [
+            "story"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "managementApi"
+          ],
+          "resource": [
+            "story"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "starts_with": {
+          "x-title": "Starts With",
+          "description": "Filter by slug",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "space": {
+      "x-title": "Space Name or ID",
+      "description": "The name of the space. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "managementApi"
+          ],
+          "resource": [
+            "story"
+          ],
+          "operation": [
+            "unpublish"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "storyId": {
+      "x-title": "Story ID",
+      "description": "Numeric ID of the story",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "managementApi"
+          ],
+          "resource": [
+            "story"
+          ],
+          "operation": [
+            "unpublish"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "managementApi"
+          ],
+          "resource": [
+            "story"
+          ],
+          "operation": [
+            "publish"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "releaseId": {
+          "x-title": "Release ID",
+          "description": "Numeric ID of release",
+          "default": "",
+          "type": "string"
+        },
+        "language": {
+          "x-title": "Language",
+          "description": "Language code to publish the story individually (must be enabled in the space settings)",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:storyblok.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "storyblokContentApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "source": [
+            "contentApi"
+          ]
+        }
+      }
+    },
+    {
+      "name": "storyblokManagementApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "source": [
+            "managementApi"
+          ]
+        }
+      }
+    }
+  ]
+}

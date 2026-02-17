@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Sticky Note",
+  "description": "Make your workflow easier to understand",
+  "x-n8n-node-type": "stickyNote",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "content": {
+      "x-title": "Content",
+      "default": "## I'm a note \n**Double click** to edit me. [Guide](https://docs.n8n.io/workflows/components/sticky-notes/)",
+      "type": "string"
+    },
+    "height": {
+      "x-title": "Height",
+      "default": 160,
+      "x-required": true,
+      "type": "number"
+    },
+    "width": {
+      "x-title": "Width",
+      "default": 240,
+      "x-required": true,
+      "type": "number"
+    },
+    "color": {
+      "x-title": "Color",
+      "default": 1,
+      "x-required": true,
+      "type": "number"
+    }
+  },
+  "x-icon": "fa:sticky-note",
+  "x-inputs": [],
+  "x-outputs": []
+}

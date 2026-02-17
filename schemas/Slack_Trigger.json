@@ -1,0 +1,167 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Slack Trigger",
+  "description": "Handle Slack events via webhooks",
+  "x-n8n-node-type": "slackTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "accessToken",
+      "type": "string"
+    },
+    "trigger": {
+      "x-title": "Trigger On",
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "any_event",
+          "app_mention",
+          "file_public",
+          "file_share",
+          "message",
+          "channel_created",
+          "team_join",
+          "reaction_added"
+        ]
+      },
+      "x-enumNames": [
+        "Any Event",
+        "Bot / App Mention",
+        "File Made Public",
+        "File Shared",
+        "New Message Posted to Channel",
+        "New Public Channel Created",
+        "New User",
+        "Reaction Added"
+      ]
+    },
+    "watchWorkspace": {
+      "x-title": "Watch Whole Workspace",
+      "description": "Whether to watch for the event in the whole workspace, rather than a specific channel",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "trigger": [
+            "any_event",
+            "message",
+            "reaction_added",
+            "file_share",
+            "app_mention"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "channelId": {
+      "x-title": "Channel to Watch",
+      "description": "The Slack channel to listen to events from. Applies to events: Bot/App mention, File Shared, New Message Posted on Channel, Reaction Added.",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "watchWorkspace": [
+            false
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id",
+            "url"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        },
+        {
+          "name": "url",
+          "displayName": "By URL",
+          "type": "string"
+        }
+      ]
+    },
+    "downloadFiles": {
+      "x-title": "Download Files",
+      "description": "Whether to download the files and add it to the output",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "trigger": [
+            "any_event",
+            "file_share"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "resolveIds": {
+          "x-title": "Resolve IDs",
+          "description": "Whether to resolve the IDs to their respective names and return them",
+          "default": false,
+          "type": "boolean"
+        },
+        "userIds": {
+          "x-title": "Usernames or IDs to Ignore",
+          "description": "A comma-separated string of encoded user IDs. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"eventFilter\"].join(\", \")}}",
+  "x-icon": "file:slack.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "slackApi",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}
