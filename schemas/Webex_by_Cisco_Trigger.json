@@ -1,0 +1,293 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Webex by Cisco Trigger",
+  "description": "Starts the workflow when Cisco Webex events occur.",
+  "x-n8n-node-type": "ciscoWebexTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "meeting",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "all",
+        "attachmentAction",
+        "meeting",
+        "membership",
+        "message",
+        "recording",
+        "room"
+      ],
+      "x-enumNames": [
+        "[All]",
+        "Attachment Action",
+        "Meeting",
+        "Membership",
+        "Message",
+        "Recording",
+        "Room"
+      ]
+    },
+    "event": {
+      "x-title": "Event",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "all"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "created",
+        "updated",
+        "deleted",
+        "all"
+      ],
+      "x-enumNames": [
+        "Created",
+        "Updated",
+        "Deleted",
+        "*"
+      ]
+    },
+    "resolveData": {
+      "x-title": "Resolve Data",
+      "description": "By default the response only contain a reference to the data the user inputed. If this option gets activated, it will resolve the data automatically.",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "attachmentAction"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "hasFiles": {
+          "x-title": "Has Files",
+          "description": "Whether to limit to messages which contain file content attachments",
+          "default": false,
+          "x-displayOptions": {
+            "show": {
+              "/resource": [
+                "message"
+              ],
+              "/event": [
+                "created",
+                "deleted"
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "isLocked": {
+          "x-title": "Is Locked",
+          "description": "Whether to limit to rooms that are locked",
+          "default": false,
+          "x-displayOptions": {
+            "show": {
+              "/resource": [
+                "room"
+              ],
+              "/event": [
+                "created",
+                "updated"
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "isModerator": {
+          "x-title": "Is Moderator",
+          "description": "Whether to limit to moderators of a room",
+          "default": false,
+          "x-displayOptions": {
+            "show": {
+              "/resource": [
+                "membership"
+              ],
+              "/event": [
+                "created",
+                "updated",
+                "deleted"
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "mentionedPeople": {
+          "x-title": "Mentioned People",
+          "description": "Limit to messages which contain these mentioned people, by person ID; accepts me as a shorthand for your own person ID; separate multiple values with commas",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/resource": [
+                "message"
+              ],
+              "/event": [
+                "created",
+                "deleted"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "messageId": {
+          "x-title": "Message ID",
+          "description": "Limit to a particular message, by ID",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/resource": [
+                "attachmentAction"
+              ],
+              "/event": [
+                "created"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "ownedBy": {
+          "x-title": "Owned By",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/resource": [
+                "meeting"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "personEmail": {
+          "x-title": "Person Email",
+          "description": "Limit to a particular person, by email",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/resource": [
+                "message"
+              ],
+              "/event": [
+                "created",
+                "deleted"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "personId": {
+          "x-title": "Person ID",
+          "description": "Limit to a particular person, by ID",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/resource": [
+                "message"
+              ],
+              "/event": [
+                "created",
+                "deleted"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "roomId": {
+          "x-title": "Room ID",
+          "description": "Limit to a particular room, by ID",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/resource": [
+                "message"
+              ],
+              "/event": [
+                "created",
+                "updated"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "roomType": {
+          "x-title": "Room Type",
+          "description": "Limit to a particular room type",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/resource": [
+                "message"
+              ],
+              "/event": [
+                "created",
+                "deleted"
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "direct",
+            "group"
+          ],
+          "x-enumNames": [
+            "Direct",
+            "Group"
+          ]
+        },
+        "type": {
+          "x-title": "Type",
+          "description": "Limit to a particular room type",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/resource": [
+                "room"
+              ],
+              "/event": [
+                "created",
+                "updated"
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "direct",
+            "group"
+          ],
+          "x-enumNames": [
+            "Direct",
+            "Group"
+          ]
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"resource\"] + \":\" + $parameter[\"event\"]}}",
+  "x-icon": "file:ciscoWebex.png",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "ciscoWebexOAuth2Api",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

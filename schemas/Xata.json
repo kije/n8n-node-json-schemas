@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Xata",
+  "description": "Use Xata Memory",
+  "x-n8n-node-type": "memoryXata",
+  "x-n8n-version": [
+    1,
+    1.1,
+    1.2,
+    1.3,
+    1.4
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "sessionId": {
+      "x-title": "Session ID",
+      "description": "The key to use to store the memory",
+      "default": "={{ $json.sessionId }}",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            1.1
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "sessionIdType": {
+      "x-title": "Session ID",
+      "default": "fromInput",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.2
+              }
+            }
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "fromInput",
+        "customKey"
+      ],
+      "x-enumNames": [
+        "Connected Chat Trigger Node",
+        "Define below"
+      ],
+      "x-enumDescriptions": [
+        "Looks for an input field called 'sessionId' that is coming from a directly connected Chat Trigger",
+        "Use an expression to reference data in previous nodes or enter static text"
+      ]
+    },
+    "sessionKey": {
+      "x-title": "Session Key From Previous Node",
+      "default": "={{ $json.sessionId }}",
+      "x-displayOptions": {
+        "show": {
+          "sessionIdType": [
+            "fromInput"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.4
+              }
+            }
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "contextWindowLength": {
+      "x-title": "Context Window Length",
+      "default": 5,
+      "x-displayOptions": {
+        "hide": {
+          "@version": [
+            {
+              "_cnd": {
+                "lt": 1.3
+              }
+            }
+          ]
+        }
+      },
+      "type": "number"
+    }
+  },
+  "x-icon": "file:xata.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "ai_memory"
+  ],
+  "x-credentials": [
+    {
+      "name": "xataApi",
+      "required": true
+    }
+  ]
+}

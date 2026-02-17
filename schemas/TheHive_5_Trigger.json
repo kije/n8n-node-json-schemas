@@ -1,0 +1,135 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TheHive 5 Trigger",
+  "description": "Starts the workflow when TheHive events occur",
+  "x-n8n-node-type": "theHiveProjectTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "events": {
+      "x-title": "Events",
+      "description": "Events types",
+      "default": [],
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "*",
+          "alert_create",
+          "alert_delete",
+          "alert_update",
+          "case_create",
+          "case_delete",
+          "case_update",
+          "comment_create",
+          "comment_delete",
+          "comment_update",
+          "observable_create",
+          "observable_delete",
+          "observable_update",
+          "page_create",
+          "page_delete",
+          "page_update",
+          "task_create",
+          "task_update",
+          "log_create",
+          "log_delete",
+          "log_update"
+        ]
+      },
+      "x-enumNames": [
+        "*",
+        "Alert Created",
+        "Alert Deleted",
+        "Alert Updated",
+        "Case Created",
+        "Case Deleted",
+        "Case Updated",
+        "Comment Created",
+        "Comment Deleted",
+        "Comment Updated",
+        "Observable Created",
+        "Observable Deleted",
+        "Observable Updated",
+        "Page Created",
+        "Page Deleted",
+        "Page Updated",
+        "Task Created",
+        "Task Updated",
+        "Task Log Created",
+        "Task Log Deleted",
+        "Task Log Updated"
+      ]
+    },
+    "filters": {
+      "x-title": "Filters",
+      "description": "Filter any incoming events based on their fields",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "field": {
+                "x-title": "Field",
+                "default": "",
+                "type": "string"
+              },
+              "operator": {
+                "x-title": "Operator",
+                "default": "equal",
+                "type": "string",
+                "enum": [
+                  "equal",
+                  "notEqual",
+                  "includes"
+                ],
+                "x-enumNames": [
+                  "Equal",
+                  "Not Equal",
+                  "Includes"
+                ],
+                "x-enumDescriptions": [
+                  "Field is equal to value",
+                  "Field is not equal to value",
+                  "Field includes value"
+                ]
+              },
+              "value": {
+                "x-title": "Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "outputOnlyData": {
+          "x-title": "Output Only Data",
+          "description": "Whether to output data with additional details and omit headers",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-icon": "file:thehiveproject.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-webhooks": "true"
+}

@@ -1,0 +1,613 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Strava",
+  "description": "Consume Strava API",
+  "x-n8n-node-type": "strava",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "activity",
+      "type": "string",
+      "enum": [
+        "activity"
+      ],
+      "x-enumNames": [
+        "Activity"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "get",
+        "getComments",
+        "getKudos",
+        "getLaps",
+        "getAll",
+        "getStreams",
+        "getZones",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Get",
+        "Get Comments",
+        "Get Kudos",
+        "Get Laps",
+        "Get Many",
+        "Get Streams",
+        "Get Zones",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a new activity",
+        "Get an activity",
+        "Get all activity comments",
+        "Get all activity kudos",
+        "Get all activity laps",
+        "Get many activities",
+        "Get activity streams",
+        "Get all activity zones",
+        "Update an activity"
+      ]
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "The name of the activity",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "type": {
+      "x-title": "Type",
+      "description": "Type of activity. For example - Run, Ride etc.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ],
+          "operation": [
+            "create"
+          ],
+          "@version": [
+            1
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "sport_type": {
+      "x-title": "Sport Type",
+      "description": "Type of sport",
+      "default": "Run",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ],
+          "operation": [
+            "create"
+          ]
+        },
+        "hide": {
+          "@version": [
+            1
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "AlpineSki",
+        "BackcountrySki",
+        "Badminton",
+        "Canoeing",
+        "Crossfit",
+        "EBikeRide",
+        "Elliptical",
+        "EMountainBikeRide",
+        "Golf",
+        "GravelRide",
+        "Handcycle",
+        "HighIntensityIntervalTraining",
+        "Hike",
+        "IceSkate",
+        "InlineSkate",
+        "Kayaking",
+        "Kitesurf",
+        "MountainBikeRide",
+        "NordicSki",
+        "Pickleball",
+        "Pilates",
+        "Racquetball",
+        "Ride",
+        "RockClimbing",
+        "RollerSki",
+        "Rowing",
+        "Run",
+        "Sail",
+        "Skateboard",
+        "Snowboard",
+        "Snowshoe",
+        "Soccer",
+        "Squash",
+        "StairStepper",
+        "StandUpPaddling",
+        "Surfing",
+        "Swim",
+        "TableTennis",
+        "Tennis",
+        "TrailRun",
+        "Velomobile",
+        "VirtualRide",
+        "VirtualRow",
+        "VirtualRun",
+        "Walk",
+        "WeightTraining",
+        "Wheelchair",
+        "Windsurf",
+        "Workout",
+        "Yoga"
+      ],
+      "x-enumNames": [
+        "Alpine Ski",
+        "Backcountry Ski",
+        "Badminton",
+        "Canoeing",
+        "Crossfit",
+        "EBike Ride",
+        "Elliptical",
+        "EMountain Bike Ride",
+        "Golf",
+        "Gravel Ride",
+        "Handcycle",
+        "HIIT",
+        "Hike",
+        "Ice Skate",
+        "Inline Skate",
+        "Kayaking",
+        "Kitesurf",
+        "Mountain Bike Ride",
+        "Nordic Ski",
+        "Pickleball",
+        "Pilates",
+        "Racquetball",
+        "Ride",
+        "Rock Climbing",
+        "Roller Ski",
+        "Rowing",
+        "Run",
+        "Sail",
+        "Skateboard",
+        "Snowboard",
+        "Snowshoe",
+        "Soccer",
+        "Squash",
+        "Stair Stepper",
+        "Stand Up Paddling",
+        "Surfing",
+        "Swim",
+        "Table Tennis",
+        "Tennis",
+        "Trail Run",
+        "Velomobile",
+        "Virtual Ride",
+        "Virtual Row",
+        "Virtual Run",
+        "Walk",
+        "Weight Training",
+        "Wheelchair",
+        "Windsurf",
+        "Workout",
+        "Yoga"
+      ]
+    },
+    "startDate": {
+      "x-title": "Start Date",
+      "description": "ISO 8601 formatted date time",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "elapsedTime": {
+      "x-title": "Elapsed Time (Seconds)",
+      "description": "In seconds",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number",
+      "minimum": 0
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "commute": {
+          "x-title": "Commute",
+          "description": "Whether to mark as commute",
+          "default": false,
+          "type": "boolean"
+        },
+        "description": {
+          "x-title": "Description",
+          "description": "Description of the activity",
+          "default": "",
+          "type": "string"
+        },
+        "distance": {
+          "x-title": "Distance",
+          "description": "In meters",
+          "default": 0,
+          "type": "number",
+          "minimum": 0
+        },
+        "trainer": {
+          "x-title": "Trainer",
+          "description": "Whether to mark as a trainer activity",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "activityId": {
+      "x-title": "Activity ID",
+      "description": "ID or email of activity",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ],
+          "operation": [
+            "getComments",
+            "getLaps",
+            "getKudos",
+            "getZones",
+            "getStreams"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "commute": {
+          "x-title": "Commute",
+          "description": "Whether to mark as commute",
+          "default": false,
+          "type": "boolean"
+        },
+        "description": {
+          "x-title": "Description",
+          "description": "Description of the activity",
+          "default": "",
+          "type": "string"
+        },
+        "gear_id": {
+          "x-title": "Gear ID",
+          "description": "Identifier for the gear associated with the activity. ‘none’ clears gear from activity.",
+          "default": "",
+          "type": "string"
+        },
+        "hide_from_home": {
+          "x-title": "Mute Activity",
+          "description": "Do not publish to Home or Club feeds",
+          "default": false,
+          "type": "boolean"
+        },
+        "name": {
+          "x-title": "Name",
+          "description": "The name of the activity",
+          "default": "",
+          "type": "string"
+        },
+        "type": {
+          "x-title": "Type",
+          "description": "Type of activity. For example - Run, Ride etc.",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "@version": [
+                1
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "sport_type": {
+          "x-title": "Sport Type",
+          "description": "Type of sport",
+          "default": "Run",
+          "x-displayOptions": {
+            "hide": {
+              "@version": [
+                1
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "AlpineSki",
+            "BackcountrySki",
+            "Badminton",
+            "Canoeing",
+            "Crossfit",
+            "EBikeRide",
+            "Elliptical",
+            "EMountainBikeRide",
+            "Golf",
+            "GravelRide",
+            "Handcycle",
+            "HighIntensityIntervalTraining",
+            "Hike",
+            "IceSkate",
+            "InlineSkate",
+            "Kayaking",
+            "Kitesurf",
+            "MountainBikeRide",
+            "NordicSki",
+            "Pickleball",
+            "Pilates",
+            "Racquetball",
+            "Ride",
+            "RockClimbing",
+            "RollerSki",
+            "Rowing",
+            "Run",
+            "Sail",
+            "Skateboard",
+            "Snowboard",
+            "Snowshoe",
+            "Soccer",
+            "Squash",
+            "StairStepper",
+            "StandUpPaddling",
+            "Surfing",
+            "Swim",
+            "TableTennis",
+            "Tennis",
+            "TrailRun",
+            "Velomobile",
+            "VirtualRide",
+            "VirtualRow",
+            "VirtualRun",
+            "Walk",
+            "WeightTraining",
+            "Wheelchair",
+            "Windsurf",
+            "Workout",
+            "Yoga"
+          ],
+          "x-enumNames": [
+            "Alpine Ski",
+            "Backcountry Ski",
+            "Badminton",
+            "Canoeing",
+            "Crossfit",
+            "EBike Ride",
+            "Elliptical",
+            "EMountain Bike Ride",
+            "Golf",
+            "Gravel Ride",
+            "Handcycle",
+            "HIIT",
+            "Hike",
+            "Ice Skate",
+            "Inline Skate",
+            "Kayaking",
+            "Kitesurf",
+            "Mountain Bike Ride",
+            "Nordic Ski",
+            "Pickleball",
+            "Pilates",
+            "Racquetball",
+            "Ride",
+            "Rock Climbing",
+            "Roller Ski",
+            "Rowing",
+            "Run",
+            "Sail",
+            "Skateboard",
+            "Snowboard",
+            "Snowshoe",
+            "Soccer",
+            "Squash",
+            "Stair Stepper",
+            "Stand Up Paddling",
+            "Surfing",
+            "Swim",
+            "Table Tennis",
+            "Tennis",
+            "Trail Run",
+            "Velomobile",
+            "Virtual Ride",
+            "Virtual Row",
+            "Virtual Run",
+            "Walk",
+            "Weight Training",
+            "Wheelchair",
+            "Windsurf",
+            "Workout",
+            "Yoga"
+          ]
+        },
+        "trainer": {
+          "x-title": "Trainer",
+          "description": "Whether to mark as a trainer activity",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "keys": {
+      "x-title": "Keys",
+      "description": "Desired stream types to return",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "activity"
+          ],
+          "operation": [
+            "getStreams"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "altitude",
+          "cadence",
+          "distance",
+          "grade_smooth",
+          "heartrate",
+          "latlng",
+          "moving",
+          "temp",
+          "time",
+          "velocity_smooth",
+          "watts"
+        ]
+      },
+      "x-enumNames": [
+        "Altitude",
+        "Cadence",
+        "Distance",
+        "Gradient",
+        "Heartrate",
+        "Latitude / Longitude",
+        "Moving",
+        "Temperature",
+        "Time",
+        "Velocity",
+        "Watts"
+      ]
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:strava.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "stravaOAuth2Api",
+      "required": true
+    }
+  ]
+}

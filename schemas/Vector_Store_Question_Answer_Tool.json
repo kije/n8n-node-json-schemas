@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Vector Store Question Answer Tool",
+  "description": "Answer questions with a vector store",
+  "x-n8n-node-type": "toolVectorStore",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "name": {
+      "x-title": "Data Name",
+      "description": "Name of the data in vector store. This will be used to fill this tool description: Useful for when you need to answer questions about [name]. Whenever you need information about [data description], you should ALWAYS use this. Input should be a fully formed question.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            1
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "description": {
+      "x-title": "Description of Data",
+      "description": "Describe the data in vector store. This will be used to fill this tool description: Useful for when you need to answer questions about [name]. Whenever you need information about [data description], you should ALWAYS use this. Input should be a fully formed question.",
+      "default": "",
+      "type": "string",
+      "x-rows": 3
+    },
+    "topK": {
+      "x-title": "Limit",
+      "description": "The maximum number of results to return",
+      "default": 4,
+      "type": "number"
+    }
+  },
+  "x-icon": "fa:database",
+  "x-inputs": [
+    {
+      "displayName": "Vector Store",
+      "maxConnections": 1,
+      "type": "ai_vectorStore",
+      "required": true
+    },
+    {
+      "displayName": "Model",
+      "maxConnections": 1,
+      "type": "ai_languageModel",
+      "required": true
+    }
+  ],
+  "x-outputs": [
+    "ai_tool"
+  ]
+}

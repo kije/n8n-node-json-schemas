@@ -1,0 +1,1435 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TheHive 5",
+  "description": "Consume TheHive 5 API",
+  "x-n8n-node-type": "theHiveProject",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "alert",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "alert",
+        "case",
+        "comment",
+        "observable",
+        "page",
+        "query",
+        "task",
+        "log"
+      ],
+      "x-enumNames": [
+        "Alert",
+        "Case",
+        "Comment",
+        "Observable",
+        "Page",
+        "Query",
+        "Task",
+        "Task Log"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "create",
+        "deleteTask",
+        "executeResponder",
+        "get",
+        "search",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Execute Responder",
+        "Get",
+        "Search",
+        "Update"
+      ]
+    },
+    "alertFields": {
+      "x-title": "Fields",
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "alert"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-n8n-type": "resourceMapper"
+    },
+    "observableUi": {
+      "x-title": "Observables",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "alert"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "dataType": {
+                "x-title": "Data Type",
+                "description": "Type of the observable. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                "default": "",
+                "type": "string"
+              },
+              "data": {
+                "x-title": "Data",
+                "default": "",
+                "x-displayOptions": {
+                  "hide": {
+                    "dataType": [
+                      "file"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "binaryProperty": {
+                "x-title": "Input Binary Field",
+                "default": "data",
+                "x-displayOptions": {
+                  "show": {
+                    "dataType": [
+                      "file"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "message": {
+                "x-title": "Message",
+                "default": "",
+                "type": "string"
+              },
+              "tags": {
+                "x-title": "Tags",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "alertId": {
+      "x-title": "Alert",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "searchIn": [
+            "alert"
+          ],
+          "resource": [
+            "observable"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "Link",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "id": {
+      "x-title": "Task",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "executeResponder"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "responder": {
+      "x-title": "Responder Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "hide": {
+          "id": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "executeResponder"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "returnCount": {
+          "x-title": "Return Count",
+          "description": "Whether to return only the count of results",
+          "default": false,
+          "x-displayOptions": {
+            "hide": {
+              "/returnAll": [
+                false
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "extraData": {
+          "x-title": "Extra Data",
+          "description": "Additional data to include in the response",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/resource": [
+                "query"
+              ]
+            },
+            "hide": {
+              "returnCount": [
+                true
+              ]
+            }
+          },
+          "type": "string"
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "returnAll": [
+            false
+          ],
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "field": {
+                "x-title": "Field",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "/resource": [
+                      "page"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "category",
+                  "content",
+                  "title"
+                ],
+                "x-enumNames": [
+                  "Category",
+                  "Content",
+                  "Title"
+                ]
+              },
+              "operator": {
+                "x-title": "Operator",
+                "default": "_eq",
+                "type": "string",
+                "enum": [
+                  "_between",
+                  "_like",
+                  "_endsWith",
+                  "_eq",
+                  "_gt",
+                  "_gte",
+                  "_in",
+                  "_lt",
+                  "_lte",
+                  "_match",
+                  "_ne",
+                  "_startsWith"
+                ],
+                "x-enumNames": [
+                  "Between",
+                  "Contains",
+                  "Ends With",
+                  "Equal",
+                  "Greater Than",
+                  "Greater Than Or Equal To",
+                  "In",
+                  "Less Than",
+                  "Less Than Or Equal To",
+                  "Match Word",
+                  "Not Equal",
+                  "Starts With"
+                ],
+                "x-enumDescriptions": [
+                  "Field is between two values ('From' is inclusive, 'To' is exclusive)",
+                  "Field contains the substring from value",
+                  "Field ends with value",
+                  "Field is equal to value",
+                  "Field is greater than value",
+                  "Field is greater than or equal to value",
+                  "Field is one of the values",
+                  "Field is less than value",
+                  "Field is less than or equal to value",
+                  "Field contains the value as a word",
+                  "Field is not equal to value",
+                  "Field starts with value"
+                ]
+              },
+              "value": {
+                "x-title": "Value",
+                "default": "",
+                "x-displayOptions": {
+                  "hide": {
+                    "operator": [
+                      "_between",
+                      "_in"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "values": {
+                "x-title": "Values",
+                "description": "Comma-separated list of values",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "operator": [
+                      "_in"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "from": {
+                "x-title": "From",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "operator": [
+                      "_between"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "to": {
+                "x-title": "To",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "operator": [
+                      "_between"
+                    ]
+                  }
+                },
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "sort": {
+      "x-title": "Sort",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "fields": {
+          "x-title": "Fields",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "field": {
+                "x-title": "Field",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "/resource": [
+                      "page"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "category",
+                  "content",
+                  "title"
+                ],
+                "x-enumNames": [
+                  "Category",
+                  "Content",
+                  "Title"
+                ]
+              },
+              "direction": {
+                "x-title": "Direction",
+                "default": "asc",
+                "type": "string",
+                "enum": [
+                  "asc",
+                  "desc"
+                ],
+                "x-enumNames": [
+                  "Ascending",
+                  "Descending"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "status": {
+      "x-title": "Status Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "alert"
+          ],
+          "operation": [
+            "status"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "caseId": {
+      "x-title": "Case",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "allCases": [
+            false
+          ],
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "Link",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "alertUpdateFields": {
+      "x-title": "Fields",
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "alert"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-n8n-type": "resourceMapper"
+    },
+    "attachmentsUi": {
+      "x-title": "Attachments",
+      "description": "Array of supported attachments to add to the message",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "dataType": [
+            "file"
+          ],
+          "resource": [
+            "observable"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "field": {
+                "x-title": "Attachment Field Name",
+                "description": "Add the field name from the input node",
+                "default": "data",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "caseFields": {
+      "x-title": "Fields",
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "case"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-n8n-type": "resourceMapper"
+    },
+    "attachmentId": {
+      "x-title": "Attachment Name or ID",
+      "description": "ID of the attachment. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "log"
+          ],
+          "operation": [
+            "deleteAttachment"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "caseUpdateFields": {
+      "x-title": "Fields",
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "case"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-n8n-type": "resourceMapper"
+    },
+    "addTo": {
+      "x-title": "Add to",
+      "default": "alert",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "comment"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "alert",
+        "case"
+      ],
+      "x-enumNames": [
+        "Alert",
+        "Case"
+      ]
+    },
+    "message": {
+      "x-title": "Message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "comment"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-rows": 2
+    },
+    "commentId": {
+      "x-title": "Comment",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "comment"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "searchIn": {
+      "x-title": "Search in",
+      "description": "Whether to search for observables in all alerts and cases or in a specific case or alert",
+      "default": "all",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "observable"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "all",
+        "alert",
+        "case"
+      ],
+      "x-enumNames": [
+        "Alerts and Cases",
+        "Alert",
+        "Case"
+      ]
+    },
+    "logId": {
+      "x-title": "Task Log",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "log"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "taskId": {
+      "x-title": "Task",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "logFields": {
+      "x-title": "Fields",
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "log"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-n8n-type": "resourceMapper"
+    },
+    "allTasks": {
+      "x-title": "Search in All Tasks",
+      "description": "Whether to search in all tasks or only in selected task",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "log"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "createIn": {
+      "x-title": "Create in",
+      "default": "case",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "observable"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "case",
+        "alert"
+      ],
+      "x-enumNames": [
+        "Case",
+        "Alert"
+      ]
+    },
+    "dataType": {
+      "x-title": "Data Type",
+      "description": "Type of the observable. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "observable"
+          ],
+          "operation": [
+            "executeAnalyzer"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "data": {
+      "x-title": "Data",
+      "default": "",
+      "x-displayOptions": {
+        "hide": {
+          "dataType": [
+            "file"
+          ]
+        },
+        "show": {
+          "resource": [
+            "observable"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "observableFields": {
+      "x-title": "Fields",
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "observable"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-n8n-type": "resourceMapper"
+    },
+    "observableId": {
+      "x-title": "Observable",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "observable"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "analyzers": {
+      "x-title": "Analyzer Names or IDs",
+      "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": [],
+      "x-displayOptions": {
+        "hide": {
+          "id": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "observable"
+          ],
+          "operation": [
+            "executeAnalyzer"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "observableUpdateFields": {
+      "x-title": "Fields",
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "observable"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-n8n-type": "resourceMapper"
+    },
+    "location": {
+      "x-title": "Update in",
+      "default": "case",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "page"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "case",
+        "knowledgeBase"
+      ],
+      "x-enumNames": [
+        "Case",
+        "Knowledge Base"
+      ]
+    },
+    "title": {
+      "x-title": "Title",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "page"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "category": {
+      "x-title": "Category",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "page"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "content": {
+      "x-title": "Content",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "page"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "string",
+      "x-rows": 2
+    },
+    "pageId": {
+      "x-title": "Page",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "page"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "searchInKnowledgeBase": {
+      "x-title": "Search in Knowledge Base",
+      "description": "Whether to search in knowledge base or only in the selected case",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "page"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "queryJson": {
+      "x-title": "Query",
+      "description": "Search for objects with filtering and sorting capabilities",
+      "default": "=[\n  {\n    \"_name\": \"listOrganisation\"\n  }\n]",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "query"
+          ],
+          "operation": [
+            "executeQuery"
+          ]
+        }
+      },
+      "x-required": true,
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "taskFields": {
+      "x-title": "Fields",
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-n8n-type": "resourceMapper"
+    },
+    "allCases": {
+      "x-title": "Search in All Cases",
+      "description": "Whether to search in all cases or only in a selected case",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "taskUpdateFields": {
+      "x-title": "Fields",
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-n8n-type": "resourceMapper"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"]}} : {{$parameter[\"resource\"]}}",
+  "x-icon": "file:thehiveproject.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "theHiveProjectApi",
+      "required": true
+    }
+  ]
+}

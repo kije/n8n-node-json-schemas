@@ -1,0 +1,198 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TravisCI",
+  "description": "Consume TravisCI API",
+  "x-n8n-node-type": "travisCi",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "build",
+      "type": "string",
+      "enum": [
+        "build"
+      ],
+      "x-enumNames": [
+        "Build"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "cancel",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "build"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "cancel",
+        "get",
+        "getAll",
+        "restart",
+        "trigger"
+      ],
+      "x-enumNames": [
+        "Cancel",
+        "Get",
+        "Get Many",
+        "Restart",
+        "Trigger"
+      ],
+      "x-enumDescriptions": [
+        "Cancel a build",
+        "Get a build",
+        "Get many builds",
+        "Restart a build",
+        "Trigger a build"
+      ]
+    },
+    "buildId": {
+      "x-title": "Build ID",
+      "description": "Value uniquely identifying the build",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "restart"
+          ],
+          "resource": [
+            "build"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "build"
+          ],
+          "operation": [
+            "trigger"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "message": {
+          "x-title": "Message",
+          "description": "Travis-ci status message attached to the request",
+          "default": "",
+          "type": "string"
+        },
+        "mergeMode": {
+          "x-title": "Merge Mode",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "deep_merge",
+            "deep_merge_append",
+            "deep_merge_prepend",
+            "merge",
+            "replace"
+          ],
+          "x-enumNames": [
+            "Deep Merge",
+            "Deep Merge Append",
+            "Deep Merge Prepend",
+            "Merge",
+            "Replace"
+          ]
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "build"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "build"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "slug": {
+      "x-title": "Slug",
+      "description": "Same as {ownerName}/{repositoryName}",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "trigger"
+          ],
+          "resource": [
+            "build"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "branch": {
+      "x-title": "Branch",
+      "description": "Branch requested to be built",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "trigger"
+          ],
+          "resource": [
+            "build"
+          ]
+        }
+      },
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:travisci.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "travisCiApi",
+      "required": true
+    }
+  ]
+}

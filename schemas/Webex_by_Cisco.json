@@ -1,0 +1,1231 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Webex by Cisco",
+  "description": "Consume the Cisco Webex API",
+  "x-n8n-node-type": "ciscoWebex",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "message",
+      "type": "string",
+      "enum": [
+        "meeting",
+        "message"
+      ],
+      "x-enumNames": [
+        "Meeting",
+        "Message"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ]
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "Meeting title. The title can be a maximum of 128 characters long.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "meeting"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "start": {
+      "x-title": "Start",
+      "description": "Date and time for the start of the meeting. Acceptable <a href=\"https://datatracker.ietf.org/doc/html/rfc2445\"> format</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "meeting"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "end": {
+      "x-title": "End",
+      "description": "Date and time for the end of the meeting. Acceptable <a href=\"https://datatracker.ietf.org/doc/html/rfc2445\"> format</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "meeting"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "attachmentsUi": {
+          "x-title": "Attachments",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "attachmentValues": {
+              "x-title": "Attachment",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "elementsUi": {
+                    "x-title": "Elements",
+                    "default": {},
+                    "type": "object",
+                    "properties": {
+                      "elementValues": {
+                        "x-title": "Element",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "x-title": "Type",
+                              "default": "textBlock",
+                              "type": "string",
+                              "enum": [
+                                "textBlock",
+                                "inputText"
+                              ],
+                              "x-enumNames": [
+                                "Text Block",
+                                "Input Text"
+                              ]
+                            },
+                            "text": {
+                              "x-title": "Text",
+                              "description": "Text to display. A subset of markdown is supported (https://aka.ms/ACTextFeatures).",
+                              "default": "",
+                              "x-displayOptions": {
+                                "show": {
+                                  "type": [
+                                    "textBlock"
+                                  ]
+                                }
+                              },
+                              "x-required": true,
+                              "type": "string"
+                            },
+                            "color": {
+                              "x-title": "Color",
+                              "description": "Color of the TextBlock element",
+                              "default": "default",
+                              "x-displayOptions": {
+                                "show": {
+                                  "type": [
+                                    "textBlock"
+                                  ]
+                                }
+                              },
+                              "type": "string",
+                              "enum": [
+                                "accent",
+                                "attention",
+                                "dark",
+                                "default",
+                                "good",
+                                "light",
+                                "warning"
+                              ],
+                              "x-enumNames": [
+                                "Accent",
+                                "Attention",
+                                "Dark",
+                                "Default",
+                                "Good",
+                                "Light",
+                                "Warning"
+                              ]
+                            },
+                            "fontType": {
+                              "x-title": "Font Type",
+                              "description": "Type of font to use for rendering",
+                              "default": "default",
+                              "x-displayOptions": {
+                                "show": {
+                                  "type": [
+                                    "textBlock"
+                                  ]
+                                }
+                              },
+                              "type": "string",
+                              "enum": [
+                                "default",
+                                "monospace"
+                              ],
+                              "x-enumNames": [
+                                "Default",
+                                "Monospace"
+                              ]
+                            },
+                            "horizontalAlignment": {
+                              "x-title": "Horizontal Alignment",
+                              "description": "Controls the horizontal text alignment",
+                              "default": "left",
+                              "x-displayOptions": {
+                                "show": {
+                                  "type": [
+                                    "textBlock"
+                                  ]
+                                }
+                              },
+                              "type": "string",
+                              "enum": [
+                                "left",
+                                "center",
+                                "right"
+                              ],
+                              "x-enumNames": [
+                                "Left",
+                                "Center",
+                                "Right"
+                              ]
+                            },
+                            "isSubtle": {
+                              "x-title": "Is Subtle",
+                              "description": "Whether to display text slightly toned down to appear less prominent",
+                              "default": false,
+                              "x-displayOptions": {
+                                "show": {
+                                  "type": [
+                                    "textBlock"
+                                  ]
+                                }
+                              },
+                              "type": "boolean"
+                            },
+                            "maxLines": {
+                              "x-title": "Max Lines",
+                              "description": "Specifies the maximum number of lines to display",
+                              "default": 1,
+                              "x-displayOptions": {
+                                "show": {
+                                  "type": [
+                                    "textBlock"
+                                  ]
+                                }
+                              },
+                              "type": "number"
+                            },
+                            "size": {
+                              "x-title": "Size",
+                              "description": "Controls size of text",
+                              "default": "default",
+                              "x-displayOptions": {
+                                "show": {
+                                  "type": [
+                                    "textBlock"
+                                  ]
+                                }
+                              },
+                              "type": "string",
+                              "enum": [
+                                "default",
+                                "extraLarge",
+                                "large",
+                                "medium",
+                                "small"
+                              ],
+                              "x-enumNames": [
+                                "Default",
+                                "Extra Large",
+                                "Large",
+                                "Medium",
+                                "Small"
+                              ]
+                            },
+                            "weight": {
+                              "x-title": "Weight",
+                              "description": "Controls the weight of TextBlock elements",
+                              "default": "default",
+                              "x-displayOptions": {
+                                "show": {
+                                  "type": [
+                                    "textBlock"
+                                  ]
+                                }
+                              },
+                              "type": "string",
+                              "enum": [
+                                "default",
+                                "lighter",
+                                "bolder"
+                              ],
+                              "x-enumNames": [
+                                "Default",
+                                "Lighter",
+                                "Bolder"
+                              ]
+                            },
+                            "wrap": {
+                              "x-title": "Wrap",
+                              "description": "Whether to allow text to wrap. Otherwise, text is clipped.",
+                              "default": true,
+                              "x-displayOptions": {
+                                "show": {
+                                  "type": [
+                                    "textBlock"
+                                  ]
+                                }
+                              },
+                              "type": "boolean"
+                            },
+                            "height": {
+                              "x-title": "Height",
+                              "description": "Specifies the height of the element",
+                              "default": "auto",
+                              "x-displayOptions": {
+                                "show": {
+                                  "type": [
+                                    "textBlock"
+                                  ]
+                                }
+                              },
+                              "type": "string",
+                              "enum": [
+                                "auto",
+                                "stretch"
+                              ],
+                              "x-enumNames": [
+                                "Auto",
+                                "Stretch"
+                              ]
+                            },
+                            "separator": {
+                              "x-title": "Separator",
+                              "description": "Whether to draw a separating line at the top of the element",
+                              "default": false,
+                              "x-displayOptions": {
+                                "show": {
+                                  "type": [
+                                    "textBlock"
+                                  ]
+                                }
+                              },
+                              "type": "boolean"
+                            },
+                            "spacing": {
+                              "x-title": "Spacing",
+                              "description": "Controls the amount of spacing between this element and the preceding element",
+                              "default": "default",
+                              "x-displayOptions": {
+                                "show": {
+                                  "type": [
+                                    "textBlock"
+                                  ]
+                                }
+                              },
+                              "type": "string",
+                              "enum": [
+                                "default",
+                                "extraLarge",
+                                "large",
+                                "medium",
+                                "none",
+                                "padding",
+                                "small"
+                              ],
+                              "x-enumNames": [
+                                "Default",
+                                "Extra Large",
+                                "Large",
+                                "Medium",
+                                "None",
+                                "Padding",
+                                "Small"
+                              ]
+                            },
+                            "id": {
+                              "x-title": "ID",
+                              "description": "Unique identifier for the value. Used to identify collected input when the Submit action is performed.",
+                              "default": "",
+                              "x-displayOptions": {
+                                "show": {
+                                  "type": [
+                                    "inputText"
+                                  ]
+                                }
+                              },
+                              "x-required": true,
+                              "type": "string"
+                            },
+                            "isVisible": {
+                              "x-title": "Is Visible",
+                              "description": "Whether this item will be removed from the visual trees",
+                              "default": true,
+                              "x-displayOptions": {
+                                "show": {
+                                  "type": [
+                                    "textBlock"
+                                  ]
+                                }
+                              },
+                              "type": "boolean"
+                            },
+                            "isMultiline": {
+                              "x-title": "Is Multiline",
+                              "description": "Whether to allow multiple lines of input",
+                              "default": false,
+                              "x-displayOptions": {
+                                "show": {
+                                  "type": [
+                                    "inputText"
+                                  ]
+                                }
+                              },
+                              "type": "boolean"
+                            },
+                            "maxLength": {
+                              "x-title": "Max Length",
+                              "description": "Hint of maximum length characters to collect (may be ignored by some clients)",
+                              "default": 1,
+                              "x-displayOptions": {
+                                "show": {
+                                  "type": [
+                                    "inputText"
+                                  ]
+                                }
+                              },
+                              "type": "number"
+                            },
+                            "placeholder": {
+                              "x-title": "Placeholder",
+                              "description": "Description of the input desired. Displayed when no text has been input.",
+                              "default": "",
+                              "x-displayOptions": {
+                                "show": {
+                                  "type": [
+                                    "inputText"
+                                  ]
+                                }
+                              },
+                              "type": "string"
+                            },
+                            "regex": {
+                              "x-title": "Regex",
+                              "description": "Regular expression indicating the required format of this text input",
+                              "default": "",
+                              "x-displayOptions": {
+                                "show": {
+                                  "type": [
+                                    "inputText"
+                                  ]
+                                }
+                              },
+                              "type": "string"
+                            },
+                            "style": {
+                              "x-title": "Style",
+                              "description": "Style hint for text input",
+                              "default": "text",
+                              "x-displayOptions": {
+                                "show": {
+                                  "type": [
+                                    "inputText"
+                                  ]
+                                }
+                              },
+                              "type": "string",
+                              "enum": [
+                                "text",
+                                "tel",
+                                "url",
+                                "email"
+                              ],
+                              "x-enumNames": [
+                                "Text",
+                                "Tel",
+                                "URL",
+                                "Email"
+                              ]
+                            },
+                            "value": {
+                              "x-title": "Value",
+                              "description": "The initial value for this field",
+                              "default": "",
+                              "x-displayOptions": {
+                                "show": {
+                                  "type": [
+                                    "inputText"
+                                  ]
+                                }
+                              },
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "actionsUi": {
+                    "x-title": "Actions",
+                    "default": {},
+                    "type": "object",
+                    "properties": {
+                      "actionValues": {
+                        "x-title": "Action",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "x-title": "Type",
+                              "default": "openUrl",
+                              "type": "string",
+                              "enum": [
+                                "execute",
+                                "openUrl",
+                                "submit"
+                              ],
+                              "x-enumNames": [
+                                "Execute",
+                                "Open URL",
+                                "Submit"
+                              ]
+                            },
+                            "url": {
+                              "x-title": "URL",
+                              "description": "The URL to open",
+                              "default": "",
+                              "x-displayOptions": {
+                                "show": {
+                                  "type": [
+                                    "openUrl"
+                                  ]
+                                }
+                              },
+                              "type": "string"
+                            },
+                            "data": {
+                              "x-title": "Data",
+                              "description": "Any extra data to pass along. These are essentially ‘hidden’ properties.",
+                              "default": "",
+                              "x-displayOptions": {
+                                "show": {
+                                  "type": [
+                                    "submit",
+                                    "execute"
+                                  ]
+                                }
+                              },
+                              "type": "string"
+                            },
+                            "verb": {
+                              "x-title": "Verb",
+                              "description": "The card author-defined verb associated with this action",
+                              "default": "",
+                              "x-displayOptions": {
+                                "show": {
+                                  "type": [
+                                    "execute"
+                                  ]
+                                }
+                              },
+                              "type": "string"
+                            },
+                            "title": {
+                              "x-title": "Title",
+                              "description": "Label for button or link that represents this action",
+                              "default": "",
+                              "x-required": true,
+                              "type": "string"
+                            },
+                            "iconUrl": {
+                              "x-title": "Icon URL",
+                              "description": "Optional icon to be shown on the action in conjunction with the title. Supports data URI in version 1.2+.",
+                              "default": "",
+                              "type": "string"
+                            },
+                            "style": {
+                              "x-title": "Style",
+                              "description": "Controls the style of an Action, which influences how the action is displayed, spoken, etc",
+                              "default": "default",
+                              "type": "string",
+                              "enum": [
+                                "default",
+                                "positive",
+                                "destructive"
+                              ],
+                              "x-enumNames": [
+                                "Default",
+                                "Positive",
+                                "Destructive"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "fileUi": {
+          "x-title": "File",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "fileValue": {
+              "x-title": "File",
+              "type": "object",
+              "properties": {
+                "fileLocation": {
+                  "x-title": "File Location",
+                  "default": "url",
+                  "type": "string",
+                  "enum": [
+                    "url",
+                    "binaryData"
+                  ],
+                  "x-enumNames": [
+                    "URL",
+                    "Binary File"
+                  ]
+                },
+                "binaryPropertyName": {
+                  "x-title": "Input Field With File",
+                  "description": "The field in the node input containing the binary file data",
+                  "default": "data",
+                  "x-displayOptions": {
+                    "show": {
+                      "fileLocation": [
+                        "binaryData"
+                      ]
+                    }
+                  },
+                  "x-required": true,
+                  "type": "string"
+                },
+                "url": {
+                  "x-title": "URL",
+                  "description": "The public URL of the file",
+                  "default": "",
+                  "x-displayOptions": {
+                    "show": {
+                      "fileLocation": [
+                        "url"
+                      ]
+                    }
+                  },
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "markdown": {
+          "x-title": "Markdown",
+          "description": "The message in markdown format. When used the text parameter is used to provide alternate text for UI clients that do not support rich text.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "meetingId": {
+      "x-title": "Meeting ID",
+      "description": "ID of the meeting",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "meeting"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "meeting"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "hostEmail": {
+          "x-title": "Host Email",
+          "description": "Email address for the meeting host. This parameter is only used if the user or application calling the API has the admin-level scopes.",
+          "default": "",
+          "type": "string"
+        },
+        "password": {
+          "x-title": "Password",
+          "description": "Meeting password. It's required when the meeting is protected by a password and the current user is not privileged to view it if they are not a host, co-host or invitee of the meeting.",
+          "default": "",
+          "type": "string",
+          "format": "password"
+        },
+        "sendEmail": {
+          "x-title": "Send Email",
+          "description": "Whether or not to send emails to host and invitees. It is an optional field and default value is true.",
+          "default": true,
+          "type": "boolean"
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "before": {
+          "x-title": "Before",
+          "description": "List messages sent before a date and time",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "beforeMessage": {
+          "x-title": "Before Message",
+          "description": "List messages sent before a message, by ID",
+          "default": "",
+          "type": "string"
+        },
+        "parentId": {
+          "x-title": "Parent Message ID",
+          "description": "List messages with a parent, by ID",
+          "default": "",
+          "type": "string"
+        },
+        "mentionedPeople": {
+          "x-title": "Mentioned Person",
+          "description": "List only messages with certain person mentioned. Enter their ID. You can use 'me' as a shorthand for yourself",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "meeting"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "agenda": {
+          "x-title": "Agenda",
+          "description": "The meeting's agenda. Cannot be longer that 1300 characters.",
+          "default": "",
+          "type": "string"
+        },
+        "allowAnyUserToBeCoHost": {
+          "x-title": "Allow Any User To Be Co-Host",
+          "description": "Whether or not to allow any attendee with a host account on the target site to become a co-host when joining the meeting",
+          "default": false,
+          "type": "boolean"
+        },
+        "allowAuthenticatedDevices": {
+          "x-title": "Allow Authenticated Devices",
+          "description": "Whether or not to allow authenticated video devices in the meeting's organization to start or join the meeting without a prompt",
+          "default": false,
+          "type": "boolean"
+        },
+        "allowFirstUserToBeCoHost": {
+          "x-title": "Allow First User To Be Co-Host",
+          "description": "Whether or not to allow the first attendee of the meeting with a host account on the target site to become a co-host",
+          "default": false,
+          "type": "boolean"
+        },
+        "enableConnectAudioBeforeHost": {
+          "x-title": "Enable Connect Audio Before Host",
+          "description": "Whether or not to allow any attendee to connect audio in the meeting before the host joins the meeting",
+          "default": false,
+          "type": "boolean"
+        },
+        "enabledAutoRecordMeeting": {
+          "x-title": "Enabled Auto Record Meeting",
+          "description": "Whether or not meeting is recorded automatically",
+          "default": false,
+          "type": "boolean"
+        },
+        "enabledJoinBeforeHost": {
+          "x-title": "Enabled Join Before Host",
+          "description": "Whether or not to allow any attendee to join the meeting before the host joins the meeting",
+          "default": false,
+          "type": "boolean"
+        },
+        "end": {
+          "x-title": "End",
+          "description": "Date and time for the end of the meeting. Acceptable <a href=\"https://datatracker.ietf.org/doc/html/rfc2445\"> format</a>.",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "excludePassword": {
+          "x-title": "Exclude Password",
+          "description": "Whether or not to exclude password from the meeting email invitation",
+          "default": false,
+          "type": "boolean"
+        },
+        "hostEmail": {
+          "x-title": "Host Email",
+          "description": "Email address for the meeting host. This attribute should only be set if the user or application calling the API has the admin-level scopes.",
+          "default": "",
+          "type": "string"
+        },
+        "inviteesUi": {
+          "x-title": "Invitees",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "inviteeValues": {
+              "x-title": "Invitee",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "x-title": "Email",
+                    "description": "Email address of meeting invitee",
+                    "default": "",
+                    "x-required": true,
+                    "type": "string"
+                  },
+                  "displayName": {
+                    "x-title": "Display Name",
+                    "description": "Display name of meeting invitee",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "coHost": {
+                    "x-title": "Co-Host",
+                    "description": "Whether or not invitee is allowed to be a co-host for the meeting",
+                    "default": false,
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "joinBeforeHostMinutes": {
+          "x-title": "Join Before Host Minutes",
+          "description": "The number of minutes an attendee can join the meeting before the meeting start time and the host joins",
+          "default": 0,
+          "type": "string",
+          "enum": [
+            0,
+            5,
+            10,
+            15
+          ],
+          "x-enumNames": [
+            "0",
+            "5",
+            "10",
+            "15"
+          ]
+        },
+        "password": {
+          "x-title": "Password",
+          "description": "Meeting password. Must conform to the site's password complexity settings. If not specified, a random password conforming to the site's password rules will be generated automatically",
+          "default": "",
+          "type": "string",
+          "format": "password"
+        },
+        "publicMeeting": {
+          "x-title": "Public Meeting",
+          "description": "Whether or not to allow the meeting to be listed on the public calendar",
+          "default": false,
+          "type": "boolean"
+        },
+        "recurrence": {
+          "x-title": "Recurrence",
+          "description": "Meeting series recurrence rule (conforming with RFC 2445), applying only to meeting series",
+          "default": "",
+          "type": "string"
+        },
+        "requireRegistrationInfo": {
+          "x-title": "Required Registration Info",
+          "description": "Data required for meeting registration",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "requireFirstName",
+              "requireLastName",
+              "requireEmail",
+              "requireJobTitle",
+              "requireCompanyName",
+              "requireAddress1",
+              "requireAddress2",
+              "requireCity",
+              "requireState",
+              "requireZipCode",
+              "requireCountryRegion",
+              "requireWorkPhone",
+              "requireFax"
+            ]
+          },
+          "x-enumNames": [
+            "Require First Name",
+            "Require Last Name",
+            "Require Email",
+            "Require Job Title",
+            "Require Company Name",
+            "Require Address 1",
+            "Require Address 2",
+            "Require City",
+            "Require State",
+            "Require Zip Code",
+            "Require Country Region",
+            "Require Work Phone",
+            "Require Fax"
+          ]
+        },
+        "reminderTime": {
+          "x-title": "Reminder Time",
+          "description": "The number of minutes before the meeting begins, for sending an email reminder to the host",
+          "default": 1,
+          "type": "number"
+        },
+        "sendEmail": {
+          "x-title": "Send Email",
+          "description": "Whether or not to send emails to host and invitees. It is an optional field and default value is true.",
+          "default": false,
+          "type": "boolean"
+        },
+        "siteUrl": {
+          "x-title": "Site URL",
+          "description": "URL of the Webex site which the meeting is created on. If not specified, the meeting is created on user's preferred site. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "start": {
+          "x-title": "Start",
+          "description": "Date and time for the start of the meeting. Acceptable <a href=\"https://datatracker.ietf.org/doc/html/rfc2445\"> format</a>.",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "title": {
+          "x-title": "Title",
+          "description": "Meeting title",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "destination": {
+      "x-title": "Destination",
+      "default": "room",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "room",
+        "person"
+      ],
+      "x-enumNames": [
+        "Room",
+        "Person"
+      ]
+    },
+    "roomId": {
+      "x-title": "Room Name or ID",
+      "description": "List messages in a room, by ID. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "specifyPersonBy": {
+      "x-title": "Specify Person By",
+      "default": "email",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "create"
+          ],
+          "destination": [
+            "person"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "email",
+        "id"
+      ],
+      "x-enumNames": [
+        "Email",
+        "ID"
+      ]
+    },
+    "toPersonId": {
+      "x-title": "Person ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "create"
+          ],
+          "specifyPersonBy": [
+            "id"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "toPersonEmail": {
+      "x-title": "Person Email",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "create"
+          ],
+          "specifyPersonBy": [
+            "email"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "text": {
+      "x-title": "Text",
+      "description": "The message, in plain text",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "update"
+          ],
+          "markdown": [
+            false
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "messageId": {
+      "x-title": "Message ID",
+      "description": "ID of the message to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "markdown": {
+      "x-title": "Is Markdown",
+      "description": "Whether the message uses markdown",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "markdownText": {
+      "x-title": "Markdown",
+      "description": "The message, in Markdown format. The maximum message length is 7439 bytes.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "update"
+          ],
+          "markdown": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:ciscoWebex.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "ciscoWebexOAuth2Api",
+      "required": true
+    }
+  ]
+}

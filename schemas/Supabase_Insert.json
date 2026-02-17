@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Supabase: Insert",
+  "description": "Insert data into Supabase Vector Store index [https://supabase.com/docs/guides/ai/langchain]",
+  "x-n8n-node-type": "vectorStoreSupabaseInsert",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "tableName": {
+      "x-title": "Table Name",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "queryName": {
+      "x-title": "Query Name",
+      "description": "Name of the query to use for matching documents",
+      "default": "match_documents",
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-icon": "file:supabase.svg",
+  "x-inputs": [
+    "main",
+    {
+      "displayName": "Document",
+      "maxConnections": 1,
+      "type": "ai_document",
+      "required": true
+    },
+    {
+      "displayName": "Embedding",
+      "maxConnections": 1,
+      "type": "ai_embedding",
+      "required": true
+    }
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "supabaseApi",
+      "required": true
+    }
+  ]
+}

@@ -1,0 +1,481 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Webhook",
+  "description": "Starts the workflow when a webhook is called",
+  "x-n8n-node-type": "webhook",
+  "x-n8n-version": [
+    1,
+    1.1,
+    2,
+    2.1
+  ],
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "multipleMethods": {
+      "x-title": "Allow Multiple HTTP Methods",
+      "description": "Whether to allow the webhook to listen for multiple HTTP methods",
+      "default": false,
+      "type": "boolean"
+    },
+    "httpMethod": {
+      "x-title": "HTTP Methods",
+      "description": "The HTTP methods to listen to",
+      "default": [
+        "GET",
+        "POST"
+      ],
+      "x-displayOptions": {
+        "show": {
+          "multipleMethods": [
+            true
+          ]
+        }
+      },
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "DELETE",
+          "GET",
+          "HEAD",
+          "PATCH",
+          "POST",
+          "PUT"
+        ]
+      },
+      "x-enumNames": [
+        "DELETE",
+        "GET",
+        "HEAD",
+        "PATCH",
+        "POST",
+        "PUT"
+      ]
+    },
+    "path": {
+      "x-title": "Path",
+      "description": "The path to listen to, dynamic values could be specified by using ':', e.g. 'your-path/:dynamic-value'. If dynamic values are set 'webhookId' would be prepended to path.",
+      "default": "",
+      "type": "string"
+    },
+    "authentication": {
+      "x-title": "Authentication",
+      "description": "The way to authenticate",
+      "default": "none",
+      "type": "string",
+      "enum": [
+        "basicAuth",
+        "headerAuth",
+        "jwtAuth",
+        "none"
+      ],
+      "x-enumNames": [
+        "Basic Auth",
+        "Header Auth",
+        "JWT Auth",
+        "None"
+      ]
+    },
+    "responseMode": {
+      "x-title": "Respond",
+      "description": "When and how to respond to the webhook",
+      "default": "onReceived",
+      "x-displayOptions": {
+        "hide": {
+          "@version": [
+            1,
+            1.1,
+            2
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "onReceived",
+        "lastNode",
+        "responseNode",
+        "streaming"
+      ],
+      "x-enumNames": [
+        "Immediately",
+        "When Last Node Finishes",
+        "Using 'Respond to Webhook' Node",
+        "Streaming"
+      ],
+      "x-enumDescriptions": [
+        "As soon as this node executes",
+        "Returns data of the last-executed node",
+        "Response defined in that node",
+        "Returns data in real time from streaming enabled nodes"
+      ]
+    },
+    "responseCode": {
+      "x-title": "Response Code",
+      "description": "The HTTP Response code to return",
+      "default": 200,
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            1,
+            1.1
+          ]
+        },
+        "hide": {
+          "responseMode": [
+            "responseNode"
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 100,
+      "maximum": 599
+    },
+    "responseData": {
+      "x-title": "Response Data",
+      "description": "What data should be returned. If it should return all items as an array or only the first item as object.",
+      "default": "firstEntryJson",
+      "x-displayOptions": {
+        "show": {
+          "responseMode": [
+            "lastNode"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "allEntries",
+        "firstEntryJson",
+        "firstEntryBinary",
+        "noData"
+      ],
+      "x-enumNames": [
+        "All Entries",
+        "First Entry JSON",
+        "First Entry Binary",
+        "No Response Body"
+      ],
+      "x-enumDescriptions": [
+        "Returns all the entries of the last node. Always returns an array.",
+        "Returns the JSON data of the first entry of the last node. Always returns a JSON object.",
+        "Returns the binary data of the first entry of the last node. Always returns a binary file.",
+        "Returns without a body"
+      ]
+    },
+    "responseBinaryPropertyName": {
+      "x-title": "Property Name",
+      "description": "Name of the binary property to return",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "responseData": [
+            "firstEntryBinary"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "binaryData": {
+          "x-title": "Binary File",
+          "description": "Whether the webhook will receive binary data",
+          "default": false,
+          "x-displayOptions": {
+            "show": {
+              "/httpMethod": [
+                "PATCH",
+                "PUT",
+                "POST"
+              ],
+              "@version": [
+                1
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "binaryPropertyName": {
+          "x-title": "Put Output File in Field",
+          "description": "If the data gets received via \"Form-Data Multipart\" it will be the prefix and a number starting with 0 will be attached to it",
+          "default": "data",
+          "x-displayOptions": {
+            "show": {
+              "binaryData": [
+                true
+              ],
+              "@version": [
+                1
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "ignoreBots": {
+          "x-title": "Ignore Bots",
+          "description": "Whether to ignore requests from bots like link previewers and web crawlers",
+          "default": false,
+          "type": "boolean"
+        },
+        "ipWhitelist": {
+          "x-title": "IP(s) Allowlist",
+          "description": "Comma-separated list of allowed IP addresses or CIDR ranges. Leave empty to allow all IPs.",
+          "default": "",
+          "type": "string"
+        },
+        "noResponseBody": {
+          "x-title": "No Response Body",
+          "description": "Whether to send any body in the response",
+          "default": false,
+          "x-displayOptions": {
+            "hide": {
+              "rawBody": [
+                true
+              ]
+            },
+            "show": {
+              "/responseMode": [
+                "onReceived"
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "responsePropertyName": {
+          "x-title": "Property Name",
+          "description": "Name of the property to return the data of instead of the whole JSON",
+          "default": "data",
+          "x-displayOptions": {
+            "show": {
+              "/responseData": [
+                "firstEntryJson"
+              ],
+              "/responseMode": [
+                "lastNode"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "rawBody": {
+          "x-title": "Raw Body",
+          "description": "Whether to return the raw body",
+          "default": false,
+          "x-displayOptions": {
+            "hide": {
+              "noResponseBody": [
+                true
+              ],
+              "@version": [
+                1
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "responseCode": {
+          "x-title": "Response Code",
+          "default": {
+            "values": {
+              "responseCode": 200
+            }
+          },
+          "x-displayOptions": {
+            "show": {
+              "@version": [
+                {
+                  "_cnd": {
+                    "gte": 2
+                  }
+                }
+              ]
+            },
+            "hide": {
+              "/responseMode": [
+                "responseNode"
+              ]
+            }
+          },
+          "type": "object",
+          "properties": {
+            "values": {
+              "x-title": "Values",
+              "type": "object",
+              "properties": {
+                "responseCode": {
+                  "x-title": "Response Code",
+                  "description": "The HTTP response code to return",
+                  "default": 200,
+                  "type": "string",
+                  "enum": [
+                    200,
+                    201,
+                    204,
+                    301,
+                    302,
+                    304,
+                    400,
+                    401,
+                    403,
+                    404,
+                    "customCode"
+                  ],
+                  "x-enumNames": [
+                    "200",
+                    "201",
+                    "204",
+                    "301",
+                    "302",
+                    "304",
+                    "400",
+                    "401",
+                    "403",
+                    "404",
+                    "Custom Code"
+                  ],
+                  "x-enumDescriptions": [
+                    "OK - Request has succeeded",
+                    "Created - Request has been fulfilled",
+                    "No Content - Request processed, no content returned",
+                    "Moved Permanently - Requested resource moved permanently",
+                    "Found - Requested resource moved temporarily",
+                    "Not Modified - Resource has not been modified",
+                    "Bad Request - Request could not be understood",
+                    "Unauthorized - Request requires user authentication",
+                    "Forbidden - Server understood, but refuses to fulfill",
+                    "Not Found - Server has not found a match",
+                    "Write any HTTP code"
+                  ]
+                },
+                "customCode": {
+                  "x-title": "Code",
+                  "default": 200,
+                  "x-displayOptions": {
+                    "show": {
+                      "responseCode": [
+                        "customCode"
+                      ]
+                    }
+                  },
+                  "type": "number",
+                  "minimum": 100
+                }
+              }
+            }
+          }
+        },
+        "responseContentType": {
+          "x-title": "Response Content-Type",
+          "description": "Set a custom content-type to return if another one as the \"application/json\" should be returned",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/responseData": [
+                "firstEntryJson"
+              ],
+              "/responseMode": [
+                "lastNode"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "responseData": {
+          "x-title": "Response Data",
+          "description": "Custom response data to send",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/responseMode": [
+                "onReceived"
+              ]
+            },
+            "hide": {
+              "noResponseBody": [
+                true
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "responseHeaders": {
+          "x-title": "Response Headers",
+          "description": "Add headers to the webhook response",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "entries": {
+              "x-title": "Entries",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "x-title": "Name",
+                    "description": "Name of the header",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "Value of the header",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-icon": {
+    "light": "file:webhook.svg",
+    "dark": "file:webhook.dark.svg"
+  },
+  "x-inputs": [],
+  "x-outputs": "={{((parameters) => {\n    const httpMethod = parameters.httpMethod;\n    if (!Array.isArray(httpMethod))\n        return [\n            {\n                type: 'main',\n                displayName: httpMethod,\n            },\n        ];\n    const outputs = httpMethod.map((method) => {\n        return {\n            type: 'main',\n            displayName: method,\n        };\n    });\n    return outputs;\n})($parameter)}}",
+  "x-credentials": [
+    {
+      "name": "httpBasicAuth",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "basicAuth"
+          ]
+        }
+      }
+    },
+    {
+      "name": "httpHeaderAuth",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "headerAuth"
+          ]
+        }
+      }
+    },
+    {
+      "name": "jwtAuth",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "jwtAuth"
+          ]
+        }
+      }
+    }
+  ],
+  "x-webhooks": "true"
+}

@@ -1,0 +1,157 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Twilio",
+  "description": "Send SMS and WhatsApp messages or make phone calls",
+  "x-n8n-node-type": "twilio",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "sms",
+      "type": "string",
+      "enum": [
+        "call",
+        "sms"
+      ],
+      "x-enumNames": [
+        "Call",
+        "SMS"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "make",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "call"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "make"
+      ],
+      "x-enumNames": [
+        "Make"
+      ]
+    },
+    "from": {
+      "x-title": "From",
+      "description": "The number from which to send the message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send",
+            "make"
+          ],
+          "resource": [
+            "sms",
+            "call"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "to": {
+      "x-title": "To",
+      "description": "The number to which to send the message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send",
+            "make"
+          ],
+          "resource": [
+            "sms",
+            "call"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "toWhatsapp": {
+      "x-title": "To Whatsapp",
+      "description": "Whether the message should be sent to WhatsApp",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "sms"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "message": {
+      "x-title": "Message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "make"
+          ],
+          "resource": [
+            "call"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "twiml": {
+      "x-title": "Use TwiML",
+      "description": "Whether to use the <a href=\"https://www.twilio.com/docs/voice/twiml\">Twilio Markup Language</a> in the message",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "make"
+          ],
+          "resource": [
+            "call"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "statusCallback": {
+          "x-title": "Status Callback",
+          "description": "Status Callbacks allow you to receive events related to the REST resources managed by Twilio: Rooms, Recordings and Compositions",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:twilio.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "twilioApi",
+      "required": true
+    }
+  ]
+}

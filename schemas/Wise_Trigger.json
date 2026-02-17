@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Wise Trigger",
+  "description": "Handle Wise events via webhooks",
+  "x-n8n-node-type": "wiseTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "profileId": {
+      "x-title": "Profile Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "event": {
+      "x-title": "Event",
+      "default": "",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "balanceCredit",
+        "balanceUpdate",
+        "transferActiveCases",
+        "tranferStateChange"
+      ],
+      "x-enumNames": [
+        "Balance Credit",
+        "Balance Update",
+        "Transfer Active Case",
+        "Transfer State Changed"
+      ],
+      "x-enumDescriptions": [
+        "Triggered every time a balance account is credited",
+        "Triggered every time a balance account is credited or debited",
+        "Triggered every time a transfer's list of active cases is updated",
+        "Triggered every time a transfer's status is updated"
+      ]
+    }
+  },
+  "x-subtitle": "={{$parameter[\"event\"]}}",
+  "x-icon": "file:wise.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "wiseApi",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

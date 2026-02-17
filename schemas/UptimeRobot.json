@@ -1,0 +1,449 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "UptimeRobot",
+  "description": "Consume UptimeRobot API",
+  "x-n8n-node-type": "uptimeRobot",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "account",
+      "type": "string",
+      "enum": [
+        "account",
+        "alertContact",
+        "maintenanceWindow",
+        "monitor",
+        "publicStatusPage"
+      ],
+      "x-enumNames": [
+        "Account",
+        "Alert Contact",
+        "Maintenance Window",
+        "Monitor",
+        "Public Status Page"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "publicStatusPage"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many"
+      ],
+      "x-enumDescriptions": [
+        "Create a public status page",
+        "Delete a public status page",
+        "Get a public status page",
+        "Get many public status pages"
+      ]
+    },
+    "friendlyName": {
+      "x-title": "Friendly Name",
+      "description": "The friendly name of the status page",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "publicStatusPage"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "type": {
+      "x-title": "Type",
+      "description": "The type of the maintenance window",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "maintenanceWindow"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "x-enumNames": [
+        "Once",
+        "Daily",
+        "Weekly",
+        "Monthly"
+      ]
+    },
+    "url": {
+      "x-title": "URL",
+      "description": "The URL/IP of the monitor",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "monitor"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "id": {
+      "x-title": "ID",
+      "description": "The ID of the public status page",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "publicStatusPage"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "publicStatusPage"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "publicStatusPage"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "publicStatusPage"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "psps": {
+          "x-title": "Public Status Page IDs",
+          "description": "Public status pages IDs separated with dash, e.g. 236-1782-4790",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "publicStatusPage"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "custom_domain": {
+          "x-title": "Custom Domain",
+          "description": "The domain or subdomain that the status page will run on",
+          "default": "",
+          "type": "string"
+        },
+        "friendly_name": {
+          "x-title": "Friendly Name",
+          "description": "The friendly name of the status page",
+          "default": "",
+          "type": "string"
+        },
+        "monitors": {
+          "x-title": "Monitor IDs",
+          "description": "Monitor IDs to be displayed in status page (the values are separated with a dash (-) or 0 for all monitors)",
+          "default": "",
+          "type": "string"
+        },
+        "password": {
+          "x-title": "Password",
+          "description": "The password for the status page",
+          "default": "",
+          "type": "string",
+          "format": "password"
+        },
+        "sort": {
+          "x-title": "Sort",
+          "description": "The sorting of the status page",
+          "default": "",
+          "type": "string",
+          "enum": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "x-enumNames": [
+            "Friendly Name (A-Z)",
+            "Friendly Name (Z-A)",
+            "Status (Up-Down-Paused)",
+            "Status (Down-Up-Paused)"
+          ]
+        }
+      }
+    },
+    "value": {
+      "x-title": "Value",
+      "description": "The correspondent value for the alert contact type",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "alertContact"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "duration": {
+      "x-title": "Duration (Minutes)",
+      "description": "The maintenance window activation period (minutes)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "maintenanceWindow"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "weekDay": {
+      "x-title": "Week Day",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "maintenanceWindow"
+          ],
+          "operation": [
+            "create"
+          ],
+          "type": [
+            3
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "x-enumNames": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ]
+    },
+    "monthDay": {
+      "x-title": "Month Day",
+      "default": 1,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "maintenanceWindow"
+          ],
+          "operation": [
+            "create"
+          ],
+          "type": [
+            4
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 30
+    },
+    "start_time": {
+      "x-title": "Start Time",
+      "description": "The maintenance window start datetime",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "maintenanceWindow"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "monitors": {
+      "x-title": "Monitor IDs",
+      "description": "Monitor IDs to be displayed in status page (the values are separated with a dash (-) or 0 for all monitors)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "publicStatusPage"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "publicStatusPage"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "custom_domain": {
+          "x-title": "Custom Domain",
+          "description": "The domain or subdomain that the status page will run on",
+          "default": "",
+          "type": "string"
+        },
+        "password": {
+          "x-title": "Password",
+          "description": "The password for the status page",
+          "default": "",
+          "type": "string",
+          "format": "password"
+        },
+        "sort": {
+          "x-title": "Sort",
+          "description": "The sorting of the status page",
+          "default": "",
+          "type": "string",
+          "enum": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "x-enumNames": [
+            "Friendly Name (A-Z)",
+            "Friendly Name (Z-A)",
+            "Status (Up-Down-Paused)",
+            "Status (Down-Up-Paused)"
+          ]
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:uptimerobot.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "uptimeRobotApi",
+      "required": true
+    }
+  ]
+}

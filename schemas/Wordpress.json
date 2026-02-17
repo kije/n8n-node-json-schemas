@@ -1,0 +1,507 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Wordpress",
+  "description": "Consume Wordpress API",
+  "x-n8n-node-type": "wordpress",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "post",
+      "type": "string",
+      "enum": [
+        "post",
+        "page",
+        "user"
+      ],
+      "x-enumNames": [
+        "Post",
+        "Page",
+        "User"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a user",
+        "Get a user",
+        "Get many users",
+        "Update a user"
+      ]
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "The title for the page",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "page"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "url": {
+          "x-title": "URL",
+          "description": "URL of the user",
+          "default": "",
+          "type": "string"
+        },
+        "description": {
+          "x-title": "Description",
+          "description": "Description of the user",
+          "default": "",
+          "type": "string"
+        },
+        "nickname": {
+          "x-title": "Nickname",
+          "description": "The nickname for the user",
+          "default": "",
+          "type": "string"
+        },
+        "slug": {
+          "x-title": "Slug",
+          "description": "An alphanumeric identifier for the user",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "postId": {
+      "x-title": "Post ID",
+      "description": "Unique identifier for the object",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "username": {
+          "x-title": "Username",
+          "description": "Login name for the user",
+          "default": "",
+          "type": "string"
+        },
+        "name": {
+          "x-title": "Name",
+          "description": "Display name for the user",
+          "default": "",
+          "type": "string"
+        },
+        "firstName": {
+          "x-title": "First Name",
+          "description": "First name for the user",
+          "default": "",
+          "type": "string"
+        },
+        "lastName": {
+          "x-title": "Last Name",
+          "description": "Last name for the user",
+          "default": "",
+          "type": "string"
+        },
+        "email": {
+          "x-title": "Email",
+          "description": "The email address for the user",
+          "default": "",
+          "type": "string"
+        },
+        "password": {
+          "x-title": "Password",
+          "description": "Password for the user (never included)",
+          "default": "",
+          "type": "string",
+          "format": "password"
+        },
+        "url": {
+          "x-title": "URL",
+          "description": "URL of the user",
+          "default": "",
+          "type": "string"
+        },
+        "description": {
+          "x-title": "Description",
+          "description": "Description of the user",
+          "default": "",
+          "type": "string"
+        },
+        "nickname": {
+          "x-title": "Nickname",
+          "description": "The nickname for the user",
+          "default": "",
+          "type": "string"
+        },
+        "slug": {
+          "x-title": "Slug",
+          "description": "An alphanumeric identifier for the user",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "context": {
+          "x-title": "Context",
+          "description": "Scope under which the request is made; determines fields present in response",
+          "default": "view",
+          "type": "string",
+          "enum": [
+            "view",
+            "embed",
+            "edit"
+          ],
+          "x-enumNames": [
+            "View",
+            "Embed",
+            "Edit"
+          ]
+        },
+        "orderBy": {
+          "x-title": "Order By",
+          "description": "Sort collection by object attribute",
+          "default": "id",
+          "type": "string",
+          "enum": [
+            "email",
+            "id",
+            "include",
+            "include_slugs",
+            "name",
+            "registered_date",
+            "slug",
+            "url"
+          ],
+          "x-enumNames": [
+            "Email",
+            "ID",
+            "Include",
+            "Include Slugs",
+            "Name",
+            "Registered Date",
+            "Slug",
+            "URL"
+          ]
+        },
+        "order": {
+          "x-title": "Order",
+          "description": "Order sort attribute ascending or descending",
+          "default": "desc",
+          "type": "string",
+          "enum": [
+            "asc",
+            "desc"
+          ],
+          "x-enumNames": [
+            "ASC",
+            "DESC"
+          ]
+        },
+        "search": {
+          "x-title": "Search",
+          "description": "Limit results to those matching a string",
+          "default": "",
+          "type": "string"
+        },
+        "who": {
+          "x-title": "Who",
+          "description": "Limit result set to users who are considered authors",
+          "default": "authors",
+          "type": "string",
+          "enum": [
+            "authors"
+          ],
+          "x-enumNames": [
+            "Authors"
+          ]
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 5,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 10
+    },
+    "pageId": {
+      "x-title": "Page ID",
+      "description": "Unique identifier for the object",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "page"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "username": {
+      "x-title": "Username",
+      "description": "Login name for the user",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "Display name for the user",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "firstName": {
+      "x-title": "First Name",
+      "description": "First name for the user",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "lastName": {
+      "x-title": "Last Name",
+      "description": "Last name for the user",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "The email address for the user",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "password": {
+      "x-title": "Password",
+      "description": "Password for the user (never included)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "password"
+    },
+    "userId": {
+      "x-title": "User ID",
+      "description": "Unique identifier for the user",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "reassign": {
+      "x-title": "Reassign",
+      "description": "Reassign the deleted user's posts and links to this user ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:wordpress.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "wordpressApi",
+      "required": true
+    }
+  ]
+}

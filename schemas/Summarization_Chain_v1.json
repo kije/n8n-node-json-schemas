@@ -1,0 +1,113 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Summarization Chain",
+  "description": "Transforms text into a concise summary",
+  "x-n8n-node-type": "chainSummarization",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "type": {
+      "x-title": "Type",
+      "description": "The type of summarization to run",
+      "default": "map_reduce",
+      "type": "string",
+      "enum": [
+        "map_reduce",
+        "refine",
+        "stuff"
+      ],
+      "x-enumNames": [
+        "Map Reduce (Recommended)",
+        "Refine",
+        "Stuff"
+      ],
+      "x-enumDescriptions": [
+        "Summarize each document (or chunk) individually, then summarize those summaries",
+        "Summarize the first document (or chunk). Then update that summary based on the next document (or chunk), and repeat.",
+        "Pass all documents (or chunks) at once. Ideal for small datasets."
+      ]
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "combineMapPrompt": {
+          "x-title": "Final Prompt to Combine",
+          "default": "Write a concise summary of the following:\n\n\n\"{text}\"\n\n\nCONCISE SUMMARY:",
+          "x-displayOptions": {
+            "show": {
+              "/type": [
+                "map_reduce"
+              ]
+            }
+          },
+          "type": "string",
+          "x-rows": 6
+        },
+        "prompt": {
+          "x-title": "Prompt",
+          "default": "Write a concise summary of the following:\n\n\n\"{text}\"\n\n\nCONCISE SUMMARY:",
+          "x-displayOptions": {
+            "show": {
+              "/type": [
+                "stuff"
+              ]
+            }
+          },
+          "type": "string",
+          "x-rows": 6
+        },
+        "refinePrompt": {
+          "x-title": "Subsequent (Refine) Prompt",
+          "default": "Your job is to produce a final summary\nWe have provided an existing summary up to a certain point: \"{existing_answer}\"\nWe have the opportunity to refine the existing summary\n(only if needed) with some more context below.\n------------\n\"{text}\"\n------------\n\nGiven the new context, refine the original summary\nIf the context isn't useful, return the original summary.\n\nREFINED SUMMARY:",
+          "x-displayOptions": {
+            "show": {
+              "/type": [
+                "refine"
+              ]
+            }
+          },
+          "type": "string",
+          "x-rows": 6
+        },
+        "refineQuestionPrompt": {
+          "x-title": "Initial Prompt",
+          "default": "Write a concise summary of the following:\n\n\n\"{text}\"\n\n\nCONCISE SUMMARY:",
+          "x-displayOptions": {
+            "show": {
+              "/type": [
+                "refine"
+              ]
+            }
+          },
+          "type": "string",
+          "x-rows": 6
+        }
+      }
+    }
+  },
+  "x-icon": "fa:link",
+  "x-inputs": [
+    "main",
+    {
+      "displayName": "Model",
+      "maxConnections": 1,
+      "type": "ai_languageModel",
+      "required": true
+    },
+    {
+      "displayName": "Document",
+      "maxConnections": 1,
+      "type": "ai_document",
+      "required": true
+    }
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": []
+}

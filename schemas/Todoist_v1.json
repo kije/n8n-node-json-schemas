@@ -1,0 +1,483 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Todoist",
+  "description": "Consume Todoist API",
+  "x-n8n-node-type": "todoist",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "apiKey",
+      "type": "string",
+      "enum": [
+        "apiKey",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "API Key",
+        "OAuth2"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "task",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "task"
+      ],
+      "x-enumNames": [
+        "Task"
+      ],
+      "x-enumDescriptions": [
+        "Task resource"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "close",
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "move",
+        "reopen",
+        "update"
+      ],
+      "x-enumNames": [
+        "Close",
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Move",
+        "Reopen",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Close a task",
+        "Create a new task",
+        "Delete a task",
+        "Get a task",
+        "Get many tasks",
+        "Move a task",
+        "Reopen a task",
+        "Update a task"
+      ]
+    },
+    "taskId": {
+      "x-title": "Task ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "delete",
+            "close",
+            "get",
+            "reopen",
+            "update",
+            "move"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "project": {
+      "x-title": "Project Name or ID",
+      "description": "The project you want to operate on. Choose from the list, or specify an ID.",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create",
+            "move",
+            "sync"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "section": {
+      "x-title": "Section Name or ID",
+      "description": "Section to which you want move the task. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "move"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "labels": {
+      "x-title": "Label Names or IDs",
+      "description": "Optional labels that will be assigned to a created task. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "content": {
+      "x-title": "Content",
+      "description": "Task content",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-rows": 5
+    },
+    "commands": {
+      "x-title": "Sync Commands",
+      "description": "Sync body",
+      "default": "[]",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "sync"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "description": {
+          "x-title": "Description",
+          "description": "A description for the task",
+          "default": "",
+          "type": "string"
+        },
+        "dueDateTime": {
+          "x-title": "Due Date Time",
+          "description": "Specific date and time in RFC3339 format in UTC",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "dueLang": {
+          "x-title": "Due String Locale",
+          "description": "2-letter code specifying language in case due_string is not written in English",
+          "default": "",
+          "type": "string"
+        },
+        "dueString": {
+          "x-title": "Due String",
+          "description": "Human defined task due date (ex.: “next Monday”, “Tomorrow”). Value is set using local (not UTC) time.",
+          "default": "",
+          "type": "string"
+        },
+        "parentId": {
+          "x-title": "Parent Name or ID",
+          "description": "The parent task you want to operate on. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": {},
+          "type": "string"
+        },
+        "priority": {
+          "x-title": "Priority",
+          "description": "Task priority from 1 (normal) to 4 (urgent)",
+          "default": 1,
+          "type": "number",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "section": {
+          "x-title": "Section Name or ID",
+          "description": "The section you want to operate on. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": {},
+          "type": "string"
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "task"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "filter": {
+          "x-title": "Filter",
+          "description": "Filter by any <a href=\"https://get.todoist.help/hc/en-us/articles/205248842\">supported filter.</a>",
+          "default": "",
+          "type": "string"
+        },
+        "ids": {
+          "x-title": "IDs",
+          "description": "A list of the task IDs to retrieve, this should be a comma-separated list",
+          "default": "",
+          "type": "string"
+        },
+        "labelId": {
+          "x-title": "Label Name or ID",
+          "description": "Filter tasks by label. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": {},
+          "type": "string"
+        },
+        "lang": {
+          "x-title": "Lang",
+          "description": "IETF language tag defining what language filter is written in, if differs from default English",
+          "default": "",
+          "type": "string"
+        },
+        "parentId": {
+          "x-title": "Parent Name or ID",
+          "description": "Filter tasks by parent task ID. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "projectId": {
+          "x-title": "Project Name or ID",
+          "description": "Filter tasks by project ID. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "sectionId": {
+          "x-title": "Section Name or ID",
+          "description": "Filter tasks by section ID. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "content": {
+          "x-title": "Content",
+          "description": "Task content",
+          "default": "",
+          "type": "string"
+        },
+        "description": {
+          "x-title": "Description",
+          "description": "A description for the task",
+          "default": "",
+          "type": "string"
+        },
+        "dueDateTime": {
+          "x-title": "Due Date Time",
+          "description": "Specific date and time in RFC3339 format in UTC",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "dueLang": {
+          "x-title": "Due String Locale",
+          "description": "2-letter code specifying language in case due_string is not written in English",
+          "default": "",
+          "type": "string"
+        },
+        "dueString": {
+          "x-title": "Due String",
+          "description": "Human defined task due date (ex.: “next Monday”, “Tomorrow”). Value is set using local (not UTC) time.",
+          "default": "",
+          "type": "string"
+        },
+        "labels": {
+          "x-title": "Label Names or IDs",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "priority": {
+          "x-title": "Priority",
+          "description": "Task priority from 1 (normal) to 4 (urgent)",
+          "default": 1,
+          "type": "number",
+          "minimum": 1,
+          "maximum": 4
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:todoist.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "todoistApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "apiKey"
+          ]
+        }
+      }
+    },
+    {
+      "name": "todoistOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

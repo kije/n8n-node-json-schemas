@@ -1,0 +1,882 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TheHive",
+  "description": "Consume TheHive API",
+  "x-n8n-node-type": "theHive",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "alert",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "alert",
+        "case",
+        "log",
+        "observable",
+        "task"
+      ],
+      "x-enumNames": [
+        "Alert",
+        "Case",
+        "Log",
+        "Observable",
+        "Task"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "log"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "create",
+        "executeResponder",
+        "getAll",
+        "get"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Execute Responder",
+        "Get Many",
+        "Get"
+      ],
+      "x-enumDescriptions": [
+        "Create task log",
+        "Execute a responder on a selected log",
+        "Get many task logs",
+        "Get a single log"
+      ]
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "log"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "log"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "id": {
+      "x-title": "Log ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "log"
+          ],
+          "operation": [
+            "executeResponder",
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "caseId": {
+      "x-title": "Case ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create",
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "Task details",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "description": {
+      "x-title": "Description",
+      "description": "Description of the case",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "case"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "severity": {
+      "x-title": "Severity",
+      "description": "Severity of the alert. Default=Medium.",
+      "default": 2,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "case"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        1,
+        2,
+        3
+      ],
+      "x-enumNames": [
+        "Low",
+        "Medium",
+        "High"
+      ]
+    },
+    "date": {
+      "x-title": "Date",
+      "description": "Date and time when the alert was raised default=now",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "alert"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "tags": {
+      "x-title": "Tags",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "case"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "tlp": {
+      "x-title": "TLP",
+      "description": "Traffict Light Protocol (TLP). Default=Amber.",
+      "default": 2,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "case"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "x-enumNames": [
+        "White",
+        "Green",
+        "Amber",
+        "Red"
+      ]
+    },
+    "status": {
+      "x-title": "Status",
+      "description": "Status of the log (Ok or Deleted) default=Ok",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "log"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "Ok",
+        "Deleted"
+      ],
+      "x-enumNames": [
+        "Ok",
+        "Deleted"
+      ]
+    },
+    "type": {
+      "x-title": "Type",
+      "description": "Type of the alert",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "alert"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "source": {
+      "x-title": "Source",
+      "description": "Source of the alert",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "alert"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "sourceRef": {
+      "x-title": "SourceRef",
+      "description": "Source reference of the alert",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "alert"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "follow": {
+      "x-title": "Follow",
+      "description": "Whether the alert becomes active when updated default=true",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "alert"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "artifactUi": {
+      "x-title": "Artifacts",
+      "description": "Artifact attributes",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "alert"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "artifactValues": {
+          "x-title": "Artifact",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "dataType": {
+                "x-title": "Data Type Name or ID",
+                "description": "Type of the observable. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                "default": "",
+                "type": "string"
+              },
+              "data": {
+                "x-title": "Data",
+                "default": "",
+                "x-displayOptions": {
+                  "hide": {
+                    "dataType": [
+                      "file"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "binaryProperty": {
+                "x-title": "Input Binary Field",
+                "default": "data",
+                "x-displayOptions": {
+                  "show": {
+                    "dataType": [
+                      "file"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "message": {
+                "x-title": "Message",
+                "default": "",
+                "type": "string"
+              },
+              "tags": {
+                "x-title": "Case Tags",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responder": {
+      "x-title": "Responder Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "log"
+          ],
+          "operation": [
+            "executeResponder"
+          ]
+        },
+        "hide": {
+          "id": [
+            ""
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "jsonParameters": {
+      "x-title": "JSON Parameters",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "case"
+          ],
+          "operation": [
+            "create",
+            "update"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "alert"
+          ],
+          "operation": [
+            "promote"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "caseTemplate": {
+          "x-title": "Case Template",
+          "description": "Case template to use when a case is created from this alert",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "description": {
+          "x-title": "Description",
+          "description": "Task details",
+          "default": "",
+          "type": "string"
+        },
+        "endDate": {
+          "x-title": "End Date",
+          "description": "Date of the end of the task. This is automatically set when status is set to Completed.",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "flag": {
+          "x-title": "Flag",
+          "description": "Whether to flag the task. Default=false.",
+          "default": false,
+          "type": "boolean"
+        },
+        "owner": {
+          "x-title": "Owner",
+          "description": "User who owns the task. This is automatically set to current user when status is set to InProgress.",
+          "default": "",
+          "type": "string"
+        },
+        "startDate": {
+          "x-title": "Start Date",
+          "description": "Date of the beginning of the task. This is automatically set when status is set to Open.",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "x-title": "Status",
+          "description": "Status of the task. Default=Waiting.",
+          "default": "Waiting",
+          "type": "string",
+          "enum": [
+            "Cancel",
+            "Completed",
+            "InProgress",
+            "Waiting"
+          ],
+          "x-enumNames": [
+            "Cancel",
+            "Completed",
+            "In Progress",
+            "Waiting"
+          ]
+        },
+        "title": {
+          "x-title": "Title",
+          "description": "Task details",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "log"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "attachmentValues": {
+          "x-title": "Attachment",
+          "description": "File attached to the log",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "attachmentValues": {
+              "x-title": "Attachment",
+              "type": "object",
+              "properties": {
+                "binaryProperty": {
+                  "x-title": "Input Binary Field",
+                  "description": "The name of the input binary field which holds binary data",
+                  "default": "data",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "search",
+            "count"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "description": {
+          "x-title": "Description",
+          "description": "Task details",
+          "default": "",
+          "type": "string"
+        },
+        "endDate": {
+          "x-title": "End Date",
+          "description": "Date of the end of the task. This is automatically set when status is set to Completed.",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "flag": {
+          "x-title": "Flag",
+          "description": "Whether to flag the task. Default=false.",
+          "default": false,
+          "type": "boolean"
+        },
+        "owner": {
+          "x-title": "Owner",
+          "description": "User who owns the task. This is automatically set to current user when status is set to InProgress.",
+          "default": "",
+          "type": "string"
+        },
+        "startDate": {
+          "x-title": "Start Date",
+          "description": "Date of the beginning of the task. This is automatically set when status is set to Open.",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "x-title": "Status",
+          "description": "Status of the task. Default=Waiting.",
+          "default": "Waiting",
+          "type": "string",
+          "enum": [
+            "Cancel",
+            "Completed",
+            "InProgress",
+            "Waiting"
+          ],
+          "x-enumNames": [
+            "Cancel",
+            "Completed",
+            "In Progress",
+            "Waiting"
+          ]
+        },
+        "title": {
+          "x-title": "Title",
+          "description": "Task details",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "dataType": {
+      "x-title": "Data Type Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "observable"
+          ],
+          "operation": [
+            "create",
+            "executeAnalyzer"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "data": {
+      "x-title": "Data",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "observable"
+          ],
+          "operation": [
+            "create"
+          ]
+        },
+        "hide": {
+          "dataType": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "binaryProperty": {
+      "x-title": "Input Binary Field",
+      "description": "The name of the input binary field that represent the attachment file",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "observable"
+          ],
+          "operation": [
+            "create"
+          ],
+          "dataType": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "message": {
+      "x-title": "Message",
+      "description": "Content of the Log",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "log"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "startDate": {
+      "x-title": "Start Date",
+      "description": "Date of the log submission default=now",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "log"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "ioc": {
+      "x-title": "IOC",
+      "description": "Whether the observable is an IOC (Indicator of compromise)",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "observable"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "sighted": {
+      "x-title": "Sighted",
+      "description": "Whether sighted previously",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "observable"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "analyzers": {
+      "x-title": "Analyzer Names or IDs",
+      "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "observable"
+          ],
+          "operation": [
+            "executeAnalyzer"
+          ]
+        },
+        "hide": {
+          "id": [
+            ""
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "owner": {
+      "x-title": "Owner",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "case"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "flag": {
+      "x-title": "Flag",
+      "description": "Whether to flag the task. Default=false.",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "taskId": {
+      "x-title": "Task ID",
+      "description": "ID of the task",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "log"
+          ],
+          "operation": [
+            "create",
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"]}} : {{$parameter[\"resource\"]}}",
+  "x-icon": "file:thehive.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "theHiveApi",
+      "required": true
+    }
+  ]
+}

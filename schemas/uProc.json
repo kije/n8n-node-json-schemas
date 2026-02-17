@@ -1,0 +1,4717 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "uProc",
+  "description": "Consume uProc API",
+  "x-n8n-node-type": "uproc",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "group": {
+      "x-title": "Resource",
+      "default": "communication",
+      "type": "string",
+      "enum": [
+        "audio",
+        "communication",
+        "company",
+        "finance",
+        "geographic",
+        "image",
+        "internet",
+        "personal",
+        "product",
+        "security",
+        "text"
+      ],
+      "x-enumNames": [
+        "Audio",
+        "Communication",
+        "Company",
+        "Finance",
+        "Geographical",
+        "Image",
+        "Internet",
+        "Personal",
+        "Product",
+        "Security",
+        "Text"
+      ],
+      "x-enumDescriptions": [
+        "The Audio Resource allows you to get tools from this resource",
+        "The Communication Resource allows you to get tools from this resource",
+        "The Company Resource allows you to get tools from this resource",
+        "The Finance Resource allows you to get tools from this resource",
+        "The Geographical Resource allows you to get tools from this resource",
+        "The Image Resource allows you to get tools from this resource",
+        "The Internet Resource allows you to get tools from this resource",
+        "The Personal Resource allows you to get tools from this resource",
+        "The Product Resource allows you to get tools from this resource",
+        "The Security Resource allows you to get tools from this resource",
+        "The Text Resource allows you to get tools from this resource"
+      ]
+    },
+    "tool": {
+      "x-title": "Operation",
+      "description": "The Operation to consume",
+      "default": "checkStringAlpha",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "text"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "checkStringAlpha",
+        "checkStringAlphanumeric",
+        "checkStringBoolean",
+        "checkNumberDecimal",
+        "checkNumberEven",
+        "checkListMax",
+        "checkStringIp",
+        "checkStringIp4",
+        "checkStringIp6",
+        "checkListLengthBetw",
+        "checkListLengthEq",
+        "checkListLengthGt",
+        "checkListLengthGe",
+        "checkListLengthLt",
+        "checkListLengthLe",
+        "checkListContains",
+        "checkListEnds",
+        "checkListSorted",
+        "checkListStarts",
+        "checkListMin",
+        "checkNumberMod",
+        "checkNumberNatural",
+        "checkNumberBetw",
+        "checkNumberEq",
+        "checkNumberGt",
+        "checkNumberGe",
+        "checkNumberLt",
+        "checkNumberLe",
+        "checkStringNumeric",
+        "checkNumberOdd",
+        "checkNumberPrime",
+        "checkStringContains",
+        "checkStringEnds",
+        "checkStringBlank",
+        "checkStringRandom",
+        "checkStringRegex",
+        "checkStringLengthBetw",
+        "checkStringLengthEq",
+        "checkStringLengthGt",
+        "checkStringLengthGe",
+        "checkStringLengthLt",
+        "checkStringLengthLe",
+        "checkStringStarts",
+        "checkStringLowercase",
+        "checkStringUppercase",
+        "checkListUnique",
+        "checkListValid",
+        "checkWordCountBetw",
+        "checkWordCountEq",
+        "checkWordCountGt",
+        "checkWordCountGe",
+        "checkWordCountLt",
+        "checkWordCountLe",
+        "getStringBase64",
+        "getWordBanned",
+        "getStringFieldName",
+        "getStringByFormat",
+        "getStringByRegex",
+        "getListMax",
+        "getStringHtmlByMarkdown",
+        "getListMin",
+        "getStringLowercase",
+        "getStringMd5",
+        "getStringMarkdownByHtml",
+        "getStringJoin",
+        "getStringNormalized",
+        "getStringParsed",
+        "getStringSha",
+        "getSentimentByText",
+        "getListSort",
+        "getStringSpin",
+        "getStringSplitAndJoin",
+        "getStringSplit",
+        "getStringLength",
+        "getStringVlookup",
+        "getWordCleanAbuse",
+        "getStringReplaceFirst",
+        "getStringWithoutHtml",
+        "getStringReplaceAll",
+        "getStringTranslated",
+        "getListUnique",
+        "getStringUppercase",
+        "getWordCount"
+      ],
+      "x-enumNames": [
+        "Check Alphabetic String Is Valid",
+        "Check Alphanumeric String Is Valid",
+        "Check Boolean String Is Valid",
+        "Check Decimal Number Is Valid",
+        "Check Even Number Is Valid",
+        "Check Greater Element",
+        "Check IP Has Valid Format",
+        "Check IPv4 Has Valid Format",
+        "Check IPv6 Has Valid Format",
+        "Check Length List Between",
+        "Check Length List Equal",
+        "Check Length List Greater",
+        "Check Length List Greater Or Equal",
+        "Check Length List Lower",
+        "Check Length List Lower Or Equal",
+        "Check List Contains",
+        "Check List Ends With",
+        "Check List Is Sorted",
+        "Check List Starts With",
+        "Check Lower Element",
+        "Check Modulus Is Equals",
+        "Check Natural Number Is Valid",
+        "Check Number Is Between",
+        "Check Number Is Equal",
+        "Check Number Is Greater",
+        "Check Number Is Greater Or Equal",
+        "Check Number Is Lower",
+        "Check Number Is Lower Or Equal",
+        "Check Numeric String Is Valid",
+        "Check Odd Number Is Valid",
+        "Check Prime Number Is Valid",
+        "Check String Contains Char",
+        "Check String Ends With",
+        "Check String Is Empty",
+        "Check String Is Random",
+        "Check String Is Valid By Pattern",
+        "Check String Length Is Between",
+        "Check String Length Is Equal",
+        "Check String Length Is Greater",
+        "Check String Length Is Greater Or Equal",
+        "Check String Length Is Lower",
+        "Check String Length Is Lower Or Equal",
+        "Check String Starts With",
+        "Check Text Is Lowercased",
+        "Check Text Is Uppercased",
+        "Check Unique Es List",
+        "Check Valid List",
+        "Check Word Count Between",
+        "Check Word Count Equal",
+        "Check Word Count Greater",
+        "Check Word Count Greater Or Equal",
+        "Check Word Count Lower",
+        "Check Word Count Lower Or Equal",
+        "Get BASE64 Value",
+        "Get Banned Words",
+        "Get Field Type By Value",
+        "Get Formatted String By Pattern",
+        "Get Generated Text By Pattern",
+        "Get Greater Element",
+        "Get HTML Code From Markdown",
+        "Get Lower Element",
+        "Get Lowercased Text",
+        "Get MD5 String",
+        "Get Markdown Text From HTML",
+        "Get Merged Values By Text",
+        "Get Normalized String By Field",
+        "Get Parsed Text",
+        "Get SHA String",
+        "Get Sentiment From A Text",
+        "Get Sorted List",
+        "Get Spin String",
+        "Get Splitted And Merged Values By Separator",
+        "Get Splitted Values By Separator",
+        "Get String Length",
+        "Get String VLookup",
+        "Get Text Cleaned Without Abuse Words",
+        "Get Text Replaced By String",
+        "Get Text Without HTML",
+        "Get Texts Replaced By String",
+        "Get Translated Text",
+        "Get Unique List",
+        "Get Uppercased Text",
+        "Get Words Count"
+      ],
+      "x-enumDescriptions": [
+        "Check if string length contains only letters <a href=\"https://app.uproc.io/#/tools/processor/check/string/alpha\" target='_blank'>Info</a>",
+        "Check if string length contains only numbers and letters <a href=\"https://app.uproc.io/#/tools/processor/check/string/alphanumeric\" target='_blank'>Info</a>",
+        "Check if string is true or false <a href=\"https://app.uproc.io/#/tools/processor/check/string/boolean\" target='_blank'>Info</a>",
+        "Check if value is a decimal number <a href=\"https://app.uproc.io/#/tools/processor/check/number/decimal\" target='_blank'>Info</a>",
+        "Check if number is even <a href=\"https://app.uproc.io/#/tools/processor/check/number/even\" target='_blank'>Info</a>",
+        "Checks if the largest item in a list matches the provided item <a href=\"https://app.uproc.io/#/tools/processor/check/list/max\" target='_blank'>Info</a>",
+        "Check if IPv4 or IPv6 address has a valid format <a href=\"https://app.uproc.io/#/tools/processor/check/string/ip\" target='_blank'>Info</a>",
+        "Check if IPv4 address has a valid format <a href=\"https://app.uproc.io/#/tools/processor/check/string/ip4\" target='_blank'>Info</a>",
+        "Check if IPv6 address has a valid format <a href=\"https://app.uproc.io/#/tools/processor/check/string/ip6\" target='_blank'>Info</a>",
+        "Check if the length of a list is between two quantities <a href=\"https://app.uproc.io/#/tools/processor/check/list/length-betw\" target='_blank'>Info</a>",
+        "Checks if the length of a list equals a specified quantity <a href=\"https://app.uproc.io/#/tools/processor/check/list/length-eq\" target='_blank'>Info</a>",
+        "Check if the length of a list is greater than a certain amount <a href=\"https://app.uproc.io/#/tools/processor/check/list/length-gt\" target='_blank'>Info</a>",
+        "Check if the length of a list is greater than or equal to a certain amount <a href=\"https://app.uproc.io/#/tools/processor/check/list/length-ge\" target='_blank'>Info</a>",
+        " <a href=\"https://app.uproc.io/#/tools/processor/check/list/length-lt\" target='_blank'>Info</a>",
+        "Check if the length of a list is less than or equal to a certain amount <a href=\"https://app.uproc.io/#/tools/processor/check/list/length-le\" target='_blank'>Info</a>",
+        "Check if the list contains a specific item <a href=\"https://app.uproc.io/#/tools/processor/check/list/contains\" target='_blank'>Info</a>",
+        "Check if the list ends with a specific element <a href=\"https://app.uproc.io/#/tools/processor/check/list/ends\" target='_blank'>Info</a>",
+        "Check if a list is sorted in ascending order <a href=\"https://app.uproc.io/#/tools/processor/check/list/sorted\" target='_blank'>Info</a>",
+        "Check if the list starts with a specific element <a href=\"https://app.uproc.io/#/tools/processor/check/list/starts\" target='_blank'>Info</a>",
+        "Checks if the smallest element in a list matches the provided element <a href=\"https://app.uproc.io/#/tools/processor/check/list/min\" target='_blank'>Info</a>",
+        "Check if modulus between two numbers is equal to a value <a href=\"https://app.uproc.io/#/tools/processor/check/number/mod\" target='_blank'>Info</a>",
+        "Check if value is a natural number <a href=\"https://app.uproc.io/#/tools/processor/check/number/natural\" target='_blank'>Info</a>",
+        "Check if number is between two values <a href=\"https://app.uproc.io/#/tools/processor/check/number/betw\" target='_blank'>Info</a>",
+        "Check if number is equal to another <a href=\"https://app.uproc.io/#/tools/processor/check/number/eq\" target='_blank'>Info</a>",
+        "Check if number is greater than another <a href=\"https://app.uproc.io/#/tools/processor/check/number/gt\" target='_blank'>Info</a>",
+        "Check if number is greater or equal than another <a href=\"https://app.uproc.io/#/tools/processor/check/number/ge\" target='_blank'>Info</a>",
+        "Check if number is lower than another <a href=\"https://app.uproc.io/#/tools/processor/check/number/lt\" target='_blank'>Info</a>",
+        "Check if number is lower or equal than another <a href=\"https://app.uproc.io/#/tools/processor/check/number/le\" target='_blank'>Info</a>",
+        "Check if string length contains only numbers <a href=\"https://app.uproc.io/#/tools/processor/check/string/numeric\" target='_blank'>Info</a>",
+        "Check if number is odd <a href=\"https://app.uproc.io/#/tools/processor/check/number/odd\" target='_blank'>Info</a>",
+        "Check if number is prime <a href=\"https://app.uproc.io/#/tools/processor/check/number/prime\" target='_blank'>Info</a>",
+        "Check if string contains a character <a href=\"https://app.uproc.io/#/tools/processor/check/string/contains\" target='_blank'>Info</a>",
+        "Check if string ends with a character <a href=\"https://app.uproc.io/#/tools/processor/check/string/ends\" target='_blank'>Info</a>",
+        "Check if string has no content <a href=\"https://app.uproc.io/#/tools/processor/check/string/blank\" target='_blank'>Info</a>",
+        "Check if string contains random characters without sense <a href=\"https://app.uproc.io/#/tools/processor/check/string/random\" target='_blank'>Info</a>",
+        "Check if string contains a value that matches with a regular expression <a href=\"https://app.uproc.io/#/tools/processor/check/string/regex\" target='_blank'>Info</a>",
+        "Check if string length is between two numbers <a href=\"https://app.uproc.io/#/tools/processor/check/string/length-betw\" target='_blank'>Info</a>",
+        "Check if string length is equal to number <a href=\"https://app.uproc.io/#/tools/processor/check/string/length-eq\" target='_blank'>Info</a>",
+        "Check if string length is greater than number <a href=\"https://app.uproc.io/#/tools/processor/check/string/length-gt\" target='_blank'>Info</a>",
+        "Check if string length is greater or equal than number <a href=\"https://app.uproc.io/#/tools/processor/check/string/length-ge\" target='_blank'>Info</a>",
+        "Check if string length is lower than number <a href=\"https://app.uproc.io/#/tools/processor/check/string/length-lt\" target='_blank'>Info</a>",
+        "Check if string length is lower or equal than number <a href=\"https://app.uproc.io/#/tools/processor/check/string/length-le\" target='_blank'>Info</a>",
+        "Check if string starts with a character <a href=\"https://app.uproc.io/#/tools/processor/check/string/starts\" target='_blank'>Info</a>",
+        "Check if string only contains lowercase characters <a href=\"https://app.uproc.io/#/tools/processor/check/string/lowercase\" target='_blank'>Info</a>",
+        "Check if string only contains uppercase characters <a href=\"https://app.uproc.io/#/tools/processor/check/string/uppercase\" target='_blank'>Info</a>",
+        "Check if a list consists of unique elements <a href=\"https://app.uproc.io/#/tools/processor/check/list/unique\" target='_blank'>Info</a>",
+        "Check if the supplied values ​​form a valid list of elements <a href=\"https://app.uproc.io/#/tools/processor/check/list/valid\" target='_blank'>Info</a>",
+        "Check if the number of words in a sentence is between two determined quantities <a href=\"https://app.uproc.io/#/tools/processor/check/word/count-betw\" target='_blank'>Info</a>",
+        "Check if the number of words in a sentence equals a certain amount <a href=\"https://app.uproc.io/#/tools/processor/check/word/count-eq\" target='_blank'>Info</a>",
+        "Check if the number of words in a sentence is greater than a certain amount <a href=\"https://app.uproc.io/#/tools/processor/check/word/count-gt\" target='_blank'>Info</a>",
+        "Check if the number of words in a sentence is greater than or equal to a certain amount <a href=\"https://app.uproc.io/#/tools/processor/check/word/count-ge\" target='_blank'>Info</a>",
+        " <a href=\"https://app.uproc.io/#/tools/processor/check/word/count-lt\" target='_blank'>Info</a>",
+        "Check if the number of words present in a sentence is less than or equal to a quantity <a href=\"https://app.uproc.io/#/tools/processor/check/word/count-le\" target='_blank'>Info</a>",
+        "Convert a string to a BASE64 encoded value <a href=\"https://app.uproc.io/#/tools/processor/get/string/base64\" target='_blank'>Info</a>",
+        "Discover English banned words in the email body or subject <a href=\"https://app.uproc.io/#/tools/processor/get/word/banned\" target='_blank'>Info</a>",
+        "Get field name, analyzing field value provided.<br><br>Supported values: Email, Domain, Isbn, Ean, Upc, Dni, Nie, Cif, Date, Gender (male, female), Landline, Mobile phone, Zip code, Web address <a href=\"https://app.uproc.io/#/tools/processor/get/string/field-name\" target='_blank'>Info</a>",
+        "It allows to format a string using a format pattern <a href=\"https://app.uproc.io/#/tools/processor/get/string/by-format\" target='_blank'>Info</a>",
+        "Generate a random string using a regular expression as a pattern <a href=\"https://app.uproc.io/#/tools/processor/get/string/by-regex\" target='_blank'>Info</a>",
+        "Returns the largest item in a list <a href=\"https://app.uproc.io/#/tools/processor/get/list/max\" target='_blank'>Info</a>",
+        "Convert Markdown code to HTML code <a href=\"https://app.uproc.io/#/tools/processor/get/string/html-by-markdown\" target='_blank'>Info</a>",
+        "Returns the smallest item in a list <a href=\"https://app.uproc.io/#/tools/processor/get/list/min\" target='_blank'>Info</a>",
+        "Convert all letters found in a string to lowercase <a href=\"https://app.uproc.io/#/tools/processor/get/string/lowercase\" target='_blank'>Info</a>",
+        "Convert a string to a MD5 encoded value <a href=\"https://app.uproc.io/#/tools/processor/get/string/md5\" target='_blank'>Info</a>",
+        "Convert HTML code to Markdown code <a href=\"https://app.uproc.io/#/tools/processor/get/string/markdown-by-html\" target='_blank'>Info</a>",
+        "Join a character or string to join two values <a href=\"https://app.uproc.io/#/tools/processor/get/string/join\" target='_blank'>Info</a>",
+        "Normalize a string depending on the field name <a href=\"https://app.uproc.io/#/tools/processor/get/string/normalized\" target='_blank'>Info</a>",
+        "Analyze string and return all emails, phones, zipcodes and links detected <a href=\"https://app.uproc.io/#/tools/processor/get/string/parsed\" target='_blank'>Info</a>",
+        "Convert a string to a SHA encoded value <a href=\"https://app.uproc.io/#/tools/processor/get/string/sha\" target='_blank'>Info</a>",
+        "It allows to analyze an english text with Emojis and detect sentiment <a href=\"https://app.uproc.io/#/tools/processor/get/sentiment/by-text\" target='_blank'>Info</a>",
+        "Returns an ascending sorted list <a href=\"https://app.uproc.io/#/tools/processor/get/list/sort\" target='_blank'>Info</a>",
+        "Generates a spin string <a href=\"https://app.uproc.io/#/tools/processor/get/string/spin\" target='_blank'>Info</a>",
+        "Split a value in two parts and join them, using a separator present in the original string <a href=\"https://app.uproc.io/#/tools/processor/get/string/split-and-join\" target='_blank'>Info</a>",
+        "Split a value in two parts, using a separator present in the original string <a href=\"https://app.uproc.io/#/tools/processor/get/string/split\" target='_blank'>Info</a>",
+        "Get length of a string <a href=\"https://app.uproc.io/#/tools/processor/get/string/length\" target='_blank'>Info</a>",
+        "Lookup string between multiple values by fuzzy logic and regex patterns <a href=\"https://app.uproc.io/#/tools/processor/get/string/vlookup\" target='_blank'>Info</a>",
+        "Clean abuse words from a string <a href=\"https://app.uproc.io/#/tools/processor/get/word/clean-abuse\" target='_blank'>Info</a>",
+        "Replace first value found in a string by another <a href=\"https://app.uproc.io/#/tools/processor/get/string/replace-first\" target='_blank'>Info</a>",
+        "Extract text from HTML, removing html tags and replacing special tags <a href=\"https://app.uproc.io/#/tools/processor/get/string/without-html\" target='_blank'>Info</a>",
+        "Replace all values found in a string by another <a href=\"https://app.uproc.io/#/tools/processor/get/string/replace-all\" target='_blank'>Info</a>",
+        "It allows to translate a text to any language <a href=\"https://app.uproc.io/#/tools/processor/get/string/translated\" target='_blank'>Info</a>",
+        "Returns a single list, with no repeating elements <a href=\"https://app.uproc.io/#/tools/processor/get/list/unique\" target='_blank'>Info</a>",
+        "Convert all letters found in a string to uppercase <a href=\"https://app.uproc.io/#/tools/processor/get/string/uppercase\" target='_blank'>Info</a>",
+        "Count total words in a text <a href=\"https://app.uproc.io/#/tools/processor/get/word/count\" target='_blank'>Info</a>"
+      ]
+    },
+    "credit_card": {
+      "x-title": "Credit card",
+      "description": "The \"Credit card\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "finance",
+            "finance"
+          ],
+          "tool": [
+            "checkCreditcardChecksum",
+            "getCreditcardType"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "address": {
+      "x-title": "Address",
+      "description": "The \"Address\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "geographic",
+            "geographic",
+            "geographic",
+            "geographic",
+            "geographic",
+            "geographic",
+            "geographic",
+            "finance",
+            "geographic",
+            "finance"
+          ],
+          "tool": [
+            "getAddressBySearch",
+            "getCoordinateBySearch",
+            "checkAddressExist",
+            "getAddressNormalized",
+            "checkAddressNumberExist",
+            "getAddressSplitted",
+            "getAddressSplittedBest",
+            "checkCryptoWalletAddressValid",
+            "getTimeByAddress",
+            "getVatByAddress"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "country": {
+      "x-title": "Country",
+      "description": "The \"Country\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "geographic",
+            "geographic",
+            "company",
+            "company",
+            "company",
+            "company",
+            "company",
+            "company",
+            "geographic",
+            "geographic",
+            "geographic",
+            "geographic",
+            "finance",
+            "finance",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication"
+          ],
+          "tool": [
+            "checkAddressExist",
+            "checkAddressNumberExist",
+            "getCompanyByName",
+            "getCompanyFinancialByDomain",
+            "getCompanyFinancialByDuns",
+            "getCompanyFinancialByName",
+            "getCompanyFinancialByTaxid",
+            "getPersonListByParams",
+            "getCountryByName",
+            "getCountryCodeByName",
+            "getCountryListByName",
+            "getCountryNormalized",
+            "getCurrencyByCountry",
+            "getCurrencyListByCountry",
+            "getMobileCountryPrefix",
+            "checkMobileFormat",
+            "getMobileFormatted",
+            "getMobileNormalized",
+            "getPhoneFixed",
+            "checkPhoneFormat",
+            "getPhoneNormalized",
+            "checkPhoneOrMobileValid"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "coordinates": {
+      "x-title": "Coordinates",
+      "description": "The \"Coordinates\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "geographic",
+            "geographic",
+            "geographic",
+            "geographic",
+            "geographic",
+            "geographic",
+            "finance"
+          ],
+          "tool": [
+            "checkCoordinateValid",
+            "getCoordinateCartesian",
+            "getCoordinateDecimal",
+            "getCoordinateUsng",
+            "getCoordinateUtm",
+            "getLocationByCoordinates",
+            "getVatByCoordinates"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "date": {
+      "x-title": "Date",
+      "description": "The \"Date\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "personal",
+            "personal",
+            "personal",
+            "personal",
+            "personal",
+            "personal",
+            "personal",
+            "personal",
+            "personal",
+            "personal",
+            "personal",
+            "personal",
+            "finance",
+            "personal",
+            "personal",
+            "personal",
+            "personal"
+          ],
+          "tool": [
+            "checkAgeBetw",
+            "getAgeByDate",
+            "checkAgeEq",
+            "checkAgeGe",
+            "checkAgeGt",
+            "checkAgeIsAdult",
+            "checkAgeIsForties",
+            "checkAgeIsRetired",
+            "checkAgeIsTwenties",
+            "checkAgeLe",
+            "checkAgeLt",
+            "getAgeRange",
+            "getCurrencyConvertedBetweenIsocodeDate",
+            "checkDateLeap",
+            "getDateNormalized",
+            "getDateParsed",
+            "checkDateValid"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "years1": {
+      "x-title": "Years1",
+      "description": "The \"Years1\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "personal"
+          ],
+          "tool": [
+            "checkAgeBetw"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "years2": {
+      "x-title": "Years2",
+      "description": "The \"Years2\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "personal"
+          ],
+          "tool": [
+            "checkAgeBetw"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "years": {
+      "x-title": "Years",
+      "description": "The \"Years\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "personal",
+            "personal",
+            "personal",
+            "personal",
+            "personal"
+          ],
+          "tool": [
+            "checkAgeEq",
+            "checkAgeGe",
+            "checkAgeGt",
+            "checkAgeLe",
+            "checkAgeLt"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "ean": {
+      "x-title": "Ean",
+      "description": "The \"Ean\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "product",
+            "product",
+            "product",
+            "product",
+            "product",
+            "product",
+            "product",
+            "product",
+            "product",
+            "product",
+            "product"
+          ],
+          "tool": [
+            "getAsinByEan",
+            "checkEan13Valid",
+            "checkGtin13Valid",
+            "checkEan14Valid",
+            "checkGtin14Valid",
+            "checkEan18Valid",
+            "checkEan8Valid",
+            "checkGtin8Valid",
+            "checkEanExist",
+            "checkEanValid",
+            "checkGtinValid"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "asin": {
+      "x-title": "Asin",
+      "description": "The \"Asin\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "product",
+            "product",
+            "product"
+          ],
+          "tool": [
+            "checkAsinExist",
+            "checkAsinValid",
+            "getEanByAsin"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "text": {
+      "x-title": "Text",
+      "description": "The \"Text\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "audio",
+            "audio",
+            "image",
+            "internet",
+            "communication",
+            "image",
+            "image",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text"
+          ],
+          "tool": [
+            "getAudioAdvancedSpeechByText",
+            "getAudioSpeechByText",
+            "getBarcodeEncoded",
+            "getUrlShareableLinks",
+            "sendMobileSms",
+            "getImageWithText",
+            "getQrEncoded",
+            "checkListContains",
+            "checkListEnds",
+            "checkListStarts",
+            "checkStringNumeric",
+            "getSentimentByText",
+            "checkStringAlpha",
+            "checkStringAlphanumeric",
+            "getStringBase64",
+            "checkStringBlank",
+            "checkStringBoolean",
+            "getStringByFormat",
+            "getStringFieldName",
+            "getStringHtmlByMarkdown",
+            "getStringLength",
+            "checkStringLengthBetw",
+            "checkStringLengthEq",
+            "checkStringLengthGe",
+            "checkStringLengthGt",
+            "checkStringLengthLe",
+            "checkStringLengthLt",
+            "checkStringLowercase",
+            "getStringLowercase",
+            "getStringMarkdownByHtml",
+            "getStringMd5",
+            "getStringNormalized",
+            "getStringParsed",
+            "checkStringRandom",
+            "checkStringRegex",
+            "getStringReplaceAll",
+            "getStringReplaceFirst",
+            "getStringSha",
+            "getStringSpin",
+            "getStringSplit",
+            "getStringSplitAndJoin",
+            "getStringTranslated",
+            "checkStringUppercase",
+            "getStringUppercase",
+            "getStringVlookup",
+            "getWordBanned",
+            "getWordCleanAbuse",
+            "getWordCount",
+            "checkWordCountBetw",
+            "checkWordCountEq",
+            "checkWordCountGe",
+            "checkWordCountGt",
+            "checkWordCountLe",
+            "checkWordCountLt"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "gender": {
+      "x-title": "Gender",
+      "description": "The \"Gender\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "audio",
+            "audio",
+            "personal",
+            "personal",
+            "geographic"
+          ],
+          "tool": [
+            "getAudioAdvancedSpeechByText",
+            "getAudioSpeechByText",
+            "checkGenderValid",
+            "getNameByPrefix",
+            "getNameListByPrefix"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "female",
+        "male"
+      ],
+      "x-enumNames": [
+        "Female",
+        "Male"
+      ]
+    },
+    "language": {
+      "x-title": "Language",
+      "description": "The \"Language\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "audio",
+            "audio",
+            "geographic",
+            "text"
+          ],
+          "tool": [
+            "getAudioAdvancedSpeechByText",
+            "getAudioSpeechByText",
+            "getCountryNormalized",
+            "getStringTranslated"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "american",
+        "arabic",
+        "bengali",
+        "british",
+        "czech",
+        "danish",
+        "dutch",
+        "filipino",
+        "finnish",
+        "french",
+        "german",
+        "greek",
+        "gujurati",
+        "hindi",
+        "hungarian",
+        "indonesian",
+        "italian",
+        "japanese",
+        "kannada",
+        "korean",
+        "malayalam",
+        "mandarin",
+        "norwegian",
+        "polish",
+        "portuguese",
+        "russian",
+        "slovak",
+        "spanish",
+        "tamil",
+        "telugu",
+        "thai",
+        "turkish",
+        "ukranian",
+        "vietnamese"
+      ],
+      "x-enumNames": [
+        "American",
+        "Arabic",
+        "Bengali",
+        "British",
+        "Czech",
+        "Danish",
+        "Dutch",
+        "Filipino",
+        "Finnish",
+        "French",
+        "German",
+        "Greek",
+        "Gujurati",
+        "Hindi",
+        "Hungarian",
+        "Indonesian",
+        "Italian",
+        "Japanese",
+        "Kannada",
+        "Korean",
+        "Malayalam",
+        "Mandarin",
+        "Norwegian",
+        "Polish",
+        "Portuguese",
+        "Russian",
+        "Slovak",
+        "Spanish",
+        "Tamil",
+        "Telugu",
+        "Thai",
+        "Turkish",
+        "Ukranian",
+        "Vietnamese"
+      ]
+    },
+    "account": {
+      "x-title": "Account",
+      "description": "The \"Account\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "finance",
+            "finance"
+          ],
+          "tool": [
+            "checkBankAccountValidEs",
+            "getBankIbanByAccount"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "bic": {
+      "x-title": "Bic",
+      "description": "The \"Bic\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "finance"
+          ],
+          "tool": [
+            "checkBankBicValid"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "isocode": {
+      "x-title": "Isocode",
+      "description": "The \"Isocode\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "finance",
+            "geographic",
+            "geographic",
+            "geographic",
+            "geographic",
+            "geographic",
+            "finance",
+            "finance",
+            "finance",
+            "finance",
+            "finance",
+            "finance"
+          ],
+          "tool": [
+            "getBankIbanByAccount",
+            "getCountryByCode",
+            "getCountryByCurrencyCode",
+            "getCountryListByCode",
+            "getCountryListByCurrencyCode",
+            "checkCountryValidIso",
+            "getCurrencyByIsocode",
+            "getCurrencyListByIsocode",
+            "checkCurrencyValidIso",
+            "getVatByIsocode",
+            "getVatByNumber",
+            "checkVatExist"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "iban": {
+      "x-title": "Iban",
+      "description": "The \"Iban\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "finance",
+            "finance"
+          ],
+          "tool": [
+            "getBankIbanLookup",
+            "checkBankIbanValid"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "swift": {
+      "x-title": "Swift",
+      "description": "The \"Swift\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "finance"
+          ],
+          "tool": [
+            "getSwiftLookup"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "bcid": {
+      "x-title": "Bcid",
+      "description": "The \"Bcid\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "image"
+          ],
+          "tool": [
+            "getBarcodeEncoded"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "auspost",
+        "azteccode",
+        "azteccodecompact",
+        "aztecrune",
+        "bc412",
+        "channelcode",
+        "codablockf",
+        "code11",
+        "code128",
+        "code16k",
+        "code2of5",
+        "code32",
+        "code39",
+        "code39ext",
+        "code49",
+        "code93",
+        "code93ext",
+        "codeone",
+        "coop2of5",
+        "daft",
+        "databarexpanded",
+        "databarexpandedcomposite",
+        "databarexpandedstacked",
+        "databarexpandedstackedcomposite",
+        "databarlimited",
+        "databarlimitedcomposite",
+        "databaromni",
+        "databaromnicomposite",
+        "databarstacked",
+        "databarstackedcomposite",
+        "databarstackedomni",
+        "databarstackedomnicomposite",
+        "databartruncated",
+        "databartruncatedcomposite",
+        "datalogic2of5",
+        "datamatrix",
+        "datamatrixrectangular",
+        "dotcode",
+        "ean13",
+        "ean13composite",
+        "ean14",
+        "ean2",
+        "ean5",
+        "ean8",
+        "ean8composite",
+        "flattermarken",
+        "gs1-128",
+        "gs1-128composite",
+        "gs1-cc",
+        "gs1datamatrix",
+        "gs1datamatrixrectangular",
+        "gs1northamericancoupon",
+        "hanxin",
+        "hibcazteccode",
+        "hibccodablockf",
+        "hibccode128",
+        "hibccode39",
+        "hibcdatamatrix",
+        "hibcdatamatrixrectangular",
+        "hibcmicropdf417",
+        "hibcpdf417",
+        "iata2of5",
+        "identcode",
+        "industrial2of5",
+        "interleaved2of5",
+        "isbn",
+        "ismn",
+        "issn",
+        "itf14",
+        "japanpost",
+        "kix",
+        "leitcode",
+        "matrix2of5",
+        "maxicode",
+        "micropdf417",
+        "msi",
+        "onecode",
+        "pdf417",
+        "pdf417compact",
+        "pharmacode",
+        "pharmacode2",
+        "planet",
+        "plessey",
+        "posicode",
+        "postnet",
+        "pzn",
+        "rationalizedCodabar",
+        "raw",
+        "royalmail",
+        "sscc18",
+        "symbol",
+        "telepen",
+        "telepennumeric",
+        "ultracode",
+        "upca",
+        "upcacomposite",
+        "upce",
+        "upcecomposite"
+      ],
+      "x-enumNames": [
+        "Auspost",
+        "Azteccode",
+        "Azteccodecompact",
+        "Aztecrune",
+        "Bc412",
+        "Channelcode",
+        "Codablockf",
+        "Code11",
+        "Code128",
+        "Code16k",
+        "Code2of5",
+        "Code32",
+        "Code39",
+        "Code39ext",
+        "Code49",
+        "Code93",
+        "Code93ext",
+        "Codeone",
+        "Coop2of5",
+        "Daft",
+        "Databarexpanded",
+        "Databarexpandedcomposite",
+        "Databarexpandedstacked",
+        "Databarexpandedstackedcomposite",
+        "Databarlimited",
+        "Databarlimitedcomposite",
+        "Databaromni",
+        "Databaromnicomposite",
+        "Databarstacked",
+        "Databarstackedcomposite",
+        "Databarstackedomni",
+        "Databarstackedomnicomposite",
+        "Databartruncated",
+        "Databartruncatedcomposite",
+        "Datalogic2of5",
+        "Datamatrix",
+        "Datamatrixrectangular",
+        "Dotcode",
+        "Ean13",
+        "Ean13composite",
+        "Ean14",
+        "Ean2",
+        "Ean5",
+        "Ean8",
+        "Ean8composite",
+        "Flattermarken",
+        "Gs1-128",
+        "Gs1-128composite",
+        "Gs1-cc",
+        "Gs1datamatrix",
+        "Gs1datamatrixrectangular",
+        "Gs1northamericancoupon",
+        "Hanxin",
+        "Hibcazteccode",
+        "Hibccodablockf",
+        "Hibccode128",
+        "Hibccode39",
+        "Hibcdatamatrix",
+        "Hibcdatamatrixrectangular",
+        "Hibcmicropdf417",
+        "Hibcpdf417",
+        "Iata2of5",
+        "Identcode",
+        "Industrial2of5",
+        "Interleaved2of5",
+        "Isbn",
+        "Ismn",
+        "Issn",
+        "Itf14",
+        "Japanpost",
+        "Kix",
+        "Leitcode",
+        "Matrix2of5",
+        "Maxicode",
+        "Micropdf417",
+        "Msi",
+        "Onecode",
+        "Pdf417",
+        "Pdf417compact",
+        "Pharmacode",
+        "Pharmacode2",
+        "Planet",
+        "Plessey",
+        "Posicode",
+        "Postnet",
+        "Pzn",
+        "RationalizedCodabar",
+        "Raw",
+        "Royalmail",
+        "Sscc18",
+        "Symbol",
+        "Telepen",
+        "Telepennumeric",
+        "Ultracode",
+        "Upca",
+        "Upcacomposite",
+        "Upce",
+        "Upcecomposite"
+      ]
+    },
+    "author": {
+      "x-title": "Author",
+      "description": "The \"Author\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "product",
+            "product"
+          ],
+          "tool": [
+            "getBookAuthorLookup",
+            "getBookListAuthorLookup"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "category": {
+      "x-title": "Category",
+      "description": "The \"Category\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "product",
+            "product",
+            "geographic",
+            "geographic"
+          ],
+          "tool": [
+            "getBookCategoryLookup",
+            "getBookListCategoryLookup",
+            "getLocationByParams",
+            "getLocationListByParams"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "isbn": {
+      "x-title": "Isbn",
+      "description": "The \"Isbn\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "product",
+            "product",
+            "product",
+            "product",
+            "product",
+            "product",
+            "product"
+          ],
+          "tool": [
+            "checkBookIsbn",
+            "checkBookIsbnExist",
+            "getBookIsbnLookup",
+            "checkBookIsbn10",
+            "getBookIsbn10ToIsbn13",
+            "checkBookIsbn13",
+            "getBookIsbn13ToIsbn10"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "publisher": {
+      "x-title": "Publisher",
+      "description": "The \"Publisher\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "product",
+            "product"
+          ],
+          "tool": [
+            "getBookListPublisherLookup",
+            "getBookPublisherLookup"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "The \"Title\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "product",
+            "product"
+          ],
+          "tool": [
+            "getBookListTitleLookup",
+            "getBookTitleLookup"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "dni": {
+      "x-title": "Dni",
+      "description": "The \"Dni\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "personal",
+            "personal",
+            "personal"
+          ],
+          "tool": [
+            "getNifByDni",
+            "getDniNormalized",
+            "checkDniValid"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "cif": {
+      "x-title": "Cif",
+      "description": "The \"Cif\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "company",
+            "company",
+            "company"
+          ],
+          "tool": [
+            "getCifNormalized",
+            "checkCifValid",
+            "getCompanyByCif"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "nie": {
+      "x-title": "Nie",
+      "description": "The \"Nie\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "personal",
+            "personal"
+          ],
+          "tool": [
+            "getNieNormalized",
+            "checkNieValid"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "nif": {
+      "x-title": "Nif",
+      "description": "The \"Nif\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "personal",
+            "personal",
+            "personal"
+          ],
+          "tool": [
+            "getNifNormalized",
+            "checkNifValid",
+            "checkRobinsonNifExist"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "ip": {
+      "x-title": "Ip",
+      "description": "The \"Ip\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "geographic",
+            "company",
+            "company",
+            "geographic",
+            "geographic",
+            "finance",
+            "finance",
+            "internet",
+            "internet",
+            "internet",
+            "security",
+            "geographic",
+            "geographic",
+            "geographic",
+            "geographic",
+            "geographic",
+            "geographic",
+            "internet",
+            "geographic",
+            "text",
+            "text",
+            "text",
+            "geographic",
+            "finance",
+            "geographic"
+          ],
+          "tool": [
+            "getCityByIp",
+            "getCompanyByIp",
+            "getCompanyGeocodedByIp",
+            "getCoordinateByIp",
+            "getCountryByIp",
+            "getCurrencyByIp",
+            "getCurrencyListByIp",
+            "getDomainByIp",
+            "checkDomainReverse",
+            "getIpWhois",
+            "getIpBlacklists",
+            "getLocaleByIp",
+            "getLocationByIp",
+            "getReputationByIp",
+            "getTimeByIp",
+            "getLocationExtendedByIp",
+            "getLocationGeocodedByIp",
+            "getNetAton",
+            "getNetByIp",
+            "checkStringIp",
+            "checkStringIp4",
+            "checkStringIp6",
+            "getProvinceByIp",
+            "getVatByIp",
+            "getZipcodeByIp"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "city": {
+      "x-title": "City",
+      "description": "The \"City\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "geographic",
+            "geographic",
+            "geographic"
+          ],
+          "tool": [
+            "getCityByName",
+            "getCityListByName",
+            "getCityNormalized"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "phone": {
+      "x-title": "Phone",
+      "description": "The \"Phone\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "geographic",
+            "geographic",
+            "company",
+            "company",
+            "geographic",
+            "geographic",
+            "personal",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "geographic",
+            "geographic",
+            "communication",
+            "finance"
+          ],
+          "tool": [
+            "getCityByPhone",
+            "getCityListByPhone",
+            "getCompanyByPhone",
+            "getPersonListByParams",
+            "getCountryByPhone",
+            "getLocationByPhone",
+            "getProfileLinkedinByPhone",
+            "getPhoneFixed",
+            "checkPhoneFormat",
+            "checkPhoneFormatEs",
+            "getPhoneNormalized",
+            "checkPhoneOrMobileValid",
+            "getPhoneParsed",
+            "checkPhoneValidPrefix",
+            "getProvinceByPhone",
+            "getProvinceListByPhone",
+            "checkRobinsonPhoneExist",
+            "getVatByPhone"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "zipcode": {
+      "x-title": "Zipcode",
+      "description": "The \"Zipcode\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "geographic",
+            "geographic",
+            "geographic",
+            "geographic",
+            "geographic",
+            "geographic",
+            "finance",
+            "geographic",
+            "geographic",
+            "geographic",
+            "geographic",
+            "geographic"
+          ],
+          "tool": [
+            "getCityByZipcode",
+            "getCityListByZipcode",
+            "getCommunityByZipcode",
+            "getLocationByZipcode",
+            "getProvinceByZipcode",
+            "getProvinceListByZipcode",
+            "getVatByZipcode",
+            "getZipcodeByPrefix",
+            "checkZipcodeExist",
+            "checkZipcodeFormat",
+            "getZipcodeListByPrefix",
+            "getZipcodeNormalized"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "upc": {
+      "x-title": "Upc",
+      "description": "The \"Upc\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "product",
+            "product",
+            "product"
+          ],
+          "tool": [
+            "checkUpcExist",
+            "checkUpcFormat",
+            "getUpcLookup"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "isin": {
+      "x-title": "Isin",
+      "description": "The \"Isin\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "company"
+          ],
+          "tool": [
+            "checkNumberIsin"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "number": {
+      "x-title": "Number",
+      "description": "The \"Number\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "company",
+            "text",
+            "text",
+            "communication",
+            "communication",
+            "internet",
+            "internet",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text"
+          ],
+          "tool": [
+            "checkNumberSsEs",
+            "checkListMax",
+            "checkListMin",
+            "getMobileOrPhoneLookupEs",
+            "getMobileOrPhoneMnpEs",
+            "getNetFixip",
+            "getNetNtoa",
+            "checkNumberDecimal",
+            "checkNumberEven",
+            "checkNumberMod",
+            "checkNumberNatural",
+            "checkNumberOdd",
+            "checkNumberPrime"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "uuid": {
+      "x-title": "Uuid",
+      "description": "The \"Uuid\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "security"
+          ],
+          "tool": [
+            "checkNumberUuid"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "domain": {
+      "x-title": "Domain",
+      "description": "The \"Domain\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "company",
+            "company",
+            "company",
+            "company",
+            "company",
+            "company",
+            "company",
+            "company",
+            "company",
+            "company",
+            "company",
+            "company",
+            "security",
+            "internet",
+            "communication",
+            "internet",
+            "internet",
+            "communication",
+            "internet",
+            "internet",
+            "communication",
+            "internet",
+            "image",
+            "internet",
+            "internet",
+            "internet",
+            "internet",
+            "internet",
+            "internet",
+            "internet",
+            "internet",
+            "internet",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "internet",
+            "internet",
+            "communication",
+            "communication",
+            "communication"
+          ],
+          "tool": [
+            "getCompanyByDomain",
+            "getPersonEmailsByDomainAndArea",
+            "getProfileFacebookByCompanyDomain",
+            "getCompanyFinancialByDomain",
+            "getProfileGithubByCompanyDomain",
+            "getProfileInstagramByCompanyDomain",
+            "getProfileLinkedinByCompanyDomain",
+            "getCompanyNameByDomain",
+            "getCompanyPhoneByDomain",
+            "getProfilePinterestByCompanyDomain",
+            "getProfileTwitterByCompanyDomain",
+            "getProfileYoutubeByCompanyDomain",
+            "getDomainBlacklists",
+            "getUrlByDomain",
+            "checkDomainCatchall",
+            "checkDomainCertificate",
+            "getDomainCertificate",
+            "checkDomainDisposable",
+            "checkDomainExist",
+            "checkDomainFormat",
+            "checkDomainFree",
+            "getDomainIsp",
+            "getDomainLogo",
+            "checkDomainMx",
+            "checkDomainRecord",
+            "getDomainRecord",
+            "getDomainRecords",
+            "checkDomainReverse",
+            "getDomainReverseIp",
+            "getDomainTechnologies",
+            "getDomainVisits",
+            "getDomainWhois",
+            "getEmailGdprListByDomain",
+            "getEmailListByDomain",
+            "getEmailRecipient",
+            "getEmailRecipientByDomainAndFullname",
+            "getFeedEntriesByDomain",
+            "getFeedLastEntryByDomain",
+            "checkSocialDomainExist",
+            "getSocialDomainLookup",
+            "getSocialDomainParsed"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "duns": {
+      "x-title": "Duns",
+      "description": "The \"Duns\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "company",
+            "company"
+          ],
+          "tool": [
+            "getCompanyByDuns",
+            "getCompanyFinancialByDuns"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "The \"Email\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "company",
+            "company",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "personal",
+            "personal",
+            "personal",
+            "personal",
+            "personal",
+            "personal",
+            "communication",
+            "communication",
+            "communication"
+          ],
+          "tool": [
+            "getCompanyByEmail",
+            "getPersonListByParams",
+            "checkEmailCatchall",
+            "checkEmailDisposable",
+            "getEmailDomain",
+            "checkEmailExists",
+            "checkEmailExistsExtended",
+            "getEmailFirstReferences",
+            "getEmailFix",
+            "checkEmailFormat",
+            "checkEmailFree",
+            "getEmailListByEmail",
+            "getEmailNormalized",
+            "getEmailReferences",
+            "checkEmailRole",
+            "checkEmailSmtp",
+            "checkEmailSpamtrap",
+            "getEmailType",
+            "getGenderByEmail",
+            "getPersonByEmail",
+            "sendPersonEmailToList",
+            "getPersonExtendedByEmail",
+            "getPersonExtendedByEmailAndCompany",
+            "getProfileLinkedinByEmail",
+            "checkRobinsonEmailExist",
+            "checkSocialEmailExist",
+            "getSocialEmailLookup"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "The \"Name\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "company",
+            "company",
+            "company",
+            "company",
+            "personal",
+            "geographic",
+            "geographic",
+            "geographic",
+            "geographic",
+            "personal",
+            "personal",
+            "geographic",
+            "personal",
+            "personal"
+          ],
+          "tool": [
+            "getCompanyByName",
+            "getCompanyDomainByName",
+            "getCompanyFinancialByName",
+            "getCompanyPhoneByName",
+            "getGenderByPersonalName",
+            "getLocationByName",
+            "getLocationByParams",
+            "getLocationListByName",
+            "getLocationListByParams",
+            "getNameByPrefix",
+            "checkNameExist",
+            "getNameListByPrefix",
+            "getNameNormalized",
+            "checkNameValid"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "url": {
+      "x-title": "Url",
+      "description": "The \"Url\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "company",
+            "internet",
+            "internet",
+            "image",
+            "internet",
+            "internet",
+            "internet",
+            "image",
+            "image",
+            "image",
+            "image",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "internet",
+            "internet",
+            "internet",
+            "internet",
+            "internet",
+            "internet",
+            "internet",
+            "internet",
+            "internet",
+            "internet",
+            "internet",
+            "communication"
+          ],
+          "tool": [
+            "getCompanyByProfile",
+            "getDomainByUrl",
+            "getUrlPdf",
+            "getUrlScreenshot",
+            "getUrlShareableLinks",
+            "getUrlTechnologies",
+            "getUrlUnshortened",
+            "getImageExif",
+            "getImageOcr",
+            "getImageWithText",
+            "getQrDecoded",
+            "getLinkedinGroupMembers",
+            "getLinkedinPostComments",
+            "getLinkedinPostLikes",
+            "getLinkedinProfiles",
+            "getLinkedinProfilesByCompany",
+            "getLinkedinPublicProfileBySalesProfile",
+            "sendLinkedinVisit",
+            "getUrlAnalysis",
+            "checkUrlContains",
+            "getUrlContents",
+            "getUrlContentsParsed",
+            "getUrlDecode",
+            "getUrlEncode",
+            "checkUrlExist",
+            "getUrlListContentsParsed",
+            "getUrlParsed",
+            "getUrlTables",
+            "checkUrlValid",
+            "getSocialUriParsed"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "profile": {
+      "x-title": "Profile",
+      "description": "The \"Profile\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "personal",
+            "personal",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "personal"
+          ],
+          "tool": [
+            "getPersonByProfile",
+            "getPersonExtendedByProfile",
+            "sendLinkedinInvitation",
+            "sendLinkedinInvitationOrMessage",
+            "sendLinkedinMessage",
+            "getEmailPersonalRecipientByProfile",
+            "getEmailRecipientByProfile",
+            "getLinkedinProfile",
+            "checkLinkedinProfileIsContact",
+            "sendPersonProfileToList"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "role": {
+      "x-title": "Role",
+      "description": "The \"Role\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "company"
+          ],
+          "tool": [
+            "getRoleClassified"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "taxid": {
+      "x-title": "Taxid",
+      "description": "The \"Taxid\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "company",
+            "company"
+          ],
+          "tool": [
+            "checkCompanyDebtorByTaxid",
+            "getCompanyFinancialByTaxid"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "company": {
+      "x-title": "Company",
+      "description": "The \"Company\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "company",
+            "company",
+            "company",
+            "company",
+            "company",
+            "company",
+            "company",
+            "communication",
+            "communication",
+            "personal",
+            "personal",
+            "personal",
+            "personal"
+          ],
+          "tool": [
+            "getPersonDecisionMaker",
+            "getPersonDecisionMakerBySearch",
+            "getProfileFacebookByCompany",
+            "getProfileLinkedinByCompany",
+            "getPersonListByParams",
+            "getPersonMultipleDecisionMakerBySearch",
+            "getProfileTwitterByCompany",
+            "getEmailRecipientByCompanyAndFullname",
+            "getEmailRecipientByCompanyFirstnameAndLastname",
+            "getPersonByFirstnameLastnameCompanyLocation",
+            "getPersonExtendedByEmailAndCompany",
+            "getProfileByEmployeeData",
+            "getProfileXingByEmployeeData"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "area": {
+      "x-title": "Area",
+      "description": "The \"Area\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "company",
+            "company",
+            "company",
+            "company",
+            "company"
+          ],
+          "tool": [
+            "getPersonDecisionMaker",
+            "getPersonDecisionMakerBySearch",
+            "getPersonEmailsByDomainAndArea",
+            "getPersonListByParams",
+            "getPersonMultipleDecisionMakerBySearch"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "Communications",
+        "Consulting",
+        "Customer service",
+        "Education",
+        "Engineering",
+        "Finance",
+        "Health professional",
+        "Human resources",
+        "Information technology",
+        "Legal",
+        "Marketing",
+        "Operations",
+        "Owner",
+        "President",
+        "Product",
+        "Public relations",
+        "Real estate",
+        "Recruiting",
+        "Research",
+        "Sales"
+      ],
+      "x-enumNames": [
+        "Communications",
+        "Consulting",
+        "Customer service",
+        "Education",
+        "Engineering",
+        "Finance",
+        "Health professional",
+        "Human resources",
+        "Information technology",
+        "Legal",
+        "Marketing",
+        "Operations",
+        "Owner",
+        "President",
+        "Product",
+        "Public relations",
+        "Real estate",
+        "Recruiting",
+        "Research",
+        "Sales"
+      ]
+    },
+    "clevel": {
+      "x-title": "Clevel",
+      "description": "The \"Clevel\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "company",
+            "company"
+          ],
+          "tool": [
+            "getPersonDecisionMakerBySearch",
+            "getPersonMultipleDecisionMakerBySearch"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "No",
+        "Yes"
+      ],
+      "x-enumNames": [
+        "No",
+        "Yes"
+      ]
+    },
+    "location": {
+      "x-title": "Location",
+      "description": "The \"Location\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "company",
+            "company",
+            "geographic",
+            "geographic",
+            "personal"
+          ],
+          "tool": [
+            "getPersonDecisionMakerBySearch",
+            "getPersonMultipleDecisionMakerBySearch",
+            "getLocationByParams",
+            "getLocationListByParams",
+            "getPersonByFirstnameLastnameCompanyLocation"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "keyword": {
+      "x-title": "Keyword",
+      "description": "The \"Keyword\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "company",
+            "company"
+          ],
+          "tool": [
+            "getPersonDecisionMakerBySearch",
+            "getPersonMultipleDecisionMakerBySearch"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "message": {
+      "x-title": "Message",
+      "description": "The \"Message\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "communication",
+            "communication"
+          ],
+          "tool": [
+            "sendLinkedinInvitation",
+            "sendLinkedinMessage"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "message1": {
+      "x-title": "Message1",
+      "description": "The \"Message1\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "communication"
+          ],
+          "tool": [
+            "sendLinkedinInvitationOrMessage"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "message2": {
+      "x-title": "Message2",
+      "description": "The \"Message2\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "communication"
+          ],
+          "tool": [
+            "sendLinkedinInvitationOrMessage"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "seniority": {
+      "x-title": "Seniority",
+      "description": "The \"Seniority\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "company"
+          ],
+          "tool": [
+            "getPersonListByParams"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "Apprentice",
+        "Director",
+        "Executive",
+        "Intermediate",
+        "Manager"
+      ],
+      "x-enumNames": [
+        "Apprentice",
+        "Director",
+        "Executive",
+        "Intermediate",
+        "Manager"
+      ]
+    },
+    "address1": {
+      "x-title": "Address1",
+      "description": "The \"Address1\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "geographic",
+            "geographic"
+          ],
+          "tool": [
+            "getDistanceByAddresses",
+            "getRouteByAddresses"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "address2": {
+      "x-title": "Address2",
+      "description": "The \"Address2\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "geographic",
+            "geographic"
+          ],
+          "tool": [
+            "getDistanceByAddresses",
+            "getRouteByAddresses"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "fuel_consumption": {
+      "x-title": "Fuel consumption",
+      "description": "The \"Fuel consumption\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "geographic",
+            "geographic"
+          ],
+          "tool": [
+            "getRouteByAddresses",
+            "getRouteByIps"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "price_liter": {
+      "x-title": "Price liter",
+      "description": "The \"Price liter\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "geographic",
+            "geographic"
+          ],
+          "tool": [
+            "getRouteByAddresses",
+            "getRouteByIps"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "coordinates1": {
+      "x-title": "Coordinates1",
+      "description": "The \"Coordinates1\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "geographic",
+            "geographic",
+            "geographic",
+            "geographic",
+            "geographic",
+            "geographic",
+            "geographic"
+          ],
+          "tool": [
+            "getDistanceByCoordinates",
+            "getRouteByCoordinates",
+            "checkDistanceEq",
+            "checkDistanceGe",
+            "checkDistanceGt",
+            "checkDistanceLe",
+            "checkDistanceLt"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "coordinates2": {
+      "x-title": "Coordinates2",
+      "description": "The \"Coordinates2\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "geographic",
+            "geographic",
+            "geographic",
+            "geographic",
+            "geographic",
+            "geographic",
+            "geographic"
+          ],
+          "tool": [
+            "getDistanceByCoordinates",
+            "getRouteByCoordinates",
+            "checkDistanceEq",
+            "checkDistanceGe",
+            "checkDistanceGt",
+            "checkDistanceLe",
+            "checkDistanceLt"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "ip1": {
+      "x-title": "Ip1",
+      "description": "The \"Ip1\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "geographic",
+            "geographic"
+          ],
+          "tool": [
+            "getDistanceByIps",
+            "getRouteByIps"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "ip2": {
+      "x-title": "Ip2",
+      "description": "The \"Ip2\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "geographic",
+            "geographic"
+          ],
+          "tool": [
+            "getDistanceByIps",
+            "getRouteByIps"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "phone1": {
+      "x-title": "Phone1",
+      "description": "The \"Phone1\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "geographic",
+            "geographic"
+          ],
+          "tool": [
+            "getDistanceByPhones",
+            "getRouteByPhones"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "phone2": {
+      "x-title": "Phone2",
+      "description": "The \"Phone2\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "geographic",
+            "geographic"
+          ],
+          "tool": [
+            "getDistanceByPhones",
+            "getRouteByPhones"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "zipcode1": {
+      "x-title": "Zipcode1",
+      "description": "The \"Zipcode1\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "geographic",
+            "geographic"
+          ],
+          "tool": [
+            "getDistanceByZipcodes",
+            "getRouteByZipcodes"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "zipcode2": {
+      "x-title": "Zipcode2",
+      "description": "The \"Zipcode2\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "geographic",
+            "geographic"
+          ],
+          "tool": [
+            "getDistanceByZipcodes",
+            "getRouteByZipcodes"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "distance": {
+      "x-title": "Distance",
+      "description": "The \"Distance\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "geographic",
+            "geographic",
+            "geographic",
+            "geographic",
+            "geographic"
+          ],
+          "tool": [
+            "checkDistanceEq",
+            "checkDistanceGe",
+            "checkDistanceGt",
+            "checkDistanceLe",
+            "checkDistanceLt"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "coin": {
+      "x-title": "Coin",
+      "description": "The \"Coin\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "finance"
+          ],
+          "tool": [
+            "checkCryptoWalletAddressValid"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "0x",
+        "Aave Coin",
+        "Algorand",
+        "Aragon",
+        "Augur",
+        "AugurV2",
+        "AuroraCoin",
+        "BTU Protocol",
+        "Bancor",
+        "Bankex",
+        "Basic Attention Token",
+        "BeaverCoin",
+        "BioCoin",
+        "Bitcoin",
+        "Bitcoin SV",
+        "BitcoinCash",
+        "BitcoinGold",
+        "BitcoinPrivate",
+        "BitcoinZ",
+        "BlockTrade",
+        "CUSD",
+        "Callisto",
+        "Cardano",
+        "Chainlink",
+        "Civic",
+        "Compound",
+        "Cred",
+        "Crypto.com Coin",
+        "Dash",
+        "Decentraland",
+        "Decred",
+        "DigiByte",
+        "District0x",
+        "DogeCoin",
+        "EOS",
+        "Enjin Coin",
+        "EtherZero",
+        "Ethereum",
+        "EthereumClassic",
+        "Expanse",
+        "FirmaChain",
+        "FreiCoin",
+        "GameCredits",
+        "GarliCoin",
+        "Gnosis",
+        "Golem",
+        "Golem (GNT)",
+        "HedgeTrade",
+        "Hush",
+        "HyperSpace",
+        "Komodo",
+        "LBRY Credits",
+        "Lisk",
+        "LiteCoin",
+        "Loom Network",
+        "Maker",
+        "Matchpool",
+        "Matic",
+        "MegaCoin",
+        "Melon",
+        "Metal",
+        "MonaCoin",
+        "Monero",
+        "Multi-collateral DAI",
+        "NameCoin",
+        "Nano",
+        "Nem",
+        "Neo",
+        "NeoGas",
+        "Numeraire",
+        "Ocean Protocol",
+        "Odyssey",
+        "OmiseGO",
+        "PIVX",
+        "Paxos",
+        "PeerCoin",
+        "Polkadot",
+        "Polymath",
+        "PrimeCoin",
+        "ProtoShares",
+        "Qtum",
+        "Quant",
+        "Quantum Resistant Ledger",
+        "RaiBlocks",
+        "Ripio Credit Network",
+        "Ripple",
+        "SOLVE",
+        "Salt",
+        "Serve",
+        "Siacoin",
+        "SnowGem",
+        "SolarCoin",
+        "Spendcoin",
+        "Status",
+        "Stellar",
+        "Storj",
+        "Storm",
+        "StormX",
+        "Swarm City",
+        "Synthetix Network",
+        "TEMCO",
+        "Tap",
+        "TenX",
+        "Tether",
+        "Tezos",
+        "Tron",
+        "TrueUSD",
+        "USD Coin",
+        "Uniswap Coin",
+        "VeChain",
+        "VertCoin",
+        "Viberate",
+        "VoteCoin",
+        "Waves",
+        "Wings",
+        "ZCash",
+        "ZClassic",
+        "ZenCash",
+        "iExec RLC",
+        "loki"
+      ],
+      "x-enumNames": [
+        "0x",
+        "Aave Coin",
+        "Algorand",
+        "Aragon",
+        "Augur",
+        "AugurV2",
+        "AuroraCoin",
+        "BTU Protocol",
+        "Bancor",
+        "Bankex",
+        "Basic Attention Token",
+        "BeaverCoin",
+        "BioCoin",
+        "Bitcoin",
+        "Bitcoin SV",
+        "BitcoinCash",
+        "BitcoinGold",
+        "BitcoinPrivate",
+        "BitcoinZ",
+        "BlockTrade",
+        "CUSD",
+        "Callisto",
+        "Cardano",
+        "Chainlink",
+        "Civic",
+        "Compound",
+        "Cred",
+        "Crypto.com Coin",
+        "Dash",
+        "Decentraland",
+        "Decred",
+        "DigiByte",
+        "District0x",
+        "DogeCoin",
+        "EOS",
+        "Enjin Coin",
+        "EtherZero",
+        "Ethereum",
+        "EthereumClassic",
+        "Expanse",
+        "FirmaChain",
+        "FreiCoin",
+        "GameCredits",
+        "GarliCoin",
+        "Gnosis",
+        "Golem",
+        "Golem (GNT)",
+        "HedgeTrade",
+        "Hush",
+        "HyperSpace",
+        "Komodo",
+        "LBRY Credits",
+        "Lisk",
+        "LiteCoin",
+        "Loom Network",
+        "Maker",
+        "Matchpool",
+        "Matic",
+        "MegaCoin",
+        "Melon",
+        "Metal",
+        "MonaCoin",
+        "Monero",
+        "Multi-collateral DAI",
+        "NameCoin",
+        "Nano",
+        "Nem",
+        "Neo",
+        "NeoGas",
+        "Numeraire",
+        "Ocean Protocol",
+        "Odyssey",
+        "OmiseGO",
+        "PIVX",
+        "Paxos",
+        "PeerCoin",
+        "Polkadot",
+        "Polymath",
+        "PrimeCoin",
+        "ProtoShares",
+        "Qtum",
+        "Quant",
+        "Quantum Resistant Ledger",
+        "RaiBlocks",
+        "Ripio Credit Network",
+        "Ripple",
+        "SOLVE",
+        "Salt",
+        "Serve",
+        "Siacoin",
+        "SnowGem",
+        "SolarCoin",
+        "Spendcoin",
+        "Status",
+        "Stellar",
+        "Storj",
+        "Storm",
+        "StormX",
+        "Swarm City",
+        "Synthetix Network",
+        "TEMCO",
+        "Tap",
+        "TenX",
+        "Tether",
+        "Tezos",
+        "Tron",
+        "TrueUSD",
+        "USD Coin",
+        "Uniswap Coin",
+        "VeChain",
+        "VertCoin",
+        "Viberate",
+        "VoteCoin",
+        "Waves",
+        "Wings",
+        "ZCash",
+        "ZClassic",
+        "ZenCash",
+        "IExec RLC",
+        "Loki"
+      ]
+    },
+    "country_code": {
+      "x-title": "Country code",
+      "description": "The \"Country code\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "finance"
+          ],
+          "tool": [
+            "getCurrencyByCountryIsocode"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "amount": {
+      "x-title": "Amount",
+      "description": "The \"Amount\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "finance",
+            "communication"
+          ],
+          "tool": [
+            "getCurrencyConvertedBetweenIsocodeDate",
+            "getLinkedinProfiles"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "isocode1": {
+      "x-title": "Isocode1",
+      "description": "The \"Isocode1\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "finance"
+          ],
+          "tool": [
+            "getCurrencyConvertedBetweenIsocodeDate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "AUD",
+        "BGN",
+        "BRL",
+        "CAD",
+        "CHF",
+        "CNY",
+        "CZK",
+        "DKK",
+        "EUR",
+        "GBP",
+        "HKD",
+        "HRK",
+        "HUF",
+        "IDR",
+        "ILS",
+        "INR",
+        "ISK",
+        "JPY",
+        "KRW",
+        "MXN",
+        "MYR",
+        "NOK",
+        "NZD",
+        "PHP",
+        "PLN",
+        "RON",
+        "RUB",
+        "SEK",
+        "SGD",
+        "THB",
+        "TRY",
+        "USD",
+        "ZAR"
+      ],
+      "x-enumNames": [
+        "AUD",
+        "BGN",
+        "BRL",
+        "CAD",
+        "CHF",
+        "CNY",
+        "CZK",
+        "DKK",
+        "EUR",
+        "GBP",
+        "HKD",
+        "HRK",
+        "HUF",
+        "IDR",
+        "ILS",
+        "INR",
+        "ISK",
+        "JPY",
+        "KRW",
+        "MXN",
+        "MYR",
+        "NOK",
+        "NZD",
+        "PHP",
+        "PLN",
+        "RON",
+        "RUB",
+        "SEK",
+        "SGD",
+        "THB",
+        "TRY",
+        "USD",
+        "ZAR"
+      ]
+    },
+    "isocode2": {
+      "x-title": "Isocode2",
+      "description": "The \"Isocode2\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "finance"
+          ],
+          "tool": [
+            "getCurrencyConvertedBetweenIsocodeDate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "AUD",
+        "BGN",
+        "BRL",
+        "CAD",
+        "CHF",
+        "CNY",
+        "CZK",
+        "DKK",
+        "EUR",
+        "GBP",
+        "HKD",
+        "HRK",
+        "HUF",
+        "IDR",
+        "ILS",
+        "INR",
+        "ISK",
+        "JPY",
+        "KRW",
+        "MXN",
+        "MYR",
+        "NOK",
+        "NZD",
+        "PHP",
+        "PLN",
+        "RON",
+        "RUB",
+        "SEK",
+        "SGD",
+        "THB",
+        "TRY",
+        "USD",
+        "ZAR"
+      ],
+      "x-enumNames": [
+        "AUD",
+        "BGN",
+        "BRL",
+        "CAD",
+        "CHF",
+        "CNY",
+        "CZK",
+        "DKK",
+        "EUR",
+        "GBP",
+        "HKD",
+        "HRK",
+        "HUF",
+        "IDR",
+        "ILS",
+        "INR",
+        "ISK",
+        "JPY",
+        "KRW",
+        "MXN",
+        "MYR",
+        "NOK",
+        "NZD",
+        "PHP",
+        "PLN",
+        "RON",
+        "RUB",
+        "SEK",
+        "SGD",
+        "THB",
+        "TRY",
+        "USD",
+        "ZAR"
+      ]
+    },
+    "date1": {
+      "x-title": "Date1",
+      "description": "The \"Date1\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "personal",
+            "personal",
+            "personal",
+            "personal",
+            "personal",
+            "personal",
+            "personal"
+          ],
+          "tool": [
+            "checkDateBetw",
+            "getDateDifference",
+            "checkDateEq",
+            "checkDateGe",
+            "checkDateGt",
+            "checkDateLe",
+            "checkDateLt"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "date2": {
+      "x-title": "Date2",
+      "description": "The \"Date2\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "personal",
+            "personal",
+            "personal",
+            "personal",
+            "personal",
+            "personal",
+            "personal"
+          ],
+          "tool": [
+            "checkDateBetw",
+            "getDateDifference",
+            "checkDateEq",
+            "checkDateGe",
+            "checkDateGt",
+            "checkDateLe",
+            "checkDateLt"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "date3": {
+      "x-title": "Date3",
+      "description": "The \"Date3\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "personal"
+          ],
+          "tool": [
+            "checkDateBetw"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "period": {
+      "x-title": "Period",
+      "description": "The \"Period\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "personal"
+          ],
+          "tool": [
+            "getDateDifference"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "days",
+        "hours",
+        "minutes",
+        "seconds"
+      ],
+      "x-enumNames": [
+        "Days",
+        "Hours",
+        "Minutes",
+        "Seconds"
+      ]
+    },
+    "useragent": {
+      "x-title": "Useragent",
+      "description": "The \"Useragent\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "internet",
+            "image"
+          ],
+          "tool": [
+            "getDeviceByUa",
+            "getUrlScreenshot"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "type": {
+      "x-title": "Type",
+      "description": "The \"Type\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "internet",
+            "internet",
+            "communication"
+          ],
+          "tool": [
+            "checkDomainRecord",
+            "getDomainRecord",
+            "getLinkedinSearchContactsUrl"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "A",
+        "AAAA",
+        "CNAME",
+        "MX",
+        "NS",
+        "TXT"
+      ],
+      "x-enumNames": [
+        "A",
+        "AAAA",
+        "CNAME",
+        "MX",
+        "NS",
+        "TXT"
+      ]
+    },
+    "width": {
+      "x-title": "Width",
+      "description": "The \"Width\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "image"
+          ],
+          "tool": [
+            "getUrlScreenshot"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "1024",
+        "160",
+        "320",
+        "640",
+        "800"
+      ],
+      "x-enumNames": [
+        "1024",
+        "160",
+        "320",
+        "640",
+        "800"
+      ]
+    },
+    "fullpage": {
+      "x-title": "Fullpage",
+      "description": "The \"Fullpage\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "image"
+          ],
+          "tool": [
+            "getUrlScreenshot"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "no",
+        "yes"
+      ],
+      "x-enumNames": [
+        "No",
+        "Yes"
+      ]
+    },
+    "selector": {
+      "x-title": "Selector",
+      "description": "The \"Selector\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "image",
+            "internet"
+          ],
+          "tool": [
+            "getUrlScreenshot",
+            "getUrlContents"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "delay": {
+      "x-title": "Delay",
+      "description": "The \"Delay\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "image"
+          ],
+          "tool": [
+            "getUrlScreenshot"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "viewport": {
+      "x-title": "Viewport",
+      "description": "The \"Viewport\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "image"
+          ],
+          "tool": [
+            "getUrlScreenshot"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "email_from": {
+      "x-title": "Email from",
+      "description": "The \"Email from\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "communication"
+          ],
+          "tool": [
+            "sendEmailCustom"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "email_to": {
+      "x-title": "Email to",
+      "description": "The \"Email to\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "communication"
+          ],
+          "tool": [
+            "sendEmailCustom"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "subject": {
+      "x-title": "Subject",
+      "description": "The \"Subject\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "communication"
+          ],
+          "tool": [
+            "sendEmailCustom"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "body": {
+      "x-title": "Body",
+      "description": "The \"Body\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "communication"
+          ],
+          "tool": [
+            "sendEmailCustom"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "page": {
+      "x-title": "Page",
+      "description": "The \"Page\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "communication",
+            "communication"
+          ],
+          "tool": [
+            "getEmailListByDomain",
+            "getEmailListByEmail"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "firstname": {
+      "x-title": "Firstname",
+      "description": "The \"Firstname\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "communication",
+            "communication",
+            "personal",
+            "personal",
+            "personal"
+          ],
+          "tool": [
+            "getEmailRecipient",
+            "getEmailRecipientByCompanyFirstnameAndLastname",
+            "getPersonByFirstnameLastnameCompanyLocation",
+            "getProfileByEmployeeData",
+            "getProfileXingByEmployeeData"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "lastname": {
+      "x-title": "Lastname",
+      "description": "The \"Lastname\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "communication",
+            "communication",
+            "personal",
+            "personal",
+            "personal"
+          ],
+          "tool": [
+            "getEmailRecipient",
+            "getEmailRecipientByCompanyFirstnameAndLastname",
+            "getPersonByFirstnameLastnameCompanyLocation",
+            "getProfileByEmployeeData",
+            "getProfileXingByEmployeeData"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "mode": {
+      "x-title": "Mode",
+      "description": "The \"Mode\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication"
+          ],
+          "tool": [
+            "getEmailRecipient",
+            "getEmailRecipientByCompanyAndFullname",
+            "getEmailRecipientByCompanyFirstnameAndLastname",
+            "getEmailRecipientByDomainAndFullname",
+            "getLinkedinConnections",
+            "getLinkedinInvitations",
+            "getLinkedinProfile",
+            "getLinkedinProfiles"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "guess",
+        "only_verify",
+        "verify"
+      ],
+      "x-enumNames": [
+        "Guess",
+        "Only_verify",
+        "Verify"
+      ]
+    },
+    "fullname": {
+      "x-title": "Fullname",
+      "description": "The \"Fullname\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "communication",
+            "communication",
+            "personal"
+          ],
+          "tool": [
+            "getEmailRecipientByCompanyAndFullname",
+            "getEmailRecipientByDomainAndFullname",
+            "getFullnameParsed"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "mobile": {
+      "x-title": "Mobile",
+      "description": "The \"Mobile\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "personal",
+            "communication",
+            "communication"
+          ],
+          "tool": [
+            "sendMobileSms",
+            "checkMobileAlive",
+            "getMobileCountryCode",
+            "checkMobileExist",
+            "checkMobileFormat",
+            "checkMobileFormatEs",
+            "getMobileFormatted",
+            "getMobileHlrLookup",
+            "getMobileLookup",
+            "getMobileMnpLookup",
+            "getMobileNormalized",
+            "checkMobileSms",
+            "checkMobileValidPrefix",
+            "checkMobileValidPrefixEs",
+            "getPersonByMobile",
+            "checkSocialMobileExist",
+            "getSocialMobileLookup"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "url_dlr": {
+      "x-title": "Url dlr",
+      "description": "The \"Url dlr\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "communication"
+          ],
+          "tool": [
+            "sendMobileSms"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "source": {
+      "x-title": "Source",
+      "description": "The \"Source\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "internet"
+          ],
+          "tool": [
+            "getFileCopiedBetweenUrls"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "destination": {
+      "x-title": "Destination",
+      "description": "The \"Destination\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "internet"
+          ],
+          "tool": [
+            "getFileCopiedBetweenUrls"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "size": {
+      "x-title": "Size",
+      "description": "The \"Size\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "image"
+          ],
+          "tool": [
+            "getImageWithText"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "list": {
+      "x-title": "List",
+      "description": "The \"List\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "communication",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "personal",
+            "personal"
+          ],
+          "tool": [
+            "getLinkedinConnections",
+            "getLinkedinGroupMembers",
+            "getLinkedinInvitations",
+            "getLinkedinPostComments",
+            "getLinkedinPostLikes",
+            "getLinkedinProfile",
+            "getLinkedinProfiles",
+            "getLinkedinProfilesByCompany",
+            "getLinkedinProfilesByContent",
+            "checkListContains",
+            "checkListEnds",
+            "checkListLengthBetw",
+            "checkListLengthEq",
+            "checkListLengthGe",
+            "checkListLengthGt",
+            "checkListLengthLe",
+            "checkListLengthLt",
+            "checkListMax",
+            "getListMax",
+            "checkListMin",
+            "getListMin",
+            "getListSort",
+            "checkListSorted",
+            "checkListStarts",
+            "checkListUnique",
+            "getListUnique",
+            "checkListValid",
+            "sendPersonEmailToList",
+            "sendPersonProfileToList"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "keywords": {
+      "x-title": "Keywords",
+      "description": "The \"Keywords\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "communication"
+          ],
+          "tool": [
+            "getLinkedinProfilesByContent"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "current_company": {
+      "x-title": "Current company",
+      "description": "The \"Current company\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "communication"
+          ],
+          "tool": [
+            "getLinkedinSearchContactsUrl"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "current_title": {
+      "x-title": "Current title",
+      "description": "The \"Current title\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "communication"
+          ],
+          "tool": [
+            "getLinkedinSearchContactsUrl"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "included_companies": {
+      "x-title": "Included companies",
+      "description": "The \"Included companies\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "communication"
+          ],
+          "tool": [
+            "getLinkedinSearchContactsUrl"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "excluded_companies": {
+      "x-title": "Excluded companies",
+      "description": "The \"Excluded companies\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "communication"
+          ],
+          "tool": [
+            "getLinkedinSearchContactsUrl"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "included_titles": {
+      "x-title": "Included titles",
+      "description": "The \"Included titles\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "communication"
+          ],
+          "tool": [
+            "getLinkedinSearchContactsUrl"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "excluded_titles": {
+      "x-title": "Excluded titles",
+      "description": "The \"Excluded titles\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "communication"
+          ],
+          "tool": [
+            "getLinkedinSearchContactsUrl"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "included_keywords": {
+      "x-title": "Included keywords",
+      "description": "The \"Included keywords\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "communication"
+          ],
+          "tool": [
+            "getLinkedinSearchContactsUrl"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "excluded_keywords": {
+      "x-title": "Excluded keywords",
+      "description": "The \"Excluded keywords\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "communication"
+          ],
+          "tool": [
+            "getLinkedinSearchContactsUrl"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "length1": {
+      "x-title": "Length1",
+      "description": "The \"Length1\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "text",
+            "text"
+          ],
+          "tool": [
+            "checkListLengthBetw",
+            "checkStringLengthBetw"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "length2": {
+      "x-title": "Length2",
+      "description": "The \"Length2\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "text",
+            "text"
+          ],
+          "tool": [
+            "checkListLengthBetw",
+            "checkStringLengthBetw"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "length": {
+      "x-title": "Length",
+      "description": "The \"Length\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text"
+          ],
+          "tool": [
+            "checkListLengthEq",
+            "checkListLengthGe",
+            "checkListLengthGt",
+            "checkListLengthLe",
+            "checkListLengthLt",
+            "checkStringLengthEq",
+            "checkStringLengthGe",
+            "checkStringLengthGt",
+            "checkStringLengthLe",
+            "checkStringLengthLt"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "separator": {
+      "x-title": "Separator",
+      "description": "The \"Separator\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "text",
+            "text",
+            "text"
+          ],
+          "tool": [
+            "checkListValid",
+            "getStringSplit",
+            "getStringSplitAndJoin"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "latitude": {
+      "x-title": "Latitude",
+      "description": "The \"Latitude\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "geographic"
+          ],
+          "tool": [
+            "getTimeByCoordinates"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "longitude": {
+      "x-title": "Longitude",
+      "description": "The \"Longitude\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "geographic"
+          ],
+          "tool": [
+            "getTimeByCoordinates"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "radius": {
+      "x-title": "Radius",
+      "description": "The \"Radius\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "geographic",
+            "geographic"
+          ],
+          "tool": [
+            "getLocationByParams",
+            "getLocationListByParams"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "imei": {
+      "x-title": "Imei",
+      "description": "The \"Imei\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "communication"
+          ],
+          "tool": [
+            "checkMobileImei"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "regex": {
+      "x-title": "Regex",
+      "description": "The \"Regex\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "internet",
+            "text",
+            "text"
+          ],
+          "tool": [
+            "checkUrlContains",
+            "getStringByRegex",
+            "checkStringRegex"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "host": {
+      "x-title": "Host",
+      "description": "The \"Host\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "internet",
+            "internet",
+            "internet"
+          ],
+          "tool": [
+            "checkNetHostAlive",
+            "getNetScan",
+            "checkNetServiceUp"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "port": {
+      "x-title": "Port",
+      "description": "The \"Port\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "internet"
+          ],
+          "tool": [
+            "checkNetServiceUp"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "table": {
+      "x-title": "Table",
+      "description": "The \"Table\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "internet"
+          ],
+          "tool": [
+            "getUrlTables"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "number1": {
+      "x-title": "Number1",
+      "description": "The \"Number1\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text"
+          ],
+          "tool": [
+            "checkNumberBetw",
+            "checkNumberEq",
+            "checkNumberGe",
+            "checkNumberGt",
+            "checkNumberLe",
+            "checkNumberLt"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "number2": {
+      "x-title": "Number2",
+      "description": "The \"Number2\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "text",
+            "text",
+            "text",
+            "text",
+            "text",
+            "text"
+          ],
+          "tool": [
+            "checkNumberBetw",
+            "checkNumberEq",
+            "checkNumberGe",
+            "checkNumberGt",
+            "checkNumberLe",
+            "checkNumberLt"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "number3": {
+      "x-title": "Number3",
+      "description": "The \"Number3\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "text"
+          ],
+          "tool": [
+            "checkNumberBetw"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "luhn": {
+      "x-title": "Luhn",
+      "description": "The \"Luhn\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "security"
+          ],
+          "tool": [
+            "checkNumberLuhn"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "mod": {
+      "x-title": "Mod",
+      "description": "The \"Mod\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "text"
+          ],
+          "tool": [
+            "checkNumberMod"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "rest": {
+      "x-title": "Rest",
+      "description": "The \"Rest\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "text"
+          ],
+          "tool": [
+            "checkNumberMod"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "password": {
+      "x-title": "Password",
+      "description": "The \"Password\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "security"
+          ],
+          "tool": [
+            "checkPasswordStrong"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "locality": {
+      "x-title": "Locality",
+      "description": "The \"Locality\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "personal"
+          ],
+          "tool": [
+            "getPersonFakedData"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "Australia (English)",
+        "Australia Ocker (English)",
+        "Azerbaijani",
+        "Bork (English)",
+        "Canada (English)",
+        "Canada (French)",
+        "Chinese",
+        "Chinese (Taiwan)",
+        "Czech",
+        "Dutch",
+        "English",
+        "Farsi",
+        "French",
+        "Georgian",
+        "German",
+        "German (Austria)",
+        "German (Switzerland)",
+        "Great Britain (English)",
+        "India (English)",
+        "Indonesia",
+        "Ireland (English)",
+        "Italian",
+        "Japanese",
+        "Korean",
+        "Nepalese",
+        "Norwegian",
+        "Polish",
+        "Portuguese (Brazil)",
+        "Russian",
+        "Slovakian",
+        "Spanish",
+        "Spanish Mexico",
+        "Swedish",
+        "Turkish",
+        "Ukrainian",
+        "United States (English)",
+        "Vietnamese"
+      ],
+      "x-enumNames": [
+        "Australia (English)",
+        "Australia Ocker (English)",
+        "Azerbaijani",
+        "Bork (English)",
+        "Canada (English)",
+        "Canada (French)",
+        "Chinese",
+        "Chinese (Taiwan)",
+        "Czech",
+        "Dutch",
+        "English",
+        "Farsi",
+        "French",
+        "Georgian",
+        "German",
+        "German (Austria)",
+        "German (Switzerland)",
+        "Great Britain (English)",
+        "India (English)",
+        "Indonesia",
+        "Ireland (English)",
+        "Italian",
+        "Japanese",
+        "Korean",
+        "Nepalese",
+        "Norwegian",
+        "Polish",
+        "Portuguese (Brazil)",
+        "Russian",
+        "Slovakian",
+        "Spanish",
+        "Spanish Mexico",
+        "Swedish",
+        "Turkish",
+        "Ukrainian",
+        "United States (English)",
+        "Vietnamese"
+      ]
+    },
+    "surname": {
+      "x-title": "Surname",
+      "description": "The \"Surname\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "personal",
+            "personal",
+            "personal",
+            "personal",
+            "personal"
+          ],
+          "tool": [
+            "getSurnameByPrefix",
+            "checkSurnameExist",
+            "getSurnameListByPrefix",
+            "getSurnameNormalized",
+            "checkSurnameValid"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "province": {
+      "x-title": "Province",
+      "description": "The \"Province\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "geographic",
+            "geographic",
+            "geographic"
+          ],
+          "tool": [
+            "getProvinceByName",
+            "getProvinceListByName",
+            "getProvinceNormalized"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "format": {
+      "x-title": "Format",
+      "description": "The \"Format\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "text"
+          ],
+          "tool": [
+            "getStringByFormat"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "text1": {
+      "x-title": "Text1",
+      "description": "The \"Text1\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "text",
+            "text",
+            "text",
+            "text"
+          ],
+          "tool": [
+            "checkStringContains",
+            "checkStringEnds",
+            "getStringJoin",
+            "checkStringStarts"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "text2": {
+      "x-title": "Text2",
+      "description": "The \"Text2\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "text",
+            "text",
+            "text",
+            "text"
+          ],
+          "tool": [
+            "checkStringContains",
+            "checkStringEnds",
+            "getStringJoin",
+            "checkStringStarts"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "glue": {
+      "x-title": "Glue",
+      "description": "The \"Glue\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "text",
+            "text"
+          ],
+          "tool": [
+            "getStringJoin",
+            "getStringSplitAndJoin"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "field": {
+      "x-title": "Field",
+      "description": "The \"Field\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "text"
+          ],
+          "tool": [
+            "getStringNormalized"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "alphabetic",
+        "alphanumeric",
+        "cif",
+        "city",
+        "country",
+        "date",
+        "decimal",
+        "dni",
+        "domain",
+        "email",
+        "gender",
+        "integer",
+        "ip",
+        "mobile",
+        "name",
+        "nie",
+        "nif",
+        "phone",
+        "province",
+        "zipcode"
+      ],
+      "x-enumNames": [
+        "Alphabetic",
+        "Alphanumeric",
+        "Cif",
+        "City",
+        "Country",
+        "Date",
+        "Decimal",
+        "Dni",
+        "Domain",
+        "Email",
+        "Gender",
+        "Integer",
+        "Ip",
+        "Mobile",
+        "Name",
+        "Nie",
+        "Nif",
+        "Phone",
+        "Province",
+        "Zipcode"
+      ]
+    },
+    "find": {
+      "x-title": "Find",
+      "description": "The \"Find\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "text",
+            "text"
+          ],
+          "tool": [
+            "getStringReplaceAll",
+            "getStringReplaceFirst"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "replace": {
+      "x-title": "Replace",
+      "description": "The \"Replace\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "text",
+            "text"
+          ],
+          "tool": [
+            "getStringReplaceAll",
+            "getStringReplaceFirst"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "texts": {
+      "x-title": "Texts",
+      "description": "The \"Texts\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "text"
+          ],
+          "tool": [
+            "getStringVlookup"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "html": {
+      "x-title": "Html",
+      "description": "The \"Html\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "text"
+          ],
+          "tool": [
+            "getStringWithoutHtml"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "tin": {
+      "x-title": "Tin",
+      "description": "The \"Tin\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "finance",
+            "finance"
+          ],
+          "tool": [
+            "getVatByNumber",
+            "checkVatExist"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "vin": {
+      "x-title": "Vin",
+      "description": "The \"Vin\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "product",
+            "product"
+          ],
+          "tool": [
+            "checkVinFormat",
+            "getVinLookup"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "count1": {
+      "x-title": "Count1",
+      "description": "The \"Count1\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "text"
+          ],
+          "tool": [
+            "checkWordCountBetw"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "count2": {
+      "x-title": "Count2",
+      "description": "The \"Count2\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "text"
+          ],
+          "tool": [
+            "checkWordCountBetw"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "count": {
+      "x-title": "Count",
+      "description": "The \"Count\" value to use as a parameter for this Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "text",
+            "text",
+            "text",
+            "text",
+            "text"
+          ],
+          "tool": [
+            "checkWordCountEq",
+            "checkWordCountGe",
+            "checkWordCountGt",
+            "checkWordCountLe",
+            "checkWordCountLt"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalOptions": {
+      "x-title": "Additional Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "group": [
+            "audio",
+            "communication",
+            "company",
+            "finance",
+            "geographic",
+            "image",
+            "internet",
+            "personal",
+            "product",
+            "security",
+            "text"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "dataWebhook": {
+          "x-title": "Data Webhook",
+          "description": "URL to send tool response when tool has resolved your request",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"tool\"]}}",
+  "x-icon": "file:uproc.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "uprocApi",
+      "required": true
+    }
+  ]
+}

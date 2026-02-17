@@ -1,0 +1,412 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Supabase",
+  "description": "Add, get, delete and update data in a table",
+  "x-n8n-node-type": "supabase",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "useCustomSchema": {
+      "x-title": "Use Custom Schema",
+      "description": "Whether to use a database schema different from the default \"public\" schema (requires schema exposure in the <a href=\"https://supabase.com/docs/guides/api/using-custom-schemas?queryGroups=language&language=curl#exposing-custom-schemas\">Supabase API</a>)",
+      "default": false,
+      "type": "boolean"
+    },
+    "schema": {
+      "x-title": "Schema",
+      "description": "Name of database schema to use for table",
+      "default": "public",
+      "x-displayOptions": {
+        "show": {
+          "useCustomSchema": [
+            true
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "row",
+      "type": "string",
+      "enum": [
+        "row"
+      ],
+      "x-enumNames": [
+        "Row"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a new row",
+        "Delete a row",
+        "Get a row",
+        "Get many rows",
+        "Update a row"
+      ]
+    },
+    "tableId": {
+      "x-title": "Table Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "create",
+            "delete",
+            "get",
+            "getAll",
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "filterType": {
+      "x-title": "Filter",
+      "default": "manual",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "none",
+        "manual",
+        "string"
+      ],
+      "x-enumNames": [
+        "None",
+        "Build Manually",
+        "String"
+      ]
+    },
+    "matchType": {
+      "x-title": "Must Match",
+      "default": "anyFilter",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "manual"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "anyFilter",
+        "allFilters"
+      ],
+      "x-enumNames": [
+        "Any Filter",
+        "All Filters"
+      ]
+    },
+    "filters": {
+      "x-title": "Filters",
+      "description": "Filter to decide which rows get retrieved",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "manual"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "conditions": {
+          "x-title": "Conditions",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "keyName": {
+                "x-title": "Field Name or ID",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": "",
+                "type": "string"
+              },
+              "condition": {
+                "x-title": "Condition",
+                "default": "",
+                "type": "string",
+                "enum": [
+                  "eq",
+                  "fullText",
+                  "gt",
+                  "gte",
+                  "ilike",
+                  "is",
+                  "lt",
+                  "lte",
+                  "like",
+                  "neq"
+                ],
+                "x-enumNames": [
+                  "Equals",
+                  "Full-Text",
+                  "Greater Than",
+                  "Greater Than or Equal",
+                  "ILIKE operator",
+                  "Is",
+                  "Less Than",
+                  "Less Than or Equal",
+                  "LIKE operator",
+                  "Not Equals"
+                ],
+                "x-enumDescriptions": [
+                  "",
+                  "",
+                  "",
+                  "",
+                  "Use * in place of %",
+                  "Checking for exact equality (null,true,false,unknown)",
+                  "",
+                  "",
+                  "Use * in place of %",
+                  ""
+                ]
+              },
+              "searchFunction": {
+                "x-title": "Search Function",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "condition": [
+                      "fullText"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "fts",
+                  "plfts",
+                  "phfts",
+                  "wfts"
+                ],
+                "x-enumNames": [
+                  "to_tsquery",
+                  "plainto_tsquery",
+                  "phraseto_tsquery",
+                  "websearch_to_tsquery"
+                ]
+              },
+              "keyValue": {
+                "x-title": "Field Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "filterString": {
+      "x-title": "Filters (String)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "string"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "dataToSend": {
+      "x-title": "Data to Send",
+      "default": "defineBelow",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "create",
+            "update"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "autoMapInputData",
+        "defineBelow"
+      ],
+      "x-enumNames": [
+        "Auto-Map Input Data to Columns",
+        "Define Below for Each Column"
+      ],
+      "x-enumDescriptions": [
+        "Use when node input properties match destination column names",
+        "Set the value for each destination column"
+      ]
+    },
+    "inputsToIgnore": {
+      "x-title": "Inputs to Ignore",
+      "description": "List of input properties to avoid sending, separated by commas. Leave empty to send all properties.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "create",
+            "update"
+          ],
+          "dataToSend": [
+            "autoMapInputData"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "fieldsUi": {
+      "x-title": "Fields to Send",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "create",
+            "update"
+          ],
+          "dataToSend": [
+            "defineBelow"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "fieldValues": {
+          "x-title": "Field",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "fieldId": {
+                "x-title": "Field Name or ID",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": "",
+                "type": "string"
+              },
+              "fieldValue": {
+                "x-title": "Field Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:supabase.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "supabaseApi",
+      "required": true,
+      "testedBy": "supabaseApiCredentialTest"
+    }
+  ]
+}

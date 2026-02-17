@@ -1,0 +1,338 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Tapfiliate",
+  "description": "Consume Tapfiliate API",
+  "x-n8n-node-type": "tapfiliate",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "affiliate",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "affiliate",
+        "affiliateMetadata",
+        "programAffiliate"
+      ],
+      "x-enumNames": [
+        "Affiliate",
+        "Affiliate Metadata",
+        "Program Affiliate"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "add",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "programAffiliate"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "add",
+        "approve",
+        "disapprove",
+        "get",
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Add",
+        "Approve",
+        "Disapprove",
+        "Get",
+        "Get Many"
+      ],
+      "x-enumDescriptions": [
+        "Add affiliate to program",
+        "Approve an affiliate for a program",
+        "Disapprove an affiliate",
+        "Get an affiliate in a program",
+        "Get many affiliates in program"
+      ]
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "The affiliate’s email",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "affiliate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "firstname": {
+      "x-title": "First Name",
+      "description": "The affiliate’s firstname",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "affiliate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "lastname": {
+      "x-title": "Last Name",
+      "description": "The affiliate’s lastname",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "affiliate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "programAffiliate"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "approved": {
+          "x-title": "Approved",
+          "description": "An optional approval status",
+          "default": true,
+          "type": "boolean"
+        },
+        "coupon": {
+          "x-title": "Coupon",
+          "description": "An optional coupon for this affiliate",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "affiliateId": {
+      "x-title": "Affiliate ID",
+      "description": "The ID of the affiliate",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "programAffiliate"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "programAffiliate"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "programAffiliate"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 1000
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "programAffiliate"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "affiliate_group_id": {
+          "x-title": "Affiliate Group ID",
+          "description": "Retrieves affiliates for a certain affiliate group",
+          "default": "",
+          "type": "string"
+        },
+        "email": {
+          "x-title": "Email",
+          "description": "An email address",
+          "default": "",
+          "type": "string"
+        },
+        "parentId": {
+          "x-title": "Parent ID",
+          "description": "Retrieves children for a certain parent affiliate",
+          "default": "",
+          "type": "string"
+        },
+        "source_id": {
+          "x-title": "Source ID",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "metadataUi": {
+      "x-title": "Metadata",
+      "description": "Meta data",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "affiliateMetadata"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "metadataValues": {
+          "x-title": "Metadata",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "x-title": "Key",
+                "description": "Name of the metadata key to add",
+                "default": "",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "Value to set for the metadata key",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "key": {
+      "x-title": "Key",
+      "description": "Name of the metadata key to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "affiliateMetadata"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "value": {
+      "x-title": "Value",
+      "description": "Value to set for the metadata key",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "affiliateMetadata"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "programId": {
+      "x-title": "Program Name or ID",
+      "description": "The ID of the Program to add the affiliate to. This ID can be found as part of the URL when viewing the program on the platform. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "programAffiliate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \":\" + $parameter[\"resource\"]}}",
+  "x-icon": "file:tapfiliate.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "tapfiliateApi",
+      "required": true
+    }
+  ]
+}

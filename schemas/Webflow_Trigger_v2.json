@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Webflow Trigger",
+  "description": "Handle Webflow events via webhooks",
+  "x-n8n-node-type": "webflowTrigger",
+  "x-n8n-version": 2,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "site": {
+      "x-title": "Site Name or ID",
+      "description": "Site that will trigger the events. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "event": {
+      "x-title": "Event",
+      "default": "form_submission",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "collection_item_created",
+        "collection_item_deleted",
+        "collection_item_changed",
+        "ecomm_inventory_changed",
+        "ecomm_new_order",
+        "ecomm_order_changed",
+        "form_submission",
+        "site_publish"
+      ],
+      "x-enumNames": [
+        "Collection Item Created",
+        "Collection Item Deleted",
+        "Collection Item Updated",
+        "Ecomm Inventory Changed",
+        "Ecomm New Order",
+        "Ecomm Order Changed",
+        "Form Submission",
+        "Site Publish"
+      ]
+    }
+  },
+  "x-icon": "file:webflow.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "webflowOAuth2Api",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

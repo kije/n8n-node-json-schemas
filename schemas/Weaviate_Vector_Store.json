@@ -1,0 +1,349 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Weaviate Vector Store",
+  "description": "Work with your data in a Weaviate Cluster",
+  "x-n8n-node-type": "vectorStoreWeaviate",
+  "x-n8n-version": [
+    1,
+    1.1,
+    1.2,
+    1.3
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "ragStarterCallout": {
+      "x-title": "Tip: Get a feel for vector stores in n8n with our",
+      "default": "",
+      "type": "string",
+      "x-n8n-type": "callout"
+    },
+    "mode": {
+      "x-title": "Operation Mode",
+      "default": "retrieve",
+      "type": "string",
+      "enum": [
+        "load",
+        "insert",
+        "retrieve",
+        "retrieve-as-tool"
+      ],
+      "x-enumNames": [
+        "Get Many",
+        "Insert Documents",
+        "Retrieve Documents (As Vector Store for Chain/Tool)",
+        "Retrieve Documents (As Tool for AI Agent)"
+      ],
+      "x-enumDescriptions": [
+        "Get many ranked documents from vector store for query",
+        "Insert documents into vector store",
+        "Retrieve documents from vector store to be used as vector store with AI nodes",
+        "Retrieve documents from vector store to be used as tool with AI nodes"
+      ]
+    },
+    "toolName": {
+      "x-title": "Name",
+      "description": "Name of the vector store",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "lte": 1.2
+              }
+            }
+          ],
+          "mode": [
+            "retrieve-as-tool"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "toolDescription": {
+      "x-title": "Description",
+      "description": "Explain to the LLM what this tool does, a good, specific description would allow LLMs to produce expected results much more often",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "retrieve-as-tool"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-rows": 2
+    },
+    "weaviateCollection": {
+      "x-title": "Weaviate Collection",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "embeddingBatchSize": {
+      "x-title": "Embedding Batch Size",
+      "description": "Number of documents to embed in a single batch",
+      "default": 200,
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "insert"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.1
+              }
+            }
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "retrieve"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "searchFilterJson": {
+          "x-title": "Search Filters",
+          "description": "Filter pageContent or metadata using this <a href=\"https://weaviate.io/\" target=\"_blank\">filtering syntax</a>",
+          "default": "{\n  \"OR\": [\n    {\n        \"path\": [\"pdf_info_Author\"],\n        \"operator\": \"Equal\",\n        \"valueString\": \"Elis\"\n    },\n    {\n        \"path\": [\"pdf_info_Author\"],\n        \"operator\": \"Equal\",\n        \"valueString\": \"Pinnacle\"\n    }    \n  ]\n}",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "metadataKeys": {
+          "x-title": "Metadata Keys",
+          "description": "Select the metadata to retrieve along the content",
+          "default": "source,page",
+          "type": "string"
+        },
+        "hybridQuery": {
+          "x-title": "Hybrid: Query Text",
+          "description": "Provide a query text to combine vector search with a keyword/text search",
+          "default": "",
+          "type": "string"
+        },
+        "hybridExplainScore": {
+          "x-title": "Hybrid: Explain Score",
+          "description": "Whether to show the score fused between hybrid and vector search explanation",
+          "default": false,
+          "type": "boolean"
+        },
+        "fusionType": {
+          "x-title": "Hybrid: Fusion Type",
+          "description": "Select the fusion type for combining vector and keyword search results",
+          "default": "RelativeScore",
+          "type": "string",
+          "enum": [
+            "RelativeScore",
+            "Ranked"
+          ],
+          "x-enumNames": [
+            "Relative Score",
+            "Ranked"
+          ]
+        },
+        "autoCutLimit": {
+          "x-title": "Hybrid: Auto Cut Limit",
+          "description": "Limit result groups by detecting sudden jumps in score",
+          "type": "number"
+        },
+        "alpha": {
+          "x-title": "Hybrid: Alpha",
+          "description": "Change the relative weights of the keyword and vector components. 1.0 = pure vector, 0.0 = pure keyword.",
+          "default": 0.5,
+          "type": "number"
+        },
+        "queryProperties": {
+          "x-title": "Hybrid: Query Properties",
+          "description": "Comma-separated list of properties to include in the query with optionally weighted values, e.g., \"question^2,answer\"",
+          "default": "",
+          "type": "string"
+        },
+        "maxVectorDistance": {
+          "x-title": "Hybrid: Max Vector Distance",
+          "description": "Set the maximum allowable distance for the vector search component",
+          "type": "number"
+        },
+        "tenant": {
+          "x-title": "Tenant Name",
+          "description": "Tenant Name. Collection must have been created with tenant support enabled.",
+          "type": "string"
+        },
+        "textKey": {
+          "x-title": "Text Key",
+          "description": "The key in the document that contains the embedded text",
+          "default": "text",
+          "type": "string"
+        },
+        "skip_init_checks": {
+          "x-title": "Skip Init Checks",
+          "description": "Whether to skip init checks while instantiating the client",
+          "default": false,
+          "type": "boolean"
+        },
+        "timeout_init": {
+          "x-title": "Init Timeout",
+          "description": "Number of timeout seconds for initial checks",
+          "default": 2,
+          "type": "number"
+        },
+        "timeout_insert": {
+          "x-title": "Insert Timeout",
+          "description": "Number of timeout seconds for inserts",
+          "default": 90,
+          "type": "number"
+        },
+        "timeout_query": {
+          "x-title": "Query Timeout",
+          "description": "Number of timeout seconds for queries",
+          "default": 30,
+          "type": "number"
+        },
+        "proxy_grpc": {
+          "x-title": "GRPC Proxy",
+          "description": "Proxy to use for GRPC",
+          "type": "string"
+        }
+      }
+    },
+    "prompt": {
+      "x-title": "Prompt",
+      "description": "Search prompt to retrieve matching documents from the vector store using similarity-based ranking",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "load"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "topK": {
+      "x-title": "Limit",
+      "description": "Number of top results to fetch from vector store",
+      "default": 4,
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "load",
+            "retrieve-as-tool"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "includeDocumentMetadata": {
+      "x-title": "Include Metadata",
+      "description": "Whether or not to include document metadata",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "load",
+            "retrieve-as-tool"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "useReranker": {
+      "x-title": "Rerank Results",
+      "description": "Whether or not to rerank results",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "load",
+            "retrieve",
+            "retrieve-as-tool"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "id": {
+      "x-title": "ID",
+      "description": "ID of an embedding entry",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-icon": "file:weaviate.svg",
+  "x-inputs": "={{\n\t\t\t((parameters) => {\n\t\t\t\tconst mode = parameters?.mode;\n\t\t\t\tconst useReranker = parameters?.useReranker;\n\t\t\t\tconst inputs = [{ displayName: \"Embedding\", type: \"ai_embedding\", required: true, maxConnections: 1}]\n\n\t\t\t\tif (['load', 'retrieve', 'retrieve-as-tool'].includes(mode) && useReranker) {\n\t\t\t\t\tinputs.push({ displayName: \"Reranker\", type: \"ai_reranker\", required: true, maxConnections: 1})\n\t\t\t\t}\n\n\t\t\t\tif (mode === 'retrieve-as-tool') {\n\t\t\t\t\treturn inputs;\n\t\t\t\t}\n\n\t\t\t\tif (['insert', 'load', 'update'].includes(mode)) {\n\t\t\t\t\tinputs.push({ displayName: \"\", type: \"main\"})\n\t\t\t\t}\n\n\t\t\t\tif (['insert'].includes(mode)) {\n\t\t\t\t\tinputs.push({ displayName: \"Document\", type: \"ai_document\", required: true, maxConnections: 1})\n\t\t\t\t}\n\t\t\t\treturn inputs\n\t\t\t})($parameter)\n\t\t}}",
+  "x-outputs": "={{\n\t\t\t((parameters) => {\n\t\t\t\tconst mode = parameters?.mode ?? 'retrieve';\n\n\t\t\t\tif (mode === 'retrieve-as-tool') {\n\t\t\t\t\treturn [{ displayName: \"Tool\", type: \"ai_tool\"}]\n\t\t\t\t}\n\n\t\t\t\tif (mode === 'retrieve') {\n\t\t\t\t\treturn [{ displayName: \"Vector Store\", type: \"ai_vectorStore\"}]\n\t\t\t\t}\n\t\t\t\treturn [{ displayName: \"\", type: \"main\"}]\n\t\t\t})($parameter)\n\t\t}}",
+  "x-credentials": [
+    {
+      "name": "weaviateApi",
+      "required": true
+    }
+  ]
+}

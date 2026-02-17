@@ -1,0 +1,178 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Vonage",
+  "description": "Consume Vonage API",
+  "x-n8n-node-type": "vonage",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "sms",
+      "type": "string",
+      "enum": [
+        "sms"
+      ],
+      "x-enumNames": [
+        "SMS"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "send",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sms"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "send"
+      ],
+      "x-enumNames": [
+        "Send"
+      ]
+    },
+    "from": {
+      "x-title": "From",
+      "description": "The name or number the message should be sent from",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sms"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "to": {
+      "x-title": "To",
+      "description": "The number that the message should be sent to. Numbers are specified in E.164 format.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sms"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "message": {
+      "x-title": "Message",
+      "description": "The body of the message being sent",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sms"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sms"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "account-ref": {
+          "x-title": "Account Ref",
+          "description": "An optional string used to identify separate accounts using the SMS endpoint for billing purposes. To use this feature, please email support@nexmo.com.",
+          "default": "",
+          "type": "string"
+        },
+        "callback": {
+          "x-title": "Callback",
+          "description": "The webhook endpoint the delivery receipt for this sms is sent to. This parameter overrides the webhook endpoint you set in Dashboard.",
+          "default": "",
+          "type": "string"
+        },
+        "client-ref": {
+          "x-title": "Client Ref",
+          "description": "You can optionally include your own reference of up to 40 characters",
+          "default": "",
+          "type": "string"
+        },
+        "message-class": {
+          "x-title": "Message Class",
+          "description": "The Data Coding Scheme value of the message",
+          "default": "",
+          "type": "string",
+          "enum": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "x-enumNames": [
+            "0",
+            "1",
+            "2",
+            "3"
+          ]
+        },
+        "protocol-id": {
+          "x-title": "Protocol ID",
+          "description": "The value of the protocol identifier to use. Ensure that the value is aligned with udh.",
+          "default": "",
+          "type": "string"
+        },
+        "status-report-req": {
+          "x-title": "Status Report Req",
+          "description": "Whether to receive a Delivery Receipt",
+          "default": false,
+          "type": "boolean"
+        },
+        "ttl": {
+          "x-title": "TTL (in Minutes)",
+          "description": "By default Nexmo attempt delivery for 72 hours",
+          "default": 4320,
+          "type": "number"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": {
+    "light": "file:vonage.svg",
+    "dark": "file:vonage.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "vonageApi",
+      "required": true
+    }
+  ]
+}

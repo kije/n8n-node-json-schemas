@@ -1,0 +1,408 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SyncroMSP",
+  "description": "Gets data from SyncroMSP",
+  "x-n8n-node-type": "syncroMsp",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "contact",
+      "type": "string",
+      "enum": [
+        "contact",
+        "customer",
+        "rmm",
+        "ticket"
+      ],
+      "x-enumNames": [
+        "Contact",
+        "Customer",
+        "RMM",
+        "Ticket"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "rmm"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "mute"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Mute"
+      ],
+      "x-enumDescriptions": [
+        "Create new RMM Alert",
+        "Delete RMM Alert",
+        "Retrieve RMM Alert",
+        "Retrieve many RMM Alerts",
+        "Mute RMM Alert"
+      ]
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "rmm"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 25,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "rmm"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "rmm"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "status": {
+          "x-title": "Status",
+          "default": "all",
+          "type": "string",
+          "enum": [
+            "active",
+            "all",
+            "resolved"
+          ],
+          "x-enumNames": [
+            "Active",
+            "All",
+            "Resolved"
+          ]
+        }
+      }
+    },
+    "customerId": {
+      "x-title": "Customer ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "rmm"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "email": {
+      "x-title": "Email",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "rmm"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "resolved": {
+          "x-title": "Resolved",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "address": {
+          "x-title": "Address",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "addressFields": {
+              "x-title": "Address Fields",
+              "type": "object",
+              "properties": {
+                "address": {
+                  "x-title": "Line 1",
+                  "default": "",
+                  "type": "string"
+                },
+                "address2": {
+                  "x-title": "Line 2",
+                  "default": "",
+                  "type": "string"
+                },
+                "city": {
+                  "x-title": "City",
+                  "default": "",
+                  "type": "string"
+                },
+                "state": {
+                  "x-title": "State",
+                  "default": "",
+                  "type": "string"
+                },
+                "zip": {
+                  "x-title": "ZIP",
+                  "default": "",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "customerId": {
+          "x-title": "Customer ID",
+          "default": "",
+          "type": "string"
+        },
+        "email": {
+          "x-title": "Email",
+          "default": "",
+          "type": "string"
+        },
+        "name": {
+          "x-title": "Name",
+          "default": "",
+          "type": "string"
+        },
+        "notes": {
+          "x-title": "Notes",
+          "default": "",
+          "type": "string"
+        },
+        "phone": {
+          "x-title": "Phone",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "subject": {
+      "x-title": "Subject",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "ticketId": {
+      "x-title": "Ticket ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "contactId": {
+      "x-title": "Contact ID",
+      "description": "Delete a specific contact by ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "alertId": {
+      "x-title": "RMM Alert ID",
+      "description": "Mute the RMM alert by ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "rmm"
+          ],
+          "operation": [
+            "mute"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "assetId": {
+      "x-title": "Asset ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "rmm"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "description": {
+      "x-title": "Description",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "rmm"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "muteFor": {
+      "x-title": "Mute Period",
+      "description": "Length of time to mute alert for",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "rmm"
+          ],
+          "operation": [
+            "mute"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "1-hour",
+        "1-day",
+        "2-days",
+        "1-week",
+        "2-weeks",
+        "1-month",
+        "forever"
+      ],
+      "x-enumNames": [
+        "1 Hour",
+        "1 Day",
+        "2 Days",
+        "1 Week",
+        "2 Weeks",
+        "1 Month",
+        "Forever"
+      ]
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:syncromsp.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "syncroMspApi",
+      "required": true,
+      "testedBy": "syncroMspApiCredentialTest"
+    }
+  ]
+}

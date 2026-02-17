@@ -1,0 +1,734 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Stripe",
+  "description": "Consume the Stripe API",
+  "x-n8n-node-type": "stripe",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "balance",
+      "type": "string",
+      "enum": [
+        "balance",
+        "charge",
+        "coupon",
+        "customer",
+        "customerCard",
+        "meterEvent",
+        "source",
+        "token"
+      ],
+      "x-enumNames": [
+        "Balance",
+        "Charge",
+        "Coupon",
+        "Customer",
+        "Customer Card",
+        "Meter Event",
+        "Source",
+        "Token"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "token"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create"
+      ],
+      "x-enumNames": [
+        "Create"
+      ],
+      "x-enumDescriptions": [
+        "Create a token"
+      ]
+    },
+    "customerId": {
+      "x-title": "Customer ID",
+      "description": "ID of the customer whose source to delete",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "source"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "token": {
+      "x-title": "Card Token",
+      "description": "Token representing sensitive card information",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customerCard"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "password"
+    },
+    "cardId": {
+      "x-title": "Card ID",
+      "description": "ID of the card to remove",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customerCard"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "sourceId": {
+      "x-title": "Source ID",
+      "description": "ID of the source to retrieve",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "source"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "amount": {
+      "x-title": "Amount",
+      "description": "Amount in cents to be collected for this charge, e.g. enter <code>100</code> for $1.00",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "source"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 0,
+      "maximum": 99999999
+    },
+    "currency": {
+      "x-title": "Currency Name or ID",
+      "description": "Three-letter ISO currency code, e.g. <code>USD</code> or <code>EUR</code>. It must be a <a href=\"https://stripe.com/docs/currencies\">Stripe-supported currency</a>. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "source"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "source": {
+      "x-title": "Source ID",
+      "description": "ID of the customer's payment source to be charged",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "charge"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "source"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "metadata": {
+          "x-title": "Metadata",
+          "description": "Set of key-value pairs to attach to the source to create",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "metadataProperties": {
+              "x-title": "Metadata Properties",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "x-title": "Key",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "statement_descriptor": {
+          "x-title": "Statement Descriptor",
+          "description": "Arbitrary text to display on the customer's statement",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "chargeId": {
+      "x-title": "Charge ID",
+      "description": "ID of the charge to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "charge"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customer"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customer"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 1000
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customer"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "address": {
+          "x-title": "Address",
+          "description": "Address of the customer to update",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "details": {
+              "x-title": "Details",
+              "type": "object",
+              "properties": {
+                "line1": {
+                  "x-title": "Line 1",
+                  "description": "Address line 1 (e.g. street, PO Box, or company name)",
+                  "default": "",
+                  "type": "string"
+                },
+                "line2": {
+                  "x-title": "Line 2",
+                  "description": "Address line 2 (e.g. apartment, suite, unit, or building)",
+                  "default": "",
+                  "type": "string"
+                },
+                "city": {
+                  "x-title": "City",
+                  "description": "City, district, suburb, town, or village",
+                  "default": "",
+                  "type": "string"
+                },
+                "state": {
+                  "x-title": "State",
+                  "description": "State, county, province, or region",
+                  "default": "",
+                  "type": "string"
+                },
+                "country": {
+                  "x-title": "Country",
+                  "description": "Two-letter country code (<a href=\"https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2\">ISO 3166-1 alpha-2</a>)",
+                  "default": "",
+                  "type": "string"
+                },
+                "postal_code": {
+                  "x-title": "Postal Code",
+                  "description": "ZIP or postal code",
+                  "default": "",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "description": {
+          "x-title": "Description",
+          "description": "Arbitrary text to describe the customer to create",
+          "default": "",
+          "type": "string"
+        },
+        "email": {
+          "x-title": "Email",
+          "description": "Email of the customer to create",
+          "default": "",
+          "type": "string"
+        },
+        "metadata": {
+          "x-title": "Metadata",
+          "description": "Set of key-value pairs to attach to the customer to create",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "metadataProperties": {
+              "x-title": "Metadata Properties",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "x-title": "Key",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "name": {
+          "x-title": "Name",
+          "description": "Full name or business name of the customer to create",
+          "default": "",
+          "type": "string"
+        },
+        "phone": {
+          "x-title": "Phone",
+          "description": "Telephone number of this customer",
+          "default": "",
+          "type": "string"
+        },
+        "shipping": {
+          "x-title": "Shipping",
+          "description": "Shipping information for the customer",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "shippingProperties": {
+              "x-title": "Shipping Properties",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "x-title": "Recipient Name",
+                    "description": "Name of the person who will receive the shipment",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "address": {
+                    "x-title": "Recipient Address",
+                    "default": {},
+                    "type": "object",
+                    "properties": {
+                      "details": {
+                        "x-title": "Details",
+                        "type": "object",
+                        "properties": {
+                          "line1": {
+                            "x-title": "Line 1",
+                            "description": "Address line 1 (e.g. street, PO Box, or company name)",
+                            "default": "",
+                            "type": "string"
+                          },
+                          "line2": {
+                            "x-title": "Line 2",
+                            "description": "Address line 2 (e.g. apartment, suite, unit, or building)",
+                            "default": "",
+                            "type": "string"
+                          },
+                          "city": {
+                            "x-title": "City",
+                            "description": "City, district, suburb, town, or village",
+                            "default": "",
+                            "type": "string"
+                          },
+                          "state": {
+                            "x-title": "State",
+                            "description": "State, county, province, or region",
+                            "default": "",
+                            "type": "string"
+                          },
+                          "country": {
+                            "x-title": "Country",
+                            "description": "Two-letter country code (<a href=\"https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2\">ISO 3166-1 alpha-2</a>)",
+                            "default": "",
+                            "type": "string"
+                          },
+                          "postal_code": {
+                            "x-title": "Postal Code",
+                            "description": "ZIP or postal code",
+                            "default": "",
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "phone": {
+                    "x-title": "Recipient Phone",
+                    "description": "Phone number of the person who will receive the shipment",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "duration": {
+      "x-title": "Apply",
+      "description": "How long the discount will be in effect",
+      "default": "once",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "coupon"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "forever",
+        "once"
+      ],
+      "x-enumNames": [
+        "Forever",
+        "Once"
+      ]
+    },
+    "type": {
+      "x-title": "Type",
+      "description": "Type of token to create",
+      "default": "cardToken",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "token"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "cardToken"
+      ],
+      "x-enumNames": [
+        "Card Token"
+      ]
+    },
+    "amountOff": {
+      "x-title": "Amount Off",
+      "description": "Amount in cents to subtract from an invoice total, e.g. enter <code>100</code> for $1.00",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "coupon"
+          ],
+          "operation": [
+            "create"
+          ],
+          "type": [
+            "fixedAmount"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number",
+      "minimum": 0,
+      "maximum": 99999999
+    },
+    "percentOff": {
+      "x-title": "Percent Off",
+      "description": "Percentage to apply with the coupon",
+      "default": 1,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "coupon"
+          ],
+          "operation": [
+            "create"
+          ],
+          "type": [
+            "percent"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "Full name or business name of the customer to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customer"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customer"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "email": {
+          "x-title": "Email",
+          "description": "Customer's email to filter by",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "eventName": {
+      "x-title": "Event Name",
+      "description": "The name of the meter event. Corresponds with the event_name field on a meter.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "meterEvent"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "value": {
+      "x-title": "Value",
+      "description": "The value of the meter event. Must be an integer. Can be positive or negative.",
+      "default": 1,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "meterEvent"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "number": {
+      "x-title": "Card Number",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "token"
+          ],
+          "operation": [
+            "create"
+          ],
+          "type": [
+            "cardToken"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "cvc": {
+      "x-title": "CVC",
+      "description": "Security code printed on the back of the card",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "token"
+          ],
+          "operation": [
+            "create"
+          ],
+          "type": [
+            "cardToken"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "expirationMonth": {
+      "x-title": "Expiration Month",
+      "description": "Number of the month when the card will expire",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "token"
+          ],
+          "operation": [
+            "create"
+          ],
+          "type": [
+            "cardToken"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "expirationYear": {
+      "x-title": "Expiration Year",
+      "description": "Year when the card will expire",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "token"
+          ],
+          "operation": [
+            "create"
+          ],
+          "type": [
+            "cardToken"
+          ]
+        }
+      },
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:stripe.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "stripeApi",
+      "required": true
+    }
+  ]
+}

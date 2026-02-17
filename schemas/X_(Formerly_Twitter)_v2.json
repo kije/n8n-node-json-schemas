@@ -1,0 +1,474 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "X (Formerly Twitter)",
+  "description": "Post, like, and search tweets, send messages, search users, and add users to lists",
+  "x-n8n-node-type": "twitter",
+  "x-n8n-version": 2,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "tweet",
+      "type": "string",
+      "enum": [
+        "directMessage",
+        "list",
+        "tweet",
+        "user"
+      ],
+      "x-enumNames": [
+        "Direct Message",
+        "List",
+        "Tweet",
+        "User"
+      ],
+      "x-enumDescriptions": [
+        "Send a direct message to a user",
+        "Add a user to a list",
+        "Create, like, search, or delete a tweet",
+        "Search users by username"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "searchUser",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "searchUser"
+      ],
+      "x-enumNames": [
+        "Get"
+      ],
+      "x-enumDescriptions": [
+        "Retrieve a user by username"
+      ]
+    },
+    "user": {
+      "x-title": "User",
+      "description": "The user you want to search",
+      "default": {
+        "mode": "username",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "searchUser"
+          ],
+          "resource": [
+            "user"
+          ]
+        },
+        "hide": {
+          "me": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "username",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "username",
+          "displayName": "By Username",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        }
+      ]
+    },
+    "text": {
+      "x-title": "Text",
+      "description": "The text of the status update. URLs must be encoded. Links wrapped with the t.co shortener will affect character count",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "tweet"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-rows": 2
+    },
+    "additionalFields": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "tweet"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "sortOrder": {
+          "x-title": "Sort Order",
+          "description": "The order in which to return results",
+          "default": "recency",
+          "type": "string",
+          "enum": [
+            "recency",
+            "relevancy"
+          ],
+          "x-enumNames": [
+            "Recent",
+            "Relevant"
+          ]
+        },
+        "startTime": {
+          "x-title": "After",
+          "description": "Tweets before this date will not be returned. This date must be within the last 7 days if you don't have Academic Research access.",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "endTime": {
+          "x-title": "Before",
+          "description": "Tweets after this date will not be returned. This date must be within the last 7 days if you don't have Academic Research access.",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "tweetFieldsObject": {
+          "x-title": "Tweet Fields",
+          "description": "The fields to add to each returned tweet object. Default fields are: ID, text, edit_history_tweet_ids.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "attachments",
+              "author_id",
+              "context_annotations",
+              "conversation_id",
+              "created_at",
+              "edit_controls",
+              "entities",
+              "geo",
+              "id",
+              "in_reply_to_user_id",
+              "lang",
+              "non_public_metrics",
+              "public_metrics",
+              "organic_metrics",
+              "promoted_metrics",
+              "possibly_sensitive",
+              "referenced_tweets",
+              "reply_settings",
+              "source",
+              "text",
+              "withheld"
+            ]
+          },
+          "x-enumNames": [
+            "Attachments",
+            "Author ID",
+            "Context Annotations",
+            "Conversation ID",
+            "Created At",
+            "Edit Controls",
+            "Entities",
+            "Geo",
+            "ID",
+            "In Reply To User ID",
+            "Lang",
+            "Non Public Metrics",
+            "Public Metrics",
+            "Organic Metrics",
+            "Promoted Metrics",
+            "Possibly Sensitive",
+            "Referenced Tweets",
+            "Reply Settings",
+            "Source",
+            "Text",
+            "Withheld"
+          ]
+        }
+      }
+    },
+    "list": {
+      "x-title": "List",
+      "description": "The list you want to add the user to",
+      "default": {
+        "mode": "id",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "add"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "id",
+            "url"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        },
+        {
+          "name": "url",
+          "displayName": "By URL",
+          "type": "string"
+        }
+      ]
+    },
+    "tweetDeleteId": {
+      "x-title": "Tweet",
+      "description": "The tweet to delete",
+      "default": {
+        "mode": "id",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "tweet"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "id",
+            "url"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        },
+        {
+          "name": "url",
+          "displayName": "By URL",
+          "type": "string"
+        }
+      ]
+    },
+    "tweetId": {
+      "x-title": "Tweet",
+      "description": "The tweet to retweet",
+      "default": {
+        "mode": "id",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "retweet"
+          ],
+          "resource": [
+            "tweet"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "id",
+            "url"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        },
+        {
+          "name": "url",
+          "displayName": "By URL",
+          "type": "string"
+        }
+      ]
+    },
+    "searchText": {
+      "x-title": "Search Term",
+      "description": "A UTF-8, URL-encoded search query of 500 characters maximum, including operators. Queries may additionally be limited by complexity. Check the searching examples <a href=\"https://developer.twitter.com/en/docs/tweets/search/guides/standard-operators\">here</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "tweet"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "tweet"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "tweet"
+          ],
+          "operation": [
+            "search"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "me": {
+      "x-title": "Me",
+      "description": "Whether you want to search the authenticated user",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "searchUser"
+          ],
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \":\" + $parameter[\"resource\"]}}",
+  "x-icon": {
+    "light": "file:x.svg",
+    "dark": "file:x.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "twitterOAuth2Api",
+      "required": true
+    }
+  ]
+}

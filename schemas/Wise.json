@@ -1,0 +1,508 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Wise",
+  "description": "Consume the Wise API",
+  "x-n8n-node-type": "wise",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "account",
+      "type": "string",
+      "enum": [
+        "account",
+        "exchangeRate",
+        "profile",
+        "quote",
+        "recipient",
+        "transfer"
+      ],
+      "x-enumNames": [
+        "Account",
+        "Exchange Rate",
+        "Profile",
+        "Quote",
+        "Recipient",
+        "Transfer"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "transfer"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "execute",
+        "get",
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Execute",
+        "Get",
+        "Get Many"
+      ]
+    },
+    "profileId": {
+      "x-title": "Profile Name or ID",
+      "description": "ID of the user profile to retrieve. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "transfer"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "borderlessAccountId": {
+      "x-title": "Borderless Account Name or ID",
+      "description": "ID of the borderless account to retrieve the statement of. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "account"
+          ],
+          "operation": [
+            "getStatement"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "currency": {
+      "x-title": "Currency",
+      "description": "Code of the currency of the borderless account to retrieve the statement of",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "account"
+          ],
+          "operation": [
+            "getStatement"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "format": {
+      "x-title": "Format",
+      "description": "File format to retrieve the statement in",
+      "default": "json",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "account"
+          ],
+          "operation": [
+            "getStatement"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "json",
+        "csv",
+        "pdf",
+        "xml"
+      ],
+      "x-enumNames": [
+        "JSON",
+        "CSV",
+        "PDF",
+        "XML (CAMT.053)"
+      ]
+    },
+    "binaryProperty": {
+      "x-title": "Put Output File in Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "transfer"
+          ],
+          "operation": [
+            "get"
+          ],
+          "downloadReceipt": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "fileName": {
+      "x-title": "File Name",
+      "description": "Name of the file that will be downloaded",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "transfer"
+          ],
+          "operation": [
+            "get"
+          ],
+          "downloadReceipt": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "transfer"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "reference": {
+          "x-title": "Reference",
+          "description": "Reference text to show in the recipient's bank statement",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "source": {
+      "x-title": "Source Currency",
+      "description": "Code of the source currency to retrieve the exchange rate for",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "exchangeRate"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "target": {
+      "x-title": "Target Currency",
+      "description": "Code of the target currency to retrieve the exchange rate for",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "exchangeRate"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "targetAccountId": {
+      "x-title": "Target Account Name or ID",
+      "description": "ID of the account that will receive the funds. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "transfer"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "amountType": {
+      "x-title": "Amount Type",
+      "description": "Whether the amount is to be sent or received",
+      "default": "source",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "quote"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "source",
+        "target"
+      ],
+      "x-enumNames": [
+        "Source",
+        "Target"
+      ]
+    },
+    "amount": {
+      "x-title": "Amount",
+      "description": "Amount of funds for the quote to create",
+      "default": 1,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "quote"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "sourceCurrency": {
+      "x-title": "Source Currency",
+      "description": "Code of the currency to send for the quote to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "quote"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "targetCurrency": {
+      "x-title": "Target Currency",
+      "description": "Code of the currency to receive for the quote to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "quote"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "quoteId": {
+      "x-title": "Quote ID",
+      "description": "ID of the quote based on which to create the transfer",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "transfer"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "transfer"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 5,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "transfer"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 1000
+    },
+    "transferId": {
+      "x-title": "Transfer ID",
+      "description": "ID of the transfer to retrieve",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "transfer"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "downloadReceipt": {
+      "x-title": "Download Receipt",
+      "description": "Whether to download the transfer receipt as a PDF file. Only for executed transfers, having status 'Outgoing Payment Sent'.",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "transfer"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "transfer"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "range": {
+          "x-title": "Range",
+          "description": "Range of time for filtering the transfers",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "rangeProperties": {
+              "x-title": "Range Properties",
+              "type": "object",
+              "properties": {
+                "createdDateStart": {
+                  "x-title": "Created Date Start",
+                  "default": "",
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "createdDateEnd": {
+                  "x-title": "Created Date End",
+                  "default": "",
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          }
+        },
+        "sourceCurrency": {
+          "x-title": "Source Currency",
+          "description": "Code of the source currency for filtering the transfers",
+          "default": "",
+          "type": "string"
+        },
+        "status": {
+          "x-title": "Status",
+          "default": "processing",
+          "type": "string",
+          "enum": [
+            "bounced_back",
+            "cancelled",
+            "charged_back",
+            "funds_converted",
+            "funds_refunded",
+            "incoming_payment_waiting",
+            "outgoing_payment_sent",
+            "processing",
+            "unknown",
+            "waiting_recipient_input_to_proceed"
+          ],
+          "x-enumNames": [
+            "Bounced Back",
+            "Cancelled",
+            "Charged Back",
+            "Funds Converted",
+            "Funds Refunded",
+            "Incoming Payment Waiting",
+            "Outgoing Payment Sent",
+            "Processing",
+            "Unknown",
+            "Waiting for Recipient Input to Proceed"
+          ]
+        },
+        "targetCurrency": {
+          "x-title": "Target Currency",
+          "description": "Code of the target currency for filtering the transfers",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:wise.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "wiseApi",
+      "required": true
+    }
+  ]
+}

@@ -1,0 +1,571 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Twist",
+  "description": "Consume Twist API",
+  "x-n8n-node-type": "twist",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "messageConversation",
+      "type": "string",
+      "enum": [
+        "channel",
+        "comment",
+        "messageConversation",
+        "thread"
+      ],
+      "x-enumNames": [
+        "Channel",
+        "Comment",
+        "Message Conversation",
+        "Thread"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "thread"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a new thread in a channel",
+        "Delete a thread",
+        "Get information about a thread",
+        "Get many threads",
+        "Update a thread"
+      ]
+    },
+    "workspaceId": {
+      "x-title": "Workspace Name or ID",
+      "description": "The ID of the workspace. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "messageConversation"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "The name of the channel",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "channel"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "thread"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "actionsUi": {
+          "x-title": "Actions",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "actionValues": {
+              "x-title": "Action",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "action": {
+                    "x-title": "Action",
+                    "description": "The action of the button",
+                    "default": "",
+                    "type": "string",
+                    "enum": [
+                      "open_url",
+                      "prefill_message",
+                      "send_reply"
+                    ],
+                    "x-enumNames": [
+                      "Open URL",
+                      "Prefill Message",
+                      "Send Reply"
+                    ]
+                  },
+                  "button_text": {
+                    "x-title": "Button Text",
+                    "description": "The text for the action button",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "message": {
+                    "x-title": "Message",
+                    "description": "The text for the action button",
+                    "default": "",
+                    "x-displayOptions": {
+                      "show": {
+                        "action": [
+                          "send_reply",
+                          "prefill_message"
+                        ]
+                      }
+                    },
+                    "type": "string"
+                  },
+                  "type": {
+                    "x-title": "Type",
+                    "description": "The type of the button. (Currently only <code>action</code> is available).",
+                    "default": "",
+                    "type": "string",
+                    "enum": [
+                      "action"
+                    ],
+                    "x-enumNames": [
+                      "Action"
+                    ]
+                  },
+                  "url": {
+                    "x-title": "URL",
+                    "description": "URL to redirect",
+                    "default": "",
+                    "x-displayOptions": {
+                      "show": {
+                        "action": [
+                          "open_url"
+                        ]
+                      }
+                    },
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "binaryProperties": {
+          "x-title": "Attachments",
+          "description": "Name of the property that holds the binary data. Multiple can be defined separated by comma.",
+          "default": "data",
+          "type": "string"
+        },
+        "direct_mentions": {
+          "x-title": "Direct Mention Names or IDs",
+          "description": "The users that are directly mentioned. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "recipients": {
+          "x-title": "Recipient Names or IDs",
+          "description": "The users that will attached to the thread. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "send_as_integration": {
+          "x-title": "Send as Integration",
+          "description": "Whether to display the integration as the thread creator",
+          "default": false,
+          "type": "boolean"
+        },
+        "temp_id": {
+          "x-title": "Temporary ID",
+          "description": "The temporary ID of the thread",
+          "default": 0,
+          "type": "number"
+        }
+      }
+    },
+    "channelId": {
+      "x-title": "Channel ID",
+      "description": "The ID of the channel",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "thread"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "thread"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "thread"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "thread"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "as_ids": {
+          "x-title": "As IDs",
+          "description": "Whether only the IDs of the threads are returned",
+          "default": false,
+          "type": "boolean"
+        },
+        "filter_by": {
+          "x-title": "Filter By",
+          "description": "A filter can be one of <code>attached_to_me</code>, <code>everyone</code> and <code>is_starred</code>",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "attached_to_me",
+            "everyone",
+            "is_starred"
+          ],
+          "x-enumNames": [
+            "Attached to Me",
+            "Everyone",
+            "Starred"
+          ]
+        },
+        "newer_than_ts": {
+          "x-title": "Newer Than",
+          "description": "Limits threads to those newer when the specified Unix time",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "older_than_ts": {
+          "x-title": "Older Than",
+          "description": "Limits threads to those older than the specified Unix time",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "thread"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "actionsUi": {
+          "x-title": "Actions",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "actionValues": {
+              "x-title": "Action",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "action": {
+                    "x-title": "Action",
+                    "description": "The action of the button",
+                    "default": "",
+                    "type": "string",
+                    "enum": [
+                      "open_url",
+                      "prefill_message",
+                      "send_reply"
+                    ],
+                    "x-enumNames": [
+                      "Open URL",
+                      "Prefill Message",
+                      "Send Reply"
+                    ]
+                  },
+                  "button_text": {
+                    "x-title": "Button Text",
+                    "description": "The text for the action button",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "message": {
+                    "x-title": "Message",
+                    "description": "The text for the action button",
+                    "default": "",
+                    "x-displayOptions": {
+                      "show": {
+                        "action": [
+                          "send_reply",
+                          "prefill_message"
+                        ]
+                      }
+                    },
+                    "type": "string"
+                  },
+                  "type": {
+                    "x-title": "Type",
+                    "description": "The type of the button. (Currently only <code>action</code> is available).",
+                    "default": "",
+                    "type": "string",
+                    "enum": [
+                      "action"
+                    ],
+                    "x-enumNames": [
+                      "Action"
+                    ]
+                  },
+                  "url": {
+                    "x-title": "URL",
+                    "description": "URL to redirect",
+                    "default": "",
+                    "x-displayOptions": {
+                      "show": {
+                        "action": [
+                          "open_url"
+                        ]
+                      }
+                    },
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "binaryProperties": {
+          "x-title": "Attachments",
+          "description": "Name of the property that holds the binary data. Multiple can be defined separated by comma.",
+          "default": "data",
+          "type": "string"
+        },
+        "content": {
+          "x-title": "Content",
+          "description": "The content of the thread",
+          "default": "",
+          "type": "string"
+        },
+        "direct_mentions": {
+          "x-title": "Direct Mention Names or IDs",
+          "description": "The users that are directly mentioned. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "title": {
+          "x-title": "Title",
+          "description": "The title of the thread (1 < length < 300)",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "threadId": {
+      "x-title": "Thread ID",
+      "description": "The ID of the thread",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "thread"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "content": {
+      "x-title": "Content",
+      "description": "The content of the thread",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "thread"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "commentId": {
+      "x-title": "Comment ID",
+      "description": "The ID of the comment",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "comment"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "conversationId": {
+      "x-title": "Conversation Name or ID",
+      "description": "The ID of the conversation. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "messageConversation"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "id": {
+      "x-title": "Conversation Message ID",
+      "description": "The ID of the conversation message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "messageConversation"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "The title of the new thread (1 < length < 300)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "thread"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:twist.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "twistOAuth2Api",
+      "required": true
+    }
+  ]
+}

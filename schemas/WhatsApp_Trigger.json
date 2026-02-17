@@ -1,0 +1,93 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WhatsApp Trigger",
+  "description": "Handle WhatsApp events via webhooks",
+  "x-n8n-node-type": "whatsAppTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "updates": {
+      "x-title": "Trigger On",
+      "default": [],
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "account_review_update",
+          "account_update",
+          "business_capability_update",
+          "message_template_quality_update",
+          "message_template_status_update",
+          "messages",
+          "phone_number_name_update",
+          "phone_number_quality_update",
+          "security",
+          "template_category_update"
+        ]
+      },
+      "x-enumNames": [
+        "Account Review Update",
+        "Account Update",
+        "Business Capability Update",
+        "Message Template Quality Update",
+        "Message Template Status Update",
+        "Messages",
+        "Phone Number Name Update",
+        "Phone Number Quality Update",
+        "Security",
+        "Template Category Update"
+      ]
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "messageStatusUpdates": {
+          "x-title": "Receive Message Status Updates",
+          "description": "WhatsApp sends notifications to the Trigger when the status of a message changes (for example from Sent to Delivered and from Delivered to Read). To avoid multiple executions for one WhatsApp message, you can set the Trigger to execute only on selected message status updates.",
+          "default": [
+            "all"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "all",
+              "deleted",
+              "delivered",
+              "failed",
+              "read",
+              "sent"
+            ]
+          },
+          "x-enumNames": [
+            "All",
+            "Deleted",
+            "Delivered",
+            "Failed",
+            "Read",
+            "Sent"
+          ]
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"event\"]}}",
+  "x-icon": "file:whatsapp.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "whatsAppTriggerApi",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

@@ -1,0 +1,121 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "XML",
+  "description": "Convert data from and to XML",
+  "x-n8n-node-type": "xml",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "mode": {
+      "x-title": "Mode",
+      "description": "From and to what format the data should be converted",
+      "default": "xmlToJson",
+      "type": "string",
+      "enum": [
+        "jsonToxml",
+        "xmlToJson"
+      ],
+      "x-enumNames": [
+        "JSON to XML",
+        "XML to JSON"
+      ],
+      "x-enumDescriptions": [
+        "Converts data from JSON to XML",
+        "Converts data from XML to JSON"
+      ]
+    },
+    "dataPropertyName": {
+      "x-title": "Property Name",
+      "description": "Name of the property which contains the XML data to convert",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "xmlToJson"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "xmlToJson"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "attrkey": {
+          "x-title": "Attribute Key",
+          "description": "Prefix that is used to access the attributes",
+          "default": "$",
+          "type": "string"
+        },
+        "charkey": {
+          "x-title": "Character Key",
+          "description": "Prefix that is used to access the character content",
+          "default": "_",
+          "type": "string"
+        },
+        "explicitArray": {
+          "x-title": "Explicit Array",
+          "description": "Whether to always put child nodes in an array if true; otherwise an array is created only if there is more than one",
+          "default": false,
+          "type": "boolean"
+        },
+        "explicitRoot": {
+          "x-title": "Explicit Root",
+          "description": "Whether to set this if you want to get the root node in the resulting object",
+          "default": true,
+          "type": "boolean"
+        },
+        "ignoreAttrs": {
+          "x-title": "Ignore Attributes",
+          "description": "Whether to ignore all XML attributes and only create text nodes",
+          "default": false,
+          "type": "boolean"
+        },
+        "mergeAttrs": {
+          "x-title": "Merge Attributes",
+          "description": "Whether to merge attributes and child elements as properties of the parent, instead of keying attributes off a child attribute object. This option is ignored if ignoreAttrs is true.",
+          "default": true,
+          "type": "boolean"
+        },
+        "normalize": {
+          "x-title": "Normalize",
+          "description": "Whether to trim whitespaces inside text nodes",
+          "default": false,
+          "type": "boolean"
+        },
+        "normalizeTags": {
+          "x-title": "Normalize Tags",
+          "description": "Whether to normalize all tag names to lowercase",
+          "default": false,
+          "type": "boolean"
+        },
+        "trim": {
+          "x-title": "Trim",
+          "description": "Whether to trim the whitespace at the beginning and end of text nodes",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"mode\"]===\"jsonToxml\" ? \"JSON to XML\" : \"XML to JSON\"}}",
+  "x-icon": "fa:file-code",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

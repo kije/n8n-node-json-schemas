@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Trello Trigger",
+  "description": "Starts the workflow when Trello events occur",
+  "x-n8n-node-type": "trelloTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "id": {
+      "x-title": "Model ID",
+      "description": "ID of the model of which to subscribe to events",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-icon": "file:trello.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "trelloApi",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

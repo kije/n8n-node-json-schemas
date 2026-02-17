@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Toggl Trigger",
+  "description": "Starts the workflow when Toggl events occur",
+  "x-n8n-node-type": "togglTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "event": {
+      "x-title": "Event",
+      "default": "newTimeEntry",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "newTimeEntry"
+      ],
+      "x-enumNames": [
+        "New Time Entry"
+      ]
+    }
+  },
+  "x-icon": "file:toggl.png",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "togglApi",
+      "required": true
+    }
+  ]
+}

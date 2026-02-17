@@ -1,0 +1,311 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Venafi TLS Protect Datacenter",
+  "description": "Consume Venafi TLS Protect Datacenter",
+  "x-n8n-node-type": "venafiTlsProtectDatacenter",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "certificate",
+      "type": "string",
+      "enum": [
+        "certificate",
+        "policy"
+      ],
+      "x-enumNames": [
+        "Certificate",
+        "Policy"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "policy"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "get"
+      ],
+      "x-enumNames": [
+        "Get"
+      ],
+      "x-enumDescriptions": [
+        "Get a policy"
+      ]
+    },
+    "PolicyDN": {
+      "x-title": "Policy DN",
+      "description": "The folder DN for the new certificate. If the value is missing, the folder name is the system default. If no system default is configured",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "certificate"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "Subject": {
+      "x-title": "Subject",
+      "description": "The Common Name field for the certificate Subject (DN)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "certificate"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "policy"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "PKCS10": {
+          "x-title": "PKCS10",
+          "description": "The PKCS#10 policy Signing Request (CSR). Omit escape characters such as or . If this value is provided, any Subject DN fields and the KeyBitSize in the request are ignored.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "certificateDn": {
+      "x-title": "Certificate DN",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "download"
+          ],
+          "resource": [
+            "certificate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "includePrivateKey": {
+      "x-title": "Include Private Key",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "certificate"
+          ],
+          "operation": [
+            "download"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "password": {
+      "x-title": "Password",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "certificate"
+          ],
+          "operation": [
+            "download"
+          ],
+          "includePrivateKey": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "password"
+    },
+    "binaryProperty": {
+      "x-title": "Input Data Field Name",
+      "description": "The name of the input field containing the binary file data to be uploaded",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "download"
+          ],
+          "resource": [
+            "certificate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "certificateId": {
+      "x-title": "Certificate GUID",
+      "description": "A GUID that uniquely identifies the certificate",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get",
+            "delete"
+          ],
+          "resource": [
+            "certificate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getMany"
+          ],
+          "resource": [
+            "certificate"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getMany"
+          ],
+          "resource": [
+            "certificate"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getMany"
+          ],
+          "resource": [
+            "certificate"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "fields": {
+          "x-title": "Fields",
+          "description": "Include one or more of the following certificate attributes in the return value",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "Issuer",
+              "KeyAlgorithm",
+              "KeySize",
+              "Subject"
+            ]
+          },
+          "x-enumNames": [
+            "Issuer",
+            "KeyAlgorithm",
+            "KeySize",
+            "Subject"
+          ]
+        }
+      }
+    },
+    "certificateDN": {
+      "x-title": "Certificate DN",
+      "description": "The Distinguished Name (DN) of the certificate to renew",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "renew"
+          ],
+          "resource": [
+            "certificate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "policyDn": {
+      "x-title": "Policy DN",
+      "description": "The Distinguished Name (DN) of the policy folder",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "policy"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:../venafi.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "venafiTlsProtectDatacenterApi",
+      "required": true
+    }
+  ]
+}

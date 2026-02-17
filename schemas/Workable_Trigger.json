@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Workable Trigger",
+  "description": "Starts the workflow when Workable events occur",
+  "x-n8n-node-type": "workableTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "triggerOn": {
+      "x-title": "Trigger On",
+      "default": "",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "candidateCreated",
+        "candidateMoved"
+      ],
+      "x-enumNames": [
+        "Candidate Created",
+        "Candidate Moved"
+      ]
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "job": {
+          "x-title": "Job Name or ID",
+          "description": "Get notifications only for one job. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "stage": {
+          "x-title": "Stage Name or ID",
+          "description": "Get notifications for specific stages. e.g. 'hired'. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"triggerOn\"]}}",
+  "x-icon": "file:workable.png",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "workableApi",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

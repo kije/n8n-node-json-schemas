@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Typeform Trigger",
+  "description": "Starts the workflow on a Typeform form submission",
+  "x-n8n-node-type": "typeformTrigger",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "accessToken",
+      "type": "string",
+      "enum": [
+        "accessToken",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "Access Token",
+        "OAuth2"
+      ]
+    },
+    "formId": {
+      "x-title": "Form Name or ID",
+      "description": "Form which should trigger workflow on submission. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-required": true,
+      "type": "string",
+      "enum": [],
+      "x-enumNames": []
+    },
+    "simplifyAnswers": {
+      "x-title": "Simplify Answers",
+      "description": "Whether to convert the answers to a key:value pair (\"FIELD_TITLE\":\"USER_ANSER\") to be easily processable",
+      "default": true,
+      "type": "boolean"
+    },
+    "onlyAnswers": {
+      "x-title": "Only Answers",
+      "description": "Whether to return only the answers of the form and not any of the other data",
+      "default": true,
+      "type": "boolean"
+    }
+  },
+  "x-subtitle": "=Form ID: {{$parameter[\"formId\"]}}",
+  "x-icon": {
+    "light": "file:typeform.svg",
+    "dark": "file:typeform.dark.svg"
+  },
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "typeformApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "accessToken"
+          ]
+        }
+      },
+      "testedBy": "testTypeformTokenAuth"
+    },
+    {
+      "name": "typeformOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "x-webhooks": "true"
+}

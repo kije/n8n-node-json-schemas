@@ -1,0 +1,606 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Trello",
+  "description": "Create, change and delete boards and cards",
+  "x-n8n-node-type": "trello",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "card",
+      "type": "string",
+      "enum": [
+        "attachment",
+        "board",
+        "boardMember",
+        "card",
+        "cardComment",
+        "checklist",
+        "label",
+        "list"
+      ],
+      "x-enumNames": [
+        "Attachment",
+        "Board",
+        "Board Member",
+        "Card",
+        "Card Comment",
+        "Checklist",
+        "Label",
+        "List"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "archive",
+        "create",
+        "get",
+        "getCards",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Archive",
+        "Create",
+        "Get",
+        "Get Cards",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Archive/Unarchive a list",
+        "Create a new list",
+        "Get the data of a list",
+        "Get all the cards in a list",
+        "Get many lists",
+        "Update a list"
+      ]
+    },
+    "cardId": {
+      "x-title": "Card ID",
+      "description": "The ID of the card",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "addLabel",
+            "removeLabel"
+          ],
+          "resource": [
+            "label"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "By URL",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "url": {
+      "x-title": "Source URL",
+      "description": "The URL of the attachment to add",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "attachment"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "fields": {
+          "x-title": "Fields",
+          "description": "Fields to return. Either \"all\" or a comma-separated list of fields.",
+          "default": "all",
+          "type": "string"
+        }
+      }
+    },
+    "id": {
+      "x-title": "List ID",
+      "description": "The ID of the list to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "The name of the list",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "description": {
+      "x-title": "Description",
+      "description": "The description of the card",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "card"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "idBoard": {
+          "x-title": "Board ID",
+          "description": "ID of a board the list should be moved to",
+          "default": "",
+          "type": "string"
+        },
+        "closed": {
+          "x-title": "Closed",
+          "description": "Whether the list is closed",
+          "default": false,
+          "type": "boolean"
+        },
+        "name": {
+          "x-title": "Name",
+          "description": "New name of the list",
+          "default": "",
+          "type": "string"
+        },
+        "pos": {
+          "x-title": "Position",
+          "description": "The position of the list. top, bottom, or a positive float.",
+          "default": "bottom",
+          "type": "string"
+        },
+        "subscribed": {
+          "x-title": "Subscribed",
+          "description": "Whether the acting user is subscribed to the list",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 20,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "idMember": {
+      "x-title": "Member ID",
+      "description": "The ID of the member to remove from the board",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "remove"
+          ],
+          "resource": [
+            "boardMember"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "type": {
+      "x-title": "Type",
+      "description": "Determines the type of membership the user being added should have",
+      "default": "normal",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "add"
+          ],
+          "resource": [
+            "boardMember"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "normal",
+        "admin",
+        "observer"
+      ],
+      "x-enumNames": [
+        "Normal",
+        "Admin",
+        "Observer"
+      ],
+      "x-enumDescriptions": [
+        "Invite as normal member",
+        "Invite as admin",
+        "Invite as observer (Trello premium feature)"
+      ]
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "The ID of the board to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "invite"
+          ],
+          "resource": [
+            "boardMember"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "listId": {
+      "x-title": "List ID",
+      "description": "The ID of the list to create card in",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "card"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "text": {
+      "x-title": "Text",
+      "description": "Text of the comment",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "cardComment"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "commentId": {
+      "x-title": "Comment ID",
+      "description": "The ID of the comment to delete",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "cardComment"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "checklistId": {
+      "x-title": "Checklist ID",
+      "description": "The ID of the checklist to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "createCheckItem"
+          ],
+          "resource": [
+            "checklist"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "checkItemId": {
+      "x-title": "CheckItem ID",
+      "description": "The ID of the checklist item to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "updateCheckItem"
+          ],
+          "resource": [
+            "checklist"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "boardId": {
+      "x-title": "Board",
+      "description": "The ID of the board",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "getAll"
+          ],
+          "resource": [
+            "label"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "By URL",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "color": {
+      "x-title": "Color",
+      "description": "The color for the label",
+      "default": "null",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "label"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "black",
+        "blue",
+        "green",
+        "lime",
+        "null",
+        "orange",
+        "pink",
+        "purple",
+        "red",
+        "sky",
+        "yellow"
+      ],
+      "x-enumNames": [
+        "Black",
+        "Blue",
+        "Green",
+        "Lime",
+        "Null",
+        "Orange",
+        "Pink",
+        "Purple",
+        "Red",
+        "Sky",
+        "Yellow"
+      ]
+    },
+    "archive": {
+      "x-title": "Archive",
+      "description": "Whether the list should be archived or unarchived",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "archive"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "idBoard": {
+      "x-title": "Board ID",
+      "description": "The ID of the board the list should be created in",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:trello.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "trelloApi",
+      "required": true
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Token Splitter",
+  "description": "Split text into chunks by tokens",
+  "x-n8n-node-type": "textSplitterTokenSplitter",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "chunkSize": {
+      "x-title": "Chunk Size",
+      "description": "Maximum number of tokens per chunk",
+      "default": 1000,
+      "type": "number"
+    },
+    "chunkOverlap": {
+      "x-title": "Chunk Overlap",
+      "description": "Number of tokens shared between consecutive chunks to preserve context",
+      "default": 0,
+      "type": "number"
+    }
+  },
+  "x-icon": "fa:grip-lines-vertical",
+  "x-inputs": [],
+  "x-outputs": [
+    "ai_textSplitter"
+  ]
+}

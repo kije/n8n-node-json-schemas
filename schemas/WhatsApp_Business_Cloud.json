@@ -1,0 +1,2184 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WhatsApp Business Cloud",
+  "description": "Access WhatsApp API",
+  "x-n8n-node-type": "whatsApp",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "message",
+      "type": "string",
+      "enum": [
+        "message",
+        "media"
+      ],
+      "x-enumNames": [
+        "Message",
+        "Media"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "description": "The operation to perform on the media",
+      "default": "mediaUpload",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "media"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "mediaUpload",
+        "mediaUrlGet",
+        "mediaDelete"
+      ],
+      "x-enumNames": [
+        "Upload",
+        "Download",
+        "Delete"
+      ]
+    },
+    "messagingProduct": {
+      "x-title": "Messaging Product",
+      "default": "whatsapp",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "phoneNumberId": {
+      "x-title": "Sender Phone Number (or ID)",
+      "description": "The ID of the business account's phone number to store the media",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "mediaUpload"
+          ],
+          "resource": [
+            "media"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "recipientPhoneNumber": {
+      "x-title": "Recipient's Phone Number",
+      "description": "Phone number of the recipient of the message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "messageType": {
+      "x-title": "MessageType",
+      "description": "The type of the message",
+      "default": "text",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "audio",
+        "contacts",
+        "document",
+        "image",
+        "location",
+        "text",
+        "video"
+      ],
+      "x-enumNames": [
+        "Audio",
+        "Contacts",
+        "Document",
+        "Image",
+        "Location",
+        "Text",
+        "Video"
+      ]
+    },
+    "name": {
+      "x-title": "Name",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "messageType": [
+            "contacts"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "data": {
+          "x-title": "Name",
+          "type": "object",
+          "properties": {
+            "formatted_name": {
+              "x-title": "Formatted Name",
+              "default": "",
+              "x-required": true,
+              "type": "string"
+            },
+            "first_name": {
+              "x-title": "First Name",
+              "default": "",
+              "type": "string"
+            },
+            "last_name": {
+              "x-title": "Last Name",
+              "default": "",
+              "type": "string"
+            },
+            "middle_name": {
+              "x-title": "Middle Name",
+              "default": "",
+              "type": "string"
+            },
+            "suffix": {
+              "x-title": "Suffix",
+              "default": "",
+              "type": "string"
+            },
+            "prefix": {
+              "x-title": "Prefix",
+              "default": "",
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "media"
+          ],
+          "operation": [
+            "mediaUpload"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "mediaFileName": {
+          "x-title": "Filename",
+          "description": "The name to use for the file",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "longitude": {
+      "x-title": "Longitude",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "send"
+          ],
+          "messageType": [
+            "location"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number",
+      "minimum": -180,
+      "maximum": 180
+    },
+    "latitude": {
+      "x-title": "Latitude",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "send"
+          ],
+          "messageType": [
+            "location"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number",
+      "minimum": -90,
+      "maximum": 90
+    },
+    "textBody": {
+      "x-title": "Text Body",
+      "description": "The body of the message (max 4096 characters)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "send"
+          ],
+          "messageType": [
+            "text"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "mediaPath": {
+      "x-title": "Take Video From",
+      "description": "Use a link, an ID, or n8n to upload a video",
+      "default": "useMediaLink",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "messageType": [
+            "video"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "useMediaLink",
+        "useMediaId",
+        "useMedian8n"
+      ],
+      "x-enumNames": [
+        "Link",
+        "WhatsApp Media",
+        "n8n"
+      ],
+      "x-enumDescriptions": [
+        "When using a link, WhatsApp will download the video, saving you the step of uploading video yourself",
+        "You can use an ID if you have already uploaded the video to WhatsApp",
+        "Upload a binary file on the item being processed in n8n"
+      ]
+    },
+    "mediaLink": {
+      "x-title": "Link",
+      "description": "Link of the media to be sent",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "messageType": [
+            "image",
+            "video",
+            "audio",
+            "sticker",
+            "document"
+          ],
+          "mediaPath": [
+            "useMediaLink"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "mediaId": {
+      "x-title": "ID",
+      "description": "ID of the media to be sent",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "messageType": [
+            "image",
+            "video",
+            "audio",
+            "sticker",
+            "document"
+          ],
+          "mediaPath": [
+            "useMediaId"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "mediaPropertyName": {
+      "x-title": "Property Name",
+      "description": "Name of the binary property which contains the data for the file to be uploaded",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "mediaUpload"
+          ],
+          "resource": [
+            "media"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "mediaFilename": {
+      "x-title": "Filename",
+      "description": "The name of the file (required when using a file ID)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "messageType": [
+            "document"
+          ],
+          "mediaPath": [
+            "useMediaId"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "template": {
+      "x-title": "Template",
+      "description": "Name of the template",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "sendTemplate"
+          ],
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "components": {
+      "x-title": "Components",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "sendTemplate"
+          ],
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "component": {
+          "x-title": "Component",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "x-title": "Type",
+                "default": "body",
+                "type": "string",
+                "enum": [
+                  "body",
+                  "button",
+                  "header"
+                ],
+                "x-enumNames": [
+                  "Body",
+                  "Button",
+                  "Header"
+                ]
+              },
+              "bodyParameters": {
+                "x-title": "Parameters",
+                "default": {},
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "body"
+                    ]
+                  }
+                },
+                "type": "object",
+                "properties": {
+                  "parameter": {
+                    "x-title": "Parameter",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "x-title": "Type",
+                          "default": "text",
+                          "type": "string",
+                          "enum": [
+                            "text",
+                            "currency",
+                            "date_time"
+                          ],
+                          "x-enumNames": [
+                            "Text",
+                            "Currency",
+                            "Date Time"
+                          ]
+                        },
+                        "text": {
+                          "x-title": "Text",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "type": [
+                                "text"
+                              ]
+                            }
+                          },
+                          "type": "string"
+                        },
+                        "code": {
+                          "x-title": "Currency Code",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "type": [
+                                "currency"
+                              ]
+                            }
+                          },
+                          "type": "string",
+                          "enum": [
+                            "AED",
+                            "AFN",
+                            "ALL",
+                            "AMD",
+                            "ANG",
+                            "AOA",
+                            "ARS",
+                            "AUD",
+                            "AWG",
+                            "AZN",
+                            "BAM",
+                            "BBD",
+                            "BDT",
+                            "BGN",
+                            "BHD",
+                            "BIF",
+                            "BMD",
+                            "BND",
+                            "BOB",
+                            "BOV",
+                            "BRL",
+                            "BSD",
+                            "BTN",
+                            "BWP",
+                            "BYN",
+                            "BZD",
+                            "CAD",
+                            "CDF",
+                            "CHE",
+                            "CHF",
+                            "CHW",
+                            "CLF",
+                            "CLP",
+                            "CNY",
+                            "COP",
+                            "COU",
+                            "CRC",
+                            "CUC",
+                            "CUP",
+                            "CVE",
+                            "CZK",
+                            "DJF",
+                            "DKK",
+                            "DOP",
+                            "DZD",
+                            "EGP",
+                            "ERN",
+                            "ETB",
+                            "EUR",
+                            "FJD",
+                            "FKP",
+                            "GBP",
+                            "GEL",
+                            "GHS",
+                            "GIP",
+                            "GMD",
+                            "GNF",
+                            "GTQ",
+                            "GYD",
+                            "HKD",
+                            "HNL",
+                            "HRK",
+                            "HTG",
+                            "HUF",
+                            "IDR",
+                            "ILS",
+                            "INR",
+                            "IQD",
+                            "IRR",
+                            "ISK",
+                            "JMD",
+                            "JOD",
+                            "JPY",
+                            "KES",
+                            "KGS",
+                            "KHR",
+                            "KMF",
+                            "KPW",
+                            "KRW",
+                            "KWD",
+                            "KYD",
+                            "KZT",
+                            "LAK",
+                            "LBP",
+                            "LKR",
+                            "LRD",
+                            "LSL",
+                            "LYD",
+                            "MAD",
+                            "MDL",
+                            "MGA",
+                            "MKD",
+                            "MMK",
+                            "MNT",
+                            "MOP",
+                            "MRU",
+                            "MUR",
+                            "MVR",
+                            "MWK",
+                            "MXN",
+                            "MXV",
+                            "MYR",
+                            "MZN",
+                            "NAD",
+                            "NGN",
+                            "NIO",
+                            "NOK",
+                            "NPR",
+                            "NZD",
+                            "OMR",
+                            "PAB",
+                            "PEN",
+                            "PGK",
+                            "PHP",
+                            "PKR",
+                            "PLN",
+                            "PYG",
+                            "QAR",
+                            "RON",
+                            "RSD",
+                            "RUB",
+                            "RWF",
+                            "SAR",
+                            "SBD",
+                            "SCR",
+                            "SDG",
+                            "SEK",
+                            "SGD",
+                            "SHP",
+                            "SLL",
+                            "SOS",
+                            "SRD",
+                            "SSP",
+                            "STN",
+                            "SVC",
+                            "SYP",
+                            "SZL",
+                            "THB",
+                            "TJS",
+                            "TMT",
+                            "TND",
+                            "TOP",
+                            "TRY",
+                            "TTD",
+                            "TWD",
+                            "TZS",
+                            "UAH",
+                            "UGX",
+                            "USD",
+                            "USN",
+                            "UYI",
+                            "UYU",
+                            "UYW",
+                            "UZS",
+                            "VES",
+                            "VND",
+                            "VUV",
+                            "WST",
+                            "XAF",
+                            "XAG",
+                            "XAU",
+                            "XBA",
+                            "XBB",
+                            "XBC",
+                            "XBD",
+                            "XCD",
+                            "XDR",
+                            "XOF",
+                            "XPD",
+                            "XPF",
+                            "XPT",
+                            "XSU",
+                            "XTS",
+                            "XUA",
+                            "XXX",
+                            "YER",
+                            "ZAR",
+                            "ZMW",
+                            "ZWL"
+                          ],
+                          "x-enumNames": [
+                            "AED - UAE Dirham",
+                            "AFN - Afghani",
+                            "ALL - Lek",
+                            "AMD - Armenian Dram",
+                            "ANG - Netherlands Antillean Guilder",
+                            "AOA - Kwanza",
+                            "ARS - Argentine Peso",
+                            "AUD - Australian Dollar",
+                            "AWG - Aruban Florin",
+                            "AZN - Azerbaijan Manat",
+                            "BAM - Convertible Mark",
+                            "BBD - Barbados Dollar",
+                            "BDT - Taka",
+                            "BGN - Bulgarian Lev",
+                            "BHD - Bahraini Dinar",
+                            "BIF - Burundi Franc",
+                            "BMD - Bermudian Dollar",
+                            "BND - Brunei Dollar",
+                            "BOB - Boliviano",
+                            "BOV - Mvdol",
+                            "BRL - Brazilian Real",
+                            "BSD - Bahamian Dollar",
+                            "BTN - Ngultrum",
+                            "BWP - Pula",
+                            "BYN - Belarusian Ruble",
+                            "BZD - Belize Dollar",
+                            "CAD - Canadian Dollar",
+                            "CDF - Congolese Franc",
+                            "CHE - WIR Euro",
+                            "CHF - Swiss Franc",
+                            "CHW - WIR Franc",
+                            "CLF - Unidad de Fomento",
+                            "CLP - Chilean Peso",
+                            "CNY - Yuan Renminbi",
+                            "COP - Colombian Peso",
+                            "COU - Unidad de Valor Real",
+                            "CRC - Costa Rican Colon",
+                            "CUC - Peso Convertible",
+                            "CUP - Cuban Peso",
+                            "CVE - Cabo Verde Escudo",
+                            "CZK - Czech Koruna",
+                            "DJF - Djibouti Franc",
+                            "DKK - Danish Krone",
+                            "DOP - Dominican Peso",
+                            "DZD - Algerian Dinar",
+                            "EGP - Egyptian Pound",
+                            "ERN - Nakfa",
+                            "ETB - Ethiopian Birr",
+                            "EUR - Euro",
+                            "FJD - Fiji Dollar",
+                            "FKP - Falkland Islands Pound",
+                            "GBP - Pound Sterling",
+                            "GEL - Lari",
+                            "GHS - Ghana Cedi",
+                            "GIP - Gibraltar Pound",
+                            "GMD - Dalasi",
+                            "GNF - Guinean Franc",
+                            "GTQ - Quetzal",
+                            "GYD - Guyana Dollar",
+                            "HKD - Hong Kong Dollar",
+                            "HNL - Lempira",
+                            "HRK - Kuna",
+                            "HTG - Gourde",
+                            "HUF - Forint",
+                            "IDR - Rupiah",
+                            "ILS - New Israeli Sheqel",
+                            "INR - Indian Rupee",
+                            "IQD - Iraqi Dinar",
+                            "IRR - Iranian Rial",
+                            "ISK - Iceland Krona",
+                            "JMD - Jamaican Dollar",
+                            "JOD - Jordanian Dinar",
+                            "JPY - Yen",
+                            "KES - Kenyan Shilling",
+                            "KGS - Som",
+                            "KHR - Riel",
+                            "KMF - Comorian Franc ",
+                            "KPW - North Korean Won",
+                            "KRW - Won",
+                            "KWD - Kuwaiti Dinar",
+                            "KYD - Cayman Islands Dollar",
+                            "KZT - Tenge",
+                            "LAK - Lao Kip",
+                            "LBP - Lebanese Pound",
+                            "LKR - Sri Lanka Rupee",
+                            "LRD - Liberian Dollar",
+                            "LSL - Loti",
+                            "LYD - Libyan Dinar",
+                            "MAD - Moroccan Dirham",
+                            "MDL - Moldovan Leu",
+                            "MGA - Malagasy Ariary",
+                            "MKD - Denar",
+                            "MMK - Kyat",
+                            "MNT - Tugrik",
+                            "MOP - Pataca",
+                            "MRU - Ouguiya",
+                            "MUR - Mauritius Rupee",
+                            "MVR - Rufiyaa",
+                            "MWK - Malawi Kwacha",
+                            "MXN - Mexican Peso",
+                            "MXV - Mexican Unidad de Inversion (UDI)",
+                            "MYR - Malaysian Ringgit",
+                            "MZN - Mozambique Metical",
+                            "NAD - Namibia Dollar",
+                            "NGN - Naira",
+                            "NIO - Cordoba Oro",
+                            "NOK - Norwegian Krone",
+                            "NPR - Nepalese Rupee",
+                            "NZD - New Zealand Dollar",
+                            "OMR - Rial Omani",
+                            "PAB - Balboa",
+                            "PEN - Sol",
+                            "PGK - Kina",
+                            "PHP - Philippine Peso",
+                            "PKR - Pakistan Rupee",
+                            "PLN - Zloty",
+                            "PYG - Guarani",
+                            "QAR - Qatari Rial",
+                            "RON - Romanian Leu",
+                            "RSD - Serbian Dinar",
+                            "RUB - Russian Ruble",
+                            "RWF - Rwanda Franc",
+                            "SAR - Saudi Riyal",
+                            "SBD - Solomon Islands Dollar",
+                            "SCR - Seychelles Rupee",
+                            "SDG - Sudanese Pound",
+                            "SEK - Swedish Krona",
+                            "SGD - Singapore Dollar",
+                            "SHP - Saint Helena Pound",
+                            "SLL - Leone",
+                            "SOS - Somali Shilling",
+                            "SRD - Surinam Dollar",
+                            "SSP - South Sudanese Pound",
+                            "STN - Dobra",
+                            "SVC - El Salvador Colon",
+                            "SYP - Syrian Pound",
+                            "SZL - Lilangeni",
+                            "THB - Baht",
+                            "TJS - Somoni",
+                            "TMT - Turkmenistan New Manat",
+                            "TND - Tunisian Dinar",
+                            "TOP - Pa’anga",
+                            "TRY - Turkish Lira",
+                            "TTD - Trinidad and Tobago Dollar",
+                            "TWD - New Taiwan Dollar",
+                            "TZS - Tanzanian Shilling",
+                            "UAH - Hryvnia",
+                            "UGX - Uganda Shilling",
+                            "USD - US Dollar",
+                            "USN - US Dollar (Next day)",
+                            "UYI - Uruguay Peso en Unidades Indexadas (UI)",
+                            "UYU - Peso Uruguayo",
+                            "UYW - Unidad Previsional",
+                            "UZS - Uzbekistan Sum",
+                            "VES - Bolívar Soberano",
+                            "VND - Dong",
+                            "VUV - Vatu",
+                            "WST - Tala",
+                            "XAF - CFA Franc BEAC",
+                            "XAG - Silver",
+                            "XAU - Gold",
+                            "XBA - Bond Markets Unit European Composite Unit (EURCO)",
+                            "XBB - Bond Markets Unit European Monetary Unit (E.M.U.-6)",
+                            "XBC - Bond Markets Unit European Unit of Account 9 (E.U.A.-9)",
+                            "XBD - Bond Markets Unit European Unit of Account 17 (E.U.A.-17)",
+                            "XCD - East Caribbean Dollar",
+                            "XDR - SDR (Special Drawing Right)",
+                            "XOF - CFA Franc BCEAO",
+                            "XPD - Palladium",
+                            "XPF - CFP Franc",
+                            "XPT - Platinum",
+                            "XSU - Sucre",
+                            "XTS - Codes specifically reserved for testing purposes",
+                            "XUA - ADB Unit of Account",
+                            "XXX - The codes assigned for transactions where no currency is involved",
+                            "YER - Yemeni Rial",
+                            "ZAR - Rand",
+                            "ZMW - Zambian Kwacha",
+                            "ZWL - Zimbabwe Dollar"
+                          ]
+                        },
+                        "amount_1000": {
+                          "x-title": "Amount",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "type": [
+                                "currency"
+                              ]
+                            }
+                          },
+                          "type": "number"
+                        },
+                        "date_time": {
+                          "x-title": "Date Time",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "type": [
+                                "date_time"
+                              ]
+                            }
+                          },
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "fallback_value": {
+                          "x-title": "Fallback Value",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "type": [
+                                "currency"
+                              ]
+                            }
+                          },
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "sub_type": {
+                "x-title": "Sub Type",
+                "default": "quick_reply",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "button"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "quick_reply",
+                  "url"
+                ],
+                "x-enumNames": [
+                  "Quick Reply",
+                  "URL"
+                ],
+                "x-enumDescriptions": [
+                  "Allows your customer to call a phone number and visit a website",
+                  ""
+                ]
+              },
+              "index": {
+                "x-title": "Index",
+                "default": 0,
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "button"
+                    ]
+                  }
+                },
+                "type": "number",
+                "minimum": 0,
+                "maximum": 2
+              },
+              "buttonParameters": {
+                "x-title": "Parameters",
+                "default": {},
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "button"
+                    ]
+                  }
+                },
+                "type": "object",
+                "properties": {
+                  "parameter": {
+                    "x-title": "Parameter",
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "x-title": "Type",
+                        "default": "payload",
+                        "type": "string",
+                        "enum": [
+                          "payload",
+                          "text"
+                        ],
+                        "x-enumNames": [
+                          "Payload",
+                          "Text"
+                        ]
+                      },
+                      "payload": {
+                        "x-title": "Payload",
+                        "default": "",
+                        "x-displayOptions": {
+                          "show": {
+                            "type": [
+                              "payload"
+                            ]
+                          }
+                        },
+                        "type": "string"
+                      },
+                      "text": {
+                        "x-title": "Text",
+                        "default": "",
+                        "x-displayOptions": {
+                          "show": {
+                            "type": [
+                              "text"
+                            ]
+                          }
+                        },
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "headerParameters": {
+                "x-title": "Parameters",
+                "default": {},
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "header"
+                    ]
+                  }
+                },
+                "type": "object",
+                "properties": {
+                  "parameter": {
+                    "x-title": "Parameter",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "x-title": "Type",
+                          "default": "text",
+                          "type": "string",
+                          "enum": [
+                            "text",
+                            "currency",
+                            "date_time",
+                            "image"
+                          ],
+                          "x-enumNames": [
+                            "Text",
+                            "Currency",
+                            "Date Time",
+                            "Image"
+                          ]
+                        },
+                        "text": {
+                          "x-title": "Text",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "type": [
+                                "text"
+                              ]
+                            }
+                          },
+                          "type": "string"
+                        },
+                        "code": {
+                          "x-title": "Currency Code",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "type": [
+                                "currency"
+                              ]
+                            }
+                          },
+                          "type": "string",
+                          "enum": [
+                            "AED",
+                            "AFN",
+                            "ALL",
+                            "AMD",
+                            "ANG",
+                            "AOA",
+                            "ARS",
+                            "AUD",
+                            "AWG",
+                            "AZN",
+                            "BAM",
+                            "BBD",
+                            "BDT",
+                            "BGN",
+                            "BHD",
+                            "BIF",
+                            "BMD",
+                            "BND",
+                            "BOB",
+                            "BOV",
+                            "BRL",
+                            "BSD",
+                            "BTN",
+                            "BWP",
+                            "BYN",
+                            "BZD",
+                            "CAD",
+                            "CDF",
+                            "CHE",
+                            "CHF",
+                            "CHW",
+                            "CLF",
+                            "CLP",
+                            "CNY",
+                            "COP",
+                            "COU",
+                            "CRC",
+                            "CUC",
+                            "CUP",
+                            "CVE",
+                            "CZK",
+                            "DJF",
+                            "DKK",
+                            "DOP",
+                            "DZD",
+                            "EGP",
+                            "ERN",
+                            "ETB",
+                            "EUR",
+                            "FJD",
+                            "FKP",
+                            "GBP",
+                            "GEL",
+                            "GHS",
+                            "GIP",
+                            "GMD",
+                            "GNF",
+                            "GTQ",
+                            "GYD",
+                            "HKD",
+                            "HNL",
+                            "HRK",
+                            "HTG",
+                            "HUF",
+                            "IDR",
+                            "ILS",
+                            "INR",
+                            "IQD",
+                            "IRR",
+                            "ISK",
+                            "JMD",
+                            "JOD",
+                            "JPY",
+                            "KES",
+                            "KGS",
+                            "KHR",
+                            "KMF",
+                            "KPW",
+                            "KRW",
+                            "KWD",
+                            "KYD",
+                            "KZT",
+                            "LAK",
+                            "LBP",
+                            "LKR",
+                            "LRD",
+                            "LSL",
+                            "LYD",
+                            "MAD",
+                            "MDL",
+                            "MGA",
+                            "MKD",
+                            "MMK",
+                            "MNT",
+                            "MOP",
+                            "MRU",
+                            "MUR",
+                            "MVR",
+                            "MWK",
+                            "MXN",
+                            "MXV",
+                            "MYR",
+                            "MZN",
+                            "NAD",
+                            "NGN",
+                            "NIO",
+                            "NOK",
+                            "NPR",
+                            "NZD",
+                            "OMR",
+                            "PAB",
+                            "PEN",
+                            "PGK",
+                            "PHP",
+                            "PKR",
+                            "PLN",
+                            "PYG",
+                            "QAR",
+                            "RON",
+                            "RSD",
+                            "RUB",
+                            "RWF",
+                            "SAR",
+                            "SBD",
+                            "SCR",
+                            "SDG",
+                            "SEK",
+                            "SGD",
+                            "SHP",
+                            "SLL",
+                            "SOS",
+                            "SRD",
+                            "SSP",
+                            "STN",
+                            "SVC",
+                            "SYP",
+                            "SZL",
+                            "THB",
+                            "TJS",
+                            "TMT",
+                            "TND",
+                            "TOP",
+                            "TRY",
+                            "TTD",
+                            "TWD",
+                            "TZS",
+                            "UAH",
+                            "UGX",
+                            "USD",
+                            "USN",
+                            "UYI",
+                            "UYU",
+                            "UYW",
+                            "UZS",
+                            "VES",
+                            "VND",
+                            "VUV",
+                            "WST",
+                            "XAF",
+                            "XAG",
+                            "XAU",
+                            "XBA",
+                            "XBB",
+                            "XBC",
+                            "XBD",
+                            "XCD",
+                            "XDR",
+                            "XOF",
+                            "XPD",
+                            "XPF",
+                            "XPT",
+                            "XSU",
+                            "XTS",
+                            "XUA",
+                            "XXX",
+                            "YER",
+                            "ZAR",
+                            "ZMW",
+                            "ZWL"
+                          ],
+                          "x-enumNames": [
+                            "AED - UAE Dirham",
+                            "AFN - Afghani",
+                            "ALL - Lek",
+                            "AMD - Armenian Dram",
+                            "ANG - Netherlands Antillean Guilder",
+                            "AOA - Kwanza",
+                            "ARS - Argentine Peso",
+                            "AUD - Australian Dollar",
+                            "AWG - Aruban Florin",
+                            "AZN - Azerbaijan Manat",
+                            "BAM - Convertible Mark",
+                            "BBD - Barbados Dollar",
+                            "BDT - Taka",
+                            "BGN - Bulgarian Lev",
+                            "BHD - Bahraini Dinar",
+                            "BIF - Burundi Franc",
+                            "BMD - Bermudian Dollar",
+                            "BND - Brunei Dollar",
+                            "BOB - Boliviano",
+                            "BOV - Mvdol",
+                            "BRL - Brazilian Real",
+                            "BSD - Bahamian Dollar",
+                            "BTN - Ngultrum",
+                            "BWP - Pula",
+                            "BYN - Belarusian Ruble",
+                            "BZD - Belize Dollar",
+                            "CAD - Canadian Dollar",
+                            "CDF - Congolese Franc",
+                            "CHE - WIR Euro",
+                            "CHF - Swiss Franc",
+                            "CHW - WIR Franc",
+                            "CLF - Unidad de Fomento",
+                            "CLP - Chilean Peso",
+                            "CNY - Yuan Renminbi",
+                            "COP - Colombian Peso",
+                            "COU - Unidad de Valor Real",
+                            "CRC - Costa Rican Colon",
+                            "CUC - Peso Convertible",
+                            "CUP - Cuban Peso",
+                            "CVE - Cabo Verde Escudo",
+                            "CZK - Czech Koruna",
+                            "DJF - Djibouti Franc",
+                            "DKK - Danish Krone",
+                            "DOP - Dominican Peso",
+                            "DZD - Algerian Dinar",
+                            "EGP - Egyptian Pound",
+                            "ERN - Nakfa",
+                            "ETB - Ethiopian Birr",
+                            "EUR - Euro",
+                            "FJD - Fiji Dollar",
+                            "FKP - Falkland Islands Pound",
+                            "GBP - Pound Sterling",
+                            "GEL - Lari",
+                            "GHS - Ghana Cedi",
+                            "GIP - Gibraltar Pound",
+                            "GMD - Dalasi",
+                            "GNF - Guinean Franc",
+                            "GTQ - Quetzal",
+                            "GYD - Guyana Dollar",
+                            "HKD - Hong Kong Dollar",
+                            "HNL - Lempira",
+                            "HRK - Kuna",
+                            "HTG - Gourde",
+                            "HUF - Forint",
+                            "IDR - Rupiah",
+                            "ILS - New Israeli Sheqel",
+                            "INR - Indian Rupee",
+                            "IQD - Iraqi Dinar",
+                            "IRR - Iranian Rial",
+                            "ISK - Iceland Krona",
+                            "JMD - Jamaican Dollar",
+                            "JOD - Jordanian Dinar",
+                            "JPY - Yen",
+                            "KES - Kenyan Shilling",
+                            "KGS - Som",
+                            "KHR - Riel",
+                            "KMF - Comorian Franc ",
+                            "KPW - North Korean Won",
+                            "KRW - Won",
+                            "KWD - Kuwaiti Dinar",
+                            "KYD - Cayman Islands Dollar",
+                            "KZT - Tenge",
+                            "LAK - Lao Kip",
+                            "LBP - Lebanese Pound",
+                            "LKR - Sri Lanka Rupee",
+                            "LRD - Liberian Dollar",
+                            "LSL - Loti",
+                            "LYD - Libyan Dinar",
+                            "MAD - Moroccan Dirham",
+                            "MDL - Moldovan Leu",
+                            "MGA - Malagasy Ariary",
+                            "MKD - Denar",
+                            "MMK - Kyat",
+                            "MNT - Tugrik",
+                            "MOP - Pataca",
+                            "MRU - Ouguiya",
+                            "MUR - Mauritius Rupee",
+                            "MVR - Rufiyaa",
+                            "MWK - Malawi Kwacha",
+                            "MXN - Mexican Peso",
+                            "MXV - Mexican Unidad de Inversion (UDI)",
+                            "MYR - Malaysian Ringgit",
+                            "MZN - Mozambique Metical",
+                            "NAD - Namibia Dollar",
+                            "NGN - Naira",
+                            "NIO - Cordoba Oro",
+                            "NOK - Norwegian Krone",
+                            "NPR - Nepalese Rupee",
+                            "NZD - New Zealand Dollar",
+                            "OMR - Rial Omani",
+                            "PAB - Balboa",
+                            "PEN - Sol",
+                            "PGK - Kina",
+                            "PHP - Philippine Peso",
+                            "PKR - Pakistan Rupee",
+                            "PLN - Zloty",
+                            "PYG - Guarani",
+                            "QAR - Qatari Rial",
+                            "RON - Romanian Leu",
+                            "RSD - Serbian Dinar",
+                            "RUB - Russian Ruble",
+                            "RWF - Rwanda Franc",
+                            "SAR - Saudi Riyal",
+                            "SBD - Solomon Islands Dollar",
+                            "SCR - Seychelles Rupee",
+                            "SDG - Sudanese Pound",
+                            "SEK - Swedish Krona",
+                            "SGD - Singapore Dollar",
+                            "SHP - Saint Helena Pound",
+                            "SLL - Leone",
+                            "SOS - Somali Shilling",
+                            "SRD - Surinam Dollar",
+                            "SSP - South Sudanese Pound",
+                            "STN - Dobra",
+                            "SVC - El Salvador Colon",
+                            "SYP - Syrian Pound",
+                            "SZL - Lilangeni",
+                            "THB - Baht",
+                            "TJS - Somoni",
+                            "TMT - Turkmenistan New Manat",
+                            "TND - Tunisian Dinar",
+                            "TOP - Pa’anga",
+                            "TRY - Turkish Lira",
+                            "TTD - Trinidad and Tobago Dollar",
+                            "TWD - New Taiwan Dollar",
+                            "TZS - Tanzanian Shilling",
+                            "UAH - Hryvnia",
+                            "UGX - Uganda Shilling",
+                            "USD - US Dollar",
+                            "USN - US Dollar (Next day)",
+                            "UYI - Uruguay Peso en Unidades Indexadas (UI)",
+                            "UYU - Peso Uruguayo",
+                            "UYW - Unidad Previsional",
+                            "UZS - Uzbekistan Sum",
+                            "VES - Bolívar Soberano",
+                            "VND - Dong",
+                            "VUV - Vatu",
+                            "WST - Tala",
+                            "XAF - CFA Franc BEAC",
+                            "XAG - Silver",
+                            "XAU - Gold",
+                            "XBA - Bond Markets Unit European Composite Unit (EURCO)",
+                            "XBB - Bond Markets Unit European Monetary Unit (E.M.U.-6)",
+                            "XBC - Bond Markets Unit European Unit of Account 9 (E.U.A.-9)",
+                            "XBD - Bond Markets Unit European Unit of Account 17 (E.U.A.-17)",
+                            "XCD - East Caribbean Dollar",
+                            "XDR - SDR (Special Drawing Right)",
+                            "XOF - CFA Franc BCEAO",
+                            "XPD - Palladium",
+                            "XPF - CFP Franc",
+                            "XPT - Platinum",
+                            "XSU - Sucre",
+                            "XTS - Codes specifically reserved for testing purposes",
+                            "XUA - ADB Unit of Account",
+                            "XXX - The codes assigned for transactions where no currency is involved",
+                            "YER - Yemeni Rial",
+                            "ZAR - Rand",
+                            "ZMW - Zambian Kwacha",
+                            "ZWL - Zimbabwe Dollar"
+                          ]
+                        },
+                        "amount_1000": {
+                          "x-title": "Amount",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "type": [
+                                "currency"
+                              ]
+                            }
+                          },
+                          "type": "number"
+                        },
+                        "date_time": {
+                          "x-title": "Date Time",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "type": [
+                                "date_time"
+                              ]
+                            }
+                          },
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "imageLink": {
+                          "x-title": "Image Link",
+                          "default": "",
+                          "x-displayOptions": {
+                            "show": {
+                              "type": [
+                                "image"
+                              ]
+                            }
+                          },
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "mediaGetId": {
+      "x-title": "Media ID",
+      "description": "The ID of the media",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "mediaUrlGet"
+          ],
+          "resource": [
+            "media"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "mediaDeleteId": {
+      "x-title": "Media ID",
+      "description": "The ID of the media",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "mediaDelete"
+          ],
+          "resource": [
+            "media"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "message": {
+      "x-title": "Message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-rows": 4
+    },
+    "responseType": {
+      "x-title": "Response Type",
+      "default": "approval",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "approval",
+        "freeText",
+        "customForm"
+      ],
+      "x-enumNames": [
+        "Approval",
+        "Free Text",
+        "Custom Form"
+      ],
+      "x-enumDescriptions": [
+        "User can approve/disapprove from within the message",
+        "User can submit a response via a form",
+        "User can submit a response via a custom form"
+      ]
+    },
+    "defineForm": {
+      "x-title": "Define Form",
+      "default": "fields",
+      "x-displayOptions": {
+        "show": {
+          "responseType": [
+            "customForm"
+          ],
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "fields",
+        "json"
+      ],
+      "x-enumNames": [
+        "Using Fields Below",
+        "Using JSON"
+      ]
+    },
+    "jsonOutput": {
+      "x-title": "Form Fields",
+      "default": "[\n  {\n    \"fieldLabel\": \"Name\",\n    \"placeholder\": \"enter your name\",\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Age\",\n    \"fieldType\": \"number\",\n    \"placeholder\": \"enter your age\"\n  },\n  {\n    \"fieldLabel\": \"Email\",\n    \"fieldType\": \"email\",\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Textarea\",\n    \"fieldType\": \"textarea\"\n  },\n  {\n    \"fieldLabel\": \"Dropdown Options\",\n    \"fieldType\": \"dropdown\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    },\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Checkboxes\",\n    \"fieldType\": \"checkbox\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    }\n  },\n  {\n    \"fieldLabel\": \"Radio\",\n    \"fieldType\": \"radio\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    }\n  },\n  {\n    \"fieldLabel\": \"Email\",\n    \"fieldType\": \"email\",\n    \"placeholder\": \"me@mail.con\"\n  },\n  {\n    \"fieldLabel\": \"File\",\n    \"fieldType\": \"file\",\n    \"multipleFiles\": true,\n    \"acceptFileTypes\": \".jpg, .png\"\n  },\n  {\n    \"fieldLabel\": \"Number\",\n    \"fieldType\": \"number\"\n  },\n  {\n    \"fieldLabel\": \"Password\",\n    \"fieldType\": \"password\"\n  }\n]\n",
+      "x-displayOptions": {
+        "show": {
+          "defineForm": [
+            "json"
+          ],
+          "responseType": [
+            "customForm"
+          ],
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "formFields": {
+      "x-title": "Form Elements",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 2.5
+              }
+            }
+          ],
+          "defineForm": [
+            "fields"
+          ],
+          "responseType": [
+            "customForm"
+          ],
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "fieldName": {
+                "x-title": "Custom Field Name",
+                "description": "The name of the field, used in input attributes and referenced by the workflow",
+                "default": "",
+                "x-displayOptions": {
+                  "hide": {
+                    "fieldType": [
+                      "html"
+                    ]
+                  },
+                  "show": {
+                    "@version": [
+                      {
+                        "_cnd": {
+                          "gte": 2.5
+                        }
+                      }
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "fieldLabel": {
+                "x-title": "Field Name",
+                "description": "Label that appears above the input field",
+                "default": "",
+                "x-displayOptions": {
+                  "hide": {
+                    "fieldType": [
+                      "hiddenField",
+                      "html"
+                    ]
+                  },
+                  "show": {
+                    "@version": [
+                      {
+                        "_cnd": {
+                          "lt": 2.4
+                        }
+                      }
+                    ]
+                  }
+                },
+                "x-required": true,
+                "type": "string"
+              },
+              "fieldType": {
+                "x-title": "Element Type",
+                "description": "The type of field to add to the form",
+                "default": "text",
+                "x-required": true,
+                "type": "string",
+                "enum": [
+                  "checkbox",
+                  "html",
+                  "date",
+                  "dropdown",
+                  "email",
+                  "file",
+                  "hiddenField",
+                  "number",
+                  "password",
+                  "radio",
+                  "text",
+                  "textarea"
+                ],
+                "x-enumNames": [
+                  "Checkboxes",
+                  "Custom HTML",
+                  "Date",
+                  "Dropdown",
+                  "Email",
+                  "File",
+                  "Hidden Field",
+                  "Number",
+                  "Password",
+                  "Radio Buttons",
+                  "Text Input",
+                  "Textarea"
+                ]
+              },
+              "elementName": {
+                "x-title": "Element Name",
+                "description": "Optional field. It can be used to include the html in the output.",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "html"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "placeholder": {
+                "x-title": "Placeholder",
+                "description": "Sample text to display inside the field",
+                "default": "",
+                "x-displayOptions": {
+                  "hide": {
+                    "fieldType": [
+                      "dropdown",
+                      "date",
+                      "file",
+                      "html",
+                      "hiddenField",
+                      "radio",
+                      "checkbox"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "defaultValue": {
+                "x-title": "Default Value",
+                "description": "Default value(s) that will be pre-selected. Must match one or multiple of the option labels. Separate multiple pre-selected options with a comma.",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "checkbox"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "fieldValue": {
+                "x-title": "Field Value",
+                "description": "Input value can be set here or will be passed as a query parameter via Field Name if no value is set",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "hiddenField"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "fieldOptions": {
+                "x-title": "Radio Buttons",
+                "default": {
+                  "values": [
+                    {
+                      "option": ""
+                    }
+                  ]
+                },
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "radio"
+                    ]
+                  }
+                },
+                "x-required": true,
+                "type": "object",
+                "properties": {
+                  "values": {
+                    "x-title": "Values",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "option": {
+                          "x-title": "Radio Button Label",
+                          "default": "",
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "multiselect": {
+                "x-title": "Multiple Choice",
+                "description": "Whether to allow the user to select multiple options from the dropdown list",
+                "default": false,
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "dropdown"
+                    ],
+                    "@version": [
+                      {
+                        "_cnd": {
+                          "lt": 2.3
+                        }
+                      }
+                    ]
+                  }
+                },
+                "type": "boolean"
+              },
+              "limitSelection": {
+                "x-title": "Limit Selection",
+                "default": "unlimited",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "checkbox"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "exact",
+                  "range",
+                  "unlimited"
+                ],
+                "x-enumNames": [
+                  "Exact Number",
+                  "Range",
+                  "Unlimited"
+                ]
+              },
+              "numberOfSelections": {
+                "x-title": "Number of Selections",
+                "default": 1,
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "checkbox"
+                    ],
+                    "limitSelection": [
+                      "exact"
+                    ]
+                  }
+                },
+                "type": "number",
+                "minimum": 1,
+                "x-precision": 0
+              },
+              "minSelections": {
+                "x-title": "Minimum Selections",
+                "default": 0,
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "checkbox"
+                    ],
+                    "limitSelection": [
+                      "range"
+                    ]
+                  }
+                },
+                "type": "number",
+                "minimum": 0,
+                "x-precision": 0
+              },
+              "maxSelections": {
+                "x-title": "Maximum Selections",
+                "default": 1,
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "checkbox"
+                    ],
+                    "limitSelection": [
+                      "range"
+                    ]
+                  }
+                },
+                "type": "number",
+                "minimum": 1,
+                "x-precision": 0
+              },
+              "html": {
+                "x-title": "HTML",
+                "description": "HTML elements to display on the form page",
+                "default": "<!-- Your custom HTML here --->\n\n\n",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "html"
+                    ]
+                  }
+                },
+                "type": "string",
+                "x-editor": "htmlEditor"
+              },
+              "multipleFiles": {
+                "x-title": "Multiple Files",
+                "description": "Whether to allow the user to select multiple files from the file input or just one",
+                "default": true,
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "file"
+                    ]
+                  }
+                },
+                "type": "boolean"
+              },
+              "acceptFileTypes": {
+                "x-title": "Accepted File Types",
+                "description": "Comma-separated list of allowed file extensions",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "file"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "requiredField": {
+                "x-title": "Required Field",
+                "description": "Whether to require the user to enter a value for this field before submitting the form",
+                "default": false,
+                "x-displayOptions": {
+                  "hide": {
+                    "fieldType": [
+                      "html",
+                      "hiddenField"
+                    ]
+                  }
+                },
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "approvalOptions": {
+      "x-title": "Approval Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "responseType": [
+            "approval"
+          ],
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "object",
+          "properties": {
+            "approvalType": {
+              "x-title": "Type of Approval",
+              "default": "single",
+              "type": "string",
+              "enum": [
+                "single",
+                "double"
+              ],
+              "x-enumNames": [
+                "Approve Only",
+                "Approve and Disapprove"
+              ]
+            },
+            "approveLabel": {
+              "x-title": "Approve Button Label",
+              "default": "✓ Approve",
+              "x-displayOptions": {
+                "show": {
+                  "approvalType": [
+                    "single",
+                    "double"
+                  ]
+                }
+              },
+              "type": "string"
+            },
+            "disapproveLabel": {
+              "x-title": "Disapprove Button Label",
+              "default": "✗ Decline",
+              "x-displayOptions": {
+                "show": {
+                  "approvalType": [
+                    "double"
+                  ]
+                }
+              },
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "responseType": [
+            "freeText",
+            "customForm"
+          ],
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "messageButtonLabel": {
+          "x-title": "Message Button Label",
+          "default": "Respond",
+          "type": "string"
+        },
+        "responseFormTitle": {
+          "x-title": "Response Form Title",
+          "description": "Title of the form that the user can access to provide their response",
+          "default": "",
+          "type": "string"
+        },
+        "responseFormDescription": {
+          "x-title": "Response Form Description",
+          "description": "Description of the form that the user can access to provide their response",
+          "default": "",
+          "type": "string"
+        },
+        "responseFormButtonLabel": {
+          "x-title": "Response Form Button Label",
+          "default": "Submit",
+          "type": "string"
+        },
+        "responseFormCustomCss": {
+          "x-title": "Response Form Custom Styling",
+          "description": "Override default styling of the response form with CSS",
+          "default": ":root {\n\t--font-family: 'Open Sans', sans-serif;\n\t--font-weight-normal: 400;\n\t--font-weight-bold: 600;\n\t--font-size-body: 12px;\n\t--font-size-label: 14px;\n\t--font-size-test-notice: 12px;\n\t--font-size-input: 14px;\n\t--font-size-header: 20px;\n\t--font-size-paragraph: 14px;\n\t--font-size-link: 12px;\n\t--font-size-error: 12px;\n\t--font-size-html-h1: 28px;\n\t--font-size-html-h2: 20px;\n\t--font-size-html-h3: 16px;\n\t--font-size-html-h4: 14px;\n\t--font-size-html-h5: 12px;\n\t--font-size-html-h6: 10px;\n\t--font-size-subheader: 14px;\n\n\t/* Colors */\n\t--color-background: #fbfcfe;\n\t--color-test-notice-text: #e6a23d;\n\t--color-test-notice-bg: #fefaf6;\n\t--color-test-notice-border: #f6dcb7;\n\t--color-card-bg: #ffffff;\n\t--color-card-border: #dbdfe7;\n\t--color-card-shadow: rgba(99, 77, 255, 0.06);\n\t--color-link: #7e8186;\n\t--color-header: #525356;\n\t--color-label: #555555;\n\t--color-input-border: #dbdfe7;\n\t--color-input-text: #71747A;\n\t--color-focus-border: rgb(90, 76, 194);\n\t--color-submit-btn-bg: #ff6d5a;\n\t--color-submit-btn-text: #ffffff;\n\t--color-error: #ea1f30;\n\t--color-required: #ff6d5a;\n\t--color-clear-button-bg: #7e8186;\n\t--color-html-text: #555;\n\t--color-html-link: #ff6d5a;\n\t--color-header-subtext: #7e8186;\n\n\t/* Border Radii */\n\t--border-radius-card: 8px;\n\t--border-radius-input: 6px;\n\t--border-radius-clear-btn: 50%;\n\t--card-border-radius: 8px;\n\n\t/* Spacing */\n\t--padding-container-top: 24px;\n\t--padding-card: 24px;\n\t--padding-test-notice-vertical: 12px;\n\t--padding-test-notice-horizontal: 24px;\n\t--margin-bottom-card: 16px;\n\t--padding-form-input: 12px;\n\t--card-padding: 24px;\n\t--card-margin-bottom: 16px;\n\n\t/* Dimensions */\n\t--container-width: 448px;\n\t--submit-btn-height: 48px;\n\t--checkbox-size: 18px;\n\n\t/* Others */\n\t--box-shadow-card: 0px 4px 16px 0px var(--color-card-shadow);\n\t--opacity-placeholder: 0.5;\n}",
+          "type": "string",
+          "x-rows": 10,
+          "x-editor": "cssEditor"
+        },
+        "limitWaitTime": {
+          "x-title": "Limit Wait Time",
+          "description": "Whether to limit the time this node should wait for a user response before execution resumes",
+          "default": {
+            "values": {
+              "limitType": "afterTimeInterval",
+              "resumeAmount": 45,
+              "resumeUnit": "minutes"
+            }
+          },
+          "type": "object",
+          "properties": {
+            "values": {
+              "x-title": "Values",
+              "type": "object",
+              "properties": {
+                "limitType": {
+                  "x-title": "Limit Type",
+                  "description": "Sets the condition for the execution to resume. Can be a specified date or after some time.",
+                  "default": "afterTimeInterval",
+                  "type": "string",
+                  "enum": [
+                    "afterTimeInterval",
+                    "atSpecifiedTime"
+                  ],
+                  "x-enumNames": [
+                    "After Time Interval",
+                    "At Specified Time"
+                  ],
+                  "x-enumDescriptions": [
+                    "Waits for a certain amount of time",
+                    "Waits until the set date and time to continue"
+                  ]
+                },
+                "resumeAmount": {
+                  "x-title": "Amount",
+                  "description": "The time to wait",
+                  "default": 1,
+                  "x-displayOptions": {
+                    "show": {
+                      "limitType": [
+                        "afterTimeInterval"
+                      ]
+                    }
+                  },
+                  "type": "number",
+                  "minimum": 0,
+                  "x-precision": 2
+                },
+                "resumeUnit": {
+                  "x-title": "Unit",
+                  "description": "Unit of the interval value",
+                  "default": "hours",
+                  "x-displayOptions": {
+                    "show": {
+                      "limitType": [
+                        "afterTimeInterval"
+                      ]
+                    }
+                  },
+                  "type": "string",
+                  "enum": [
+                    "minutes",
+                    "hours",
+                    "days"
+                  ],
+                  "x-enumNames": [
+                    "Minutes",
+                    "Hours",
+                    "Days"
+                  ]
+                },
+                "maxDateAndTime": {
+                  "x-title": "Max Date and Time",
+                  "description": "Continue execution after the specified date and time",
+                  "default": "",
+                  "x-displayOptions": {
+                    "show": {
+                      "limitType": [
+                        "atSpecifiedTime"
+                      ]
+                    }
+                  },
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          }
+        },
+        "appendAttribution": {
+          "x-title": "Append n8n Attribution",
+          "description": "Whether to include the phrase \"This message was sent automatically with n8n\" to the end of the message",
+          "default": true,
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{ $parameter[\"resource\"] + \": \" + $parameter[\"operation\"] }}",
+  "x-icon": "file:whatsapp.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "whatsAppApi",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

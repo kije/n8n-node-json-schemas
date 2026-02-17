@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Track Time Saved",
+  "description": "Dynamically track time saved based on the workflow’s execution path and the number of items processed",
+  "x-n8n-node-type": "timeSaved",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "organization"
+  ],
+  "type": "object",
+  "properties": {
+    "mode": {
+      "x-title": "Calculation Mode",
+      "default": "once",
+      "type": "string",
+      "enum": [
+        "once",
+        "perItem"
+      ],
+      "x-enumNames": [
+        "Once For All Items",
+        "Per Item"
+      ],
+      "x-enumDescriptions": [
+        "Counts minutes saved once for all input items",
+        "Multiply minutes saved by the number of input items"
+      ]
+    },
+    "minutesSaved": {
+      "x-title": "Minutes Saved",
+      "description": "Number of minutes saved by this workflow execution",
+      "default": 0,
+      "type": "number",
+      "minimum": 0
+    }
+  },
+  "x-icon": "fa:timer",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

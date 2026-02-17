@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Vector Store Retriever",
+  "description": "Use a Vector Store as Retriever",
+  "x-n8n-node-type": "retrieverVectorStore",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "topK": {
+      "x-title": "Limit",
+      "description": "The maximum number of results to return",
+      "default": 4,
+      "type": "number"
+    }
+  },
+  "x-icon": "fa:box-open",
+  "x-inputs": [
+    {
+      "displayName": "Vector Store",
+      "maxConnections": 1,
+      "type": "ai_vectorStore",
+      "required": true
+    }
+  ],
+  "x-outputs": [
+    "ai_retriever"
+  ]
+}

@@ -1,0 +1,141 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Text Classifier",
+  "description": "Classify your text into distinct categories",
+  "x-n8n-node-type": "textClassifier",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "inputText": {
+      "x-title": "Text to Classify",
+      "description": "Use an expression to reference data in previous nodes or enter static text",
+      "default": "",
+      "x-required": true,
+      "type": "string",
+      "x-rows": 2
+    },
+    "categories": {
+      "x-title": "Categories",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "categories": {
+          "x-title": "Categories",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "category": {
+                "x-title": "Category",
+                "description": "Category to add",
+                "default": "",
+                "x-required": true,
+                "type": "string"
+              },
+              "description": {
+                "x-title": "Description",
+                "description": "Describe your category if it's not obvious",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "multiClass": {
+          "x-title": "Allow Multiple Classes To Be True",
+          "default": false,
+          "type": "boolean"
+        },
+        "fallback": {
+          "x-title": "When No Clear Match",
+          "description": "What to do with items that don’t match the categories exactly",
+          "default": "discard",
+          "type": "string",
+          "enum": [
+            "discard",
+            "other"
+          ],
+          "x-enumNames": [
+            "Discard Item",
+            "Output on Extra, 'Other' Branch"
+          ],
+          "x-enumDescriptions": [
+            "Ignore the item and drop it from the output",
+            "Create a separate output branch called 'Other'"
+          ]
+        },
+        "systemPromptTemplate": {
+          "x-title": "System Prompt Template",
+          "description": "String to use directly as the system prompt template",
+          "default": "Please classify the text provided by the user into one of the following categories: {categories}, and use the provided formatting instructions below. Don't explain, and only output the json.",
+          "type": "string",
+          "x-rows": 6
+        },
+        "enableAutoFixing": {
+          "x-title": "Enable Auto-Fixing",
+          "description": "Whether to enable auto-fixing (may trigger an additional LLM call if output is broken)",
+          "default": true,
+          "type": "boolean"
+        },
+        "batching": {
+          "x-title": "Batch Processing",
+          "description": "Batch processing options for rate limiting",
+          "default": {},
+          "x-displayOptions": {
+            "show": {
+              "@version": [
+                {
+                  "_cnd": {
+                    "gte": 1.1
+                  }
+                }
+              ]
+            }
+          },
+          "type": "object",
+          "properties": {
+            "batchSize": {
+              "x-title": "Batch Size",
+              "description": "How many items to process in parallel. This is useful for rate limiting, but might impact the log output ordering.",
+              "default": 5,
+              "type": "number"
+            },
+            "delayBetweenBatches": {
+              "x-title": "Delay Between Batches",
+              "description": "Delay in milliseconds between batches. This is useful for rate limiting.",
+              "default": 0,
+              "type": "number"
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-icon": "fa:tags",
+  "x-inputs": [
+    {
+      "displayName": "",
+      "type": "main"
+    },
+    {
+      "displayName": "Model",
+      "maxConnections": 1,
+      "type": "ai_languageModel",
+      "required": true
+    }
+  ],
+  "x-outputs": "={{((parameters) => {\n    const categories = parameters.categories?.categories ?? [];\n    const fallback = parameters.options?.fallback;\n    const ret = categories.map((cat) => {\n        return { type: 'main', displayName: cat.category };\n    });\n    if (fallback === 'other')\n        ret.push({ type: 'main', displayName: 'Other' });\n    return ret;\n})($parameter)}}"
+}

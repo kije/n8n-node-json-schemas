@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Wikipedia",
+  "description": "Search in Wikipedia",
+  "x-n8n-node-type": "toolWikipedia",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {},
+  "x-icon": "file:wikipedia.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "ai_tool"
+  ]
+}

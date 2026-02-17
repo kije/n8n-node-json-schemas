@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WooCommerce Trigger",
+  "description": "Handle WooCommerce events via webhooks",
+  "x-n8n-node-type": "wooCommerceTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "event": {
+      "x-title": "Event",
+      "description": "Determines which resource events the webhook is triggered for",
+      "default": "",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "coupon.created",
+        "coupon.deleted",
+        "coupon.updated",
+        "customer.created",
+        "customer.deleted",
+        "customer.updated",
+        "order.created",
+        "order.deleted",
+        "order.updated",
+        "product.created",
+        "product.deleted",
+        "product.updated"
+      ],
+      "x-enumNames": [
+        "coupon.created",
+        "coupon.deleted",
+        "coupon.updated",
+        "customer.created",
+        "customer.deleted",
+        "customer.updated",
+        "order.created",
+        "order.deleted",
+        "order.updated",
+        "product.created",
+        "product.deleted",
+        "product.updated"
+      ]
+    }
+  },
+  "x-icon": "file:wooCommerce.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "wooCommerceApi",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

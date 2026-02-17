@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Write Binary File",
+  "description": "Writes a binary file to disk",
+  "x-n8n-node-type": "writeBinaryFile",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "fileName": {
+      "x-title": "File Name",
+      "description": "Path to which the file should be written",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "dataPropertyName": {
+      "x-title": "Property Name",
+      "description": "Name of the binary property which contains the data for the file to be written",
+      "default": "data",
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "append": {
+          "x-title": "Append",
+          "description": "Whether to append to an existing file",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-icon": "fa:file-export",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

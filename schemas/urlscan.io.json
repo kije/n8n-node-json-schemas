@@ -1,0 +1,207 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "urlscan.io",
+  "description": "Provides various utilities for monitoring websites like health checks or screenshots",
+  "x-n8n-node-type": "urlScanIo",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "scan",
+      "type": "string",
+      "enum": [
+        "scan"
+      ],
+      "x-enumNames": [
+        "Scan"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "perform",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "scan"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "get",
+        "getAll",
+        "perform"
+      ],
+      "x-enumNames": [
+        "Get",
+        "Get Many",
+        "Perform"
+      ]
+    },
+    "scanId": {
+      "x-title": "Scan ID",
+      "description": "ID of the scan to retrieve",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "scan"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "scan"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "scan"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "scan"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "query": {
+          "x-title": "Query",
+          "description": "Query using the <a href=\"https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html#query-dsl-query-string-query\">Elastic Search Query String syntax</a>. See <a href=\"https://urlscan.io/docs/search/\">supported fields</a> in the documentation.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "url": {
+      "x-title": "URL",
+      "description": "URL to scan",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "scan"
+          ],
+          "operation": [
+            "perform"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "scan"
+          ],
+          "operation": [
+            "perform"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "customAgent": {
+          "x-title": "Custom Agent",
+          "description": "<code>User-Agent</code> header to set for this scan. Defaults to <code>n8n</code>",
+          "default": "",
+          "type": "string"
+        },
+        "overrideSafety": {
+          "x-title": "Override Safety",
+          "description": "Disable reclassification of URLs with potential PII in them",
+          "default": "",
+          "type": "string"
+        },
+        "referer": {
+          "x-title": "Referer",
+          "description": "HTTP referer to set for this scan",
+          "default": "",
+          "type": "string"
+        },
+        "tags": {
+          "x-title": "Tags",
+          "description": "Comma-separated list of user-defined tags to add to this scan. Limited to 10 tags.",
+          "default": "",
+          "type": "string"
+        },
+        "visibility": {
+          "x-title": "Visibility",
+          "default": "private",
+          "type": "string",
+          "enum": [
+            "private",
+            "public",
+            "unlisted"
+          ],
+          "x-enumNames": [
+            "Private",
+            "Public",
+            "Unlisted"
+          ]
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:urlScanIo.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "urlScanIoApi",
+      "required": true
+    }
+  ]
+}

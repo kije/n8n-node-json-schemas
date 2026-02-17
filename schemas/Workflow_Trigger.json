@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Workflow Trigger",
+  "description": "Triggers based on various lifecycle events, like when a workflow is activated",
+  "x-n8n-node-type": "workflowTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "events": {
+      "x-title": "Events",
+      "description": "Specifies under which conditions an execution should happen:\n\t\t\t\t\t<ul>\n\t\t\t\t\t\t<li><b>Active Workflow Updated</b>: Triggers when this workflow is updated</li>\n\t\t\t\t\t\t<li><b>Workflow Activated</b>: Triggers when this workflow is activated</li>\n\t\t\t\t\t</ul>",
+      "default": [],
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "update",
+          "activate"
+        ]
+      },
+      "x-enumNames": [
+        "Active Workflow Updated",
+        "Workflow Activated"
+      ]
+    }
+  },
+  "x-icon": "fa:network-wired",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ]
+}

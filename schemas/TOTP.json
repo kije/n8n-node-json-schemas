@@ -1,0 +1,92 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TOTP",
+  "description": "Generate a time-based one-time password",
+  "x-n8n-node-type": "totp",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "operation": {
+      "x-title": "Operation",
+      "default": "generateSecret",
+      "type": "string",
+      "enum": [
+        "generateSecret"
+      ],
+      "x-enumNames": [
+        "Generate Secret"
+      ]
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "generateSecret"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "algorithm": {
+          "x-title": "Algorithm",
+          "description": "HMAC hashing algorithm. Defaults to SHA1.",
+          "default": "SHA1",
+          "type": "string",
+          "enum": [
+            "SHA1",
+            "SHA224",
+            "SHA256",
+            "SHA3-224",
+            "SHA3-256",
+            "SHA3-384",
+            "SHA3-512",
+            "SHA384",
+            "SHA512"
+          ],
+          "x-enumNames": [
+            "SHA1",
+            "SHA224",
+            "SHA256",
+            "SHA3-224",
+            "SHA3-256",
+            "SHA3-384",
+            "SHA3-512",
+            "SHA384",
+            "SHA512"
+          ]
+        },
+        "digits": {
+          "x-title": "Digits",
+          "description": "Number of digits in the generated TOTP code. Defaults to 6 digits.",
+          "default": 6,
+          "type": "number"
+        },
+        "period": {
+          "x-title": "Period",
+          "description": "How many seconds the generated TOTP code is valid for. Defaults to 30 seconds.",
+          "default": 30,
+          "type": "number"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{ $parameter[\"operation\"] }}",
+  "x-icon": "fa:fingerprint",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "totpApi",
+      "required": true
+    }
+  ]
+}

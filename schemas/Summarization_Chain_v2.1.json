@@ -1,0 +1,239 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Summarization Chain",
+  "description": "Transforms text into a concise summary",
+  "x-n8n-node-type": "chainSummarization",
+  "x-n8n-version": 2.1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "operationMode": {
+      "x-title": "Data to Summarize",
+      "description": "How to pass data into the summarization chain",
+      "default": "nodeInputJson",
+      "type": "string",
+      "enum": [
+        "nodeInputJson",
+        "nodeInputBinary",
+        "documentLoader"
+      ],
+      "x-enumNames": [
+        "Use Node Input (JSON)",
+        "Use Node Input (Binary)",
+        "Use Document Loader"
+      ],
+      "x-enumDescriptions": [
+        "Summarize the JSON data coming into this node from the previous one",
+        "Summarize the binary data coming into this node from the previous one",
+        "Use a loader sub-node with more configuration options"
+      ]
+    },
+    "chunkingMode": {
+      "x-title": "Chunking Strategy",
+      "description": "Chunk splitting strategy",
+      "default": "simple",
+      "x-displayOptions": {
+        "show": {
+          "/operationMode": [
+            "nodeInputJson",
+            "nodeInputBinary"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "simple",
+        "advanced"
+      ],
+      "x-enumNames": [
+        "Simple (Define Below)",
+        "Advanced"
+      ],
+      "x-enumDescriptions": [
+        "",
+        "Use a splitter sub-node with more configuration options"
+      ]
+    },
+    "chunkSize": {
+      "x-title": "Characters Per Chunk",
+      "description": "Controls the max size (in terms of number of characters) of the final document chunk",
+      "default": 1000,
+      "x-displayOptions": {
+        "show": {
+          "/chunkingMode": [
+            "simple"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "chunkOverlap": {
+      "x-title": "Chunk Overlap (Characters)",
+      "description": "Specifies how much characters overlap there should be between chunks",
+      "default": 200,
+      "x-displayOptions": {
+        "show": {
+          "/chunkingMode": [
+            "simple"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "binaryDataKey": {
+          "x-title": "Input Data Field Name",
+          "description": "The name of the field in the agent or chain’s input that contains the binary file to be processed",
+          "default": "data",
+          "x-displayOptions": {
+            "show": {
+              "/operationMode": [
+                "nodeInputBinary"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "summarizationMethodAndPrompts": {
+          "x-title": "Summarization Method and Prompts",
+          "default": {
+            "values": {
+              "summarizationMethod": "map_reduce",
+              "prompt": "Write a concise summary of the following:\n\n\n\"{text}\"\n\n\nCONCISE SUMMARY:",
+              "combineMapPrompt": "Write a concise summary of the following:\n\n\n\"{text}\"\n\n\nCONCISE SUMMARY:"
+            }
+          },
+          "type": "object",
+          "properties": {
+            "values": {
+              "x-title": "Values",
+              "type": "object",
+              "properties": {
+                "summarizationMethod": {
+                  "x-title": "Summarization Method",
+                  "description": "The type of summarization to run",
+                  "default": "map_reduce",
+                  "type": "string",
+                  "enum": [
+                    "map_reduce",
+                    "refine",
+                    "stuff"
+                  ],
+                  "x-enumNames": [
+                    "Map Reduce (Recommended)",
+                    "Refine",
+                    "Stuff"
+                  ],
+                  "x-enumDescriptions": [
+                    "Summarize each document (or chunk) individually, then summarize those summaries",
+                    "Summarize the first document (or chunk). Then update that summary based on the next document (or chunk), and repeat.",
+                    "Pass all documents (or chunks) at once. Ideal for small datasets."
+                  ]
+                },
+                "combineMapPrompt": {
+                  "x-title": "Individual Summary Prompt",
+                  "default": "Write a concise summary of the following:\n\n\n\"{text}\"\n\n\nCONCISE SUMMARY:",
+                  "x-displayOptions": {
+                    "hide": {
+                      "/options.summarizationMethodAndPrompts.values.summarizationMethod": [
+                        "stuff",
+                        "refine"
+                      ]
+                    }
+                  },
+                  "type": "string",
+                  "x-rows": 9
+                },
+                "prompt": {
+                  "x-title": "Prompt",
+                  "default": "Write a concise summary of the following:\n\n\n\"{text}\"\n\n\nCONCISE SUMMARY:",
+                  "x-displayOptions": {
+                    "hide": {
+                      "/options.summarizationMethodAndPrompts.values.summarizationMethod": [
+                        "refine",
+                        "map_reduce"
+                      ]
+                    }
+                  },
+                  "type": "string",
+                  "x-rows": 9
+                },
+                "refinePrompt": {
+                  "x-title": "Subsequent (Refine) Prompt",
+                  "default": "Your job is to produce a final summary\nWe have provided an existing summary up to a certain point: \"{existing_answer}\"\nWe have the opportunity to refine the existing summary\n(only if needed) with some more context below.\n------------\n\"{text}\"\n------------\n\nGiven the new context, refine the original summary\nIf the context isn't useful, return the original summary.\n\nREFINED SUMMARY:",
+                  "x-displayOptions": {
+                    "hide": {
+                      "/options.summarizationMethodAndPrompts.values.summarizationMethod": [
+                        "stuff",
+                        "map_reduce"
+                      ]
+                    }
+                  },
+                  "type": "string",
+                  "x-rows": 9
+                },
+                "refineQuestionPrompt": {
+                  "x-title": "Initial Prompt",
+                  "default": "Write a concise summary of the following:\n\n\n\"{text}\"\n\n\nCONCISE SUMMARY:",
+                  "x-displayOptions": {
+                    "hide": {
+                      "/options.summarizationMethodAndPrompts.values.summarizationMethod": [
+                        "stuff",
+                        "map_reduce"
+                      ]
+                    }
+                  },
+                  "type": "string",
+                  "x-rows": 9
+                }
+              }
+            }
+          }
+        },
+        "batching": {
+          "x-title": "Batch Processing",
+          "description": "Batch processing options for rate limiting",
+          "default": {},
+          "x-displayOptions": {
+            "show": {
+              "@version": [
+                {
+                  "_cnd": {
+                    "gte": 2.1
+                  }
+                }
+              ]
+            }
+          },
+          "type": "object",
+          "properties": {
+            "batchSize": {
+              "x-title": "Batch Size",
+              "description": "How many items to process in parallel. This is useful for rate limiting, but might impact the log output ordering.",
+              "default": 5,
+              "type": "number"
+            },
+            "delayBetweenBatches": {
+              "x-title": "Delay Between Batches",
+              "description": "Delay in milliseconds between batches. This is useful for rate limiting.",
+              "default": 0,
+              "type": "number"
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-icon": "fa:link",
+  "x-inputs": "={{ ((parameter) => { function getInputs(parameters) {\n    const chunkingMode = parameters?.chunkingMode;\n    const operationMode = parameters?.operationMode;\n    const inputs = [\n        { displayName: '', type: 'main' },\n        {\n            displayName: 'Model',\n            maxConnections: 1,\n            type: 'ai_languageModel',\n            required: true,\n        },\n    ];\n    if (operationMode === 'documentLoader') {\n        inputs.push({\n            displayName: 'Document',\n            type: 'ai_document',\n            required: true,\n            maxConnections: 1,\n        });\n        return inputs;\n    }\n    if (chunkingMode === 'advanced') {\n        inputs.push({\n            displayName: 'Text Splitter',\n            type: 'ai_textSplitter',\n            required: false,\n            maxConnections: 1,\n        });\n        return inputs;\n    }\n    return inputs;\n}; return getInputs(parameter) })($parameter) }}",
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": []
+}

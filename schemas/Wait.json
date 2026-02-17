@@ -1,0 +1,828 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Wait",
+  "description": "Wait before continue with execution",
+  "x-n8n-node-type": "wait",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "organization"
+  ],
+  "type": "object",
+  "properties": {
+    "resume": {
+      "x-title": "Resume",
+      "description": "Determines the waiting mode to use before the workflow continues",
+      "default": "timeInterval",
+      "type": "string",
+      "enum": [
+        "timeInterval",
+        "specificTime",
+        "webhook",
+        "form"
+      ],
+      "x-enumNames": [
+        "After Time Interval",
+        "At Specified Time",
+        "On Webhook Call",
+        "On Form Submitted"
+      ],
+      "x-enumDescriptions": [
+        "Waits for a certain amount of time",
+        "Waits until a specific date and time to continue",
+        "Waits for a webhook call before continuing",
+        "Waits for a form submission before continuing"
+      ]
+    },
+    "incomingAuthentication": {
+      "x-title": "Authentication",
+      "description": "If and how incoming resume-webhook-requests to $execution.resumeUrl should be authenticated for additional security",
+      "default": "none",
+      "x-displayOptions": {
+        "show": {
+          "resume": [
+            "webhook"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "basicAuth",
+        "headerAuth",
+        "jwtAuth",
+        "none"
+      ],
+      "x-enumNames": [
+        "Basic Auth",
+        "Header Auth",
+        "JWT Auth",
+        "None"
+      ]
+    },
+    "dateTime": {
+      "x-title": "Date and Time",
+      "description": "The date and time to wait for before continuing",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resume": [
+            "specificTime"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "amount": {
+      "x-title": "Wait Amount",
+      "description": "The time to wait",
+      "default": 5,
+      "x-displayOptions": {
+        "show": {
+          "resume": [
+            "timeInterval"
+          ]
+        },
+        "hide": {
+          "@version": [
+            1
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 0,
+      "x-precision": 2
+    },
+    "unit": {
+      "x-title": "Wait Unit",
+      "description": "The time unit of the Wait Amount value",
+      "default": "seconds",
+      "x-displayOptions": {
+        "show": {
+          "resume": [
+            "timeInterval"
+          ]
+        },
+        "hide": {
+          "@version": [
+            1
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "seconds",
+        "minutes",
+        "hours",
+        "days"
+      ],
+      "x-enumNames": [
+        "Seconds",
+        "Minutes",
+        "Hours",
+        "Days"
+      ]
+    },
+    "formTitle": {
+      "x-title": "Form Title",
+      "description": "Shown at the top of the form",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resume": [
+            "form"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "formDescription": {
+      "x-title": "Form Description",
+      "description": "Shown underneath the Form Title. Can be used to prompt the user on how to complete the form. Accepts HTML. Does not accept <code>&lt;script&gt;</code>, <code>&lt;style&gt;</code> or <code>&lt;input&gt;</code> tags.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resume": [
+            "form"
+          ]
+        }
+      },
+      "type": "string",
+      "x-rows": 2
+    },
+    "formFields": {
+      "x-title": "Form Elements",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resume": [
+            "form"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "fieldName": {
+                "x-title": "Custom Field Name",
+                "description": "The name of the field, used in input attributes and referenced by the workflow",
+                "default": "",
+                "x-displayOptions": {
+                  "hide": {
+                    "fieldType": [
+                      "html"
+                    ]
+                  },
+                  "show": {
+                    "@version": [
+                      {
+                        "_cnd": {
+                          "gte": 2.5
+                        }
+                      }
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "fieldLabel": {
+                "x-title": "Field Name",
+                "description": "Label that appears above the input field",
+                "default": "",
+                "x-displayOptions": {
+                  "hide": {
+                    "fieldType": [
+                      "hiddenField",
+                      "html"
+                    ]
+                  },
+                  "show": {
+                    "@version": [
+                      {
+                        "_cnd": {
+                          "lt": 2.4
+                        }
+                      }
+                    ]
+                  }
+                },
+                "x-required": true,
+                "type": "string"
+              },
+              "fieldType": {
+                "x-title": "Element Type",
+                "description": "The type of field to add to the form",
+                "default": "text",
+                "x-required": true,
+                "type": "string",
+                "enum": [
+                  "checkbox",
+                  "html",
+                  "date",
+                  "dropdown",
+                  "email",
+                  "file",
+                  "hiddenField",
+                  "number",
+                  "password",
+                  "radio",
+                  "text",
+                  "textarea"
+                ],
+                "x-enumNames": [
+                  "Checkboxes",
+                  "Custom HTML",
+                  "Date",
+                  "Dropdown",
+                  "Email",
+                  "File",
+                  "Hidden Field",
+                  "Number",
+                  "Password",
+                  "Radio Buttons",
+                  "Text Input",
+                  "Textarea"
+                ]
+              },
+              "elementName": {
+                "x-title": "Element Name",
+                "description": "Optional field. It can be used to include the html in the output.",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "html"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "placeholder": {
+                "x-title": "Placeholder",
+                "description": "Sample text to display inside the field",
+                "default": "",
+                "x-displayOptions": {
+                  "hide": {
+                    "fieldType": [
+                      "dropdown",
+                      "date",
+                      "file",
+                      "html",
+                      "hiddenField",
+                      "radio",
+                      "checkbox"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "defaultValue": {
+                "x-title": "Default Value",
+                "description": "Default value(s) that will be pre-selected. Must match one or multiple of the option labels. Separate multiple pre-selected options with a comma.",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "checkbox"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "fieldValue": {
+                "x-title": "Field Value",
+                "description": "Input value can be set here or will be passed as a query parameter via Field Name if no value is set",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "hiddenField"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "fieldOptions": {
+                "x-title": "Radio Buttons",
+                "default": {
+                  "values": [
+                    {
+                      "option": ""
+                    }
+                  ]
+                },
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "radio"
+                    ]
+                  }
+                },
+                "x-required": true,
+                "type": "object",
+                "properties": {
+                  "values": {
+                    "x-title": "Values",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "option": {
+                          "x-title": "Radio Button Label",
+                          "default": "",
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "multiselect": {
+                "x-title": "Multiple Choice",
+                "description": "Whether to allow the user to select multiple options from the dropdown list",
+                "default": false,
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "dropdown"
+                    ],
+                    "@version": [
+                      {
+                        "_cnd": {
+                          "lt": 2.3
+                        }
+                      }
+                    ]
+                  }
+                },
+                "type": "boolean"
+              },
+              "limitSelection": {
+                "x-title": "Limit Selection",
+                "default": "unlimited",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "checkbox"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "exact",
+                  "range",
+                  "unlimited"
+                ],
+                "x-enumNames": [
+                  "Exact Number",
+                  "Range",
+                  "Unlimited"
+                ]
+              },
+              "numberOfSelections": {
+                "x-title": "Number of Selections",
+                "default": 1,
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "checkbox"
+                    ],
+                    "limitSelection": [
+                      "exact"
+                    ]
+                  }
+                },
+                "type": "number",
+                "minimum": 1,
+                "x-precision": 0
+              },
+              "minSelections": {
+                "x-title": "Minimum Selections",
+                "default": 0,
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "checkbox"
+                    ],
+                    "limitSelection": [
+                      "range"
+                    ]
+                  }
+                },
+                "type": "number",
+                "minimum": 0,
+                "x-precision": 0
+              },
+              "maxSelections": {
+                "x-title": "Maximum Selections",
+                "default": 1,
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "checkbox"
+                    ],
+                    "limitSelection": [
+                      "range"
+                    ]
+                  }
+                },
+                "type": "number",
+                "minimum": 1,
+                "x-precision": 0
+              },
+              "html": {
+                "x-title": "HTML",
+                "description": "HTML elements to display on the form page",
+                "default": "<!-- Your custom HTML here --->\n\n\n",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "html"
+                    ]
+                  }
+                },
+                "type": "string",
+                "x-editor": "htmlEditor"
+              },
+              "multipleFiles": {
+                "x-title": "Multiple Files",
+                "description": "Whether to allow the user to select multiple files from the file input or just one",
+                "default": true,
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "file"
+                    ]
+                  }
+                },
+                "type": "boolean"
+              },
+              "acceptFileTypes": {
+                "x-title": "Accepted File Types",
+                "description": "Comma-separated list of allowed file extensions",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "file"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "requiredField": {
+                "x-title": "Required Field",
+                "description": "Whether to require the user to enter a value for this field before submitting the form",
+                "default": false,
+                "x-displayOptions": {
+                  "hide": {
+                    "fieldType": [
+                      "html",
+                      "hiddenField"
+                    ]
+                  }
+                },
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responseMode": {
+      "x-title": "Respond",
+      "description": "When and how to respond to the webhook",
+      "default": "onReceived",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            1,
+            1.1,
+            2
+          ],
+          "resume": [
+            "webhook"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "onReceived",
+        "lastNode",
+        "responseNode"
+      ],
+      "x-enumNames": [
+        "Immediately",
+        "When Last Node Finishes",
+        "Using 'Respond to Webhook' Node"
+      ],
+      "x-enumDescriptions": [
+        "As soon as this node executes",
+        "Returns data of the last-executed node",
+        "Response defined in that node"
+      ]
+    },
+    "httpMethod": {
+      "x-title": "HTTP Method",
+      "description": "The HTTP method of the Webhook call",
+      "default": "GET",
+      "x-displayOptions": {
+        "show": {
+          "resume": [
+            "webhook"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "DELETE",
+        "GET",
+        "HEAD",
+        "PATCH",
+        "POST",
+        "PUT"
+      ],
+      "x-enumNames": [
+        "DELETE",
+        "GET",
+        "HEAD",
+        "PATCH",
+        "POST",
+        "PUT"
+      ]
+    },
+    "responseCode": {
+      "x-title": "Response Code",
+      "description": "The HTTP Response code to return",
+      "default": 200,
+      "x-displayOptions": {
+        "hide": {
+          "responseMode": [
+            "responseNode"
+          ]
+        },
+        "show": {
+          "resume": [
+            "webhook"
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 100,
+      "maximum": 599
+    },
+    "responseData": {
+      "x-title": "Response Data",
+      "description": "What data should be returned. If it should return all items as an array or only the first item as object.",
+      "default": "firstEntryJson",
+      "x-displayOptions": {
+        "show": {
+          "responseMode": [
+            "lastNode"
+          ],
+          "resume": [
+            "webhook"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "allEntries",
+        "firstEntryJson",
+        "firstEntryBinary",
+        "noData"
+      ],
+      "x-enumNames": [
+        "All Entries",
+        "First Entry JSON",
+        "First Entry Binary",
+        "No Response Body"
+      ],
+      "x-enumDescriptions": [
+        "Returns all the entries of the last node. Always returns an array.",
+        "Returns the JSON data of the first entry of the last node. Always returns a JSON object.",
+        "Returns the binary data of the first entry of the last node. Always returns a binary file.",
+        "Returns without a body"
+      ]
+    },
+    "responseBinaryPropertyName": {
+      "x-title": "Property Name",
+      "description": "Name of the binary property to return",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "responseData": [
+            "firstEntryBinary"
+          ],
+          "resume": [
+            "webhook"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "limitWaitTime": {
+      "x-title": "Limit Wait Time",
+      "description": "Whether to limit the time this node should wait for a user response before execution resumes",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resume": [
+            "webhook",
+            "form"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limitType": {
+      "x-title": "Limit Type",
+      "description": "Sets the condition for the execution to resume. Can be a specified date or after some time.",
+      "default": "afterTimeInterval",
+      "x-displayOptions": {
+        "show": {
+          "limitWaitTime": [
+            true
+          ],
+          "resume": [
+            "webhook",
+            "form"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "afterTimeInterval",
+        "atSpecifiedTime"
+      ],
+      "x-enumNames": [
+        "After Time Interval",
+        "At Specified Time"
+      ],
+      "x-enumDescriptions": [
+        "Waits for a certain amount of time",
+        "Waits until the set date and time to continue"
+      ]
+    },
+    "resumeAmount": {
+      "x-title": "Amount",
+      "description": "The time to wait",
+      "default": 1,
+      "x-displayOptions": {
+        "show": {
+          "limitType": [
+            "afterTimeInterval"
+          ],
+          "limitWaitTime": [
+            true
+          ],
+          "resume": [
+            "webhook",
+            "form"
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 0,
+      "x-precision": 2
+    },
+    "resumeUnit": {
+      "x-title": "Unit",
+      "description": "Unit of the interval value",
+      "default": "hours",
+      "x-displayOptions": {
+        "show": {
+          "limitType": [
+            "afterTimeInterval"
+          ],
+          "limitWaitTime": [
+            true
+          ],
+          "resume": [
+            "webhook",
+            "form"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "seconds",
+        "minutes",
+        "hours",
+        "days"
+      ],
+      "x-enumNames": [
+        "Seconds",
+        "Minutes",
+        "Hours",
+        "Days"
+      ]
+    },
+    "maxDateAndTime": {
+      "x-title": "Max Date and Time",
+      "description": "Continue execution after the specified date and time",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "limitType": [
+            "atSpecifiedTime"
+          ],
+          "limitWaitTime": [
+            true
+          ],
+          "resume": [
+            "webhook",
+            "form"
+          ]
+        }
+      },
+      "type": "string",
+      "format": "date-time"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resume": [
+            "form"
+          ]
+        },
+        "hide": {
+          "responseMode": [
+            "onReceived",
+            "lastNode"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "appendAttribution": {
+          "x-title": "Append n8n Attribution",
+          "description": "Whether to include the link “Form automated with n8n” at the bottom of the form",
+          "default": true,
+          "type": "boolean"
+        },
+        "webhookSuffix": {
+          "x-title": "Webhook Suffix",
+          "description": "This suffix path will be appended to the restart URL. Helpful when using multiple wait nodes.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-icon": "fa:pause-circle",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "httpBasicAuth",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "incomingAuthentication": [
+            "basicAuth"
+          ]
+        }
+      }
+    },
+    {
+      "name": "httpHeaderAuth",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "incomingAuthentication": [
+            "headerAuth"
+          ]
+        }
+      }
+    },
+    {
+      "name": "jwtAuth",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "incomingAuthentication": [
+            "jwtAuth"
+          ]
+        }
+      }
+    }
+  ],
+  "x-webhooks": "true"
+}

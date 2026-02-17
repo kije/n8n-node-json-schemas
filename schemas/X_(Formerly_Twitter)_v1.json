@@ -1,0 +1,203 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "X (Formerly Twitter)",
+  "description": "Consume Twitter API",
+  "x-n8n-node-type": "twitter",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "tweet",
+      "type": "string",
+      "enum": [
+        "directMessage",
+        "tweet"
+      ],
+      "x-enumNames": [
+        "Direct Message",
+        "Tweet"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "tweet"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "like",
+        "retweet",
+        "search"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Like",
+        "Retweet",
+        "Search"
+      ],
+      "x-enumDescriptions": [
+        "Create or reply a tweet",
+        "Delete a tweet",
+        "Like a tweet",
+        "Retweet a tweet",
+        "Search tweets"
+      ]
+    },
+    "userId": {
+      "x-title": "User ID",
+      "description": "The ID of the user who should receive the direct message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "directMessage"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "text": {
+      "x-title": "Text",
+      "description": "The text of the status update. URL encode as necessary. t.co link wrapping will affect character counts.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "tweet"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "retweet"
+          ],
+          "resource": [
+            "tweet"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "trimUser": {
+          "x-title": "Trim User",
+          "description": "Whether each tweet returned in a timeline will include a user object including only the status authors numerical ID",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "tweetId": {
+      "x-title": "Tweet ID",
+      "description": "The ID of the tweet",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "retweet"
+          ],
+          "resource": [
+            "tweet"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "searchText": {
+      "x-title": "Search Text",
+      "description": "A UTF-8, URL-encoded search query of 500 characters maximum, including operators. Queries may additionally be limited by complexity. Check the searching examples <a href=\"https://developer.twitter.com/en/docs/tweets/search/guides/standard-operators\">here</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "tweet"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "tweet"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "tweet"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \":\" + $parameter[\"resource\"]}}",
+  "x-icon": {
+    "light": "file:x.svg",
+    "dark": "file:x.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "twitterOAuth1Api",
+      "required": true
+    }
+  ]
+}

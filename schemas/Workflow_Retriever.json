@@ -1,0 +1,211 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Workflow Retriever",
+  "description": "Use an n8n Workflow as Retriever",
+  "x-n8n-node-type": "retrieverWorkflow",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "source": {
+      "x-title": "Source",
+      "description": "Where to get the workflow to execute from",
+      "default": "database",
+      "type": "string",
+      "enum": [
+        "database",
+        "parameter"
+      ],
+      "x-enumNames": [
+        "Database",
+        "Parameter"
+      ],
+      "x-enumDescriptions": [
+        "Load the workflow from the database by ID",
+        "Load the workflow from a parameter"
+      ]
+    },
+    "workflowId": {
+      "x-title": "Workflow",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "database"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.1
+              }
+            }
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-n8n-type": "workflowSelector"
+    },
+    "workflowJson": {
+      "x-title": "Workflow JSON",
+      "description": "The workflow JSON code to execute",
+      "default": "\n\n\n",
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "parameter"
+          ]
+        }
+      },
+      "x-required": true,
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "fields": {
+      "x-title": "Workflow Values",
+      "description": "Set the values which should be made available in the workflow",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Name",
+                "description": "Name of the field to set the value of. Supports dot-notation. Example: data.person[0].name.",
+                "default": "",
+                "type": "string"
+              },
+              "type": {
+                "x-title": "Type",
+                "description": "The field value type",
+                "default": "stringValue",
+                "type": "string",
+                "enum": [
+                  "stringValue",
+                  "numberValue",
+                  "booleanValue",
+                  "arrayValue",
+                  "objectValue"
+                ],
+                "x-enumNames": [
+                  "String",
+                  "Number",
+                  "Boolean",
+                  "Array",
+                  "Object"
+                ]
+              },
+              "stringValue": {
+                "x-title": "Value",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "stringValue"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "numberValue": {
+                "x-title": "Value",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "numberValue"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "booleanValue": {
+                "x-title": "Value",
+                "default": "true",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "booleanValue"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "true",
+                  "false"
+                ],
+                "x-enumNames": [
+                  "True",
+                  "False"
+                ]
+              },
+              "arrayValue": {
+                "x-title": "Value",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "arrayValue"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "objectValue": {
+                "x-title": "Value",
+                "default": "={}",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "objectValue"
+                    ]
+                  }
+                },
+                "oneOf": [
+                  {
+                    "type": "string",
+                    "description": "JSON string"
+                  },
+                  {
+                    "type": "object"
+                  },
+                  {
+                    "type": "array"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-icon": "fa:box-open",
+  "x-inputs": [],
+  "x-outputs": [
+    {
+      "displayName": "Retriever",
+      "maxConnections": 1,
+      "type": "ai_retriever"
+    }
+  ]
+}

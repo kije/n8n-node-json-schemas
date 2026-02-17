@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Think Tool",
+  "description": "Invite the AI agent to do some thinking",
+  "x-n8n-node-type": "toolThink",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "description": {
+      "x-title": "Think Tool Description",
+      "description": "The thinking tool's description",
+      "default": "Use the tool to think about something. It will not obtain new information or change the database, but just append the thought to the log. Use it when complex reasoning or some cache memory is needed.",
+      "x-required": true,
+      "type": "string",
+      "x-rows": 3
+    }
+  },
+  "x-icon": "fa:brain",
+  "x-inputs": [],
+  "x-outputs": [
+    "ai_tool"
+  ]
+}

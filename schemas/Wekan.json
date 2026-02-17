@@ -1,0 +1,431 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Wekan",
+  "description": "Consume Wekan API",
+  "x-n8n-node-type": "wekan",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "card",
+      "type": "string",
+      "enum": [
+        "board",
+        "card",
+        "cardComment",
+        "checklist",
+        "checklistItem",
+        "list"
+      ],
+      "x-enumNames": [
+        "Board",
+        "Card",
+        "Card Comment",
+        "Checklist",
+        "Checklist Item",
+        "List"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many"
+      ],
+      "x-enumDescriptions": [
+        "Create a new list",
+        "Delete a list",
+        "Get the data of a list",
+        "Get many board lists"
+      ]
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "The title of the list",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "owner": {
+      "x-title": "Owner Name or ID",
+      "description": "The user ID in Wekan. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "board"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "card"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "assignees": {
+          "x-title": "Assignee Names or IDs",
+          "description": "The new list of assignee IDs attached to the card. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "description": {
+          "x-title": "Description",
+          "description": "The new description of the card",
+          "default": "",
+          "type": "string"
+        },
+        "members": {
+          "x-title": "Member Names or IDs",
+          "description": "The new list of member IDs attached to the card. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "boardId": {
+      "x-title": "Board Name or ID",
+      "description": "ID of the board where the lists are in. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "IdUser": {
+      "x-title": "User Name or ID",
+      "description": "The ID of the user that boards are attached. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "board"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "list"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 200
+    },
+    "listId": {
+      "x-title": "List ID",
+      "description": "The ID of the list to get",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "swimlaneId": {
+      "x-title": "Swimlane Name or ID",
+      "description": "The ID of the swimlane that card belongs to. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "fromObject": [
+            "swimlane"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "card"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "authorId": {
+      "x-title": "Author Name or ID",
+      "description": "The user who posted the comment. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "cardComment"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "cardId": {
+      "x-title": "Card Name or ID",
+      "description": "The ID of the card that checklistItem belongs to. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "checklistItem"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "fromObject": {
+      "x-title": "From Object",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "card"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "list",
+        "swimlane"
+      ],
+      "x-enumNames": [
+        "List",
+        "Swimlane"
+      ]
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "checklistItem"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "title": {
+          "x-title": "Title",
+          "description": "The new title for the checklistItem item",
+          "default": "",
+          "type": "string"
+        },
+        "isFinished": {
+          "x-title": "Finished",
+          "description": "Whether the item is checked",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "comment": {
+      "x-title": "Comment",
+      "description": "The comment text",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "cardComment"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "commentId": {
+      "x-title": "Comment ID",
+      "description": "The ID of the comment to get",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "cardComment"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "items": {
+      "x-title": "Items",
+      "description": "Items to be added to the checklist",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "checklist"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "checklistId": {
+      "x-title": "CheckList Name or ID",
+      "description": "The ID of the checklistItem that card belongs to. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "checklistItem"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "checklistItemId": {
+      "x-title": "Checklist Item Name or ID",
+      "description": "The ID of the checklistItem item to update. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "checklistItem"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:wekan.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "wekanApi",
+      "required": true
+    }
+  ]
+}

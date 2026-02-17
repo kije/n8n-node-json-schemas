@@ -1,0 +1,177 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Unleashed Software",
+  "description": "Consume Unleashed Software API",
+  "x-n8n-node-type": "unleashedSoftware",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "salesOrder",
+      "type": "string",
+      "enum": [
+        "salesOrder",
+        "stockOnHand"
+      ],
+      "x-enumNames": [
+        "Sales Order",
+        "Stock On Hand"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "stockOnHand"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "get",
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Get",
+        "Get Many"
+      ],
+      "x-enumDescriptions": [
+        "Get a stock on hand",
+        "Get many stocks on hand"
+      ]
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "stockOnHand"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "stockOnHand"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 1000
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "stockOnHand"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "asAtDate": {
+          "x-title": "As at Date",
+          "description": "Returns the stock on hand for a specific date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "IsAssembled": {
+          "x-title": "Is Assembled",
+          "description": "Whether the AvailableQty will also include the quantity that can be assembled",
+          "default": false,
+          "type": "boolean"
+        },
+        "modifiedSince": {
+          "x-title": "Modified Since",
+          "description": "Returns stock on hand values modified after a specific date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "orderBy": {
+          "x-title": "Order By",
+          "description": "Orders the list by a specific column, by default the list is ordered by productCode",
+          "default": "",
+          "type": "string"
+        },
+        "productId": {
+          "x-title": "Product ID",
+          "description": "Returns products with the specific Product Guid. You can enter multiple product IDs separated by commas.",
+          "default": "",
+          "type": "string"
+        },
+        "warehouseCode": {
+          "x-title": "Warehouse Code",
+          "description": "Returns stock on hand for a specific warehouse code",
+          "default": "",
+          "type": "string"
+        },
+        "warehouseName": {
+          "x-title": "Warehouse Name",
+          "description": "Returns stock on hand for a specific warehouse name",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "productId": {
+      "x-title": "Product ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "stockOnHand"
+          ]
+        }
+      },
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \":\" + $parameter[\"resource\"]}}",
+  "x-icon": "file:unleashedSoftware.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "unleashedSoftwareApi",
+      "required": true
+    }
+  ]
+}

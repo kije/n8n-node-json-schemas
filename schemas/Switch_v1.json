@@ -1,0 +1,202 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Switch",
+  "description": "Route items depending on defined expression or rules",
+  "x-n8n-node-type": "switch",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "mode": {
+      "x-title": "Mode",
+      "description": "How data should be routed",
+      "default": "rules",
+      "type": "string",
+      "enum": [
+        "expression",
+        "rules"
+      ],
+      "x-enumNames": [
+        "Expression",
+        "Rules"
+      ],
+      "x-enumDescriptions": [
+        "Expression decides how to route data",
+        "Rules decide how to route data"
+      ]
+    },
+    "output": {
+      "x-title": "Output",
+      "description": "The index of output to which to send data to",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "expression"
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 0,
+      "maximum": 3
+    },
+    "dataType": {
+      "x-title": "Data Type",
+      "description": "The type of data to route on",
+      "default": "number",
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "rules"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "boolean",
+        "dateTime",
+        "number",
+        "string"
+      ],
+      "x-enumNames": [
+        "Boolean",
+        "Date & Time",
+        "Number",
+        "String"
+      ]
+    },
+    "value1": {
+      "x-title": "Value 1",
+      "description": "The value to compare with the second one",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "dataType": [
+            "string"
+          ],
+          "mode": [
+            "rules"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "rules": {
+      "x-title": "Routing Rules",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "dataType": [
+            "string"
+          ],
+          "mode": [
+            "rules"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "rules": {
+          "x-title": "Strings",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "operation": {
+                "x-title": "Operation",
+                "description": "Operation to decide where the data should be mapped to",
+                "default": "equal",
+                "type": "string",
+                "enum": [
+                  "contains",
+                  "notContains",
+                  "endsWith",
+                  "notEndsWith",
+                  "equal",
+                  "notEqual",
+                  "regex",
+                  "notRegex",
+                  "startsWith",
+                  "notStartsWith"
+                ],
+                "x-enumNames": [
+                  "Contains",
+                  "Not Contains",
+                  "Ends With",
+                  "Not Ends With",
+                  "Equal",
+                  "Not Equal",
+                  "Regex Match",
+                  "Regex Not Match",
+                  "Starts With",
+                  "Not Starts With"
+                ]
+              },
+              "value2": {
+                "x-title": "Regex",
+                "description": "The regex which has to match",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "regex",
+                      "notRegex"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "output": {
+                "x-title": "Output",
+                "description": "The index of output to which to send data to if rule matches",
+                "default": 0,
+                "type": "number",
+                "minimum": 0,
+                "maximum": 3
+              }
+            }
+          }
+        }
+      }
+    },
+    "fallbackOutput": {
+      "x-title": "Fallback Output",
+      "description": "The output to which to route all items which do not match any of the rules",
+      "default": -1,
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "rules"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        -1,
+        0,
+        1,
+        2,
+        3
+      ],
+      "x-enumNames": [
+        "None",
+        "0",
+        "1",
+        "2",
+        "3"
+      ]
+    }
+  },
+  "x-icon": "fa:map-signs",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main",
+    "main",
+    "main",
+    "main"
+  ]
+}

@@ -1,0 +1,715 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Zammad",
+  "description": "Consume the Zammad API",
+  "x-n8n-node-type": "zammad",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "tokenAuth",
+      "type": "string",
+      "enum": [
+        "basicAuth",
+        "tokenAuth"
+      ],
+      "x-enumNames": [
+        "Basic Auth",
+        "Token Auth"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "user",
+      "type": "string",
+      "enum": [
+        "group",
+        "organization",
+        "ticket",
+        "user"
+      ],
+      "x-enumNames": [
+        "Group",
+        "Organization",
+        "Ticket",
+        "User"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "getSelf",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Get Self",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a user",
+        "Delete a user",
+        "Retrieve a user",
+        "Retrieve many users",
+        "Retrieve currently logged-in user",
+        "Update a user"
+      ]
+    },
+    "name": {
+      "x-title": "Organization Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "organization"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "id": {
+      "x-title": "User ID",
+      "description": "User to retrieve. Specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "active": {
+          "x-title": "Active",
+          "default": true,
+          "type": "boolean"
+        },
+        "addressUi": {
+          "x-title": "Address",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "addressDetails": {
+              "x-title": "Address Details",
+              "type": "object",
+              "properties": {
+                "city": {
+                  "x-title": "City",
+                  "default": "",
+                  "type": "string"
+                },
+                "country": {
+                  "x-title": "Country",
+                  "default": "",
+                  "type": "string"
+                },
+                "address": {
+                  "x-title": "Street & Number",
+                  "default": "",
+                  "type": "string"
+                },
+                "zip": {
+                  "x-title": "Zip Code",
+                  "default": "",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "customFieldsUi": {
+          "x-title": "Custom Fields",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "customFieldPairs": {
+              "x-title": "Custom Field",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "x-title": "Field Name or ID",
+                    "description": "Name of the custom field to set. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Field Value",
+                    "description": "Value to set on the custom field",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "department": {
+          "x-title": "Department",
+          "default": "",
+          "type": "string"
+        },
+        "email": {
+          "x-title": "Email Address",
+          "default": "",
+          "type": "string"
+        },
+        "fax": {
+          "x-title": "Fax",
+          "default": "",
+          "type": "string"
+        },
+        "note": {
+          "x-title": "Notes",
+          "default": "",
+          "type": "string"
+        },
+        "organization": {
+          "x-title": "Organization Name or ID",
+          "description": "Name of the organization to assign to the user. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "phone": {
+          "x-title": "Phone (Landline)",
+          "default": "",
+          "type": "string"
+        },
+        "mobile": {
+          "x-title": "Phone (Mobile)",
+          "default": "",
+          "type": "string"
+        },
+        "verified": {
+          "x-title": "Verified",
+          "description": "Whether the user has been verified",
+          "default": false,
+          "type": "boolean"
+        },
+        "vip": {
+          "x-title": "VIP",
+          "description": "Whether the user is a Very Important Person",
+          "default": false,
+          "type": "boolean"
+        },
+        "web": {
+          "x-title": "Website",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "active": {
+          "x-title": "Active",
+          "default": true,
+          "type": "boolean"
+        },
+        "addressUi": {
+          "x-title": "Address",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "addressDetails": {
+              "x-title": "Address Details",
+              "type": "object",
+              "properties": {
+                "city": {
+                  "x-title": "City",
+                  "default": "",
+                  "type": "string"
+                },
+                "country": {
+                  "x-title": "Country",
+                  "default": "",
+                  "type": "string"
+                },
+                "address": {
+                  "x-title": "Street & Number",
+                  "default": "",
+                  "type": "string"
+                },
+                "zip": {
+                  "x-title": "Zip Code",
+                  "default": "",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "customFieldsUi": {
+          "x-title": "Custom Fields",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "customFieldPairs": {
+              "x-title": "Custom Field",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "x-title": "Field Name or ID",
+                    "description": "Name of the custom field to set. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Field Value",
+                    "description": "Value to set on the custom field",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "department": {
+          "x-title": "Department",
+          "default": "",
+          "type": "string"
+        },
+        "email": {
+          "x-title": "Email Address",
+          "default": "",
+          "type": "string"
+        },
+        "fax": {
+          "x-title": "Fax",
+          "default": "",
+          "type": "string"
+        },
+        "firstname": {
+          "x-title": "First Name",
+          "default": "",
+          "type": "string"
+        },
+        "lastname": {
+          "x-title": "Last Name",
+          "default": "",
+          "type": "string"
+        },
+        "note": {
+          "x-title": "Notes",
+          "default": "",
+          "type": "string"
+        },
+        "organization": {
+          "x-title": "Organization Name or ID",
+          "description": "Name of the organization to assign to the user. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "phone": {
+          "x-title": "Phone (Landline)",
+          "default": "",
+          "type": "string"
+        },
+        "mobile": {
+          "x-title": "Phone (Mobile)",
+          "default": "",
+          "type": "string"
+        },
+        "verified": {
+          "x-title": "Verified",
+          "description": "Whether the user has been verified",
+          "default": false,
+          "type": "boolean"
+        },
+        "vip": {
+          "x-title": "VIP",
+          "description": "Whether the user is a Very Important Person",
+          "default": false,
+          "type": "boolean"
+        },
+        "web": {
+          "x-title": "Website",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "Title of the ticket to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "group": {
+      "x-title": "Group Name or ID",
+      "description": "Group that will own the ticket to create. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "customer": {
+      "x-title": "Customer Email Name or ID",
+      "description": "Email address of the customer concerned in the ticket to create. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "article": {
+      "x-title": "Article",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "articleDetails": {
+          "x-title": "Article Details",
+          "type": "object",
+          "properties": {
+            "subject": {
+              "x-title": "Subject",
+              "default": "",
+              "type": "string"
+            },
+            "body": {
+              "x-title": "Body",
+              "default": "",
+              "type": "string"
+            },
+            "visibility": {
+              "x-title": "Visibility",
+              "default": "internal",
+              "type": "string",
+              "enum": [
+                "external",
+                "internal"
+              ],
+              "x-enumNames": [
+                "External",
+                "Internal"
+              ],
+              "x-enumDescriptions": [
+                "Visible to customers",
+                "Visible to help desk"
+              ]
+            },
+            "sender": {
+              "x-title": "Sender",
+              "default": "Agent",
+              "type": "string",
+              "enum": [
+                "Agent",
+                "Customer",
+                "System"
+              ],
+              "x-enumNames": [
+                "Agent",
+                "Customer",
+                "System"
+              ],
+              "x-enumDescriptions": [
+                "",
+                "",
+                "Only subject will be displayed in Zammad"
+              ]
+            },
+            "type": {
+              "x-title": "Article Type",
+              "default": "note",
+              "type": "string",
+              "enum": [
+                "chat",
+                "email",
+                "fax",
+                "note",
+                "phone",
+                "sms"
+              ],
+              "x-enumNames": [
+                "Chat",
+                "Email",
+                "Fax",
+                "Note",
+                "Phone",
+                "SMS"
+              ]
+            },
+            "reply_to": {
+              "x-title": "Reply To",
+              "default": "",
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "firstname": {
+      "x-title": "First Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "lastname": {
+      "x-title": "Last Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "query": {
+      "x-title": "Query",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "query": {
+          "x-title": "Query",
+          "description": "Query to filter results by",
+          "default": "",
+          "type": "string"
+        },
+        "sortUi": {
+          "x-title": "Sort",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "sortDetails": {
+              "x-title": "Sort Options",
+              "type": "object",
+              "properties": {
+                "sort_by": {
+                  "x-title": "Sort Key Name or ID",
+                  "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                  "default": "",
+                  "type": "string"
+                },
+                "order_by": {
+                  "x-title": "Sort Order",
+                  "default": "asc",
+                  "type": "string",
+                  "enum": [
+                    "asc",
+                    "desc"
+                  ],
+                  "x-enumNames": [
+                    "Ascending",
+                    "Descending"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:zammad.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "zammadBasicAuthApi",
+      "required": true,
+      "testedBy": "zammadBasicAuthApiTest",
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "basicAuth"
+          ]
+        }
+      }
+    },
+    {
+      "name": "zammadTokenAuthApi",
+      "required": true,
+      "testedBy": "zammadTokenAuthApiTest",
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "tokenAuth"
+          ]
+        }
+      }
+    }
+  ]
+}

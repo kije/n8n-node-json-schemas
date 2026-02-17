@@ -1,0 +1,602 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Zendesk",
+  "description": "Consume Zendesk API",
+  "x-n8n-node-type": "zendesk",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "apiToken",
+      "type": "string",
+      "enum": [
+        "apiToken",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "API Token",
+        "OAuth2"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "ticket",
+      "type": "string",
+      "enum": [
+        "ticket",
+        "ticketField",
+        "user",
+        "organization"
+      ],
+      "x-enumNames": [
+        "Ticket",
+        "Ticket Field",
+        "User",
+        "Organization"
+      ],
+      "x-enumDescriptions": [
+        "Tickets are the means through which your end users (customers) communicate with agents in Zendesk Support",
+        "Manage system and custom ticket fields",
+        "Manage users",
+        "Manage organizations"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "count",
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "getRelatedData",
+        "update"
+      ],
+      "x-enumNames": [
+        "Count",
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Get Related Data",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Count organizations",
+        "Create an organization",
+        "Delete an organization",
+        "Get an organization",
+        "Get many organizations",
+        "Get data related to the organization",
+        "Update a organization"
+      ]
+    },
+    "description": {
+      "x-title": "Description",
+      "description": "The first comment on the ticket",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "jsonParameters": {
+      "x-title": "JSON Parameters",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "details": {
+          "x-title": "Details",
+          "description": "Details about the organization, such as the address",
+          "default": "",
+          "type": "string"
+        },
+        "domain_names": {
+          "x-title": "Domain Names",
+          "description": "Comma-separated domain names associated with this organization",
+          "default": "",
+          "type": "string"
+        },
+        "notes": {
+          "x-title": "Notes",
+          "default": "",
+          "type": "string"
+        },
+        "organizationFieldsUi": {
+          "x-title": "Organization Fields",
+          "description": "Values of custom fields in the organization's profile",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "organizationFieldValues": {
+              "x-title": "Field",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "x-title": "Field Name or ID",
+                    "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": {
+          "x-title": "Tag Names or IDs",
+          "description": "IDs of tags applied to this organization. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "additionalFieldsJson": {
+      "x-title": "Additional Fields",
+      "description": "Object of values to set as described <a href=\"https://developer.zendesk.com/rest_api/docs/support/tickets\">here</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "id": {
+      "x-title": "Organization ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "getRelatedData"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "details": {
+          "x-title": "Details",
+          "description": "Details about the organization, such as the address",
+          "default": "",
+          "type": "string"
+        },
+        "domain_names": {
+          "x-title": "Domain Names",
+          "description": "Comma-separated domain names associated with this organization",
+          "default": "",
+          "type": "string"
+        },
+        "name": {
+          "x-title": "Name",
+          "default": "",
+          "type": "string"
+        },
+        "notes": {
+          "x-title": "Notes",
+          "default": "",
+          "type": "string"
+        },
+        "organizationFieldsUi": {
+          "x-title": "Organization Fields",
+          "description": "Values of custom fields in the organization's profile",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "organizationFieldValues": {
+              "x-title": "Field",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "x-title": "Field Name or ID",
+                    "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": {
+          "x-title": "Tag Names or IDs",
+          "description": "IDs of tags applied to this organization. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "updateFieldsJson": {
+      "x-title": "Update Fields",
+      "description": "Object of values to update as described <a href=\"https://developer.zendesk.com/rest_api/docs/support/tickets\">here</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "update"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "ticketType": {
+      "x-title": "Ticket Type",
+      "default": "regular",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "get",
+            "delete",
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "regular",
+        "suspended"
+      ],
+      "x-enumNames": [
+        "Regular",
+        "Suspended"
+      ]
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticket"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "group": {
+          "x-title": "Group Name or ID",
+          "description": "The group to search. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/ticketType": [
+                "regular"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "query": {
+          "x-title": "Query",
+          "description": "<a href=\"https://developer.zendesk.com/api-reference/ticketing/ticket-management/search/#syntax-examples\">Query syntax</a> to search tickets",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/ticketType": [
+                "regular"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "sortBy": {
+          "x-title": "Sort By",
+          "description": "Defaults to sorting by relevance",
+          "default": "updated_at",
+          "type": "string",
+          "enum": [
+            "created_at",
+            "priority",
+            "status",
+            "ticket_type",
+            "updated_at"
+          ],
+          "x-enumNames": [
+            "Created At",
+            "Priority",
+            "Status",
+            "Ticket Type",
+            "Updated At"
+          ]
+        },
+        "sortOrder": {
+          "x-title": "Sort Order",
+          "default": "asc",
+          "type": "string",
+          "enum": [
+            "asc",
+            "desc"
+          ],
+          "x-enumNames": [
+            "Ascending",
+            "Descending"
+          ]
+        },
+        "status": {
+          "x-title": "Status",
+          "description": "The state of the ticket",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/ticketType": [
+                "regular"
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "closed",
+            "new",
+            "hold",
+            "open",
+            "pending",
+            "solved"
+          ],
+          "x-enumNames": [
+            "Closed",
+            "New",
+            "On-Hold",
+            "Open",
+            "Pending",
+            "Solved"
+          ]
+        }
+      }
+    },
+    "ticketFieldId": {
+      "x-title": "Ticket Field ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticketField"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "name": {
+      "x-title": "Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "query": {
+          "x-title": "Query",
+          "default": "",
+          "type": "string"
+        },
+        "external_id": {
+          "x-title": "External ID",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:zendesk.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "zendeskApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "apiToken"
+          ]
+        }
+      }
+    },
+    {
+      "name": "zendeskOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

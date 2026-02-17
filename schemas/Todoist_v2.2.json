@@ -1,0 +1,1539 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Todoist",
+  "description": "Consume Todoist API",
+  "x-n8n-node-type": "todoist",
+  "x-n8n-version": 2.2,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "apiKey",
+      "type": "string",
+      "enum": [
+        "apiKey",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "API Key",
+        "OAuth2"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "task",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "task",
+        "project",
+        "section",
+        "comment",
+        "label",
+        "reminder"
+      ],
+      "x-enumNames": [
+        "Task",
+        "Project",
+        "Section",
+        "Comment",
+        "Label",
+        "Reminder"
+      ],
+      "x-enumDescriptions": [
+        "Task resource",
+        "Project resource",
+        "Section resource",
+        "Comment resource",
+        "Label resource",
+        "Reminder resource"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a new reminder",
+        "Delete a reminder",
+        "Get many reminders",
+        "Update a reminder"
+      ]
+    },
+    "taskId": {
+      "x-title": "Task ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "delete",
+            "close",
+            "get",
+            "reopen",
+            "update",
+            "move"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "project": {
+      "x-title": "Project Name or ID",
+      "description": "The destination project. Choose from the list, or specify an ID.",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create",
+            "move"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "section": {
+      "x-title": "Section Name or ID",
+      "description": "Section to which you want move the task. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "move"
+          ]
+        },
+        "hide": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 2.1
+              }
+            }
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "description": {
+          "x-title": "Description",
+          "description": "A description for the task",
+          "default": "",
+          "type": "string"
+        },
+        "dueDateTime": {
+          "x-title": "Due Date Time",
+          "description": "Specific date and time in RFC3339 format in UTC",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "dueLang": {
+          "x-title": "Due String Locale",
+          "description": "2-letter code specifying language in case due_string is not written in English",
+          "default": "",
+          "type": "string"
+        },
+        "dueString": {
+          "x-title": "Due String",
+          "description": "Human defined task due date (ex.: “next Monday”, “Tomorrow”). Value is set using local (not UTC) time.",
+          "default": "",
+          "type": "string"
+        },
+        "parentId": {
+          "x-title": "Parent Name or ID",
+          "description": "The parent task you want to operate on. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": {},
+          "type": "string"
+        },
+        "priority": {
+          "x-title": "Priority",
+          "description": "Task priority from 1 (normal) to 4 (urgent)",
+          "default": 1,
+          "type": "number",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "section": {
+          "x-title": "Section Name or ID",
+          "description": "The section you want to operate on. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": {},
+          "type": "string"
+        },
+        "order": {
+          "x-title": "Order",
+          "description": "Non-zero integer used to sort tasks under the same parent",
+          "default": 0,
+          "type": "number"
+        },
+        "dueDate": {
+          "x-title": "Due Date",
+          "description": "Specific date in YYYY-MM-DD format",
+          "default": "",
+          "type": "string"
+        },
+        "assigneeId": {
+          "x-title": "Assignee ID",
+          "description": "Responsible user ID (for shared tasks)",
+          "default": "",
+          "type": "string"
+        },
+        "duration": {
+          "x-title": "Duration",
+          "description": "Positive integer for task duration (must be used with Duration Unit)",
+          "default": 0,
+          "type": "number"
+        },
+        "durationUnit": {
+          "x-title": "Duration Unit",
+          "description": "Unit of time for duration (must be used with Duration)",
+          "default": "minute",
+          "type": "string",
+          "enum": [
+            "minute",
+            "day"
+          ],
+          "x-enumNames": [
+            "Minute",
+            "Day"
+          ]
+        },
+        "deadlineDate": {
+          "x-title": "Deadline Date",
+          "description": "Specific deadline date in YYYY-MM-DD format",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "labels": {
+      "x-title": "Label Names",
+      "description": "Optional labels that will be assigned to a created task. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "content": {
+      "x-title": "Content",
+      "description": "Task content",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-rows": 5
+    },
+    "text": {
+      "x-title": "Text",
+      "description": "Natural language text for quick adding task (e.g., \"Buy milk @Grocery #shopping tomorrow\"). It can include a due date in free form text, a project name starting with the \"#\" character (without spaces), a label starting with the \"@\" character, an assignee starting with the \"+\" character, a priority (e.g., p1), a deadline between \"{}\" (e.g. {in 3 days}), or a description starting from \"//\" until the end of the text.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "quickAdd"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-rows": 3
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "task"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "filter": {
+          "x-title": "Filter",
+          "description": "Filter by any <a href=\"https://get.todoist.help/hc/en-us/articles/205248842\">supported filter.</a>",
+          "default": "",
+          "type": "string"
+        },
+        "ids": {
+          "x-title": "IDs",
+          "description": "A list of the task IDs to retrieve, this should be a comma-separated list",
+          "default": "",
+          "type": "string"
+        },
+        "labelId": {
+          "x-title": "Label Name or ID",
+          "description": "Filter tasks by label. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": {},
+          "type": "string"
+        },
+        "lang": {
+          "x-title": "Lang",
+          "description": "IETF language tag defining what language filter is written in, if differs from default English",
+          "default": "",
+          "type": "string"
+        },
+        "parentId": {
+          "x-title": "Parent Name or ID",
+          "description": "Filter tasks by parent task ID. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "projectId": {
+          "x-title": "Project Name or ID",
+          "description": "Filter tasks by project ID. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "sectionId": {
+          "x-title": "Section Name or ID",
+          "description": "Filter tasks by section ID. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "content": {
+          "x-title": "Content",
+          "description": "Task content",
+          "default": "",
+          "type": "string"
+        },
+        "description": {
+          "x-title": "Description",
+          "description": "A description for the task",
+          "default": "",
+          "type": "string"
+        },
+        "dueDateTime": {
+          "x-title": "Due Date Time",
+          "description": "Specific date and time in RFC3339 format in UTC",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "dueLang": {
+          "x-title": "Due String Locale",
+          "description": "2-letter code specifying language in case due_string is not written in English",
+          "default": "",
+          "type": "string"
+        },
+        "dueString": {
+          "x-title": "Due String",
+          "description": "Human defined task due date (ex.: “next Monday”, “Tomorrow”). Value is set using local (not UTC) time.",
+          "default": "",
+          "type": "string"
+        },
+        "labels": {
+          "x-title": "Label Names",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "priority": {
+          "x-title": "Priority",
+          "description": "Task priority from 1 (normal) to 4 (urgent)",
+          "default": 1,
+          "type": "number",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "order": {
+          "x-title": "Order",
+          "description": "Non-zero integer used to sort tasks under the same parent",
+          "default": 0,
+          "type": "number"
+        },
+        "dueDate": {
+          "x-title": "Due Date",
+          "description": "Specific date in YYYY-MM-DD format",
+          "default": "",
+          "type": "string"
+        },
+        "assigneeId": {
+          "x-title": "Assignee ID",
+          "description": "Responsible user ID (for shared tasks)",
+          "default": "",
+          "type": "string"
+        },
+        "duration": {
+          "x-title": "Duration",
+          "description": "Positive integer for task duration (must be used with Duration Unit)",
+          "default": 0,
+          "type": "number"
+        },
+        "durationUnit": {
+          "x-title": "Duration Unit",
+          "description": "Unit of time for duration (must be used with Duration)",
+          "default": "minute",
+          "type": "string",
+          "enum": [
+            "minute",
+            "day"
+          ],
+          "x-enumNames": [
+            "Minute",
+            "Day"
+          ]
+        },
+        "deadlineDate": {
+          "x-title": "Deadline Date",
+          "description": "Specific deadline date in YYYY-MM-DD format",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "projectId": {
+      "x-title": "Project ID",
+      "description": "The project ID - can be either a string or number",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "project"
+          ],
+          "operation": [
+            "archive",
+            "delete",
+            "get",
+            "getCollaborators",
+            "unarchive",
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "Name of the project",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "project"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "projectOptions": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "project"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "color": {
+          "x-title": "Color",
+          "description": "The color of the project",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "berry_red",
+            "red",
+            "orange",
+            "yellow",
+            "olive_green",
+            "lime_green",
+            "green",
+            "mint_green",
+            "teal",
+            "sky_blue",
+            "light_blue",
+            "blue",
+            "grape",
+            "violet",
+            "lavender",
+            "magenta",
+            "salmon",
+            "charcoal",
+            "grey",
+            "taupe"
+          ],
+          "x-enumNames": [
+            "Berry Red",
+            "Red",
+            "Orange",
+            "Yellow",
+            "Olive Green",
+            "Lime Green",
+            "Green",
+            "Mint Green",
+            "Teal",
+            "Sky Blue",
+            "Light Blue",
+            "Blue",
+            "Grape",
+            "Violet",
+            "Lavender",
+            "Magenta",
+            "Salmon",
+            "Charcoal",
+            "Grey",
+            "Taupe"
+          ]
+        },
+        "is_favorite": {
+          "x-title": "Is Favorite",
+          "description": "Whether the project is a favorite",
+          "default": false,
+          "type": "boolean"
+        },
+        "parent_id": {
+          "x-title": "Parent ID",
+          "description": "Parent project ID",
+          "default": "",
+          "type": "string"
+        },
+        "view_style": {
+          "x-title": "View Style",
+          "description": "The default view style of the project",
+          "default": "list",
+          "type": "string",
+          "enum": [
+            "list",
+            "board"
+          ],
+          "x-enumNames": [
+            "List",
+            "Board"
+          ]
+        }
+      }
+    },
+    "projectUpdateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "project"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "name": {
+          "x-title": "Name",
+          "description": "Name of the project",
+          "default": "",
+          "type": "string"
+        },
+        "color": {
+          "x-title": "Color",
+          "description": "The color of the project",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "berry_red",
+            "red",
+            "orange",
+            "yellow",
+            "olive_green",
+            "lime_green",
+            "green",
+            "mint_green",
+            "teal",
+            "sky_blue",
+            "light_blue",
+            "blue",
+            "grape",
+            "violet",
+            "lavender",
+            "magenta",
+            "salmon",
+            "charcoal",
+            "grey",
+            "taupe"
+          ],
+          "x-enumNames": [
+            "Berry Red",
+            "Red",
+            "Orange",
+            "Yellow",
+            "Olive Green",
+            "Lime Green",
+            "Green",
+            "Mint Green",
+            "Teal",
+            "Sky Blue",
+            "Light Blue",
+            "Blue",
+            "Grape",
+            "Violet",
+            "Lavender",
+            "Magenta",
+            "Salmon",
+            "Charcoal",
+            "Grey",
+            "Taupe"
+          ]
+        },
+        "is_favorite": {
+          "x-title": "Is Favorite",
+          "description": "Whether the project is a favorite",
+          "default": false,
+          "type": "boolean"
+        },
+        "view_style": {
+          "x-title": "View Style",
+          "description": "The default view style of the project",
+          "default": "list",
+          "type": "string",
+          "enum": [
+            "list",
+            "board"
+          ],
+          "x-enumNames": [
+            "List",
+            "Board"
+          ]
+        }
+      }
+    },
+    "sectionId": {
+      "x-title": "Section ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "section"
+          ],
+          "operation": [
+            "delete",
+            "get",
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "sectionProject": {
+      "x-title": "Project Name or ID",
+      "description": "The project to add the section to",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "section"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "sectionName": {
+      "x-title": "Name",
+      "description": "Name of the section",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "section"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "sectionOptions": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "section"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "order": {
+          "x-title": "Order",
+          "description": "The order of the section",
+          "default": 0,
+          "type": "number"
+        }
+      }
+    },
+    "sectionUpdateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "section"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "name": {
+          "x-title": "Name",
+          "description": "Name of the section",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "sectionFilters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "section"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "project_id": {
+          "x-title": "Project Name or ID",
+          "description": "Filter sections by project. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "commentId": {
+      "x-title": "Comment ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "comment"
+          ],
+          "operation": [
+            "delete",
+            "get",
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "commentTaskId": {
+      "x-title": "Task ID",
+      "description": "The ID of the task to comment on",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "comment"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "commentContent": {
+      "x-title": "Content",
+      "description": "Comment content",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "comment"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-rows": 3
+    },
+    "commentUpdateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "comment"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "content": {
+          "x-title": "Content",
+          "description": "Comment content",
+          "default": "",
+          "type": "string",
+          "x-rows": 3
+        }
+      }
+    },
+    "commentFilters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "comment"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "task_id": {
+          "x-title": "Task ID",
+          "description": "Filter comments by task ID",
+          "default": "",
+          "type": "string"
+        },
+        "project_id": {
+          "x-title": "Project ID",
+          "description": "Filter comments by project ID",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "labelId": {
+      "x-title": "Label ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "label"
+          ],
+          "operation": [
+            "delete",
+            "get",
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "labelName": {
+      "x-title": "Name",
+      "description": "Name of the label",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "label"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "labelOptions": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "label"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "color": {
+          "x-title": "Color",
+          "description": "The color of the label",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "berry_red",
+            "red",
+            "orange",
+            "yellow",
+            "olive_green",
+            "lime_green",
+            "green",
+            "mint_green",
+            "teal",
+            "sky_blue",
+            "light_blue",
+            "blue",
+            "grape",
+            "violet",
+            "lavender",
+            "magenta",
+            "salmon",
+            "charcoal",
+            "grey",
+            "taupe"
+          ],
+          "x-enumNames": [
+            "Berry Red",
+            "Red",
+            "Orange",
+            "Yellow",
+            "Olive Green",
+            "Lime Green",
+            "Green",
+            "Mint Green",
+            "Teal",
+            "Sky Blue",
+            "Light Blue",
+            "Blue",
+            "Grape",
+            "Violet",
+            "Lavender",
+            "Magenta",
+            "Salmon",
+            "Charcoal",
+            "Grey",
+            "Taupe"
+          ]
+        },
+        "order": {
+          "x-title": "Order",
+          "description": "Label order",
+          "default": 0,
+          "type": "number"
+        },
+        "is_favorite": {
+          "x-title": "Is Favorite",
+          "description": "Whether the label is a favorite",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "labelUpdateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "label"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "name": {
+          "x-title": "Name",
+          "description": "Name of the label",
+          "default": "",
+          "type": "string"
+        },
+        "color": {
+          "x-title": "Color",
+          "description": "The color of the label",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "berry_red",
+            "red",
+            "orange",
+            "yellow",
+            "olive_green",
+            "lime_green",
+            "green",
+            "mint_green",
+            "teal",
+            "sky_blue",
+            "light_blue",
+            "blue",
+            "grape",
+            "violet",
+            "lavender",
+            "magenta",
+            "salmon",
+            "charcoal",
+            "grey",
+            "taupe"
+          ],
+          "x-enumNames": [
+            "Berry Red",
+            "Red",
+            "Orange",
+            "Yellow",
+            "Olive Green",
+            "Lime Green",
+            "Green",
+            "Mint Green",
+            "Teal",
+            "Sky Blue",
+            "Light Blue",
+            "Blue",
+            "Grape",
+            "Violet",
+            "Lavender",
+            "Magenta",
+            "Salmon",
+            "Charcoal",
+            "Grey",
+            "Taupe"
+          ]
+        },
+        "order": {
+          "x-title": "Order",
+          "description": "Label order",
+          "default": 0,
+          "type": "number"
+        },
+        "is_favorite": {
+          "x-title": "Is Favorite",
+          "description": "Whether the label is a favorite",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "reminderId": {
+      "x-title": "Reminder ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "delete",
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "itemId": {
+      "x-title": "Task ID",
+      "description": "The ID of the task to attach reminder to",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "dueDateType": {
+      "x-title": "Due Date Type",
+      "description": "How to specify when the reminder should trigger",
+      "default": "natural_language",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "natural_language",
+        "full_day",
+        "floating_time",
+        "fixed_timezone"
+      ],
+      "x-enumNames": [
+        "Natural Language",
+        "Full-Day Date",
+        "Floating Date with Time",
+        "Fixed Timezone Date with Time"
+      ],
+      "x-enumDescriptions": [
+        "Human-readable date and time (e.g., \"tomorrow 2pm\")",
+        "Date without specific time (floating)",
+        "Date and time without timezone",
+        "Date and time with specific timezone"
+      ]
+    },
+    "natural_language_representation": {
+      "x-title": "Natural Language Representation",
+      "description": "Human-readable date and time",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ],
+          "dueDateType": [
+            "natural_language"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "date": {
+      "x-title": "Date",
+      "description": "Full-day date in YYYY-MM-DD format",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ],
+          "dueDateType": [
+            "full_day"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "datetime": {
+      "x-title": "Date Time",
+      "description": "Date and time with timezone",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ],
+          "dueDateType": [
+            "fixed_timezone"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "timezone": {
+      "x-title": "Timezone",
+      "description": "Timezone for the fixed timezone date",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ],
+          "dueDateType": [
+            "fixed_timezone"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "reminderOptions": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "type": {
+          "x-title": "Type",
+          "description": "The reminder type",
+          "default": "absolute",
+          "type": "string",
+          "enum": [
+            "absolute",
+            "relative"
+          ],
+          "x-enumNames": [
+            "Absolute",
+            "Relative"
+          ]
+        },
+        "minute_offset": {
+          "x-title": "Minute Offset",
+          "description": "Minutes before the task due date",
+          "default": 0,
+          "type": "number"
+        },
+        "notify_uid": {
+          "x-title": "Notify User ID",
+          "description": "User ID to notify (for shared tasks)",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "reminderUpdateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "reminder"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "due": {
+          "x-title": "Due",
+          "description": "When the reminder should trigger",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "string": {
+              "x-title": "Natural Language",
+              "description": "Human-readable date and time",
+              "default": "",
+              "type": "string"
+            },
+            "date": {
+              "x-title": "Date",
+              "description": "Specific date in YYYY-MM-DD format",
+              "default": "",
+              "type": "string"
+            },
+            "datetime": {
+              "x-title": "Date Time",
+              "description": "Specific date and time",
+              "default": "",
+              "type": "string",
+              "format": "date-time"
+            },
+            "timezone": {
+              "x-title": "Timezone",
+              "description": "Timezone for the reminder",
+              "default": "",
+              "type": "string"
+            }
+          }
+        },
+        "type": {
+          "x-title": "Type",
+          "description": "The reminder type",
+          "default": "absolute",
+          "type": "string",
+          "enum": [
+            "absolute",
+            "relative"
+          ],
+          "x-enumNames": [
+            "Absolute",
+            "Relative"
+          ]
+        },
+        "minute_offset": {
+          "x-title": "Minute Offset",
+          "description": "Minutes before the task due date",
+          "default": 0,
+          "type": "number"
+        },
+        "notify_uid": {
+          "x-title": "Notify User ID",
+          "description": "User ID to notify (for shared tasks)",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:todoist.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "todoistApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "apiKey"
+          ]
+        }
+      }
+    },
+    {
+      "name": "todoistOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

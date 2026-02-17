@@ -1,0 +1,114 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Twake",
+  "description": "Consume Twake API",
+  "x-n8n-node-type": "twake",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "message",
+      "type": "string",
+      "enum": [
+        "message"
+      ],
+      "x-enumNames": [
+        "Message"
+      ],
+      "x-enumDescriptions": [
+        "Send data to the message app"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "send",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "send"
+      ],
+      "x-enumNames": [
+        "Send"
+      ],
+      "x-enumDescriptions": [
+        "Send a message"
+      ]
+    },
+    "channelId": {
+      "x-title": "Channel Name or ID",
+      "description": "Channel's ID. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "content": {
+      "x-title": "Content",
+      "description": "Message content",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "senderIcon": {
+          "x-title": "Sender Icon",
+          "description": "URL of the image/icon",
+          "default": "",
+          "type": "string"
+        },
+        "senderName": {
+          "x-title": "Sender Name",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:twake.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "twakeCloudApi",
+      "required": true
+    }
+  ]
+}

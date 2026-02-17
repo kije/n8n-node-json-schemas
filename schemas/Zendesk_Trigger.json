@@ -1,0 +1,304 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Zendesk Trigger",
+  "description": "Handle Zendesk events via webhooks",
+  "x-n8n-node-type": "zendeskTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "apiToken",
+      "type": "string",
+      "enum": [
+        "apiToken",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "API Token",
+        "OAuth2"
+      ]
+    },
+    "service": {
+      "x-title": "Service",
+      "default": "support",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "support"
+      ],
+      "x-enumNames": [
+        "Support"
+      ]
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "service": [
+            "support"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "fields": {
+          "x-title": "Field Names or IDs",
+          "description": "The fields to return the values of. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "conditions": {
+      "x-title": "Conditions",
+      "description": "The condition to set",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "service": [
+            "support"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "all": {
+          "x-title": "All",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "resource": {
+                "x-title": "Resource",
+                "default": "ticket",
+                "type": "string",
+                "enum": [
+                  "ticket"
+                ],
+                "x-enumNames": [
+                  "Ticket"
+                ]
+              },
+              "field": {
+                "x-title": "Field",
+                "default": "status",
+                "x-displayOptions": {
+                  "show": {
+                    "resource": [
+                      "ticket"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "assignee",
+                  "group",
+                  "priority",
+                  "status",
+                  "type"
+                ],
+                "x-enumNames": [
+                  "Assignee",
+                  "Group",
+                  "Priority",
+                  "Status",
+                  "Type"
+                ]
+              },
+              "operation": {
+                "x-title": "Operation",
+                "default": "is",
+                "x-displayOptions": {
+                  "show": {
+                    "field": [
+                      "assignee"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "changed",
+                  "value_previous",
+                  "value",
+                  "is",
+                  "is_not",
+                  "not_changed",
+                  "not_value_previous",
+                  "not_value"
+                ],
+                "x-enumNames": [
+                  "Changed",
+                  "Changed From",
+                  "Changed To",
+                  "Is",
+                  "Is Not",
+                  "Not Changed",
+                  "Not Changed From",
+                  "Not Changed To"
+                ]
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "field": [
+                      "assignee"
+                    ]
+                  },
+                  "hide": {
+                    "field": [
+                      "group",
+                      "priority",
+                      "type",
+                      "status"
+                    ]
+                  }
+                },
+                "type": "string"
+              }
+            }
+          }
+        },
+        "any": {
+          "x-title": "Any",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "resource": {
+                "x-title": "Resource",
+                "default": "ticket",
+                "type": "string",
+                "enum": [
+                  "ticket"
+                ],
+                "x-enumNames": [
+                  "Ticket"
+                ]
+              },
+              "field": {
+                "x-title": "Field",
+                "default": "status",
+                "x-displayOptions": {
+                  "show": {
+                    "resource": [
+                      "ticket"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "assignee",
+                  "group",
+                  "priority",
+                  "status",
+                  "type"
+                ],
+                "x-enumNames": [
+                  "Assignee",
+                  "Group",
+                  "Priority",
+                  "Status",
+                  "Type"
+                ]
+              },
+              "operation": {
+                "x-title": "Operation",
+                "default": "is",
+                "x-displayOptions": {
+                  "show": {
+                    "field": [
+                      "assignee"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "changed",
+                  "value_previous",
+                  "value",
+                  "is",
+                  "is_not",
+                  "not_changed",
+                  "not_value_previous",
+                  "not_value"
+                ],
+                "x-enumNames": [
+                  "Changed",
+                  "Changed From",
+                  "Changed To",
+                  "Is",
+                  "Is Not",
+                  "Not Changed",
+                  "Not Changed From",
+                  "Not Changed To"
+                ]
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "field": [
+                      "assignee"
+                    ]
+                  },
+                  "hide": {
+                    "field": [
+                      "group",
+                      "priority",
+                      "type",
+                      "status"
+                    ]
+                  }
+                },
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-icon": "file:zendesk.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "zendeskApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "apiToken"
+          ]
+        }
+      }
+    },
+    {
+      "name": "zendeskOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "x-webhooks": "true"
+}

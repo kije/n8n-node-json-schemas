@@ -1,0 +1,142 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Uplead",
+  "description": "Consume Uplead API",
+  "x-n8n-node-type": "uplead",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "company",
+      "type": "string",
+      "enum": [
+        "company",
+        "person"
+      ],
+      "x-enumNames": [
+        "Company",
+        "Person"
+      ],
+      "x-enumDescriptions": [
+        "Company API lets you lookup company data via a domain name or company name",
+        "Person API lets you lookup a person based on an email address OR based on a domain name + first name + last name"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "enrich",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "enrich"
+      ],
+      "x-enumNames": [
+        "Enrich"
+      ]
+    },
+    "company": {
+      "x-title": "Company",
+      "description": "The name of the company (e.g – amazon)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "enrich"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "domain": {
+      "x-title": "Domain",
+      "description": "The domain name (e.g – salesforce.com)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "enrich"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "Email address (e.g – mbenioff@salesforce.com)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "enrich"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "firstname": {
+      "x-title": "First Name",
+      "description": "First name of the person (e.g – Marc)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "enrich"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "lastname": {
+      "x-title": "Last Name",
+      "description": "Last name of the person (e.g – Benioff)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "enrich"
+          ]
+        }
+      },
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \":\" + $parameter[\"resource\"]}}",
+  "x-icon": "file:uplead.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "upleadApi",
+      "required": true
+    }
+  ]
+}

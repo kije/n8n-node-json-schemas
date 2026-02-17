@@ -1,0 +1,127 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Yourls",
+  "description": "Consume Yourls API",
+  "x-n8n-node-type": "yourls",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "url",
+      "type": "string",
+      "enum": [
+        "url"
+      ],
+      "x-enumNames": [
+        "URL"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "shorten",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "url"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "expand",
+        "shorten",
+        "stats"
+      ],
+      "x-enumNames": [
+        "Expand",
+        "Shorten",
+        "Stats"
+      ],
+      "x-enumDescriptions": [
+        "Expand a URL",
+        "Shorten a URL",
+        "Get stats about one short URL"
+      ]
+    },
+    "url": {
+      "x-title": "URL",
+      "description": "The URL to shorten",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "url"
+          ],
+          "operation": [
+            "shorten"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "url"
+          ],
+          "operation": [
+            "shorten"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "keyword": {
+          "x-title": "Keyword",
+          "default": "",
+          "type": "string"
+        },
+        "title": {
+          "x-title": "Title",
+          "description": "Title for custom short URLs",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "shortUrl": {
+      "x-title": "Short URL",
+      "description": "The short URL for which to get stats",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "url"
+          ],
+          "operation": [
+            "stats"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:yourls.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "yourlsApi",
+      "required": true
+    }
+  ]
+}

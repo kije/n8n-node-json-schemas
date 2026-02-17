@@ -1,0 +1,206 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Summarize",
+  "description": "Sum, count, max, etc. across items",
+  "x-n8n-node-type": "summarize",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "fieldsToSummarize": {
+      "x-title": "Fields to Summarize",
+      "default": {
+        "values": [
+          {
+            "aggregation": "count",
+            "field": ""
+          }
+        ]
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "aggregation": {
+                "x-title": "Aggregation",
+                "description": "How to combine the values of the field you want to summarize",
+                "default": "count",
+                "type": "string",
+                "enum": [
+                  "append",
+                  "average",
+                  "concatenate",
+                  "count",
+                  "countUnique",
+                  "max",
+                  "min",
+                  "sum"
+                ],
+                "x-enumNames": [
+                  "Append",
+                  "Average",
+                  "Concatenate",
+                  "Count",
+                  "Count Unique",
+                  "Max",
+                  "Min",
+                  "Sum"
+                ]
+              },
+              "field": {
+                "x-title": "Field",
+                "description": "The name of an input field that you want to summarize; null, undefined, empty strings would be ignored",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "aggregation": [
+                      "countUnique",
+                      "count",
+                      "max",
+                      "min"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "includeEmpty": {
+                "x-title": "Include Empty Values",
+                "default": false,
+                "x-displayOptions": {
+                  "show": {
+                    "aggregation": [
+                      "append",
+                      "concatenate",
+                      "count",
+                      "countUnique"
+                    ]
+                  }
+                },
+                "type": "boolean"
+              },
+              "separateBy": {
+                "x-title": "Separator",
+                "default": ",",
+                "x-displayOptions": {
+                  "show": {
+                    "aggregation": [
+                      "concatenate"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  ",",
+                  ", ",
+                  "\n",
+                  "",
+                  " ",
+                  "other"
+                ],
+                "x-enumNames": [
+                  "Comma",
+                  "Comma and Space",
+                  "New Line",
+                  "None",
+                  "Space",
+                  "Other"
+                ]
+              },
+              "customSeparator": {
+                "x-title": "Custom Separator",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "aggregation": [
+                      "concatenate"
+                    ],
+                    "separateBy": [
+                      "other"
+                    ]
+                  }
+                },
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "fieldsToSplitBy": {
+      "x-title": "Fields to Group By",
+      "description": "The name of the input fields that you want to split the summary by",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "/options.outputFormat": [
+            "singleItem"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "continueIfFieldNotFound": {
+          "x-title": "Continue if Field Not Found",
+          "description": "Whether to continue if field to summarize can't be found in any items and return single empty item, otherwise an error would be thrown",
+          "default": false,
+          "x-displayOptions": {
+            "hide": {
+              "@version": [
+                {
+                  "_cnd": {
+                    "gte": 1.1
+                  }
+                }
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "disableDotNotation": {
+          "x-title": "Disable Dot Notation",
+          "description": "Whether to disallow referencing child fields using `parent.child` in the field name",
+          "default": false,
+          "type": "boolean"
+        },
+        "outputFormat": {
+          "x-title": "Output Format",
+          "default": "separateItems",
+          "type": "string",
+          "enum": [
+            "separateItems",
+            "singleItem"
+          ],
+          "x-enumNames": [
+            "Each Split in a Separate Item",
+            "All Splits in a Single Item"
+          ]
+        },
+        "skipEmptySplitFields": {
+          "x-title": "Ignore items without valid fields to group by",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-icon": "file:summarize.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

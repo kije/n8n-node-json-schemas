@@ -1,0 +1,331 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Vero",
+  "description": "Consume Vero API",
+  "x-n8n-node-type": "vero",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "user",
+      "type": "string",
+      "enum": [
+        "user",
+        "event"
+      ],
+      "x-enumNames": [
+        "User",
+        "Event"
+      ],
+      "x-enumDescriptions": [
+        "Create, update and manage the subscription status of your users",
+        "Track events based on actions your customers take in real time"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "track",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "track"
+      ],
+      "x-enumNames": [
+        "Track"
+      ],
+      "x-enumDescriptions": [
+        "Track an event for a specific customer"
+      ]
+    },
+    "id": {
+      "x-title": "ID",
+      "description": "The unique identifier of the customer",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "track"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "jsonParameters": {
+      "x-title": "JSON Parameters",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "track"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "email": {
+          "x-title": "Email",
+          "description": "The table to create the row in",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "dataAttributesUi": {
+      "x-title": "Data",
+      "description": "Key value pairs that represent any properties you want to track with this event",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "track"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "dataAttributesValues": {
+          "x-title": "Data",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "x-title": "Key",
+                "description": "Name of the property to set",
+                "default": "",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "Value of the property to set",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "dataAttributesJson": {
+      "x-title": "Data",
+      "description": "Key value pairs that represent the custom user properties you want to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "track"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "newId": {
+      "x-title": "New ID",
+      "description": "The new unique identifier of the user",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "alias"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "tags": {
+      "x-title": "Tags",
+      "description": "Tags to remove separated by \",\"",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "removeTags"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "email": {
+      "x-title": "Email",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "track"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "eventName": {
+      "x-title": "Event Name",
+      "description": "The name of the event tracked",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "track"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "extraAttributesUi": {
+      "x-title": "Extra",
+      "description": "Key value pairs that represent reserved, Vero-specific operators. Refer to the note on “deduplication” below.",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "track"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "extraAttributesValues": {
+          "x-title": "Extra",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "x-title": "Key",
+                "description": "Name of the property to set",
+                "default": "",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "Value of the property to set",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "extraAttributesJson": {
+      "x-title": "Extra",
+      "description": "Key value pairs that represent reserved, Vero-specific operators. Refer to the note on “deduplication” below.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "track"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:vero.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "veroApi",
+      "required": true
+    }
+  ]
+}

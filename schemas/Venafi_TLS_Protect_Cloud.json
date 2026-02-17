@@ -1,0 +1,544 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Venafi TLS Protect Cloud",
+  "description": "Consume Venafi TLS Protect Cloud API",
+  "x-n8n-node-type": "venafiTlsProtectCloud",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "certificateRequest",
+      "type": "string",
+      "enum": [
+        "certificate",
+        "certificateRequest"
+      ],
+      "x-enumNames": [
+        "Certificate",
+        "Certificate Request"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "certificateRequest"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "get",
+        "getMany"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Get",
+        "Get Many"
+      ],
+      "x-enumDescriptions": [
+        "Create a new certificate request",
+        "Retrieve a certificate request",
+        "Retrieve many certificate requests"
+      ]
+    },
+    "certificateId": {
+      "x-title": "Certificate ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get",
+            "delete"
+          ],
+          "resource": [
+            "certificate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "downloadItem": {
+      "x-title": "Download Item",
+      "default": "certificate",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "download"
+          ],
+          "resource": [
+            "certificate"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "certificate",
+        "keystore"
+      ],
+      "x-enumNames": [
+        "Certificate",
+        "Keystore"
+      ]
+    },
+    "keystoreType": {
+      "x-title": "Keystore Type",
+      "default": "PEM",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "download"
+          ],
+          "resource": [
+            "certificate"
+          ],
+          "downloadItem": [
+            "keystore"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "JKS",
+        "PKCS12",
+        "PEM"
+      ],
+      "x-enumNames": [
+        "JKS",
+        "PKCS12",
+        "PEM"
+      ]
+    },
+    "certificateLabel": {
+      "x-title": "Certificate Label",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "download"
+          ],
+          "resource": [
+            "certificate"
+          ],
+          "downloadItem": [
+            "keystore"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "privateKeyPassphrase": {
+      "x-title": "Private Key Passphrase",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "download"
+          ],
+          "resource": [
+            "certificate"
+          ],
+          "downloadItem": [
+            "keystore"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "keystorePassphrase": {
+      "x-title": "Keystore Passphrase",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "download"
+          ],
+          "resource": [
+            "certificate"
+          ],
+          "downloadItem": [
+            "keystore"
+          ],
+          "keystoreType": [
+            "JKS"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "binaryProperty": {
+      "x-title": "Input Data Field Name",
+      "description": "The name of the input field containing the binary file data to be uploaded",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "download"
+          ],
+          "resource": [
+            "certificate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "certificateRequest"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "validityPeriod": {
+          "x-title": "Validity Period",
+          "description": "Specify how long the issued certificate should be valid for. Use ISO8601 format.",
+          "default": "P1Y",
+          "type": "string"
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getMany"
+          ],
+          "resource": [
+            "certificateRequest"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getMany"
+          ],
+          "resource": [
+            "certificateRequest"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getMany"
+          ],
+          "resource": [
+            "certificate"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "subject": {
+          "x-title": "Subject",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "applicationId": {
+      "x-title": "Application Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "certificateRequest"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "existingCertificateId": {
+      "x-title": "Existing Certificate ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "renew"
+          ],
+          "resource": [
+            "certificate"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "certificateIssuingTemplateId": {
+      "x-title": "Certificate Issuing Template Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "certificateRequest"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "certificateSigningRequest": {
+      "x-title": "Certificate Signing Request",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "certificateRequest"
+          ],
+          "generateCsr": [
+            false
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "generateCsr": {
+      "x-title": "Generate CSR",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "certificateRequest"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "commonName": {
+      "x-title": "Common Name",
+      "description": "The Common Name field for the certificate Subject (CN)",
+      "default": "n8n.io",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "certificateRequest"
+          ],
+          "generateCsr": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "certificateRequest"
+          ],
+          "generateCsr": [
+            true
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "keyType": {
+          "x-title": "Key Type",
+          "description": "The encryption algorithm for the public key",
+          "default": "RSA",
+          "type": "string",
+          "enum": [
+            "EC",
+            "RSA"
+          ],
+          "x-enumNames": [
+            "EC",
+            "RSA"
+          ],
+          "x-enumDescriptions": [
+            "Elliptic Curve (EC)",
+            "Rivest, Shamir, Adleman key (RSA)"
+          ]
+        },
+        "keyCurve": {
+          "x-title": "Key Curve",
+          "default": "ED25519",
+          "type": "string",
+          "enum": [
+            "ED25519",
+            "P256",
+            "P384",
+            "P521",
+            "UNKNOWN"
+          ],
+          "x-enumNames": [
+            "ED25519",
+            "P256",
+            "P384",
+            "P521",
+            "UNKNOWN"
+          ],
+          "x-enumDescriptions": [
+            "Use Edwards-curve Digital Signature Algorithm (EdDSA)",
+            "Use Elliptic Prime Curve 256 bit encryption",
+            "Use Elliptic Prime Curve 384 bit encryption",
+            "Use Elliptic Prime Curve 521 bit encryption",
+            ""
+          ]
+        },
+        "keyLength": {
+          "x-title": "Key Length",
+          "description": "The number of bits to allow for key generation",
+          "default": 2048,
+          "type": "number"
+        },
+        "organization": {
+          "x-title": "(O) Organization",
+          "description": "The name of a company or organization",
+          "default": "",
+          "type": "string"
+        },
+        "organizationalUnits": {
+          "x-title": "(OU) Organizational Unit(s)",
+          "description": "The name of a department or section",
+          "default": "",
+          "type": "string"
+        },
+        "locality": {
+          "x-title": "(L) City/Locality",
+          "description": "The name of a city or town",
+          "default": "",
+          "type": "string"
+        },
+        "state": {
+          "x-title": "(ST) State",
+          "description": "The name of a state or province",
+          "default": "",
+          "type": "string"
+        },
+        "country": {
+          "x-title": "(C) Country",
+          "description": "A 2 letter country code",
+          "default": "",
+          "type": "string"
+        },
+        "SubjectAltNamesUi": {
+          "x-title": "Subject Alt Names",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "SubjectAltNamesValues": {
+              "x-title": "Subject Alt Name",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "Typename": {
+                    "x-title": "Typename",
+                    "description": "What type of SAN is being used",
+                    "default": "dnsNames",
+                    "type": "string",
+                    "enum": [
+                      "dnsNames"
+                    ],
+                    "x-enumNames": [
+                      "DNS"
+                    ]
+                  },
+                  "name": {
+                    "x-title": "Name",
+                    "description": "The SAN friendly name that corresponds to the Type or TypeName parameter. For example, if a TypeName is IPAddress, the Name value is a valid IP address.",
+                    "default": "community.n8n.io",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "certificateRequestId": {
+      "x-title": "Certificate Request ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "certificateRequest"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:../venafi.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "venafiTlsProtectCloudApi",
+      "required": true
+    }
+  ]
+}

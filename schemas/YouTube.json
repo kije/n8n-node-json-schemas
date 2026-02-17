@@ -1,0 +1,555 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "YouTube",
+  "description": "Consume YouTube API",
+  "x-n8n-node-type": "youTube",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "channel",
+      "type": "string",
+      "enum": [
+        "channel",
+        "playlist",
+        "playlistItem",
+        "video",
+        "videoCategory"
+      ],
+      "x-enumNames": [
+        "Channel",
+        "Playlist",
+        "Playlist Item",
+        "Video",
+        "Video Category"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "videoCategory"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Get Many"
+      ],
+      "x-enumDescriptions": [
+        "Retrieve many video categories"
+      ]
+    },
+    "part": {
+      "x-title": "Fields",
+      "description": "The fields parameter specifies a comma-separated list of one or more video resource properties that the API response will include",
+      "default": [
+        "*"
+      ],
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "*",
+          "contentDetails",
+          "id",
+          "liveStreamingDetails",
+          "localizations",
+          "player",
+          "recordingDetails",
+          "snippet",
+          "statistics",
+          "status",
+          "topicDetails"
+        ]
+      },
+      "x-enumNames": [
+        "*",
+        "Content Details",
+        "ID",
+        "Live Streaming Details",
+        "Localizations",
+        "Player",
+        "Recording Details",
+        "Snippet",
+        "Statistics",
+        "Status",
+        "Topic Details"
+      ]
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "videoCategory"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 25,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "videoCategory"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 50
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "channelId": {
+          "x-title": "Channel ID",
+          "description": "The channelId parameter indicates that the API response should only contain resources created by the channel",
+          "default": "",
+          "type": "string"
+        },
+        "forDeveloper": {
+          "x-title": "For Developer",
+          "description": "Whether to restrict the search to only retrieve videos uploaded via the developer's application or website",
+          "default": false,
+          "type": "boolean"
+        },
+        "publishedAfter": {
+          "x-title": "Published After",
+          "description": "The publishedAfter parameter indicates that the API response should only contain resources created at or after the specified time",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "publishedBefore": {
+          "x-title": "Published Before",
+          "description": "The publishedBefore parameter indicates that the API response should only contain resources created before or at the specified time",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "q": {
+          "x-title": "Query",
+          "description": "The q parameter specifies the query term to search for",
+          "default": "",
+          "type": "string"
+        },
+        "regionCode": {
+          "x-title": "Region Code",
+          "description": "The regionCode parameter instructs the API to select a video chart available in the specified region. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "relatedToVideoId": {
+          "x-title": "Related To Video ID",
+          "description": "The relatedToVideoId parameter retrieves a list of videos that are related to the video that the parameter value identifies",
+          "default": "",
+          "type": "string"
+        },
+        "videoCategoryId": {
+          "x-title": "Video Category ID",
+          "description": "The videoCategoryId parameter identifies the video category for which the chart should be retrieved",
+          "default": "",
+          "type": "string"
+        },
+        "videoSyndicated": {
+          "x-title": "Video Syndicated",
+          "description": "Whether to restrict a search to only videos that can be played outside youtube.com",
+          "default": false,
+          "type": "boolean"
+        },
+        "videoType": {
+          "x-title": "Video Type",
+          "description": "The videoType parameter lets you restrict a search to a particular type of videos",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "any",
+            "episode",
+            "movie"
+          ],
+          "x-enumNames": [
+            "Any",
+            "Episode",
+            "Movie"
+          ]
+        }
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "order": {
+          "x-title": "Order",
+          "default": "relevance",
+          "type": "string",
+          "enum": [
+            "date",
+            "relevance"
+          ],
+          "x-enumNames": [
+            "Date",
+            "Relevance"
+          ]
+        },
+        "safeSearch": {
+          "x-title": "Safe Search",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "moderate",
+            "none",
+            "strict"
+          ],
+          "x-enumNames": [
+            "Moderate",
+            "None",
+            "Strict"
+          ],
+          "x-enumDescriptions": [
+            "YouTube will filter some content from search results and, at the least, will filter content that is restricted in your locale",
+            "YouTube will not filter the search result set",
+            "YouTube will try to exclude all restricted content from the search result set"
+          ]
+        }
+      }
+    },
+    "channelId": {
+      "x-title": "Channel ID",
+      "description": "ID of the channel",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "uploadBanner"
+          ],
+          "resource": [
+            "channel"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "defaultLanguage": {
+          "x-title": "Default Language Name or ID",
+          "description": "The language of the text in the playlist resource's title and description properties. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "description": {
+          "x-title": "Description",
+          "description": "The playlist's description",
+          "default": "",
+          "type": "string"
+        },
+        "embeddable": {
+          "x-title": "Embeddable",
+          "description": "Whether the video can be embedded on another website",
+          "default": false,
+          "type": "boolean"
+        },
+        "license": {
+          "x-title": "License",
+          "description": "The video's license",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "creativeCommon",
+            "youtube"
+          ],
+          "x-enumNames": [
+            "Creative Common",
+            "Youtube"
+          ]
+        },
+        "notifySubscribers": {
+          "x-title": "Notify Subscribers",
+          "description": "Whether YouTube should send a notification about the new video to users who subscribe to the video's channel",
+          "default": false,
+          "type": "boolean"
+        },
+        "privacyStatus": {
+          "x-title": "Privacy Status",
+          "description": "The playlist's privacy status",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "private",
+            "public",
+            "unlistef"
+          ],
+          "x-enumNames": [
+            "Private",
+            "Public",
+            "Unlisted"
+          ]
+        },
+        "publicStatsViewable": {
+          "x-title": "Public Stats Viewable",
+          "description": "Whether the extended video statistics on the video's watch page are publicly viewable",
+          "default": true,
+          "type": "boolean"
+        },
+        "publishAt": {
+          "x-title": "Publish At",
+          "description": "If you set a value for this property, you must also set the status.privacyStatus property to private",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "recordingDate": {
+          "x-title": "Recording Date",
+          "description": "The date and time when the video was recorded",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "selfDeclaredMadeForKids": {
+          "x-title": "Self Declared Made For Kids",
+          "description": "Whether the video is designated as child-directed, and it contains the current \"made for kids\" status of the video",
+          "default": false,
+          "type": "boolean"
+        },
+        "tags": {
+          "x-title": "Tags",
+          "description": "Keyword tags associated with the playlist. Mulplie can be defined separated by comma.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "binaryProperty": {
+      "x-title": "Input Binary Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "title": {
+      "x-title": "Title",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "playlistId": {
+      "x-title": "Playlist Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "playlistItem"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "videoId": {
+      "x-title": "Video ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "playlistItemId": {
+      "x-title": "Playlist Item ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "playlistItem"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "regionCode": {
+      "x-title": "Region Code",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "videoCategory"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "categoryId": {
+      "x-title": "Category Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "rating": {
+      "x-title": "Rating",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "rate"
+          ],
+          "resource": [
+            "video"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "dislike",
+        "like",
+        "none"
+      ],
+      "x-enumNames": [
+        "Dislike",
+        "Like",
+        "None"
+      ],
+      "x-enumDescriptions": [
+        "Records that the authenticated user disliked the video",
+        "Records that the authenticated user liked the video",
+        "Removes any rating that the authenticated user had previously set for the video"
+      ]
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:youTube.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "youTubeOAuth2Api",
+      "required": true
+    }
+  ]
+}

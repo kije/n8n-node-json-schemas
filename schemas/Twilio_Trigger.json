@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Twilio Trigger",
+  "description": "Starts the workflow on a Twilio update",
+  "x-n8n-node-type": "twilioTrigger",
+  "x-n8n-version": [
+    1
+  ],
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "updates": {
+      "x-title": "Trigger On",
+      "default": [],
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "com.twilio.messaging.inbound-message.received",
+          "com.twilio.voice.insights.call-summary.complete"
+        ]
+      },
+      "x-enumNames": [
+        "New SMS",
+        "New Call"
+      ]
+    }
+  },
+  "x-subtitle": "=Updates: {{$parameter[\"updates\"].join(\", \")}}",
+  "x-icon": "file:twilio.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "twilioApi",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

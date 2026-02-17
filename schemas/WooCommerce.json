@@ -1,0 +1,1125 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WooCommerce",
+  "description": "Consume WooCommerce API",
+  "x-n8n-node-type": "wooCommerce",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "product",
+      "type": "string",
+      "enum": [
+        "customer",
+        "order",
+        "product"
+      ],
+      "x-enumNames": [
+        "Customer",
+        "Order",
+        "Product"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "order"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a order",
+        "Delete a order",
+        "Get a order",
+        "Get many orders",
+        "Update a order"
+      ]
+    },
+    "email": {
+      "x-title": "Email",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customer"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "order"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "currency": {
+          "x-title": "Currency",
+          "description": "Currency the order was created with",
+          "default": "",
+          "type": "string"
+        },
+        "customerId": {
+          "x-title": "Customer ID",
+          "description": "User ID who owns the order. 0 for guests.",
+          "default": "",
+          "type": "string"
+        },
+        "customerNote": {
+          "x-title": "Customer Note",
+          "description": "Note left by customer during checkout",
+          "default": "",
+          "type": "string"
+        },
+        "parentId": {
+          "x-title": "Parent ID",
+          "description": "Parent order ID",
+          "default": "",
+          "type": "string"
+        },
+        "paymentMethodId": {
+          "x-title": "Payment Method ID",
+          "default": "",
+          "type": "string"
+        },
+        "paymentMethodTitle": {
+          "x-title": "Payment Method Title",
+          "default": "",
+          "type": "string"
+        },
+        "setPaid": {
+          "x-title": "Set Paid",
+          "description": "Whether the order is paid. It will set the status to processing and reduce stock items.",
+          "default": false,
+          "type": "boolean"
+        },
+        "status": {
+          "x-title": "Status",
+          "description": "A named status for the order",
+          "default": "pending",
+          "type": "string",
+          "enum": [
+            "cancelled",
+            "completed",
+            "failed",
+            "on-hold",
+            "pending",
+            "processing",
+            "refunded",
+            "trash"
+          ],
+          "x-enumNames": [
+            "Cancelled",
+            "Completed",
+            "Failed",
+            "on-hold",
+            "Pending",
+            "Processing",
+            "Refunded",
+            "Trash"
+          ]
+        },
+        "transactionID": {
+          "x-title": "Transaction ID",
+          "description": "Unique transaction ID",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "customerId": {
+      "x-title": "Customer ID",
+      "description": "ID of the customer to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customer"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "order"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "order"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customer"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "email": {
+          "x-title": "Email",
+          "description": "Email address to filter customers by",
+          "default": "",
+          "type": "string"
+        },
+        "order": {
+          "x-title": "Sort Order",
+          "description": "Order to sort customers in",
+          "default": "asc",
+          "type": "string",
+          "enum": [
+            "asc",
+            "desc"
+          ],
+          "x-enumNames": [
+            "Ascending",
+            "Descending"
+          ]
+        },
+        "orderby": {
+          "x-title": "Order By",
+          "description": "Field to sort customers by",
+          "default": "id",
+          "type": "string",
+          "enum": [
+            "id",
+            "include",
+            "name",
+            "registered_date"
+          ],
+          "x-enumNames": [
+            "ID",
+            "Include",
+            "Name",
+            "Registered Date"
+          ]
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "order"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "currency": {
+          "x-title": "Currency",
+          "description": "Currency the order was created with",
+          "default": "",
+          "type": "string"
+        },
+        "customerId": {
+          "x-title": "Customer ID",
+          "description": "User ID who owns the order. 0 for guests.",
+          "default": "",
+          "type": "string"
+        },
+        "customerNote": {
+          "x-title": "Customer Note",
+          "description": "Note left by customer during checkout",
+          "default": "",
+          "type": "string"
+        },
+        "parentId": {
+          "x-title": "Parent ID",
+          "description": "Parent order ID",
+          "default": "",
+          "type": "string"
+        },
+        "paymentMethodId": {
+          "x-title": "Payment Method ID",
+          "default": "",
+          "type": "string"
+        },
+        "paymentMethodTitle": {
+          "x-title": "Payment Method Title",
+          "default": "",
+          "type": "string"
+        },
+        "status": {
+          "x-title": "Status",
+          "description": "A named status for the order",
+          "default": "pending",
+          "type": "string",
+          "enum": [
+            "cancelled",
+            "completed",
+            "failed",
+            "on-hold",
+            "pending",
+            "processing",
+            "refunded",
+            "trash"
+          ],
+          "x-enumNames": [
+            "Cancelled",
+            "Completed",
+            "Failed",
+            "on-hold",
+            "Pending",
+            "Processing",
+            "Refunded",
+            "Trash"
+          ]
+        },
+        "transactionID": {
+          "x-title": "Transaction ID",
+          "description": "Unique transaction ID",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "Product name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "product"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "dimensionsUi": {
+      "x-title": "Dimensions",
+      "description": "Product dimensions",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "product"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "dimensionsValues": {
+          "x-title": "Dimension",
+          "type": "object",
+          "properties": {
+            "height": {
+              "x-title": "Height",
+              "description": "Product height",
+              "default": "",
+              "type": "string"
+            },
+            "length": {
+              "x-title": "Length",
+              "description": "Product length",
+              "default": "",
+              "type": "string"
+            },
+            "width": {
+              "x-title": "Width",
+              "description": "Product width",
+              "default": "",
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "imagesUi": {
+      "x-title": "Images",
+      "description": "Product Image",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "product"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "imagesValues": {
+          "x-title": "Image",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "alt": {
+                "x-title": "Alt",
+                "description": "Image alternative text",
+                "default": "",
+                "type": "string"
+              },
+              "src": {
+                "x-title": "Src",
+                "description": "Image URL",
+                "default": "",
+                "type": "string"
+              },
+              "name": {
+                "x-title": "Name",
+                "description": "Image name",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadataUi": {
+      "x-title": "Metadata",
+      "description": "Meta data",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "order"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "metadataValues": {
+          "x-title": "Metadata",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "x-title": "Key",
+                "description": "Name of the metadata key to add",
+                "default": "",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "Value to set for the metadata key",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "productId": {
+      "x-title": "Product ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "product"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "order"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "after": {
+          "x-title": "After",
+          "description": "Limit response to resources published after a given ISO8601 compliant date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "before": {
+          "x-title": "Before",
+          "description": "Limit response to resources published before a given ISO8601 compliant date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "customer": {
+          "x-title": "Customer",
+          "description": "Limit result set to orders assigned a specific customer",
+          "default": "",
+          "type": "string"
+        },
+        "decimalPoints": {
+          "x-title": "Decimal Points",
+          "description": "Number of decimal points to use in each resource",
+          "default": 2,
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "order": {
+          "x-title": "Order",
+          "description": "Order sort attribute ascending or descending",
+          "default": "desc",
+          "type": "string",
+          "enum": [
+            "asc",
+            "desc"
+          ],
+          "x-enumNames": [
+            "ASC",
+            "DESC"
+          ]
+        },
+        "product": {
+          "x-title": "Product",
+          "description": "Limit result set to orders assigned a specific product",
+          "default": "",
+          "type": "string"
+        },
+        "orderBy": {
+          "x-title": "Order By",
+          "description": "Sort collection by object attribute",
+          "default": "id",
+          "type": "string",
+          "enum": [
+            "date",
+            "id",
+            "include",
+            "slug",
+            "title"
+          ],
+          "x-enumNames": [
+            "Date",
+            "ID",
+            "Include",
+            "Slug",
+            "Title"
+          ]
+        },
+        "search": {
+          "x-title": "Search",
+          "description": "Limit results to those matching a string",
+          "default": "",
+          "type": "string"
+        },
+        "status": {
+          "x-title": "Status",
+          "description": "Limit result set to orders assigned a specific status",
+          "default": "any",
+          "type": "string",
+          "enum": [
+            "any",
+            "cancelled",
+            "completed",
+            "failed",
+            "on-hold",
+            "pending",
+            "processing",
+            "refunded",
+            "trash"
+          ],
+          "x-enumNames": [
+            "Any",
+            "Cancelled",
+            "Completed",
+            "Failed",
+            "On-Hold",
+            "Pending",
+            "Processing",
+            "Refunded",
+            "Trash"
+          ]
+        }
+      }
+    },
+    "billingUi": {
+      "x-title": "Billing",
+      "description": "Billing address",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "order"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "billingValues": {
+          "x-title": "Address",
+          "type": "object",
+          "properties": {
+            "firstName": {
+              "x-title": "First Name",
+              "default": "",
+              "type": "string"
+            },
+            "lastName": {
+              "x-title": "Last Name",
+              "default": "",
+              "type": "string"
+            },
+            "company": {
+              "x-title": "Company",
+              "default": "",
+              "type": "string"
+            },
+            "address_1": {
+              "x-title": "Address Line 1",
+              "default": "",
+              "type": "string"
+            },
+            "address_2": {
+              "x-title": "Address Line 2",
+              "default": "",
+              "type": "string"
+            },
+            "city": {
+              "x-title": "City",
+              "description": "ISO code or name of the state, province or district",
+              "default": "",
+              "type": "string"
+            },
+            "postalCode": {
+              "x-title": "Postal Code",
+              "default": "",
+              "type": "string"
+            },
+            "country": {
+              "x-title": "Country",
+              "default": "",
+              "type": "string"
+            },
+            "email": {
+              "x-title": "Email",
+              "default": "",
+              "type": "string"
+            },
+            "phone": {
+              "x-title": "Phone",
+              "default": "",
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "couponLinesUi": {
+      "x-title": "Coupon Lines",
+      "description": "Coupons line data",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "order"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "couponLinesValues": {
+          "x-title": "Coupon Line",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "x-title": "Code",
+                "description": "Coupon code",
+                "default": "",
+                "type": "string"
+              },
+              "metadataUi": {
+                "x-title": "Metadata",
+                "description": "Meta data",
+                "default": {},
+                "type": "object",
+                "properties": {
+                  "metadataValues": {
+                    "x-title": "Metadata",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "key": {
+                          "x-title": "Key",
+                          "description": "Name of the metadata key to add",
+                          "default": "",
+                          "type": "string"
+                        },
+                        "value": {
+                          "x-title": "Value",
+                          "description": "Value to set for the metadata key",
+                          "default": "",
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "feeLinesUi": {
+      "x-title": "Fee Lines",
+      "description": "Fee line data",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "order"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "feeLinesValues": {
+          "x-title": "Fee Line",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Name",
+                "description": "Fee name",
+                "default": "",
+                "type": "string"
+              },
+              "taxClass": {
+                "x-title": "Tax Class",
+                "description": "Tax class of fee",
+                "default": "",
+                "type": "string"
+              },
+              "taxStatus": {
+                "x-title": "Tax Status",
+                "description": "Tax class of fee",
+                "default": "",
+                "type": "string",
+                "enum": [
+                  "taxable",
+                  "none"
+                ],
+                "x-enumNames": [
+                  "Taxable",
+                  "None"
+                ]
+              },
+              "total": {
+                "x-title": "Total",
+                "description": "Line total (after discounts)",
+                "default": "",
+                "type": "string"
+              },
+              "metadataUi": {
+                "x-title": "Metadata",
+                "description": "Meta data",
+                "default": {},
+                "type": "object",
+                "properties": {
+                  "metadataValues": {
+                    "x-title": "Metadata",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "key": {
+                          "x-title": "Key",
+                          "description": "Name of the metadata key to add",
+                          "default": "",
+                          "type": "string"
+                        },
+                        "value": {
+                          "x-title": "Value",
+                          "description": "Value to set for the metadata key",
+                          "default": "",
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "lineItemsUi": {
+      "x-title": "Line Items",
+      "description": "Line item data",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "order"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "lineItemsValues": {
+          "x-title": "Line Item",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Name",
+                "description": "Product name",
+                "default": "",
+                "type": "string"
+              },
+              "productId": {
+                "x-title": "Product ID",
+                "default": 0,
+                "type": "number"
+              },
+              "variationId": {
+                "x-title": "Variation ID",
+                "description": "Variation ID, if applicable",
+                "default": 0,
+                "type": "number"
+              },
+              "quantity": {
+                "x-title": "Quantity",
+                "description": "Quantity ordered",
+                "default": 1,
+                "type": "number"
+              },
+              "taxClass": {
+                "x-title": "Tax Class",
+                "description": "Slug of the tax class of product",
+                "default": "",
+                "type": "string"
+              },
+              "subtotal": {
+                "x-title": "Subtotal",
+                "description": "Line subtotal (before discounts)",
+                "default": "",
+                "type": "string"
+              },
+              "total": {
+                "x-title": "Total",
+                "description": "Line total (after discounts)",
+                "default": "",
+                "type": "string"
+              },
+              "metadataUi": {
+                "x-title": "Metadata",
+                "description": "Meta data",
+                "default": {},
+                "type": "object",
+                "properties": {
+                  "metadataValues": {
+                    "x-title": "Metadata",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "key": {
+                          "x-title": "Key",
+                          "description": "Name of the metadata key to add",
+                          "default": "",
+                          "type": "string"
+                        },
+                        "value": {
+                          "x-title": "Value",
+                          "description": "Value to set for the metadata key",
+                          "default": "",
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "shippingUi": {
+      "x-title": "Shipping",
+      "description": "Shipping address",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "order"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "shippingValues": {
+          "x-title": "Address",
+          "type": "object",
+          "properties": {
+            "firstName": {
+              "x-title": "First Name",
+              "default": "",
+              "type": "string"
+            },
+            "lastName": {
+              "x-title": "Last Name",
+              "default": "",
+              "type": "string"
+            },
+            "company": {
+              "x-title": "Company",
+              "default": "",
+              "type": "string"
+            },
+            "address_1": {
+              "x-title": "Address Line 1",
+              "default": "",
+              "type": "string"
+            },
+            "address_2": {
+              "x-title": "Address Line 2",
+              "default": "",
+              "type": "string"
+            },
+            "city": {
+              "x-title": "City",
+              "description": "ISO code or name of the state, province or district",
+              "default": "",
+              "type": "string"
+            },
+            "postalCode": {
+              "x-title": "Postal Code",
+              "default": "",
+              "type": "string"
+            },
+            "country": {
+              "x-title": "Country",
+              "default": "",
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "shippingLinesUi": {
+      "x-title": "Shipping Lines",
+      "description": "Shipping line data",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "order"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "shippingLinesValues": {
+          "x-title": "Fee Line",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "methodTitle": {
+                "x-title": "Method Title",
+                "description": "Shipping method name",
+                "default": "",
+                "type": "string"
+              },
+              "method ID": {
+                "x-title": "Method ID",
+                "description": "Shipping method ID",
+                "default": "",
+                "type": "string"
+              },
+              "total": {
+                "x-title": "Total",
+                "description": "Line total (after discounts)",
+                "default": "",
+                "type": "string"
+              },
+              "metadataUi": {
+                "x-title": "Metadata",
+                "description": "Meta data",
+                "default": {},
+                "type": "object",
+                "properties": {
+                  "metadataValues": {
+                    "x-title": "Metadata",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "key": {
+                          "x-title": "Key",
+                          "description": "Name of the metadata key to add",
+                          "default": "",
+                          "type": "string"
+                        },
+                        "value": {
+                          "x-title": "Value",
+                          "description": "Value to set for the metadata key",
+                          "default": "",
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "orderId": {
+      "x-title": "Order ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "order"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:wooCommerce.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "wooCommerceApi",
+      "required": true
+    }
+  ]
+}
