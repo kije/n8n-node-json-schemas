@@ -1,0 +1,987 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Zoho CRM",
+  "description": "Consume Zoho CRM API",
+  "x-n8n-node-type": "zohoCrm",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "account",
+      "type": "string",
+      "enum": [
+        "account",
+        "contact",
+        "deal",
+        "invoice",
+        "lead",
+        "product",
+        "purchaseOrder",
+        "quote",
+        "salesOrder",
+        "vendor"
+      ],
+      "x-enumNames": [
+        "Account",
+        "Contact",
+        "Deal",
+        "Invoice",
+        "Lead",
+        "Product",
+        "Purchase Order",
+        "Quote",
+        "Sales Order",
+        "Vendor"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "vendor"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "upsert",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Create or Update",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a vendor",
+        "Create a new record, or update the current one if it already exists (upsert)",
+        "Delete a vendor",
+        "Get a vendor",
+        "Get many vendors",
+        "Update a vendor"
+      ]
+    },
+    "accountName": {
+      "x-title": "Account Name",
+      "description": "Name of the account. If a record with this account name exists it will be updated, otherwise a new one will be created.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "account"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "vendor"
+          ],
+          "operation": [
+            "create",
+            "upsert"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "Address": {
+          "x-title": "Address",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "address_fields": {
+              "x-title": "Address Fields",
+              "type": "object",
+              "properties": {
+                "Street": {
+                  "x-title": "Street",
+                  "default": "",
+                  "type": "string"
+                },
+                "City": {
+                  "x-title": "City",
+                  "default": "",
+                  "type": "string"
+                },
+                "State": {
+                  "x-title": "State",
+                  "default": "",
+                  "type": "string"
+                },
+                "Country": {
+                  "x-title": "Country",
+                  "default": "",
+                  "type": "string"
+                },
+                "Zip_Code": {
+                  "x-title": "Zip Code",
+                  "default": "",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "Category": {
+          "x-title": "Category",
+          "default": "",
+          "type": "string"
+        },
+        "Currency": {
+          "x-title": "Currency",
+          "default": "USD",
+          "type": "string",
+          "enum": [
+            "USD",
+            "EUR",
+            "AED",
+            "AFN",
+            "ALL",
+            "ARS",
+            "AUD",
+            "AZN",
+            "BBD",
+            "BDT",
+            "BGN",
+            "BMD",
+            "BND",
+            "BOB",
+            "BRL",
+            "BSD",
+            "BWP",
+            "BZD",
+            "CAD",
+            "CHF",
+            "CLP",
+            "CNY",
+            "COP",
+            "CRC",
+            "CZK",
+            "DKK",
+            "DOP",
+            "DZD",
+            "EGP",
+            "FJD",
+            "GBP",
+            "GTQ",
+            "HKD",
+            "HNL",
+            "HRK",
+            "HUF",
+            "IDR",
+            "ILS",
+            "INR",
+            "JMD",
+            "JPY",
+            "KES",
+            "KRW",
+            "KZT",
+            "LAK",
+            "LBP",
+            "LKR",
+            "LRD",
+            "MAD",
+            "MMK",
+            "MOP",
+            "MRO",
+            "MUR",
+            "MVR",
+            "MXN",
+            "MYR",
+            "NIO",
+            "NOK",
+            "NPR",
+            "NZD",
+            "PEN",
+            "PGK",
+            "PHP",
+            "PKR",
+            "PLN",
+            "QAR",
+            "RON",
+            "RUB",
+            "SAR",
+            "SBD",
+            "SCR",
+            "SEK",
+            "SGD",
+            "SYP",
+            "THB",
+            "TOP",
+            "TRY",
+            "TTD",
+            "TWD",
+            "UAH",
+            "VND",
+            "VUV",
+            "WST",
+            "XCD",
+            "XOF",
+            "YER",
+            "ZAR"
+          ],
+          "x-enumNames": [
+            "US Dollar",
+            "Euro",
+            "UAE Dirham",
+            "Afghani",
+            "Lek",
+            "Argentine Peso",
+            "Australian Dollar",
+            "Azerbaijan Manat",
+            "Barbados Dollar",
+            "Taka",
+            "Bulgarian Lev",
+            "Bermudian Dollar",
+            "Brunei Dollar",
+            "Boliviano",
+            "Brazilian Real",
+            "Bahamian Dollar",
+            "Pula",
+            "Belize Dollar",
+            "Canadian Dollar",
+            "Swiss Franc",
+            "Chilean Peso",
+            "Yuan Renminbi",
+            "Colombian Peso",
+            "Costa Rican Colon",
+            "Czech Koruna",
+            "Danish Krone",
+            "Dominican Peso",
+            "Algerian Dinar",
+            "Egyptian Pound",
+            "Fiji Dollar",
+            "Pound Sterling",
+            "Quetzal",
+            "Hong Kong Dollar",
+            "Lempira",
+            "Kuna",
+            "Forint",
+            "Rupiah",
+            "New Israeli Sheqel",
+            "Indian Rupee",
+            "Jamaican Dollar",
+            "Yen",
+            "Kenyan Shilling",
+            "Won",
+            "Tenge",
+            "Lao Kip",
+            "Lebanese Pound",
+            "Sri Lanka Rupee",
+            "Liberian Dollar",
+            "Moroccan Dirham",
+            "Kyat",
+            "Pataca",
+            "Ouguiya",
+            "Mauritius Rupee",
+            "Rufiyaa",
+            "Mexican Peso",
+            "Malaysian Ringgit",
+            "Cordoba Oro",
+            "Norwegian Krone",
+            "Nepalese Rupee",
+            "New Zealand Dollar",
+            "Sol",
+            "Kina",
+            "Philippine Peso",
+            "Pakistan Rupee",
+            "Zloty",
+            "Qatari Rial",
+            "Romanian Leu",
+            "Russian Ruble",
+            "Saudi Riyal",
+            "Solomon Islands Dollar",
+            "Seychelles Rupee",
+            "Swedish Krona",
+            "Singapore Dollar",
+            "Syrian Pound",
+            "Baht",
+            "Pa’anga",
+            "Turkish Lira",
+            "Trinidad and Tobago Dollar",
+            "New Taiwan Dollar",
+            "Hryvnia",
+            "Dong",
+            "Vatu",
+            "Tala",
+            "East Caribbean Dollar",
+            "West African CFA Franc",
+            "Yemeni Rial",
+            "Rand"
+          ]
+        },
+        "customFields": {
+          "x-title": "Custom Fields",
+          "description": "Filter by custom fields",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "customFields": {
+              "x-title": "Custom Field",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "fieldId": {
+                    "x-title": "Field ID",
+                    "description": "Custom field to set a value to",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "Value to set on custom field",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "Description": {
+          "x-title": "Description",
+          "default": "",
+          "type": "string"
+        },
+        "Email": {
+          "x-title": "Email",
+          "default": "",
+          "type": "string"
+        },
+        "Phone": {
+          "x-title": "Phone",
+          "default": "",
+          "type": "string"
+        },
+        "Website": {
+          "x-title": "Website",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "accountId": {
+      "x-title": "Account Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "salesOrder"
+          ],
+          "operation": [
+            "create",
+            "upsert"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "vendor"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 5,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "vendor"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 1000
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "vendor"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "approved": {
+          "x-title": "Approved",
+          "description": "Whether to retrieve only approved records. Defaults to true.",
+          "default": true,
+          "type": "boolean"
+        },
+        "converted": {
+          "x-title": "Converted",
+          "description": "Whether to retrieve only converted records. Defaults to false.",
+          "default": false,
+          "type": "boolean"
+        },
+        "fields": {
+          "x-title": "Fields",
+          "description": "Return only these fields",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "include_child": {
+          "x-title": "Include Child",
+          "description": "Whether to retrieve only records from child territories",
+          "default": false,
+          "type": "boolean"
+        },
+        "sort_by": {
+          "x-title": "Sort By",
+          "description": "Field to sort records by",
+          "default": [],
+          "type": "string"
+        },
+        "sort_order": {
+          "x-title": "Sort Order",
+          "description": "Ascending or descending order sort order",
+          "default": "desc",
+          "type": "string",
+          "enum": [
+            "asc",
+            "desc"
+          ],
+          "x-enumNames": [
+            "Ascending",
+            "Descending"
+          ]
+        },
+        "territory_id": {
+          "x-title": "Territory ID",
+          "description": "Retrieve only records from this territory",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "vendor"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "Address": {
+          "x-title": "Address",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "address_fields": {
+              "x-title": "Address Fields",
+              "type": "object",
+              "properties": {
+                "Street": {
+                  "x-title": "Street",
+                  "default": "",
+                  "type": "string"
+                },
+                "City": {
+                  "x-title": "City",
+                  "default": "",
+                  "type": "string"
+                },
+                "State": {
+                  "x-title": "State",
+                  "default": "",
+                  "type": "string"
+                },
+                "Country": {
+                  "x-title": "Country",
+                  "default": "",
+                  "type": "string"
+                },
+                "Zip_Code": {
+                  "x-title": "Zip Code",
+                  "default": "",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "Category": {
+          "x-title": "Category",
+          "default": "",
+          "type": "string"
+        },
+        "Currency": {
+          "x-title": "Currency",
+          "default": "",
+          "type": "string"
+        },
+        "customFields": {
+          "x-title": "Custom Fields",
+          "description": "Filter by custom fields",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "customFields": {
+              "x-title": "Custom Field",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "fieldId": {
+                    "x-title": "Field ID",
+                    "description": "Custom field to set a value to",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "Value to set on custom field",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "Description": {
+          "x-title": "Description",
+          "default": "",
+          "type": "string"
+        },
+        "Email": {
+          "x-title": "Email",
+          "default": "",
+          "type": "string"
+        },
+        "Phone": {
+          "x-title": "Phone",
+          "default": "",
+          "type": "string"
+        },
+        "Vendor_Name": {
+          "x-title": "Vendor Name",
+          "default": "",
+          "type": "string"
+        },
+        "Website": {
+          "x-title": "Website",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "lastName": {
+      "x-title": "Last Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "lead"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "contactId": {
+      "x-title": "Contact ID",
+      "description": "ID of the contact to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "dealName": {
+      "x-title": "Deal Name",
+      "description": "Name of the deal. If a record with this deal name exists it will be updated, otherwise a new one will be created.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "stage": {
+      "x-title": "Stage Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create",
+            "upsert"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "dealId": {
+      "x-title": "Deal ID",
+      "description": "ID of the deal to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "subject": {
+      "x-title": "Subject",
+      "description": "Subject or title of the sales order. If a record with this subject exists it will be updated, otherwise a new one will be created.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "salesOrder"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "Product_Details": {
+      "x-title": "Products",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "salesOrder"
+          ],
+          "operation": [
+            "create",
+            "upsert"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "list_price": {
+          "x-title": "List Price",
+          "default": "",
+          "type": "number"
+        },
+        "id": {
+          "x-title": "Product Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "type": "string"
+        },
+        "product_description": {
+          "x-title": "Product Description",
+          "default": "",
+          "type": "string"
+        },
+        "quantity": {
+          "x-title": "Quantity",
+          "default": 1,
+          "type": "number"
+        },
+        "quantity_in_stock": {
+          "x-title": "Quantity in Stock",
+          "default": 0,
+          "type": "number"
+        },
+        "Tax": {
+          "x-title": "Tax",
+          "default": 0,
+          "type": "number"
+        },
+        "total": {
+          "x-title": "Total",
+          "default": 0,
+          "type": "number"
+        },
+        "total_after_discount": {
+          "x-title": "Total After Discount",
+          "default": 0,
+          "type": "number"
+        },
+        "net_total": {
+          "x-title": "Total (Net)",
+          "default": 0,
+          "type": "number"
+        },
+        "unit_price": {
+          "x-title": "Unit Price",
+          "default": 0,
+          "type": "number"
+        }
+      }
+    },
+    "invoiceId": {
+      "x-title": "Invoice ID",
+      "description": "ID of the invoice to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "invoice"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "Company": {
+      "x-title": "Company",
+      "description": "Company at which the lead works",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "lead"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "leadId": {
+      "x-title": "Lead ID",
+      "description": "ID of the lead to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "lead"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "productName": {
+      "x-title": "Product Name",
+      "description": "Name of the product. If a record with this product name exists it will be updated, otherwise a new one will be created.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "product"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "productId": {
+      "x-title": "Product ID",
+      "description": "ID of the product to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "product"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "vendorId": {
+      "x-title": "Vendor ID",
+      "description": "ID of the vendor to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "vendor"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "purchaseOrderId": {
+      "x-title": "Purchase Order ID",
+      "description": "ID of the purchase order to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "purchaseOrder"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "quoteId": {
+      "x-title": "Quote ID",
+      "description": "ID of the quote to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "quote"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "salesOrderId": {
+      "x-title": "Sales Order ID",
+      "description": "ID of the sales order to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "salesOrder"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "vendorName": {
+      "x-title": "Vendor Name",
+      "description": "Name of the vendor. If a record with this vendor name exists it will be updated, otherwise a new one will be created.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "vendor"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:zoho.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "zohoOAuth2Api",
+      "required": true
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Zep Vector Store: Insert",
+  "description": "Insert data into Zep Vector Store index",
+  "x-n8n-node-type": "vectorStoreZepInsert",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "collectionName": {
+      "x-title": "Collection Name",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "embeddingDimensions": {
+          "x-title": "Embedding Dimensions",
+          "description": "Whether to allow using characters from the Unicode surrogate blocks",
+          "default": 1536,
+          "type": "number"
+        },
+        "isAutoEmbedded": {
+          "x-title": "Is Auto Embedded",
+          "description": "Whether to automatically embed documents when they are added",
+          "default": true,
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-icon": "file:zep.png",
+  "x-inputs": [
+    "main",
+    {
+      "displayName": "Document",
+      "maxConnections": 1,
+      "type": "ai_document",
+      "required": true
+    },
+    {
+      "displayName": "Embedding",
+      "maxConnections": 1,
+      "type": "ai_embedding",
+      "required": true
+    }
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "zepApi",
+      "required": true
+    }
+  ]
+}
