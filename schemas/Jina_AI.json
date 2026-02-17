@@ -1,0 +1,174 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Jina AI",
+  "description": "Interact with Jina AI API",
+  "x-n8n-node-type": "jinaAi",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "reader",
+      "type": "string",
+      "enum": [
+        "reader",
+        "research"
+      ],
+      "x-enumNames": [
+        "Reader",
+        "Research"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "deepResearch",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "research"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "deepResearch"
+      ],
+      "x-enumNames": [
+        "Deep Research"
+      ],
+      "x-enumDescriptions": [
+        "Research a topic and generate a structured research report"
+      ]
+    },
+    "url": {
+      "x-title": "URL",
+      "description": "The URL to fetch content from",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "reader"
+          ],
+          "operation": [
+            "read"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "simplify": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "research"
+          ],
+          "operation": [
+            "deepResearch"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "research"
+          ],
+          "operation": [
+            "deepResearch"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "maxReturnedSources": {
+          "x-title": "Max Returned Sources",
+          "description": "The maximum number of URLs to include in the final answer",
+          "default": "",
+          "type": "number",
+          "minimum": 1,
+          "x-precision": 0
+        },
+        "prioritizeSources": {
+          "x-title": "Prioritize Sources",
+          "description": "A list of domains that are given a higher priority for content retrieval",
+          "default": "",
+          "type": "string"
+        },
+        "excludeSources": {
+          "x-title": "Exclude Sources",
+          "description": "A list of domains to be strictly excluded from content retrieval",
+          "default": "",
+          "type": "string"
+        },
+        "siteFilter": {
+          "x-title": "Site Filter",
+          "description": "Restrict search to specific websites",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "searchQuery": {
+      "x-title": "Search Query",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "reader"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "researchQuery": {
+      "x-title": "Research Query",
+      "description": "The topic or question for the AI to research",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "research"
+          ],
+          "operation": [
+            "deepResearch"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-rows": 2
+    }
+  },
+  "x-subtitle": "={{ $parameter[\"operation\"] + \": \" + $parameter[\"resource\"] }}",
+  "x-icon": {
+    "light": "file:jinaAi.svg",
+    "dark": "file:jinaAi.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "jinaAiApi",
+      "required": true
+    }
+  ]
+}

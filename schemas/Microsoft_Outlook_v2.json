@@ -1,0 +1,1883 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Microsoft Outlook",
+  "description": "Consume Microsoft Outlook API",
+  "x-n8n-node-type": "microsoftOutlook",
+  "x-n8n-version": 2,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "message",
+      "type": "string",
+      "enum": [
+        "calendar",
+        "contact",
+        "draft",
+        "event",
+        "folder",
+        "folderMessage",
+        "message",
+        "messageAttachment"
+      ],
+      "x-enumNames": [
+        "Calendar",
+        "Contact",
+        "Draft",
+        "Event",
+        "Folder",
+        "Folder Message",
+        "Message",
+        "Message Attachment"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "add",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "messageAttachment"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "add",
+        "download",
+        "get",
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Add",
+        "Download",
+        "Get",
+        "Get Many"
+      ],
+      "x-enumDescriptions": [
+        "Add an attachment to a message",
+        "Download an attachment from a message",
+        "Retrieve information about an attachment of a message",
+        "Retrieve information about the attachments of a message"
+      ]
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "The name of the calendar to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "calendar"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "attachments": {
+          "x-title": "Attachments",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "attachments": {
+              "x-title": "Attachment",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "binaryPropertyName": {
+                    "x-title": "Input Data Field Name",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "bccRecipients": {
+          "x-title": "BCC Recipients",
+          "description": "Comma-separated list of email addresses of BCC recipients",
+          "default": "",
+          "type": "string"
+        },
+        "categories": {
+          "x-title": "Category Names or IDs",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ccRecipients": {
+          "x-title": "CC Recipients",
+          "description": "Comma-separated list of email addresses of CC recipients",
+          "default": "",
+          "type": "string"
+        },
+        "internetMessageHeaders": {
+          "x-title": "Custom Headers",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "headers": {
+              "x-title": "Header",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "x-title": "Name",
+                    "description": "Name of the header",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "Value to set for the header",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "from": {
+          "x-title": "From",
+          "description": "The owner of the mailbox from which the message is sent. Must correspond to the actual mailbox used.",
+          "default": "",
+          "type": "string"
+        },
+        "importance": {
+          "x-title": "Importance",
+          "description": "The importance of the message",
+          "default": "Normal",
+          "type": "string",
+          "enum": [
+            "Low",
+            "Normal",
+            "High"
+          ],
+          "x-enumNames": [
+            "Low",
+            "Normal",
+            "High"
+          ]
+        },
+        "bodyContentType": {
+          "x-title": "Message Type",
+          "description": "Message body content type",
+          "default": "html",
+          "type": "string",
+          "enum": [
+            "html",
+            "Text"
+          ],
+          "x-enumNames": [
+            "HTML",
+            "Text"
+          ]
+        },
+        "isReadReceiptRequested": {
+          "x-title": "Read Receipt Requested",
+          "description": "Whether a read receipt is requested for the message",
+          "default": false,
+          "type": "boolean"
+        },
+        "replyTo": {
+          "x-title": "Reply To",
+          "description": "Email address to use when replying",
+          "default": "",
+          "type": "string"
+        },
+        "saveToSentItems": {
+          "x-title": "Save To Sent Items",
+          "description": "Whether to save the message in Sent Items",
+          "default": true,
+          "type": "boolean"
+        }
+      }
+    },
+    "calendarId": {
+      "x-title": "Calendar",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "messageAttachment"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "returnAll": [
+            false
+          ],
+          "resource": [
+            "messageAttachment"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "filter": {
+          "x-title": "Filter Query",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "bccRecipients": {
+          "x-title": "BCC Recipients",
+          "description": "Comma-separated list of email addresses of BCC recipients",
+          "default": "",
+          "type": "string"
+        },
+        "categories": {
+          "x-title": "Category Names or IDs",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ccRecipients": {
+          "x-title": "CC Recipients",
+          "description": "Comma-separated list of email addresses of CC recipients",
+          "default": "",
+          "type": "string"
+        },
+        "internetMessageHeaders": {
+          "x-title": "Custom Headers",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "headers": {
+              "x-title": "Header",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "x-title": "Name",
+                    "description": "Name of the header",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "Value to set for the header",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "folderId": {
+          "x-title": "Folder",
+          "default": {
+            "mode": "list",
+            "value": ""
+          },
+          "type": "object",
+          "properties": {
+            "__rl": {
+              "type": "boolean",
+              "const": true
+            },
+            "mode": {
+              "type": "string",
+              "enum": [
+                "list",
+                "url",
+                "id"
+              ]
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "mode",
+            "value"
+          ],
+          "x-modes": [
+            {
+              "name": "list",
+              "displayName": "From List",
+              "type": "list"
+            },
+            {
+              "name": "url",
+              "displayName": "Link",
+              "type": "string"
+            },
+            {
+              "name": "id",
+              "displayName": "ID",
+              "type": "string"
+            }
+          ]
+        },
+        "importance": {
+          "x-title": "Importance",
+          "description": "The importance of the message",
+          "default": "Normal",
+          "type": "string",
+          "enum": [
+            "Low",
+            "Normal",
+            "High"
+          ],
+          "x-enumNames": [
+            "Low",
+            "Normal",
+            "High"
+          ]
+        },
+        "isRead": {
+          "x-title": "Is Read",
+          "description": "Whether the message must be marked as read",
+          "default": false,
+          "type": "boolean"
+        },
+        "bodyContent": {
+          "x-title": "Message",
+          "description": "Message body content",
+          "default": "",
+          "type": "string",
+          "x-rows": 2
+        },
+        "bodyContentType": {
+          "x-title": "Message Type",
+          "description": "Message body content type",
+          "default": "html",
+          "type": "string",
+          "enum": [
+            "html",
+            "Text"
+          ],
+          "x-enumNames": [
+            "HTML",
+            "Text"
+          ]
+        },
+        "isReadReceiptRequested": {
+          "x-title": "Read Receipt Requested",
+          "description": "Whether a read receipt is requested for the message",
+          "default": false,
+          "type": "boolean"
+        },
+        "toRecipients": {
+          "x-title": "To",
+          "description": "Comma-separated list of email addresses of recipients",
+          "default": "",
+          "type": "string"
+        },
+        "replyTo": {
+          "x-title": "Reply To",
+          "description": "Email address to use when replying",
+          "default": "",
+          "type": "string"
+        },
+        "subject": {
+          "x-title": "Subject",
+          "description": "The subject of the message",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "givenName": {
+      "x-title": "First Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "surname": {
+      "x-title": "Last Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "contactId": {
+      "x-title": "Contact",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "output": {
+      "x-title": "Output",
+      "default": "simple",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "simple",
+        "raw",
+        "fields"
+      ],
+      "x-enumNames": [
+        "Simplified",
+        "Raw",
+        "Select Included Fields"
+      ]
+    },
+    "fields": {
+      "x-title": "Fields",
+      "description": "The fields to add to the output",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "output": [
+            "fields"
+          ],
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "bccRecipients",
+          "body",
+          "bodyPreview",
+          "categories",
+          "ccRecipients",
+          "changeKey",
+          "conversationId",
+          "createdDateTime",
+          "flag",
+          "from",
+          "hasAttachments",
+          "importance",
+          "inferenceClassification",
+          "internetMessageId",
+          "isDeliveryReceiptRequested",
+          "isDraft",
+          "isRead",
+          "isReadReceiptRequested",
+          "lastModifiedDateTime",
+          "parentFolderId",
+          "receivedDateTime",
+          "replyTo",
+          "sender",
+          "sentDateTime",
+          "subject",
+          "toRecipients",
+          "webLink"
+        ]
+      },
+      "x-enumNames": [
+        "bccRecipients",
+        "body",
+        "bodyPreview",
+        "categories",
+        "ccRecipients",
+        "changeKey",
+        "conversationId",
+        "createdDateTime",
+        "flag",
+        "from",
+        "hasAttachments",
+        "importance",
+        "inferenceClassification",
+        "internetMessageId",
+        "isDeliveryReceiptRequested",
+        "isDraft",
+        "isRead",
+        "isReadReceiptRequested",
+        "lastModifiedDateTime",
+        "parentFolderId",
+        "receivedDateTime",
+        "replyTo",
+        "sender",
+        "sentDateTime",
+        "subject",
+        "toRecipients",
+        "webLink"
+      ]
+    },
+    "subject": {
+      "x-title": "Subject",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "bodyContent": {
+      "x-title": "Message",
+      "description": "Message body content",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "type": "string",
+      "x-rows": 2
+    },
+    "draftId": {
+      "x-title": "Draft",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "draft"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "messageAttachment"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "fields": {
+          "x-title": "Fields",
+          "description": "The fields to add to the output",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "contentType",
+              "isInline",
+              "lastModifiedDateTime",
+              "name",
+              "size"
+            ]
+          },
+          "x-enumNames": [
+            "contentType",
+            "isInline",
+            "lastModifiedDateTime",
+            "name",
+            "size"
+          ]
+        }
+      }
+    },
+    "to": {
+      "x-title": "To",
+      "description": "Comma-separated list of email addresses of recipients",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "draft"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "startDateTime": {
+      "x-title": "Start",
+      "default": "2026-02-17T16:59:10.379+01:00",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "endDateTime": {
+      "x-title": "End",
+      "default": "2026-02-17T17:29:10.379+01:00",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "eventId": {
+      "x-title": "Event",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "Link",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "fromAllCalendars": {
+      "x-title": "From All Calendars",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "displayName": {
+      "x-title": "Name",
+      "description": "Name of the folder",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "folderId": {
+      "x-title": "Parent Folder",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "move"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "Link",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "filtersUI": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "object",
+          "properties": {
+            "filterBy": {
+              "x-title": "Filter By",
+              "default": "filters",
+              "type": "string",
+              "enum": [
+                "filters",
+                "search"
+              ],
+              "x-enumNames": [
+                "Filters",
+                "Search"
+              ]
+            },
+            "search": {
+              "x-title": "Search",
+              "description": "Only return messages that contains search term. Without specific message properties, the search is carried out on the default search properties of from, subject, and body. <a href=\"https://docs.microsoft.com/en-us/graph/query-parameters#search-parameter target=\"_blank\">More info</a>.",
+              "default": "",
+              "x-displayOptions": {
+                "show": {
+                  "filterBy": [
+                    "search"
+                  ]
+                }
+              },
+              "type": "string"
+            },
+            "filters": {
+              "x-title": "Filters",
+              "default": {},
+              "x-displayOptions": {
+                "show": {
+                  "filterBy": [
+                    "filters"
+                  ]
+                }
+              },
+              "type": "object",
+              "properties": {
+                "custom": {
+                  "x-title": "Filter Query",
+                  "default": "",
+                  "type": "string"
+                },
+                "hasAttachments": {
+                  "x-title": "Has Attachments",
+                  "default": false,
+                  "type": "boolean"
+                },
+                "foldersToExclude": {
+                  "x-title": "Folders to Exclude",
+                  "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                  "default": [],
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "foldersToInclude": {
+                  "x-title": "Folders to Include",
+                  "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                  "default": [],
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "readStatus": {
+                  "x-title": "Read Status",
+                  "default": "unread",
+                  "type": "string",
+                  "enum": [
+                    "both",
+                    "unread",
+                    "read"
+                  ],
+                  "x-enumNames": [
+                    "Unread and read messages",
+                    "Unread messages only",
+                    "Read messages only"
+                  ]
+                },
+                "receivedAfter": {
+                  "x-title": "Received After",
+                  "description": "Get all messages received after the specified date. In an expression you can set date using string in ISO format or a timestamp in miliseconds.",
+                  "default": "",
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "receivedBefore": {
+                  "x-title": "Received Before",
+                  "description": "Get all messages received before the specified date. In an expression you can set date using string in ISO format or a timestamp in miliseconds.",
+                  "default": "",
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "sender": {
+                  "x-title": "Sender",
+                  "description": "Sender name or email to filter by",
+                  "default": "",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "messageId": {
+      "x-title": "Message",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "messageAttachment"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "replyToSenderOnly": {
+      "x-title": "Reply to Sender Only",
+      "description": "Whether to reply to the sender only or to the entire list of recipients",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "reply"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "message": {
+      "x-title": "Message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-rows": 4
+    },
+    "toRecipients": {
+      "x-title": "To",
+      "description": "Comma-separated list of email addresses of recipients",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "responseType": {
+      "x-title": "Response Type",
+      "default": "approval",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "approval",
+        "freeText",
+        "customForm"
+      ],
+      "x-enumNames": [
+        "Approval",
+        "Free Text",
+        "Custom Form"
+      ],
+      "x-enumDescriptions": [
+        "User can approve/disapprove from within the message",
+        "User can submit a response via a form",
+        "User can submit a response via a custom form"
+      ]
+    },
+    "defineForm": {
+      "x-title": "Define Form",
+      "default": "fields",
+      "x-displayOptions": {
+        "show": {
+          "responseType": [
+            "customForm"
+          ],
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "fields",
+        "json"
+      ],
+      "x-enumNames": [
+        "Using Fields Below",
+        "Using JSON"
+      ]
+    },
+    "jsonOutput": {
+      "x-title": "Form Fields",
+      "default": "[\n  {\n    \"fieldLabel\": \"Name\",\n    \"placeholder\": \"enter your name\",\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Age\",\n    \"fieldType\": \"number\",\n    \"placeholder\": \"enter your age\"\n  },\n  {\n    \"fieldLabel\": \"Email\",\n    \"fieldType\": \"email\",\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Textarea\",\n    \"fieldType\": \"textarea\"\n  },\n  {\n    \"fieldLabel\": \"Dropdown Options\",\n    \"fieldType\": \"dropdown\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    },\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Checkboxes\",\n    \"fieldType\": \"checkbox\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    }\n  },\n  {\n    \"fieldLabel\": \"Radio\",\n    \"fieldType\": \"radio\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    }\n  },\n  {\n    \"fieldLabel\": \"Email\",\n    \"fieldType\": \"email\",\n    \"placeholder\": \"me@mail.con\"\n  },\n  {\n    \"fieldLabel\": \"File\",\n    \"fieldType\": \"file\",\n    \"multipleFiles\": true,\n    \"acceptFileTypes\": \".jpg, .png\"\n  },\n  {\n    \"fieldLabel\": \"Number\",\n    \"fieldType\": \"number\"\n  },\n  {\n    \"fieldLabel\": \"Password\",\n    \"fieldType\": \"password\"\n  }\n]\n",
+      "x-displayOptions": {
+        "show": {
+          "defineForm": [
+            "json"
+          ],
+          "responseType": [
+            "customForm"
+          ],
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "formFields": {
+      "x-title": "Form Elements",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 2.5
+              }
+            }
+          ],
+          "defineForm": [
+            "fields"
+          ],
+          "responseType": [
+            "customForm"
+          ],
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "fieldName": {
+                "x-title": "Custom Field Name",
+                "description": "The name of the field, used in input attributes and referenced by the workflow",
+                "default": "",
+                "x-displayOptions": {
+                  "hide": {
+                    "fieldType": [
+                      "html"
+                    ]
+                  },
+                  "show": {
+                    "@version": [
+                      {
+                        "_cnd": {
+                          "gte": 2.5
+                        }
+                      }
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "fieldLabel": {
+                "x-title": "Field Name",
+                "description": "Label that appears above the input field",
+                "default": "",
+                "x-displayOptions": {
+                  "hide": {
+                    "fieldType": [
+                      "hiddenField",
+                      "html"
+                    ]
+                  },
+                  "show": {
+                    "@version": [
+                      {
+                        "_cnd": {
+                          "lt": 2.4
+                        }
+                      }
+                    ]
+                  }
+                },
+                "x-required": true,
+                "type": "string"
+              },
+              "fieldType": {
+                "x-title": "Element Type",
+                "description": "The type of field to add to the form",
+                "default": "text",
+                "x-required": true,
+                "type": "string",
+                "enum": [
+                  "checkbox",
+                  "html",
+                  "date",
+                  "dropdown",
+                  "email",
+                  "file",
+                  "hiddenField",
+                  "number",
+                  "password",
+                  "radio",
+                  "text",
+                  "textarea"
+                ],
+                "x-enumNames": [
+                  "Checkboxes",
+                  "Custom HTML",
+                  "Date",
+                  "Dropdown",
+                  "Email",
+                  "File",
+                  "Hidden Field",
+                  "Number",
+                  "Password",
+                  "Radio Buttons",
+                  "Text Input",
+                  "Textarea"
+                ]
+              },
+              "elementName": {
+                "x-title": "Element Name",
+                "description": "Optional field. It can be used to include the html in the output.",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "html"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "placeholder": {
+                "x-title": "Placeholder",
+                "description": "Sample text to display inside the field",
+                "default": "",
+                "x-displayOptions": {
+                  "hide": {
+                    "fieldType": [
+                      "dropdown",
+                      "date",
+                      "file",
+                      "html",
+                      "hiddenField",
+                      "radio",
+                      "checkbox"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "defaultValue": {
+                "x-title": "Default Value",
+                "description": "Default value(s) that will be pre-selected. Must match one or multiple of the option labels. Separate multiple pre-selected options with a comma.",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "checkbox"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "fieldValue": {
+                "x-title": "Field Value",
+                "description": "Input value can be set here or will be passed as a query parameter via Field Name if no value is set",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "hiddenField"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "fieldOptions": {
+                "x-title": "Radio Buttons",
+                "default": {
+                  "values": [
+                    {
+                      "option": ""
+                    }
+                  ]
+                },
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "radio"
+                    ]
+                  }
+                },
+                "x-required": true,
+                "type": "object",
+                "properties": {
+                  "values": {
+                    "x-title": "Values",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "option": {
+                          "x-title": "Radio Button Label",
+                          "default": "",
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "multiselect": {
+                "x-title": "Multiple Choice",
+                "description": "Whether to allow the user to select multiple options from the dropdown list",
+                "default": false,
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "dropdown"
+                    ],
+                    "@version": [
+                      {
+                        "_cnd": {
+                          "lt": 2.3
+                        }
+                      }
+                    ]
+                  }
+                },
+                "type": "boolean"
+              },
+              "limitSelection": {
+                "x-title": "Limit Selection",
+                "default": "unlimited",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "checkbox"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "exact",
+                  "range",
+                  "unlimited"
+                ],
+                "x-enumNames": [
+                  "Exact Number",
+                  "Range",
+                  "Unlimited"
+                ]
+              },
+              "numberOfSelections": {
+                "x-title": "Number of Selections",
+                "default": 1,
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "checkbox"
+                    ],
+                    "limitSelection": [
+                      "exact"
+                    ]
+                  }
+                },
+                "type": "number",
+                "minimum": 1,
+                "x-precision": 0
+              },
+              "minSelections": {
+                "x-title": "Minimum Selections",
+                "default": 0,
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "checkbox"
+                    ],
+                    "limitSelection": [
+                      "range"
+                    ]
+                  }
+                },
+                "type": "number",
+                "minimum": 0,
+                "x-precision": 0
+              },
+              "maxSelections": {
+                "x-title": "Maximum Selections",
+                "default": 1,
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "checkbox"
+                    ],
+                    "limitSelection": [
+                      "range"
+                    ]
+                  }
+                },
+                "type": "number",
+                "minimum": 1,
+                "x-precision": 0
+              },
+              "html": {
+                "x-title": "HTML",
+                "description": "HTML elements to display on the form page",
+                "default": "<!-- Your custom HTML here --->\n\n\n",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "html"
+                    ]
+                  }
+                },
+                "type": "string",
+                "x-editor": "htmlEditor"
+              },
+              "multipleFiles": {
+                "x-title": "Multiple Files",
+                "description": "Whether to allow the user to select multiple files from the file input or just one",
+                "default": true,
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "file"
+                    ]
+                  }
+                },
+                "type": "boolean"
+              },
+              "acceptFileTypes": {
+                "x-title": "Accepted File Types",
+                "description": "Comma-separated list of allowed file extensions",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "file"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "requiredField": {
+                "x-title": "Required Field",
+                "description": "Whether to require the user to enter a value for this field before submitting the form",
+                "default": false,
+                "x-displayOptions": {
+                  "hide": {
+                    "fieldType": [
+                      "html",
+                      "hiddenField"
+                    ]
+                  }
+                },
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "approvalOptions": {
+      "x-title": "Approval Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "responseType": [
+            "approval"
+          ],
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "object",
+          "properties": {
+            "approvalType": {
+              "x-title": "Type of Approval",
+              "default": "single",
+              "type": "string",
+              "enum": [
+                "single",
+                "double"
+              ],
+              "x-enumNames": [
+                "Approve Only",
+                "Approve and Disapprove"
+              ]
+            },
+            "approveLabel": {
+              "x-title": "Approve Button Label",
+              "default": "Approve",
+              "x-displayOptions": {
+                "show": {
+                  "approvalType": [
+                    "single",
+                    "double"
+                  ]
+                }
+              },
+              "type": "string"
+            },
+            "buttonApprovalStyle": {
+              "x-title": "Approve Button Style",
+              "default": "primary",
+              "x-displayOptions": {
+                "show": {
+                  "approvalType": [
+                    "single",
+                    "double"
+                  ]
+                }
+              },
+              "type": "string",
+              "enum": [
+                "primary",
+                "secondary"
+              ],
+              "x-enumNames": [
+                "Primary",
+                "Secondary"
+              ]
+            },
+            "disapproveLabel": {
+              "x-title": "Disapprove Button Label",
+              "default": "Decline",
+              "x-displayOptions": {
+                "show": {
+                  "approvalType": [
+                    "double"
+                  ]
+                }
+              },
+              "type": "string"
+            },
+            "buttonDisapprovalStyle": {
+              "x-title": "Disapprove Button Style",
+              "default": "secondary",
+              "x-displayOptions": {
+                "show": {
+                  "approvalType": [
+                    "double"
+                  ]
+                }
+              },
+              "type": "string",
+              "enum": [
+                "primary",
+                "secondary"
+              ],
+              "x-enumNames": [
+                "Primary",
+                "Secondary"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "binaryPropertyName": {
+      "x-title": "Put Output in Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "messageAttachment"
+          ],
+          "operation": [
+            "download"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "attachmentId": {
+      "x-title": "Attachment",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "messageAttachment"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:outlook.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "microsoftOutlookOAuth2Api",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

@@ -1,0 +1,246 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MCP Client",
+  "description": "Standalone MCP Client",
+  "x-n8n-node-type": "mcpClient",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "serverTransport": {
+      "x-title": "Server Transport",
+      "description": "The transport used by your endpoint",
+      "default": "httpStreamable",
+      "type": "string",
+      "enum": [
+        "httpStreamable",
+        "sse"
+      ],
+      "x-enumNames": [
+        "HTTP Streamable",
+        "Server Sent Events (Deprecated)"
+      ]
+    },
+    "endpointUrl": {
+      "x-title": "MCP Endpoint URL",
+      "description": "The URL of the MCP server to connect to",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "authentication": {
+      "x-title": "Authentication",
+      "description": "The way to authenticate with your endpoint",
+      "default": "none",
+      "type": "string",
+      "enum": [
+        "bearerAuth",
+        "headerAuth",
+        "mcpOAuth2Api",
+        "multipleHeadersAuth",
+        "none"
+      ],
+      "x-enumNames": [
+        "Bearer Auth",
+        "Header Auth",
+        "MCP OAuth2",
+        "Multiple Headers Auth",
+        "None"
+      ]
+    },
+    "credentials": {
+      "x-title": "Credentials",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "authentication": [
+            "headerAuth",
+            "bearerAuth",
+            "mcpOAuth2Api",
+            "multipleHeadersAuth"
+          ]
+        }
+      },
+      "type": "string",
+      "x-n8n-type": "credentials"
+    },
+    "tool": {
+      "x-title": "Tool",
+      "description": "The tool to use",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "inputMode": {
+      "x-title": "Input Mode",
+      "default": "manual",
+      "type": "string",
+      "enum": [
+        "manual",
+        "json"
+      ],
+      "x-enumNames": [
+        "Manual",
+        "JSON"
+      ],
+      "x-enumDescriptions": [
+        "Manually specify the input data for each tool parameter",
+        "Specify the input data as a JSON object"
+      ]
+    },
+    "parameters": {
+      "x-title": "Parameters",
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "x-displayOptions": {
+        "show": {
+          "inputMode": [
+            "manual"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-n8n-type": "resourceMapper"
+    },
+    "jsonInput": {
+      "x-title": "JSON",
+      "default": "{\n  \"my_field_1\": \"value\",\n  \"my_field_2\": 1\n}\n",
+      "x-displayOptions": {
+        "show": {
+          "inputMode": [
+            "json"
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "options": {
+      "x-title": "Options",
+      "description": "Additional options to add",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "convertToBinary": {
+          "x-title": "Convert to Binary",
+          "description": "Whether to convert images and audio to binary data. If false, images and audio will be returned as base64 encoded strings.",
+          "default": true,
+          "type": "boolean"
+        },
+        "timeout": {
+          "x-title": "Timeout",
+          "description": "Time in ms to wait for tool calls to finish",
+          "default": 60000,
+          "type": "number",
+          "minimum": 1
+        }
+      }
+    }
+  },
+  "x-icon": {
+    "light": "file:../mcp.svg",
+    "dark": "file:../mcp.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "httpBearerAuth",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "bearerAuth"
+          ]
+        }
+      }
+    },
+    {
+      "name": "httpHeaderAuth",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "headerAuth"
+          ]
+        }
+      }
+    },
+    {
+      "name": "mcpOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "mcpOAuth2Api"
+          ]
+        }
+      }
+    },
+    {
+      "name": "httpMultipleHeadersAuth",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "multipleHeadersAuth"
+          ]
+        }
+      }
+    }
+  ]
+}

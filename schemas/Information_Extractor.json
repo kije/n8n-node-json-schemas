@@ -1,0 +1,217 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Information Extractor",
+  "description": "Extract information from text in a structured format",
+  "x-n8n-node-type": "informationExtractor",
+  "x-n8n-version": [
+    1,
+    1.1,
+    1.2
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "text": {
+      "x-title": "Text",
+      "description": "The text to extract information from",
+      "default": "",
+      "type": "string",
+      "x-rows": 2
+    },
+    "schemaType": {
+      "x-title": "Schema Type",
+      "description": "How to specify the schema for the desired output",
+      "default": "fromAttributes",
+      "type": "string",
+      "enum": [
+        "fromAttributes",
+        "fromJson",
+        "manual"
+      ],
+      "x-enumNames": [
+        "From Attribute Descriptions",
+        "Generate From JSON Example",
+        "Define using JSON Schema"
+      ],
+      "x-enumDescriptions": [
+        "Extract specific attributes from the text based on types and descriptions",
+        "Generate a schema from an example JSON object",
+        "Define the JSON schema manually"
+      ]
+    },
+    "jsonSchemaExample": {
+      "x-title": "JSON Example",
+      "description": "Example JSON object to use to generate the schema",
+      "default": "{\n\t\"state\": \"California\",\n\t\"cities\": [\"Los Angeles\", \"San Francisco\", \"San Diego\"]\n}",
+      "x-displayOptions": {
+        "show": {
+          "schemaType": [
+            "fromJson"
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "inputSchema": {
+      "x-title": "Input Schema",
+      "description": "Schema to use for the function",
+      "default": "{\n\t\"type\": \"object\",\n\t\"properties\": {\n\t\t\"state\": {\n\t\t\t\"type\": \"string\"\n\t\t},\n\t\t\"cities\": {\n\t\t\t\"type\": \"array\",\n\t\t\t\"items\": {\n\t\t\t\t\"type\": \"string\"\n\t\t\t}\n\t\t}\n\t}\n}",
+      "x-displayOptions": {
+        "show": {
+          "schemaType": [
+            "manual"
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "attributes": {
+      "x-title": "Attributes",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "schemaType": [
+            "fromAttributes"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "attributes": {
+          "x-title": "Attribute List",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Name",
+                "description": "Attribute to extract",
+                "default": "",
+                "x-required": true,
+                "type": "string"
+              },
+              "type": {
+                "x-title": "Type",
+                "description": "Data type of the attribute",
+                "default": "string",
+                "x-required": true,
+                "type": "string",
+                "enum": [
+                  "boolean",
+                  "date",
+                  "number",
+                  "string"
+                ],
+                "x-enumNames": [
+                  "Boolean",
+                  "Date",
+                  "Number",
+                  "String"
+                ]
+              },
+              "description": {
+                "x-title": "Description",
+                "description": "Describe your attribute",
+                "default": "",
+                "x-required": true,
+                "type": "string"
+              },
+              "required": {
+                "x-title": "Required",
+                "description": "Whether attribute is required",
+                "default": false,
+                "x-required": true,
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "systemPromptTemplate": {
+          "x-title": "System Prompt Template",
+          "description": "String to use directly as the system prompt template",
+          "default": "You are an expert extraction algorithm.\nOnly extract relevant information from the text.\nIf you do not know the value of an attribute asked to extract, you may omit the attribute's value.",
+          "type": "string",
+          "x-rows": 6
+        },
+        "batching": {
+          "x-title": "Batch Processing",
+          "description": "Batch processing options for rate limiting",
+          "default": {},
+          "x-displayOptions": {
+            "show": {
+              "@version": [
+                {
+                  "_cnd": {
+                    "gte": 1.1
+                  }
+                }
+              ]
+            }
+          },
+          "type": "object",
+          "properties": {
+            "batchSize": {
+              "x-title": "Batch Size",
+              "description": "How many items to process in parallel. This is useful for rate limiting, but might impact the log output ordering.",
+              "default": 5,
+              "type": "number"
+            },
+            "delayBetweenBatches": {
+              "x-title": "Delay Between Batches",
+              "description": "Delay in milliseconds between batches. This is useful for rate limiting.",
+              "default": 0,
+              "type": "number"
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-icon": "fa:project-diagram",
+  "x-inputs": [
+    {
+      "displayName": "",
+      "type": "main"
+    },
+    {
+      "displayName": "Model",
+      "maxConnections": 1,
+      "type": "ai_languageModel",
+      "required": true
+    }
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

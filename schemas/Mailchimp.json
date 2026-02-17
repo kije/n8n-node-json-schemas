@@ -1,0 +1,856 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Mailchimp",
+  "description": "Consume Mailchimp API",
+  "x-n8n-node-type": "mailchimp",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "apiKey",
+      "type": "string",
+      "enum": [
+        "apiKey",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "API Key",
+        "OAuth2"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "member",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "campaign",
+        "listGroup",
+        "member",
+        "memberTag"
+      ],
+      "x-enumNames": [
+        "Campaign",
+        "List Group",
+        "Member",
+        "Member Tag"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "campaign"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "delete",
+        "get",
+        "getAll",
+        "replicate",
+        "resend",
+        "send"
+      ],
+      "x-enumNames": [
+        "Delete",
+        "Get",
+        "Get Many",
+        "Replicate",
+        "Resend",
+        "Send"
+      ],
+      "x-enumDescriptions": [
+        "Delete a campaign",
+        "Get a campaign",
+        "Get many campaigns",
+        "Replicate a campaign",
+        "Creates a Resend to Non-Openers version of this campaign",
+        "Send a campaign"
+      ]
+    },
+    "list": {
+      "x-title": "List Name or ID",
+      "description": "List of lists. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "listGroup"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [],
+      "x-enumNames": []
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "Email address of the subscriber",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "memberTag"
+          ],
+          "operation": [
+            "create",
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "status": {
+      "x-title": "Status",
+      "description": "Subscriber's current status",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "cleaned",
+        "pending",
+        "subscribed",
+        "transactional",
+        "unsubscribed"
+      ],
+      "x-enumNames": [
+        "Cleaned",
+        "Pending",
+        "Subscribed",
+        "Transactional",
+        "Unsubscribed"
+      ]
+    },
+    "jsonParameters": {
+      "x-title": "JSON Parameters",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "campaign"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "beforeCreateTime": {
+          "x-title": "Before Create Time",
+          "description": "Restrict the response to campaigns created before the set time",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "beforeSendTime": {
+          "x-title": "Before Send Time",
+          "description": "Restrict the response to campaigns sent before the set time",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "excludeFields": {
+          "x-title": "Exclude Field Names or IDs",
+          "description": "A comma-separated list of fields to exclude. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fields": {
+          "x-title": "Field Names or IDs",
+          "description": "A comma-separated list of fields to return. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [
+            "campaigns.id",
+            "campaigns.status",
+            "campaigns.tracking",
+            "campaigns.settings.from_name",
+            "campaigns.settings.reply_to",
+            "campaigns.settings.title"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "listId": {
+          "x-title": "List Name or ID",
+          "description": "List of lists. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "sinceCreateTime": {
+          "x-title": "Since Create Time",
+          "description": "Restrict the response to campaigns created after the set time",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "sinceSendTime": {
+          "x-title": "Since Send Time",
+          "description": "Restrict the response to campaigns sent after the set time",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "sortDirection": {
+          "x-title": "Sort Direction",
+          "description": "Determines the order direction for sorted results",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "ASC",
+            "DESC"
+          ],
+          "x-enumNames": [
+            "ASC",
+            "DESC"
+          ]
+        },
+        "sortField": {
+          "x-title": "Sort Field",
+          "description": "Returns files sorted by the specified field",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "create_time",
+            "send_time"
+          ],
+          "x-enumNames": [
+            "Create Time",
+            "Send Time"
+          ]
+        },
+        "status": {
+          "x-title": "Status",
+          "description": "The status of the campaign",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "save",
+            "sending",
+            "sent",
+            "schedule"
+          ],
+          "x-enumNames": [
+            "Save",
+            "Sending",
+            "Sent",
+            "Schedule"
+          ]
+        }
+      }
+    },
+    "locationFieldsUi": {
+      "x-title": "Location",
+      "description": "Subscriber location information.n",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "locationFieldsValues": {
+          "x-title": "Location",
+          "type": "object",
+          "properties": {
+            "latitude": {
+              "x-title": "Latitude",
+              "description": "The location latitude",
+              "default": "",
+              "x-required": true,
+              "type": "string"
+            },
+            "longitude": {
+              "x-title": "Longitude",
+              "description": "The location longitude",
+              "default": "",
+              "x-required": true,
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "mergeFieldsUi": {
+      "x-title": "Merge Fields",
+      "description": "An individual merge var and value for a member",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "mergeFieldsValues": {
+          "x-title": "Field",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Field Name or ID",
+                "description": "Merge Field name. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                "default": "",
+                "x-required": true,
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Field Value",
+                "description": "Merge field value",
+                "default": "",
+                "x-required": true,
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "mergeFieldsJson": {
+      "x-title": "Merge Fields",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "update"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "locationJson": {
+      "x-title": "Location",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "update"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "groupsUi": {
+      "x-title": "Interest Groups",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "groupsValues": {
+          "x-title": "Group",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "categoryId": {
+                "x-title": "Category Name or ID",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": "",
+                "type": "string"
+              },
+              "categoryFieldId": {
+                "x-title": "Category Field ID",
+                "default": "",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "default": false,
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "groupJson": {
+      "x-title": "Interest Groups",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "update"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "campaign"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 10,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "campaign"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 1000
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "emailType": {
+          "x-title": "Email Type",
+          "description": "Type of email this member asked to get",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "html",
+            "text"
+          ],
+          "x-enumNames": [
+            "HTML",
+            "Text"
+          ]
+        },
+        "groupsUi": {
+          "x-title": "Interest Groups",
+          "default": {},
+          "x-displayOptions": {
+            "show": {
+              "/resource": [
+                "member"
+              ],
+              "/operation": [
+                "update"
+              ],
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "type": "object",
+          "properties": {
+            "groupsValues": {
+              "x-title": "Group",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "categoryId": {
+                    "x-title": "Category Name or ID",
+                    "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "categoryFieldId": {
+                    "x-title": "Category Field ID",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "default": false,
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "language": {
+          "x-title": "Language",
+          "description": "If set/detected, the subscriber's language",
+          "default": "",
+          "type": "string"
+        },
+        "mergeFieldsUi": {
+          "x-title": "Merge Fields",
+          "description": "An individual merge var and value for a member",
+          "default": {},
+          "x-displayOptions": {
+            "show": {
+              "/resource": [
+                "member"
+              ],
+              "/operation": [
+                "update"
+              ],
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "type": "object",
+          "properties": {
+            "mergeFieldsValues": {
+              "x-title": "Field",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "x-title": "Field Name or ID",
+                    "description": "Merge Field name. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                    "default": "",
+                    "x-required": true,
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Field Value",
+                    "description": "Merge field value",
+                    "default": "",
+                    "x-required": true,
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "ipOptIn": {
+          "x-title": "Opt-in IP",
+          "description": "The IP address the subscriber used to confirm their opt-in status",
+          "default": "",
+          "type": "string"
+        },
+        "ipSignup": {
+          "x-title": "Signup IP",
+          "description": "IP address the subscriber signed up from",
+          "default": "",
+          "type": "string"
+        },
+        "timestampSignup": {
+          "x-title": "Signup Timestamp",
+          "description": "The date and time the subscriber signed up for the list in ISO 8601 format",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "skipMergeValidation": {
+          "x-title": "Skip Merge Validation",
+          "description": "Whether member data will be accepted without merge field values, even if the merge field is usually required",
+          "default": false,
+          "type": "boolean"
+        },
+        "status": {
+          "x-title": "Status",
+          "description": "Subscriber's current status",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "cleaned",
+            "pending",
+            "subscribed",
+            "transactional",
+            "unsubscribed"
+          ],
+          "x-enumNames": [
+            "Cleaned",
+            "Pending",
+            "Subscribed",
+            "Transactional",
+            "Unsubscribed"
+          ]
+        },
+        "vip": {
+          "x-title": "Vip",
+          "description": "Vip status for subscribers",
+          "default": false,
+          "type": "boolean"
+        },
+        "locationFieldsUi": {
+          "x-title": "Location",
+          "description": "Subscriber location information.n",
+          "default": {},
+          "x-displayOptions": {
+            "show": {
+              "/resource": [
+                "member"
+              ],
+              "/operation": [
+                "update"
+              ],
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "type": "object",
+          "properties": {
+            "locationFieldsValues": {
+              "x-title": "Location",
+              "type": "object",
+              "properties": {
+                "latitude": {
+                  "x-title": "Latitude",
+                  "description": "The location latitude",
+                  "default": "",
+                  "x-required": true,
+                  "type": "string"
+                },
+                "longitude": {
+                  "x-title": "Longitude",
+                  "description": "The location longitude",
+                  "default": "",
+                  "x-required": true,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "timestampOpt": {
+          "x-title": "Opt-in Timestamp",
+          "description": "The date and time the subscribe confirmed their opt-in status in ISO 8601 format",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "tags": {
+      "x-title": "Tags",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "memberTag"
+          ],
+          "operation": [
+            "create",
+            "delete"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "groupCategory": {
+      "x-title": "Group Category Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "listGroup"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [],
+      "x-enumNames": []
+    },
+    "campaignId": {
+      "x-title": "Campaign ID",
+      "description": "List of Campaigns",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "campaign"
+          ],
+          "operation": [
+            "send",
+            "get",
+            "delete",
+            "replicate",
+            "resend"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": {
+    "light": "file:mailchimp.svg",
+    "dark": "file:mailchimp.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "mailchimpApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "apiKey"
+          ]
+        }
+      }
+    },
+    {
+      "name": "mailchimpOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

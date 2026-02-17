@@ -1,0 +1,358 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Ldap",
+  "description": "Interact with LDAP servers",
+  "x-n8n-node-type": "ldap",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "operation": {
+      "x-title": "Operation",
+      "default": "search",
+      "type": "string",
+      "enum": [
+        "compare",
+        "create",
+        "delete",
+        "rename",
+        "search",
+        "update"
+      ],
+      "x-enumNames": [
+        "Compare",
+        "Create",
+        "Delete",
+        "Rename",
+        "Search",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Compare an attribute",
+        "Create a new entry",
+        "Delete an entry",
+        "Rename the DN of an existing entry",
+        "Search LDAP",
+        "Update attributes"
+      ]
+    },
+    "nodeDebug": {
+      "x-title": "Debug",
+      "default": false,
+      "type": "boolean"
+    },
+    "dn": {
+      "x-title": "DN",
+      "description": "The distinguished name of the entry to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "id": {
+      "x-title": "Attribute ID",
+      "description": "The ID of the attribute to compare",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "compare"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "value": {
+      "x-title": "Value",
+      "description": "The value to compare",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "compare"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "targetDn": {
+      "x-title": "New DN",
+      "description": "The new distinguished name for the entry",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "rename"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "attributes": {
+      "x-title": "Update Attributes",
+      "description": "Update entry attributes",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "add": {
+          "x-title": "Add",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "x-title": "Attribute ID",
+                "description": "The ID of the attribute to add",
+                "default": "",
+                "x-required": true,
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "Value of the attribute to set",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "replace": {
+          "x-title": "Replace",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "x-title": "Attribute ID",
+                "description": "The ID of the attribute to replace",
+                "default": "",
+                "x-required": true,
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "Value of the attribute to replace",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "delete": {
+          "x-title": "Remove",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "x-title": "Attribute ID",
+                "description": "The ID of the attribute to remove",
+                "default": "",
+                "x-required": true,
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "Value of the attribute to remove",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "baseDN": {
+      "x-title": "Base DN",
+      "description": "The distinguished name of the subtree to search in",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "searchFor": {
+      "x-title": "Search For",
+      "description": "Directory object class to search for",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "customFilter": {
+      "x-title": "Custom Filter",
+      "description": "Custom LDAP filter. Escape these chars * ( ) \\ with a backslash \"\\\".",
+      "default": "(objectclass=*)",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "searchFor": [
+            "custom"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "attribute": {
+      "x-title": "Attribute",
+      "description": "Attribute to search for",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ]
+        },
+        "hide": {
+          "searchFor": [
+            "custom"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "searchText": {
+      "x-title": "Search Text",
+      "description": "Text to search for, Use * for a wildcard",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ]
+        },
+        "hide": {
+          "searchFor": [
+            "custom"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "attributes": {
+          "x-title": "Attribute Names or IDs",
+          "description": "Comma-separated list of attributes to return. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "pageSize": {
+          "x-title": "Page Size",
+          "description": "Maximum number of results to request at one time. Set to 0 to disable paging.",
+          "default": 1000,
+          "type": "number",
+          "minimum": 0
+        },
+        "scope": {
+          "x-title": "Scope",
+          "description": "The set of entries at or below the BaseDN that may be considered potential matches",
+          "default": "sub",
+          "type": "string",
+          "enum": [
+            "base",
+            "one",
+            "sub"
+          ],
+          "x-enumNames": [
+            "Base Object",
+            "Single Level",
+            "Whole Subtree"
+          ]
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": {
+    "light": "file:ldap.svg",
+    "dark": "file:ldap.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "ldap",
+      "required": true,
+      "testedBy": "ldapConnectionTest"
+    }
+  ]
+}

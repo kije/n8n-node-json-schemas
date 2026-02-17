@@ -1,0 +1,675 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Invoice Ninja",
+  "description": "Consume Invoice Ninja API",
+  "x-n8n-node-type": "invoiceNinja",
+  "x-n8n-version": [
+    1,
+    2
+  ],
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "x-title": "API Version",
+      "default": "v5",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            2
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "v4",
+        "v5"
+      ],
+      "x-enumNames": [
+        "Version 4",
+        "Version 5"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "client",
+      "type": "string",
+      "enum": [
+        "bank_transaction",
+        "client",
+        "expense",
+        "invoice",
+        "payment",
+        "quote",
+        "task"
+      ],
+      "x-enumNames": [
+        "Bank Transaction",
+        "Client",
+        "Expense",
+        "Invoice",
+        "Payment",
+        "Quote",
+        "Task"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "bank_transaction"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "matchPayment"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Match Payment"
+      ],
+      "x-enumDescriptions": [
+        "Create a new bank transaction",
+        "Delete a bank transaction",
+        "Get data of a bank transaction",
+        "Get data of many bank transactions",
+        "Match payment to a bank transaction"
+      ]
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "bank_transaction"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "amount": {
+          "x-title": "Amount",
+          "default": 0,
+          "type": "number"
+        },
+        "bankIntegrationId": {
+          "x-title": "Bank Integration Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "baseType": {
+          "x-title": "Base Type",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "CREDIT",
+            "DEBIT"
+          ],
+          "x-enumNames": [
+            "Deposit",
+            "Withdrawal"
+          ]
+        },
+        "currencyId": {
+          "x-title": "Currency Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "date": {
+          "x-title": "Date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "description": {
+          "x-title": "Description",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "billingAddressUi": {
+      "x-title": "Billing Address",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "client"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "billingAddressValue": {
+          "x-title": "Billing Address",
+          "type": "object",
+          "properties": {
+            "streetAddress": {
+              "x-title": "Street Address",
+              "default": "",
+              "type": "string"
+            },
+            "aptSuite": {
+              "x-title": "Apt/Suite",
+              "default": "",
+              "type": "string"
+            },
+            "city": {
+              "x-title": "City",
+              "default": "",
+              "type": "string"
+            },
+            "state": {
+              "x-title": "State",
+              "default": "",
+              "type": "string"
+            },
+            "postalCode": {
+              "x-title": "Postal Code",
+              "default": "",
+              "type": "string"
+            },
+            "countryCode": {
+              "x-title": "Country Code Name or ID",
+              "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+              "default": "",
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "contactsUi": {
+      "x-title": "Contacts",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "client"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "contacstValues": {
+          "x-title": "Contact",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "firstName": {
+                "x-title": "First Name",
+                "default": "",
+                "type": "string"
+              },
+              "lastName": {
+                "x-title": "Last Name",
+                "default": "",
+                "type": "string"
+              },
+              "email": {
+                "x-title": "Email",
+                "default": "",
+                "type": "string"
+              },
+              "phone": {
+                "x-title": "Phone",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "shippingAddressUi": {
+      "x-title": "Shipping Address",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "client"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "shippingAddressValue": {
+          "x-title": "Shipping Address",
+          "type": "object",
+          "properties": {
+            "streetAddress": {
+              "x-title": "Street Address",
+              "default": "",
+              "type": "string"
+            },
+            "aptSuite": {
+              "x-title": "Apt/Suite",
+              "default": "",
+              "type": "string"
+            },
+            "city": {
+              "x-title": "City",
+              "default": "",
+              "type": "string"
+            },
+            "state": {
+              "x-title": "State",
+              "default": "",
+              "type": "string"
+            },
+            "postalCode": {
+              "x-title": "Postal Code",
+              "default": "",
+              "type": "string"
+            },
+            "countryCode": {
+              "x-title": "Country Code Name or ID",
+              "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+              "default": "",
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "clientId": {
+      "x-title": "Client ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "client"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "quote"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "quoteNumber": {
+          "x-title": "Quote Number",
+          "default": "",
+          "type": "string"
+        },
+        "include": {
+          "x-title": "Include",
+          "default": "client",
+          "type": "string",
+          "enum": [
+            "client"
+          ],
+          "x-enumNames": [
+            "Client"
+          ]
+        },
+        "status": {
+          "x-title": "Status",
+          "default": "active",
+          "type": "string",
+          "enum": [
+            "active",
+            "archived",
+            "deleted"
+          ],
+          "x-enumNames": [
+            "Active",
+            "Archived",
+            "Deleted"
+          ]
+        },
+        "createdAt": {
+          "x-title": "Created At",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "x-title": "Updated At",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "isDeleted": {
+          "x-title": "Is Deleted",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "bank_transaction"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "bank_transaction"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 60
+    },
+    "invoiceItemsUi": {
+      "x-title": "Invoice Items",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "quote"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "invoiceItemsValues": {
+          "x-title": "Invoice Item",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "cost": {
+                "x-title": "Cost",
+                "default": 0,
+                "type": "number"
+              },
+              "description": {
+                "x-title": "Description",
+                "default": "",
+                "type": "string"
+              },
+              "service": {
+                "x-title": "Service",
+                "default": "",
+                "type": "string"
+              },
+              "hours": {
+                "x-title": "Hours",
+                "default": 0,
+                "type": "number",
+                "minimum": 0
+              },
+              "taxName1": {
+                "x-title": "Tax Name 1",
+                "default": "",
+                "type": "string"
+              },
+              "taxName2": {
+                "x-title": "Tax Name 2",
+                "default": "",
+                "type": "string"
+              },
+              "taxRate1": {
+                "x-title": "Tax Rate 1",
+                "default": 0,
+                "type": "number"
+              },
+              "taxRate2": {
+                "x-title": "Tax Rate 2",
+                "default": 0,
+                "type": "number"
+              }
+            }
+          }
+        }
+      }
+    },
+    "invoiceId": {
+      "x-title": "Invoice ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "invoice"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "timeLogsUi": {
+      "x-title": "Time Logs",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "timeLogsValues": {
+          "x-title": "Time Log",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "startDate": {
+                "x-title": "Start Date",
+                "default": "",
+                "type": "string",
+                "format": "date-time"
+              },
+              "endDate": {
+                "x-title": "End Date",
+                "default": "",
+                "type": "string",
+                "format": "date-time"
+              },
+              "duration": {
+                "x-title": "Duration (Hours)",
+                "default": 0,
+                "type": "number",
+                "minimum": 0
+              }
+            }
+          }
+        }
+      }
+    },
+    "taskId": {
+      "x-title": "Task ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "invoice": {
+      "x-title": "Invoice Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "payment"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "amount": {
+      "x-title": "Amount",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "payment"
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 0
+    },
+    "paymentId": {
+      "x-title": "Payment Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "bank_transaction"
+          ],
+          "operation": [
+            "matchPayment"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "expenseId": {
+      "x-title": "Expense ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "expense"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "quoteId": {
+      "x-title": "Quote ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "quote"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "bankTransactionId": {
+      "x-title": "Bank Transaction ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "bank_transaction"
+          ],
+          "operation": [
+            "matchPayment"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:invoiceNinja.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "invoiceNinjaApi",
+      "required": true
+    }
+  ]
+}

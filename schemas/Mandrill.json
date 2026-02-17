@@ -1,0 +1,542 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Mandrill",
+  "description": "Consume Mandrill API",
+  "x-n8n-node-type": "mandrill",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "message",
+      "type": "string",
+      "enum": [
+        "message"
+      ],
+      "x-enumNames": [
+        "Message"
+      ],
+      "x-enumDescriptions": [
+        "Send a message"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "sendTemplate",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "sendTemplate",
+        "sendHtml"
+      ],
+      "x-enumNames": [
+        "Send Template",
+        "Send HTML"
+      ],
+      "x-enumDescriptions": [
+        "Send message based on template",
+        "Send message based on HTML"
+      ]
+    },
+    "template": {
+      "x-title": "Template Name or ID",
+      "description": "The template you want to send. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "sendTemplate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [],
+      "x-enumNames": []
+    },
+    "fromEmail": {
+      "x-title": "From Email",
+      "description": "Email address of the sender optional with name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "sendHtml",
+            "sendTemplate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "toEmail": {
+      "x-title": "To Email",
+      "description": "Email address of the recipient. Multiple ones can be separated by comma.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "sendHtml",
+            "sendTemplate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "jsonParameters": {
+      "x-title": "JSON Parameters",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "sendHtml",
+            "sendTemplate"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "sendHtml",
+            "sendTemplate"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "async": {
+          "x-title": "Async",
+          "description": "Whether to enable a background sending mode that is optimized for bulk sending. In async mode, messages/send will immediately return a status of \"queued\" for every recipient. To handle rejections when sending in async mode, set up a webhook for the 'reject' event. Defaults to false for messages with no more than 10 recipients; messages with more than 10 recipients are always sent asynchronously, regardless of the value of async.",
+          "default": false,
+          "type": "boolean"
+        },
+        "autoText": {
+          "x-title": "Auto Text",
+          "description": "Whether or not to automatically generate a text part for messages that are not given text",
+          "default": false,
+          "type": "boolean"
+        },
+        "autoHtml": {
+          "x-title": "Auto HTML",
+          "description": "Whether or not to automatically generate an HTML part for messages that are not given HTML",
+          "default": false,
+          "type": "boolean"
+        },
+        "bccAddress": {
+          "x-title": "BCC Address",
+          "description": "An optional address to receive an exact copy of each recipient's email",
+          "default": "",
+          "type": "string"
+        },
+        "fromName": {
+          "x-title": "From Name",
+          "description": "Optional from name to be used",
+          "default": "",
+          "type": "string"
+        },
+        "googleAnalyticsCampaign": {
+          "x-title": "Google Analytics Campaign",
+          "description": "Optional string indicating the value to set for the utm_campaign tracking parameter. If this isn't provided the email's from address will be used instead.",
+          "default": "",
+          "type": "string"
+        },
+        "googleAnalyticsDomains": {
+          "x-title": "Google Analytics Domains",
+          "description": "An array of strings separated by a comma (,) indicating for which any matching URLs will automatically have Google Analytics parameters appended to their query string automatically",
+          "default": "",
+          "type": "string"
+        },
+        "html": {
+          "x-title": "HTML",
+          "description": "The html you want to send",
+          "default": "",
+          "type": "string",
+          "x-rows": 5
+        },
+        "important": {
+          "x-title": "Important",
+          "description": "Whether or not this message is important, and should be delivered ahead of non-important messages",
+          "default": false,
+          "type": "boolean"
+        },
+        "inlineCss": {
+          "x-title": "Inline CSS",
+          "description": "Whether or not to automatically inline all CSS styles provided in the message HTML - only for HTML documents less than 256KB in size",
+          "default": false,
+          "type": "boolean"
+        },
+        "ipPool": {
+          "x-title": "Ip Pool",
+          "description": "The name of the dedicated ip pool that should be used to send the message. If you do not have any dedicated IPs, this parameter has no effect. If you specify a pool that does not exist, your default pool will be used instead.",
+          "default": "",
+          "type": "string"
+        },
+        "preserveRecipients": {
+          "x-title": "Preserve Recipients",
+          "description": "Whether or not to expose all recipients in to \"To\" header for each email",
+          "default": false,
+          "type": "boolean"
+        },
+        "returnPathDomain": {
+          "x-title": "Return Path Domain",
+          "description": "A custom domain to use for the messages's return-path",
+          "default": "",
+          "type": "string"
+        },
+        "sendAt": {
+          "x-title": "Sent At",
+          "description": "When this message should be sent as a UTC timestamp in YYYY-MM-DD HH:MM:SS format. If you specify a time in the past, the message will be sent immediately. An additional fee applies for scheduled email, and this feature is only available to accounts with a positive balance.",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "signingDomain": {
+          "x-title": "Signing Domain",
+          "description": "A custom domain to use for SPF/DKIM signing instead of mandrill(for \"via\" or \"on behalf of\" in email clients)",
+          "default": "",
+          "type": "string"
+        },
+        "subAccount": {
+          "x-title": "Subaccount",
+          "description": "The unique ID of a subaccount for this message - must already exist or will fail with an error",
+          "default": "",
+          "type": "string"
+        },
+        "subject": {
+          "x-title": "Subject",
+          "description": "Subject line of the email",
+          "default": "",
+          "type": "string"
+        },
+        "tags": {
+          "x-title": "Tags",
+          "description": "An array of string separated by a comma (,) to tag the message with. Stats are accumulated using tags, though we only store the first 100 we see, so this should not be unique or change frequently. Tags should be 50 characters or less. Any tags starting with an underscore are reserved for internal use and will cause errors.",
+          "default": "",
+          "type": "string"
+        },
+        "text": {
+          "x-title": "Text",
+          "description": "Example text content",
+          "default": "",
+          "type": "string",
+          "x-rows": 5
+        },
+        "trackClicks": {
+          "x-title": "Track Clicks",
+          "description": "Whether or not to turn on click tracking for the message",
+          "default": false,
+          "type": "boolean"
+        },
+        "trackOpens": {
+          "x-title": "Track Opens",
+          "description": "Whether or not to turn on open tracking for the message",
+          "default": false,
+          "type": "boolean"
+        },
+        "trackingDomain": {
+          "x-title": "Tracking Domain",
+          "description": "A custom domain to use for tracking opens and clicks instead of mandrillapp.com",
+          "default": "",
+          "type": "string"
+        },
+        "urlStripQs": {
+          "x-title": "Url Strip Qs",
+          "description": "Whether or not to strip the query string from URLs when aggregating tracked URL data",
+          "default": false,
+          "type": "boolean"
+        },
+        "viewContentLink": {
+          "x-title": "View Content Link",
+          "description": "Whether to remove content logging for sensitive emails",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "mergeVarsJson": {
+      "x-title": "Merge Vars",
+      "description": "Global merge variables",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "mergeVarsUi": {
+      "x-title": "Merge Vars",
+      "description": "Per-recipient merge variables",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "mergeVarsValues": {
+          "x-title": "Vars",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Name",
+                "default": "",
+                "type": "string"
+              },
+              "content": {
+                "x-title": "Content",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadataUi": {
+      "x-title": "Metadata",
+      "description": "Metadata an associative array of user metadata. Mandrill will store this metadata and make it available for retrieval. In addition, you can select up to 10 metadata fields to index and make searchable using the Mandrill search api.",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "metadataValues": {
+          "x-title": "Metadata",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Name",
+                "default": "Name of the metadata key to add.",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "Value to set for the metadata key",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadataJson": {
+      "x-title": "Metadata",
+      "description": "Metadata an associative array of user metadata. Mandrill will store this metadata and make it available for retrieval. In addition, you can select up to 10 metadata fields to index and make searchable using the Mandrill search api.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "attachmentsJson": {
+      "x-title": "Attachments",
+      "description": "An array of supported attachments to add to the message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "attachmentsUi": {
+      "x-title": "Attachments",
+      "description": "Array of supported attachments to add to the message",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "attachmentsValues": {
+          "x-title": "Attachments Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "x-title": "Type",
+                "description": "The MIME type of the attachment",
+                "default": "",
+                "type": "string"
+              },
+              "name": {
+                "x-title": "Name",
+                "description": "The file name of the attachment",
+                "default": "",
+                "type": "string"
+              },
+              "content": {
+                "x-title": "Content",
+                "description": "The content of the attachment as a base64-encoded string",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "attachmentsBinary": {
+          "x-title": "Attachments Binary",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "property": {
+                "x-title": "Property",
+                "description": "Name of the binary properties which contain data which should be added to email as attachment",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "headersJson": {
+      "x-title": "Headers",
+      "description": "Optional extra headers to add to the message (most headers are allowed)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "headersUi": {
+      "x-title": "Headers",
+      "description": "Optional extra headers to add to the message (most headers are allowed)",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "headersValues": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Name",
+                "default": "",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:mandrill.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "mandrillApi",
+      "required": true
+    }
+  ]
+}

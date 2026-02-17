@@ -1,0 +1,196 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Kafka",
+  "description": "Sends messages to a Kafka topic",
+  "x-n8n-node-type": "kafka",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "topic": {
+      "x-title": "Topic",
+      "description": "Name of the queue of topic to publish to",
+      "default": "",
+      "type": "string"
+    },
+    "sendInputData": {
+      "x-title": "Send Input Data",
+      "description": "Whether to send the data the node receives as JSON to Kafka",
+      "default": true,
+      "type": "boolean"
+    },
+    "message": {
+      "x-title": "Message",
+      "description": "The message to be sent",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "sendInputData": [
+            false
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "jsonParameters": {
+      "x-title": "JSON Parameters",
+      "default": false,
+      "type": "boolean"
+    },
+    "useSchemaRegistry": {
+      "x-title": "Use Schema Registry",
+      "description": "Whether to use Confluent Schema Registry",
+      "default": false,
+      "type": "boolean"
+    },
+    "schemaRegistryUrl": {
+      "x-title": "Schema Registry URL",
+      "description": "URL of the schema registry",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "useSchemaRegistry": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "useKey": {
+      "x-title": "Use Key",
+      "description": "Whether to use a message key",
+      "default": false,
+      "type": "boolean"
+    },
+    "key": {
+      "x-title": "Key",
+      "description": "The message key",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "useKey": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "eventName": {
+      "x-title": "Event Name",
+      "description": "Namespace and Name of Schema in Schema Registry (namespace.name)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "useSchemaRegistry": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "headersUi": {
+      "x-title": "Headers",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "headerValues": {
+          "x-title": "Header",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "x-title": "Key",
+                "default": "",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "headerParametersJson": {
+      "x-title": "Headers (JSON)",
+      "description": "Header parameters as JSON (flat object)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "acks": {
+          "x-title": "Acks",
+          "description": "Whether or not producer must wait for acknowledgement from all replicas",
+          "default": false,
+          "type": "boolean"
+        },
+        "compression": {
+          "x-title": "Compression",
+          "description": "Whether to send the data in a compressed format using the GZIP codec",
+          "default": false,
+          "type": "boolean"
+        },
+        "timeout": {
+          "x-title": "Timeout",
+          "description": "The time to await a response in ms",
+          "default": 30000,
+          "type": "number"
+        }
+      }
+    }
+  },
+  "x-icon": {
+    "light": "file:kafka.svg",
+    "dark": "file:kafka.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "kafka",
+      "required": true,
+      "testedBy": "kafkaConnectionTest"
+    }
+  ]
+}

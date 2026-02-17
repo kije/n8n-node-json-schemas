@@ -1,0 +1,302 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Medium",
+  "description": "Consume Medium API",
+  "x-n8n-node-type": "medium",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "accessToken",
+      "type": "string",
+      "enum": [
+        "accessToken",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "Access Token",
+        "OAuth2"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "post",
+      "type": "string",
+      "enum": [
+        "post",
+        "publication"
+      ],
+      "x-enumNames": [
+        "Post",
+        "Publication"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "publication",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "publication"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Get Many"
+      ],
+      "x-enumDescriptions": [
+        "Get many publications"
+      ]
+    },
+    "publication": {
+      "x-title": "Publication",
+      "description": "Whether you are posting for a publication",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "publicationId": {
+      "x-title": "Publication Name or ID",
+      "description": "Publication IDs. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ],
+          "publication": [
+            true
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "Title of the post. Max Length : 100 characters.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "contentFormat": {
+      "x-title": "Content Format",
+      "description": "The format of the content to be posted",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "html",
+        "markdown"
+      ],
+      "x-enumNames": [
+        "HTML",
+        "Markdown"
+      ]
+    },
+    "content": {
+      "x-title": "Content",
+      "description": "The body of the post, in a valid semantic HTML fragment, or Markdown",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "canonicalUrl": {
+          "x-title": "Canonical Url",
+          "description": "The original home of this content, if it was originally published elsewhere",
+          "default": "",
+          "type": "string"
+        },
+        "license": {
+          "x-title": "License",
+          "description": "License of the post",
+          "default": "all-rights-reserved",
+          "type": "string",
+          "enum": [
+            "all-rights-reserved",
+            "cc-40-by",
+            "cc-40-by-nc",
+            "cc-40-by-nc-nd",
+            "cc-40-by-nc-sa",
+            "cc-40-by-nd",
+            "cc-40-by-sa",
+            "cc-40-zero",
+            "public-domain"
+          ],
+          "x-enumNames": [
+            "all-rights-reserved",
+            "cc-40-by",
+            "cc-40-by-nc",
+            "cc-40-by-nc-nd",
+            "cc-40-by-nc-sa",
+            "cc-40-by-nd",
+            "cc-40-by-sa",
+            "cc-40-zero",
+            "public-domain"
+          ]
+        },
+        "notifyFollowers": {
+          "x-title": "Notify Followers",
+          "description": "Whether to notify followers that the user has published",
+          "default": false,
+          "type": "boolean"
+        },
+        "publishStatus": {
+          "x-title": "Publish Status",
+          "description": "The status of the post",
+          "default": "public",
+          "type": "string",
+          "enum": [
+            "public",
+            "draft",
+            "unlisted"
+          ],
+          "x-enumNames": [
+            "Public",
+            "Draft",
+            "Unlisted"
+          ]
+        },
+        "tags": {
+          "x-title": "Tags",
+          "description": "Comma-separated strings to be used as tags for post classification. Max allowed tags: 5. Max tag length: 25 characters.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "publication"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "publication"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 200
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:medium.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "mediumApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "accessToken"
+          ]
+        }
+      }
+    },
+    {
+      "name": "mediumOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

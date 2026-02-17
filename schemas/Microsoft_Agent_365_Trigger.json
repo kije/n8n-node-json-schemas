@@ -1,0 +1,136 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Microsoft Agent 365 Trigger",
+  "description": "Trigger for Microsoft Agent 365",
+  "x-n8n-node-type": "microsoftAgent365Trigger",
+  "x-n8n-version": [
+    1
+  ],
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "systemPrompt": {
+      "x-title": "System Prompt",
+      "default": "",
+      "type": "string",
+      "x-rows": 4
+    },
+    "needsFallback": {
+      "x-title": "Enable Fallback Model",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 2.1
+              }
+            }
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "useMcpTools": {
+      "x-title": "Enable Microsoft MCP Tools",
+      "description": "Whether to allow the agent to use Microsoft MCP tools like Calendar, Email, and OneDrive to assist in completing tasks. Requires appropriate permissions in your Microsoft account.",
+      "default": false,
+      "type": "boolean"
+    },
+    "include": {
+      "x-title": "Tools to Include",
+      "default": "all",
+      "x-displayOptions": {
+        "show": {
+          "useMcpTools": [
+            true
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "all",
+        "selected"
+      ],
+      "x-enumNames": [
+        "All",
+        "Selected"
+      ]
+    },
+    "includeTools": {
+      "x-title": "Tools to Include",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "useMcpTools": [
+            true
+          ],
+          "include": [
+            "selected"
+          ]
+        }
+      },
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "mcp_CalendarTools",
+          "mcp_MailTools",
+          "mcp_MeServer",
+          "mcp_ODSPRemoteServer",
+          "mcp_SharePointListsTools",
+          "mcp_TeamsServer",
+          "mcp_TeamsCanaryServer",
+          "mcp_WordServer"
+        ]
+      },
+      "x-enumNames": [
+        "Calendar",
+        "Mail",
+        "Me",
+        "OneDrive & SharePoint",
+        "SharePoint Lists",
+        "Teams",
+        "Teams Canary",
+        "Word"
+      ]
+    },
+    "hasOutputParser": {
+      "x-title": "Require Specific Output Format",
+      "default": false,
+      "type": "boolean"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "maxIterations": {
+          "x-title": "Max Iterations",
+          "description": "The maximum number of iterations the agent will run before stopping",
+          "default": 10,
+          "type": "number"
+        },
+        "welcomeMessage": {
+          "x-title": "Welcome Message",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-icon": "file:Agent365.svg",
+  "x-inputs": "={{\n\t\t\t\t((hasOutputParser, needsFallback) => {\n\t\t\t\t\tfunction getInputs(hasMainInput, hasOutputParser, needsFallback) {\n    const getInputData = (inputs) => {\n        return inputs.map(({ type, filter, displayName, required }) => {\n            const input = {\n                type,\n                displayName,\n                required,\n                maxConnections: ['ai_languageModel', 'ai_memory', 'ai_outputParser'].includes(type)\n                    ? 1\n                    : undefined,\n            };\n            if (filter) {\n                input.filter = filter;\n            }\n            return input;\n        });\n    };\n    let specialInputs = [\n        {\n            type: 'ai_languageModel',\n            displayName: 'Chat Model',\n            required: true,\n            filter: {\n                excludedNodes: [\n                    '@n8n/n8n-nodes-langchain.lmCohere',\n                    '@n8n/n8n-nodes-langchain.lmOllama',\n                    'n8n/n8n-nodes-langchain.lmOpenAi',\n                    '@n8n/n8n-nodes-langchain.lmOpenHuggingFaceInference',\n                ],\n            },\n        },\n        {\n            type: 'ai_languageModel',\n            displayName: 'Fallback Model',\n            required: true,\n            filter: {\n                excludedNodes: [\n                    '@n8n/n8n-nodes-langchain.lmCohere',\n                    '@n8n/n8n-nodes-langchain.lmOllama',\n                    'n8n/n8n-nodes-langchain.lmOpenAi',\n                    '@n8n/n8n-nodes-langchain.lmOpenHuggingFaceInference',\n                ],\n            },\n        },\n        {\n            displayName: 'Memory',\n            type: 'ai_memory',\n        },\n        {\n            displayName: 'Tool',\n            type: 'ai_tool',\n        },\n        {\n            displayName: 'Output Parser',\n            type: 'ai_outputParser',\n        },\n    ];\n    if (hasOutputParser === false) {\n        specialInputs = specialInputs.filter((input) => input.type !== 'ai_outputParser');\n    }\n    if (needsFallback === false) {\n        specialInputs = specialInputs.filter((input) => input.displayName !== 'Fallback Model');\n    }\n    const mainInputs = hasMainInput ? ['main'] : [];\n    return [...mainInputs, ...getInputData(specialInputs)];\n};\n\t\t\t\t\treturn getInputs(false, hasOutputParser, needsFallback);\n\t\t\t\t})($parameter.hasOutputParser === undefined || $parameter.hasOutputParser === true, $parameter.needsFallback !== undefined && $parameter.needsFallback === true)\n\t\t\t}}",
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "microsoftAgent365Api",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

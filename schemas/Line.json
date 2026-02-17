@@ -1,0 +1,185 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Line",
+  "description": "Consume Line API",
+  "x-n8n-node-type": "line",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "notification",
+      "type": "string",
+      "enum": [
+        "notification"
+      ],
+      "x-enumNames": [
+        "Notification"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "send",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "notification"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "send"
+      ],
+      "x-enumNames": [
+        "Send"
+      ],
+      "x-enumDescriptions": [
+        "Sends notifications to users or groups"
+      ]
+    },
+    "message": {
+      "x-title": "Message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "notification"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "notification"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "imageUi": {
+          "x-title": "Image",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "imageValue": {
+              "x-title": "Image",
+              "type": "object",
+              "properties": {
+                "binaryData": {
+                  "x-title": "Binary File",
+                  "default": false,
+                  "type": "boolean"
+                },
+                "imageFullsize": {
+                  "x-title": "Image Full Size",
+                  "description": "HTTP/HTTPS URL. Maximum size of 2048×2048px JPEG.",
+                  "default": "",
+                  "x-displayOptions": {
+                    "show": {
+                      "binaryData": [
+                        false
+                      ]
+                    }
+                  },
+                  "type": "string"
+                },
+                "imageThumbnail": {
+                  "x-title": "Image Thumbnail",
+                  "description": "HTTP/HTTPS URL. Maximum size of 240×240px JPEG.",
+                  "default": "",
+                  "x-displayOptions": {
+                    "show": {
+                      "binaryData": [
+                        false
+                      ]
+                    }
+                  },
+                  "type": "string"
+                },
+                "binaryProperty": {
+                  "x-title": "Input Binary Field",
+                  "default": "data",
+                  "x-displayOptions": {
+                    "show": {
+                      "binaryData": [
+                        true
+                      ]
+                    }
+                  },
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "notificationDisabled": {
+          "x-title": "Notification Disabled",
+          "description": "<p>true: The user doesn't receive a push notification when the message is sent.</p><p>false: The user receives a push notification when the message is sent</p>",
+          "default": false,
+          "type": "boolean"
+        },
+        "stickerUi": {
+          "x-title": "Sticker",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "stickerValue": {
+              "x-title": "Sticker",
+              "type": "object",
+              "properties": {
+                "stickerId": {
+                  "x-title": "Sticker ID",
+                  "default": "",
+                  "type": "number"
+                },
+                "stickerPackageId": {
+                  "x-title": "Sticker Package ID",
+                  "description": "Package ID",
+                  "default": "",
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:line.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "lineNotifyOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "resource": [
+            "notification"
+          ]
+        }
+      }
+    }
+  ]
+}

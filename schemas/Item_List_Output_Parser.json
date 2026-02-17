@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Item List Output Parser",
+  "description": "Return the results as separate items",
+  "x-n8n-node-type": "outputParserItemList",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "numberOfItems": {
+          "x-title": "Number Of Items",
+          "description": "Defines how many items should be returned maximally. If set to -1, there is no limit.",
+          "default": -1,
+          "type": "number"
+        },
+        "separator": {
+          "x-title": "Separator",
+          "description": "Defines the separator that should be used to split the results into separate items. Defaults to a new line but can be changed depending on the data that should be returned.",
+          "default": "\\n",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-icon": "fa:bars",
+  "x-inputs": [],
+  "x-outputs": [
+    "ai_outputParser"
+  ]
+}

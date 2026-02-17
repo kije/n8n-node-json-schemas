@@ -1,0 +1,223 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Microsoft Graph Security",
+  "description": "Consume the Microsoft Graph Security API",
+  "x-n8n-node-type": "microsoftGraphSecurity",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "secureScore",
+      "type": "string",
+      "enum": [
+        "secureScore",
+        "secureScoreControlProfile"
+      ],
+      "x-enumNames": [
+        "Secure Score",
+        "Secure Score Control Profile"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "secureScoreControlProfile"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Get",
+        "Get Many",
+        "Update"
+      ]
+    },
+    "secureScoreId": {
+      "x-title": "Secure Score ID",
+      "description": "ID of the secure score to retrieve",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "secureScore"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "secureScoreControlProfile"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "secureScoreControlProfile"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 1000
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "secureScoreControlProfile"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "filter": {
+          "x-title": "Filter Query Parameter",
+          "description": "<a href=\"https://docs.microsoft.com/en-us/graph/query-parameters#filter-parameter\">Query parameter</a> to filter results by",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "secureScoreControlProfileId": {
+      "x-title": "Secure Score Control Profile ID",
+      "description": "ID of the secure score control profile to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "secureScoreControlProfile"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "provider": {
+      "x-title": "Provider",
+      "description": "Name of the provider of the security product or service",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "secureScoreControlProfile"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "vendor": {
+      "x-title": "Vendor",
+      "description": "Name of the vendor of the security product or service",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "secureScoreControlProfile"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "secureScoreControlProfile"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "state": {
+          "x-title": "State",
+          "description": "Analyst driven setting on the control",
+          "default": "Default",
+          "type": "string",
+          "enum": [
+            "Default",
+            "Ignored",
+            "ThirdParty"
+          ],
+          "x-enumNames": [
+            "Default",
+            "Ignored",
+            "Third Party"
+          ]
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:microsoftGraph.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "microsoftGraphSecurityOAuth2Api",
+      "required": true
+    }
+  ]
+}

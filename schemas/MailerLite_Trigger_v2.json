@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MailerLite Trigger",
+  "description": "Starts the workflow when MailerLite events occur",
+  "x-n8n-node-type": "mailerLiteTrigger",
+  "x-n8n-version": 2,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "events": {
+      "x-title": "Events",
+      "description": "The events to listen to",
+      "default": [],
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "campaign.sent",
+          "subscriber.added_to_group",
+          "subscriber.automation_completed",
+          "subscriber.automation_triggered",
+          "subscriber.bounced",
+          "subscriber.created",
+          "subscriber.removed_from_group",
+          "subscriber.spam_reported",
+          "subscriber.unsubscribed",
+          "subscriber.updated"
+        ]
+      },
+      "x-enumNames": [
+        "Campaign Sent",
+        "Subscriber Added to Group",
+        "Subscriber Automation Completed",
+        "Subscriber Automation Triggered",
+        "Subscriber Bounced",
+        "Subscriber Created",
+        "Subscriber Removed From Group",
+        "Subscriber Spam Reported",
+        "Subscriber Unsubscribe",
+        "Subscriber Updated"
+      ]
+    }
+  },
+  "x-icon": "file:MailerLite.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "mailerLiteApi",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

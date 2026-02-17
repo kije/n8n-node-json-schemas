@@ -1,0 +1,237 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "If",
+  "description": "Route items to different branches (true/false)",
+  "x-n8n-node-type": "if",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "conditions": {
+      "x-title": "Conditions",
+      "description": "The type of values to compare",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "boolean": {
+          "x-title": "Boolean",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "value1": {
+                "x-title": "Value 1",
+                "description": "The value to compare with the second one",
+                "default": false,
+                "type": "boolean"
+              },
+              "operation": {
+                "x-title": "Operation",
+                "description": "Operation to decide where the data should be mapped to",
+                "default": "equal",
+                "type": "string",
+                "enum": [
+                  "equal",
+                  "notEqual"
+                ],
+                "x-enumNames": [
+                  "Equal",
+                  "Not Equal"
+                ]
+              },
+              "value2": {
+                "x-title": "Value 2",
+                "description": "The value to compare with the first one",
+                "default": false,
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "dateTime": {
+          "x-title": "Date & Time",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "value1": {
+                "x-title": "Value 1",
+                "description": "The value to compare with the second one",
+                "default": "",
+                "type": "string",
+                "format": "date-time"
+              },
+              "operation": {
+                "x-title": "Operation",
+                "description": "Operation to decide where the data should be mapped to",
+                "default": "after",
+                "type": "string",
+                "enum": [
+                  "after",
+                  "before"
+                ],
+                "x-enumNames": [
+                  "Occurred After",
+                  "Occurred Before"
+                ]
+              },
+              "value2": {
+                "x-title": "Value 2",
+                "description": "The value to compare with the first one",
+                "default": "",
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        },
+        "number": {
+          "x-title": "Number",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "value1": {
+                "x-title": "Value 1",
+                "description": "The value to compare with the second one",
+                "default": 0,
+                "type": "number"
+              },
+              "operation": {
+                "x-title": "Operation",
+                "description": "Operation to decide where the data should be mapped to",
+                "default": "smaller",
+                "type": "string",
+                "enum": [
+                  "smaller",
+                  "smallerEqual",
+                  "equal",
+                  "notEqual",
+                  "larger",
+                  "largerEqual",
+                  "isEmpty",
+                  "isNotEmpty"
+                ],
+                "x-enumNames": [
+                  "Smaller",
+                  "Smaller or Equal",
+                  "Equal",
+                  "Not Equal",
+                  "Larger",
+                  "Larger or Equal",
+                  "Is Empty",
+                  "Is Not Empty"
+                ]
+              },
+              "value2": {
+                "x-title": "Value 2",
+                "description": "The value to compare with the first one",
+                "default": 0,
+                "x-displayOptions": {
+                  "hide": {
+                    "operation": [
+                      "isEmpty",
+                      "isNotEmpty"
+                    ]
+                  }
+                },
+                "type": "number"
+              }
+            }
+          }
+        },
+        "string": {
+          "x-title": "String",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "value1": {
+                "x-title": "Value 1",
+                "description": "The value to compare with the second one",
+                "default": "",
+                "type": "string"
+              },
+              "operation": {
+                "x-title": "Operation",
+                "description": "Operation to decide where the data should be mapped to",
+                "default": "equal",
+                "type": "string",
+                "enum": [
+                  "contains",
+                  "notContains",
+                  "endsWith",
+                  "notEndsWith",
+                  "equal",
+                  "notEqual",
+                  "regex",
+                  "notRegex",
+                  "startsWith",
+                  "notStartsWith",
+                  "isEmpty",
+                  "isNotEmpty"
+                ],
+                "x-enumNames": [
+                  "Contains",
+                  "Not Contains",
+                  "Ends With",
+                  "Not Ends With",
+                  "Equal",
+                  "Not Equal",
+                  "Regex Match",
+                  "Regex Not Match",
+                  "Starts With",
+                  "Not Starts With",
+                  "Is Empty",
+                  "Is Not Empty"
+                ]
+              },
+              "value2": {
+                "x-title": "Regex",
+                "description": "The regex which has to match",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "regex",
+                      "notRegex"
+                    ]
+                  }
+                },
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "combineOperation": {
+      "x-title": "Combine",
+      "description": "If multiple rules got set this settings decides if it is true as soon as ANY condition matches or only if ALL get meet",
+      "default": "all",
+      "type": "string",
+      "enum": [
+        "all",
+        "any"
+      ],
+      "x-enumNames": [
+        "ALL",
+        "ANY"
+      ],
+      "x-enumDescriptions": [
+        "Only if all conditions are met it goes into \"true\" branch",
+        "If any of the conditions is met it goes into \"true\" branch"
+      ]
+    }
+  },
+  "x-icon": "fa:map-signs",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main",
+    "main"
+  ]
+}

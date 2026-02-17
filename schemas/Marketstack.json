@@ -1,0 +1,220 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Marketstack",
+  "description": "Consume Marketstack API",
+  "x-n8n-node-type": "marketstack",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "endOfDayData",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "endOfDayData",
+        "exchange",
+        "ticker"
+      ],
+      "x-enumNames": [
+        "End-of-Day Data",
+        "Exchange",
+        "Ticker"
+      ],
+      "x-enumDescriptions": [
+        "Stock market closing data",
+        "Stock market exchange",
+        "Stock market symbol"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticker"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "get"
+      ],
+      "x-enumNames": [
+        "Get"
+      ]
+    },
+    "symbols": {
+      "x-title": "Ticker",
+      "description": "One or multiple comma-separated stock symbols (tickers) to retrieve, e.g. <code>AAPL</code> or <code>AAPL,MSFT</code>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "endOfDayData"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "endOfDayData"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "endOfDayData"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "endOfDayData"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "exchange": {
+          "x-title": "Exchange",
+          "description": "Stock exchange to filter results by, specified by <a href=\"https://en.wikipedia.org/wiki/Market_Identifier_Code\">Market Identifier Code</a>, e.g. <code>XNAS</code>",
+          "default": "",
+          "type": "string"
+        },
+        "latest": {
+          "x-title": "Latest",
+          "description": "Whether to fetch the most recent stock market data",
+          "default": false,
+          "type": "boolean"
+        },
+        "sort": {
+          "x-title": "Sort Order",
+          "description": "Order to sort results in",
+          "default": "DESC",
+          "type": "string",
+          "enum": [
+            "ASC",
+            "DESC"
+          ],
+          "x-enumNames": [
+            "Ascending",
+            "Descending"
+          ]
+        },
+        "specificDate": {
+          "x-title": "Specific Date",
+          "description": "Date in YYYY-MM-DD format, e.g. <code>2020-01-01</code>, or in ISO-8601 date format, e.g. <code>2020-05-21T00:00:00+0000</code>",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "dateFrom": {
+          "x-title": "Timeframe Start Date",
+          "description": "Timeframe start date in YYYY-MM-DD format, e.g. <code>2020-01-01</code>, or in ISO-8601 date format, e.g. <code>2020-05-21T00:00:00+0000</code>",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "dateTo": {
+          "x-title": "Timeframe End Date",
+          "description": "Timeframe end date in YYYY-MM-DD format, e.g. <code>2020-01-01</code>, or in ISO-8601 date format, e.g. <code>2020-05-21T00:00:00+0000</code>",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "exchange": {
+      "x-title": "Exchange",
+      "description": "Stock exchange to retrieve, specified by <a href=\"https://en.wikipedia.org/wiki/Market_Identifier_Code\">Market Identifier Code</a>, e.g. <code>XNAS</code>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "exchange"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "symbol": {
+      "x-title": "Ticker",
+      "description": "Stock symbol (ticker) to retrieve, e.g. <code>AAPL</code>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ticker"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": {
+    "light": "file:marketstack.svg",
+    "dark": "file:marketstack.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "marketstackApi",
+      "required": true
+    }
+  ]
+}

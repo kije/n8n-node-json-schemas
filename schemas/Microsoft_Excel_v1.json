@@ -1,0 +1,368 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Microsoft Excel",
+  "description": "Consume Microsoft Excel API",
+  "x-n8n-node-type": "microsoftExcel",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "workbook",
+      "type": "string",
+      "enum": [
+        "table",
+        "workbook",
+        "worksheet"
+      ],
+      "x-enumNames": [
+        "Table",
+        "Workbook",
+        "Worksheet"
+      ],
+      "x-enumDescriptions": [
+        "Represents an Excel table",
+        "Workbook is the top level object which contains related workbook objects such as worksheets, tables, ranges, etc",
+        "An Excel worksheet is a grid of cells. It can contain data, tables, charts, etc."
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "addRow",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "table"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "addRow",
+        "getColumns",
+        "getRows",
+        "lookup"
+      ],
+      "x-enumNames": [
+        "Add Row",
+        "Get Columns",
+        "Get Rows",
+        "Lookup"
+      ],
+      "x-enumDescriptions": [
+        "Adds rows to the end of the table",
+        "Retrieve a list of tablecolumns",
+        "Retrieve a list of tablerows",
+        "Looks for a specific column value and then returns the matching row"
+      ]
+    },
+    "workbook": {
+      "x-title": "Workbook Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "lookup"
+          ],
+          "resource": [
+            "table"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "addRow"
+          ],
+          "resource": [
+            "table"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "index": {
+          "x-title": "Index",
+          "description": "Specifies the relative position of the new row. If not defined, the addition happens at the end. Any rows below the inserted row are shifted downwards. Zero-indexed",
+          "default": 0,
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getColumns"
+          ],
+          "resource": [
+            "table"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getColumns"
+          ],
+          "resource": [
+            "table"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getColumns"
+          ],
+          "resource": [
+            "table"
+          ],
+          "rawData": [
+            true
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "fields": {
+          "x-title": "Fields",
+          "description": "Fields the response will containt. Multiple can be added separated by ,.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "worksheet": {
+      "x-title": "Worksheet Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "lookup"
+          ],
+          "resource": [
+            "table"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "range": {
+      "x-title": "Range",
+      "description": "The address or the name of the range. If not specified, the entire worksheet range is returned.",
+      "default": "A1:C3",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getContent"
+          ],
+          "resource": [
+            "worksheet"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "rawData": {
+      "x-title": "RAW Data",
+      "description": "Whether the data should be returned RAW instead of parsed into keys according to their header",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getColumns"
+          ],
+          "resource": [
+            "table"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "dataProperty": {
+      "x-title": "Data Property",
+      "description": "The name of the property into which to write the RAW data",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getColumns"
+          ],
+          "resource": [
+            "table"
+          ],
+          "rawData": [
+            true
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "dataStartRow": {
+      "x-title": "Data Start Row",
+      "description": "Index of the first row which contains the actual data and not the keys. Starts with 0.",
+      "default": 1,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getContent"
+          ],
+          "resource": [
+            "worksheet"
+          ]
+        },
+        "hide": {
+          "rawData": [
+            true
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "keyRow": {
+      "x-title": "Key Row",
+      "description": "Index of the row which contains the keys. Starts at 0. The incoming node data is matched to the keys for assignment. The matching is case sensitve.",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getContent"
+          ],
+          "resource": [
+            "worksheet"
+          ]
+        },
+        "hide": {
+          "rawData": [
+            true
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 0
+    },
+    "table": {
+      "x-title": "Table Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "lookup"
+          ],
+          "resource": [
+            "table"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "lookupColumn": {
+      "x-title": "Lookup Column",
+      "description": "The name of the column in which to look for value",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "table"
+          ],
+          "operation": [
+            "lookup"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "lookupValue": {
+      "x-title": "Lookup Value",
+      "description": "The value to look for in column",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "table"
+          ],
+          "operation": [
+            "lookup"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "table"
+          ],
+          "operation": [
+            "lookup"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "returnAllMatches": {
+          "x-title": "Return All Matches",
+          "description": "By default only the first result gets returned. If options gets set all found matches get returned.",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:excel.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "microsoftExcelOAuth2Api",
+      "required": true
+    }
+  ]
+}

@@ -1,0 +1,1086 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Mautic",
+  "description": "Consume Mautic API",
+  "x-n8n-node-type": "mautic",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "credentials",
+      "type": "string",
+      "enum": [
+        "credentials",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "Credentials",
+        "OAuth2"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "contact",
+      "type": "string",
+      "enum": [
+        "campaignContact",
+        "company",
+        "companyContact",
+        "contact",
+        "contactSegment",
+        "segmentEmail"
+      ],
+      "x-enumNames": [
+        "Campaign Contact",
+        "Company",
+        "Company Contact",
+        "Contact",
+        "Contact Segment",
+        "Segment Email"
+      ],
+      "x-enumDescriptions": [
+        "Add/remove contacts to/from a campaign",
+        "Create or modify a company",
+        "Add/remove contacts to/from a company",
+        "Create & modify contacts",
+        "Add/remove contacts to/from a segment",
+        "Send an email"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "send",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "segmentEmail"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "send"
+      ],
+      "x-enumNames": [
+        "Send"
+      ]
+    },
+    "name": {
+      "x-title": "Company Name",
+      "description": "The name of the company to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "simple": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "editDoNotContactList"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "reason": {
+          "x-title": "Reason To Do Not Contact",
+          "default": "3",
+          "type": "string",
+          "enum": [
+            "1",
+            "2",
+            "3"
+          ],
+          "x-enumNames": [
+            "Unsubscribed",
+            "Bounced",
+            "Manual"
+          ]
+        },
+        "comments": {
+          "x-title": "Comments",
+          "description": "A text describing details of Do Not Contact entry",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "companyId": {
+      "x-title": "Company ID",
+      "description": "The ID of the company",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "companyContact"
+          ],
+          "operation": [
+            "add",
+            "remove"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "bodyJson": {
+          "x-title": "Body",
+          "description": "Contact parameters",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                true
+              ]
+            }
+          },
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "addressUi": {
+          "x-title": "Address",
+          "default": {},
+          "x-displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "type": "object",
+          "properties": {
+            "addressValues": {
+              "x-title": "Address",
+              "type": "object",
+              "properties": {
+                "address1": {
+                  "x-title": "Address Line 1",
+                  "default": "",
+                  "type": "string"
+                },
+                "address2": {
+                  "x-title": "Address Line 2",
+                  "default": "",
+                  "type": "string"
+                },
+                "city": {
+                  "x-title": "City",
+                  "default": "",
+                  "type": "string"
+                },
+                "state": {
+                  "x-title": "State",
+                  "default": "",
+                  "type": "string"
+                },
+                "country": {
+                  "x-title": "Country",
+                  "default": "",
+                  "type": "string"
+                },
+                "zipCode": {
+                  "x-title": "Zip Code",
+                  "default": "",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "b2bOrb2c": {
+          "x-title": "B2B or B2C",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "B2B",
+            "B2C"
+          ],
+          "x-enumNames": [
+            "B2B",
+            "B2C"
+          ]
+        },
+        "crmId": {
+          "x-title": "CRM ID",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "customFieldsUi": {
+          "x-title": "Custom Fields",
+          "description": "Adds a custom fields to set also values which have not been predefined",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "customFieldValues": {
+              "x-title": "Field",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "fieldId": {
+                    "x-title": "Field Name or ID",
+                    "description": "ID of the field to set. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "fieldValue": {
+                    "x-title": "Field Value",
+                    "description": "Value of the field to set",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "email": {
+          "x-title": "Email",
+          "description": "Email address of the contact",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "fax": {
+          "x-title": "Fax",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "firstName": {
+          "x-title": "First Name",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "hasPurchased": {
+          "x-title": "Has Purchased",
+          "default": false,
+          "x-displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "ipAddress": {
+          "x-title": "IP Address",
+          "description": "IP address to associate with the contact",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "lastActive": {
+          "x-title": "Last Active",
+          "description": "Date/time in UTC;",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastName": {
+          "x-title": "Last Name",
+          "description": "LastName",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "mobile": {
+          "x-title": "Mobile",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "ownerId": {
+          "x-title": "Owner ID",
+          "description": "ID of a Mautic user to assign this contact to",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "phone": {
+          "x-title": "Phone",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "position": {
+          "x-title": "Position",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "company": {
+          "x-title": "Primary Company Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "prospectOrCustomer": {
+          "x-title": "Prospect or Customer",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "Prospect",
+            "Customer"
+          ],
+          "x-enumNames": [
+            "Prospect",
+            "Customer"
+          ]
+        },
+        "sandbox": {
+          "x-title": "Sandbox",
+          "default": false,
+          "x-displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "stage": {
+          "x-title": "Stage Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "tags": {
+          "x-title": "Tag Names or IDs",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "x-displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "title": {
+          "x-title": "Title",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "socialMediaUi": {
+          "x-title": "Social Media",
+          "default": {},
+          "x-displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "type": "object",
+          "properties": {
+            "socialMediaValues": {
+              "x-title": "Social Media",
+              "type": "object",
+              "properties": {
+                "facebook": {
+                  "x-title": "Facebook",
+                  "default": "",
+                  "type": "string"
+                },
+                "foursquare": {
+                  "x-title": "Foursquare",
+                  "default": "",
+                  "type": "string"
+                },
+                "instagram": {
+                  "x-title": "Instagram",
+                  "default": "",
+                  "type": "string"
+                },
+                "linkedIn": {
+                  "x-title": "LinkedIn",
+                  "default": "",
+                  "type": "string"
+                },
+                "skype": {
+                  "x-title": "Skype",
+                  "default": "",
+                  "type": "string"
+                },
+                "twitter": {
+                  "x-title": "Twitter",
+                  "default": "",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "website": {
+          "x-title": "Website",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "type": "string"
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 30,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 30
+    },
+    "jsonParameters": {
+      "x-title": "JSON Parameters",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "Email address of the contact",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "firstName": {
+      "x-title": "First Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "lastName": {
+      "x-title": "Last Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "company": {
+      "x-title": "Primary Company Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "position": {
+      "x-title": "Position",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "title": {
+      "x-title": "Title",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "bodyJson": {
+      "x-title": "Body",
+      "description": "Contact parameters",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "contact"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "contactId": {
+      "x-title": "Contact ID",
+      "description": "The ID of the contact",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "companyContact"
+          ],
+          "operation": [
+            "add",
+            "remove"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "action": {
+      "x-title": "Action",
+      "default": "add",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "editContactPoint"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "add",
+        "remove"
+      ],
+      "x-enumNames": [
+        "Add",
+        "Remove"
+      ]
+    },
+    "channel": {
+      "x-title": "Channel",
+      "default": "email",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "editDoNotContactList"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "email",
+        "sms"
+      ],
+      "x-enumNames": [
+        "Email",
+        "SMS"
+      ]
+    },
+    "points": {
+      "x-title": "Points",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "editContactPoint"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ]
+        },
+        "hide": {
+          "operation": [
+            "sendEmail",
+            "editDoNotContactList",
+            "editContactPoint"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "search": {
+          "x-title": "Search",
+          "description": "String or search command to filter entities by",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/resource": [
+                "contact"
+              ],
+              "/operation": [
+                "getAll"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "orderBy": {
+          "x-title": "Order By",
+          "description": "Column to sort by. Can use any column listed in the response.",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/resource": [
+                "contact"
+              ],
+              "/operation": [
+                "getAll"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "orderByDir": {
+          "x-title": "Order By Dir",
+          "description": "Sort direction: ASC or DESC",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/resource": [
+                "contact"
+              ],
+              "/operation": [
+                "getAll"
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "asc",
+            "desc"
+          ],
+          "x-enumNames": [
+            "ASC",
+            "DESC"
+          ]
+        },
+        "publishedOnly": {
+          "x-title": "Published Only",
+          "description": "Whether to return currently published entities",
+          "default": false,
+          "x-displayOptions": {
+            "show": {
+              "/resource": [
+                "contact"
+              ],
+              "/operation": [
+                "getAll"
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "minimal": {
+          "x-title": "Minimal",
+          "description": "Whether to return array of entities without additional lists in it",
+          "default": false,
+          "x-displayOptions": {
+            "show": {
+              "/resource": [
+                "contact"
+              ],
+              "/operation": [
+                "getAll"
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "rawData": {
+          "x-title": "RAW Data",
+          "description": "By default only the data of the fields get returned. If this options gets set the RAW response with all data gets returned.",
+          "default": true,
+          "type": "boolean"
+        }
+      }
+    },
+    "campaignEmailId": {
+      "x-title": "Campaign Email Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "sendEmail"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "segmentId": {
+      "x-title": "Segment Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contactSegment"
+          ],
+          "operation": [
+            "add",
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "campaignId": {
+      "x-title": "Campaign Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "campaignContact"
+          ],
+          "operation": [
+            "add",
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "segmentEmailId": {
+      "x-title": "Segment Email Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "segmentEmail"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:mautic.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "mauticApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "credentials"
+          ]
+        }
+      }
+    },
+    {
+      "name": "mauticOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Keap Trigger",
+  "description": "Starts the workflow when Infusionsoft events occur",
+  "x-n8n-node-type": "keapTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "eventId": {
+      "x-title": "Event Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "rawData": {
+      "x-title": "RAW Data",
+      "description": "Whether to return the data exactly in the way it got received from the API",
+      "default": false,
+      "type": "boolean"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"eventId\"]}}",
+  "x-icon": "file:keap.png",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "keapOAuth2Api",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

@@ -1,0 +1,561 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "KoBoToolbox",
+  "description": "Work with KoBoToolbox forms and submissions",
+  "x-n8n-node-type": "koBoToolbox",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "submission",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "file",
+        "form",
+        "hook",
+        "submission"
+      ],
+      "x-enumNames": [
+        "File",
+        "Form",
+        "Hook",
+        "Submission"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many"
+      ],
+      "x-enumDescriptions": [
+        "Create a file",
+        "Delete file",
+        "Get a file content",
+        "Get many files"
+      ]
+    },
+    "formId": {
+      "x-title": "Form Name or ID",
+      "description": "Form ID (e.g. aSAvYreNzVEkrWg5Gdcvg). Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "submission"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "submission"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "maximum": 3000
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "submission"
+          ],
+          "operation": [
+            "get",
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "download": {
+          "x-title": "Download Attachments",
+          "description": "Whether to download submitted attachments",
+          "default": false,
+          "type": "boolean"
+        },
+        "binaryNamingScheme": {
+          "x-title": "Attachments Naming Scheme",
+          "default": "sequence",
+          "x-displayOptions": {
+            "show": {
+              "download": [
+                true
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "sequence",
+            "question"
+          ],
+          "x-enumNames": [
+            "Sequence (e.g. attachment_N)",
+            "Use Original Form Question ID"
+          ]
+        },
+        "dataPropertyAttachmentsPrefixName": {
+          "x-title": "Attachments Prefix",
+          "description": "Prefix for name of the binary property to which to write the attachments. An index starting with 0 will be added. So if name is \"attachment_\" the first attachment is saved to \"attachment_0\"",
+          "default": "attachment_",
+          "x-displayOptions": {
+            "show": {
+              "download": [
+                true
+              ],
+              "binaryNamingScheme": [
+                "sequence"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "fields": {
+          "x-title": "Fields to Retrieve",
+          "description": "Comma-separated list of fields to retrieve (e.g. _submission_time,_submitted_by). If left blank, all fields are retrieved.",
+          "default": "",
+          "type": "string"
+        },
+        "version": {
+          "x-title": "File Size",
+          "description": "Attachment size to retrieve, if multiple versions are available",
+          "default": "download_url",
+          "x-displayOptions": {
+            "show": {
+              "download": [
+                true
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "download_url",
+            "download_small_url",
+            "download_medium_url",
+            "download_large_url"
+          ],
+          "x-enumNames": [
+            "Original",
+            "Small",
+            "Medium",
+            "Large"
+          ]
+        },
+        "selectMask": {
+          "x-title": "Multiselect Mask",
+          "description": "Comma-separated list of wildcard-style selectors for fields that should be treated as multiselect fields, i.e. parsed as arrays.",
+          "default": "select_*",
+          "type": "string"
+        },
+        "numberMask": {
+          "x-title": "Number Mask",
+          "description": "Comma-separated list of wildcard-style selectors for fields that should be treated as numbers",
+          "default": "n_*, f_*",
+          "type": "string"
+        },
+        "reformat": {
+          "x-title": "Reformat",
+          "description": "Whether to apply some reformatting to the submission data, such as parsing GeoJSON coordinates",
+          "default": false,
+          "type": "boolean"
+        },
+        "sort": {
+          "x-title": "Sort",
+          "description": "Sort predicates, in MongoDB JSON format (e.g. {\"_submission_time\":1})",
+          "default": "",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        }
+      }
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "form"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "filter": {
+          "x-title": "Filter",
+          "description": "A text search query based on form data - e.g. \"owner__username:meg AND name__icontains:quixotic\" - see <a href=\"https://github.com/kobotoolbox/kpi#searching\" target=\"_blank\">docs</a> for more details",
+          "default": "asset_type:survey",
+          "type": "string"
+        }
+      }
+    },
+    "hookId": {
+      "x-title": "Hook ID",
+      "description": "Hook ID (starts with h, e.g. hVehywQ2oXPYGHJHKtqth4)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "hook"
+          ],
+          "operation": [
+            "get",
+            "retryOne",
+            "retryAll",
+            "getLogs"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "logId": {
+      "x-title": "Hook Log ID",
+      "description": "Hook log ID (starts with hl, e.g. hlSbGKaUKzTVNoWEVMYbLHe)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "hook"
+          ],
+          "operation": [
+            "retryOne"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "status": {
+      "x-title": "Log Status",
+      "description": "Only retrieve logs with a specific status",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "hook"
+          ],
+          "operation": [
+            "getLogs"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "",
+        "0",
+        "1",
+        "2"
+      ],
+      "x-enumNames": [
+        "All",
+        "Failed",
+        "Pending",
+        "Success"
+      ]
+    },
+    "startDate": {
+      "x-title": "Start Date",
+      "description": "Minimum date for the hook log to retrieve",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "hook"
+          ],
+          "operation": [
+            "getLogs"
+          ]
+        }
+      },
+      "type": "string",
+      "format": "date-time"
+    },
+    "endDate": {
+      "x-title": "End Date",
+      "description": "Maximum date for the hook log to retrieve",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "hook"
+          ],
+          "operation": [
+            "getLogs"
+          ]
+        }
+      },
+      "type": "string",
+      "format": "date-time"
+    },
+    "submissionId": {
+      "x-title": "Submission ID",
+      "description": "Submission ID (number, e.g. 245128)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "submission"
+          ],
+          "operation": [
+            "get",
+            "delete",
+            "getValidation",
+            "setValidation"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "validationStatus": {
+      "x-title": "Validation Status",
+      "description": "Desired Validation Status",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "submission"
+          ],
+          "operation": [
+            "setValidation"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "validation_status_approved",
+        "validation_status_not_approved",
+        "validation_status_on_hold"
+      ],
+      "x-enumNames": [
+        "Approved",
+        "Not Approved",
+        "On Hold"
+      ]
+    },
+    "filterType": {
+      "x-title": "Filter",
+      "default": "none",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "submission"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "none",
+        "json"
+      ],
+      "x-enumNames": [
+        "None",
+        "JSON"
+      ]
+    },
+    "filterJson": {
+      "x-title": "Filters (JSON)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "submission"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "json"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "fileId": {
+      "x-title": "File ID",
+      "description": "Uid of the file (should start with \"af\" e.g. \"afQoJxA4kmKEXVpkH6SYbhb\"",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "delete",
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "binaryPropertyName": {
+      "x-title": "Property Name",
+      "description": "Name of the binary property containing the file to upload. Supported types: image, audio, video, csv, xml, zip.",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "create"
+          ],
+          "fileMode": [
+            "binary"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "download": {
+      "x-title": "Download File Content",
+      "description": "Whether to download the file content into a binary property",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "fileMode": {
+      "x-title": "File Upload Mode",
+      "default": "binary",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "binary",
+        "url"
+      ],
+      "x-enumNames": [
+        "Binary File",
+        "URL"
+      ]
+    },
+    "fileUrl": {
+      "x-title": "File URL",
+      "description": "HTTP(s) link to the file to upload",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "create"
+          ],
+          "fileMode": [
+            "url"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:koBoToolbox.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "koBoToolboxApi",
+      "required": true
+    }
+  ]
+}

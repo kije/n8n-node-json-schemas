@@ -1,0 +1,389 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Merge",
+  "description": "Merges data of multiple streams once data from both is available",
+  "x-n8n-node-type": "merge",
+  "x-n8n-version": 2,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "mode": {
+      "x-title": "Mode",
+      "description": "How data of branches should be merged",
+      "default": "append",
+      "type": "string",
+      "enum": [
+        "append",
+        "combine",
+        "chooseBranch"
+      ],
+      "x-enumNames": [
+        "Append",
+        "Combine",
+        "Choose Branch"
+      ],
+      "x-enumDescriptions": [
+        "All items of input 1, then all items of input 2",
+        "Merge matching items together",
+        "Output input data, without modifying it"
+      ]
+    },
+    "combinationMode": {
+      "x-title": "Combination Mode",
+      "default": "mergeByFields",
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "combine"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "mergeByFields",
+        "mergeByPosition",
+        "multiplex"
+      ],
+      "x-enumNames": [
+        "Merge By Fields",
+        "Merge By Position",
+        "Multiplex"
+      ],
+      "x-enumDescriptions": [
+        "Combine items with the same field values",
+        "Combine items based on their order",
+        "All possible item combinations (cross join)"
+      ]
+    },
+    "mergeByFields": {
+      "x-title": "Fields to Match",
+      "default": {
+        "values": [
+          {
+            "field1": "",
+            "field2": ""
+          }
+        ]
+      },
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "combine"
+          ],
+          "combinationMode": [
+            "mergeByFields"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "field1": {
+                "x-title": "Input 1 Field",
+                "default": "",
+                "type": "string"
+              },
+              "field2": {
+                "x-title": "Input 2 Field",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "joinMode": {
+      "x-title": "Output Type",
+      "default": "keepMatches",
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "combine"
+          ],
+          "combinationMode": [
+            "mergeByFields"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "keepMatches",
+        "keepNonMatches",
+        "keepEverything",
+        "enrichInput1",
+        "enrichInput2"
+      ],
+      "x-enumNames": [
+        "Keep Matches",
+        "Keep Non-Matches",
+        "Keep Everything",
+        "Enrich Input 1",
+        "Enrich Input 2"
+      ],
+      "x-enumDescriptions": [
+        "Items that match, merged together (inner join)",
+        "Items that don't match",
+        "Items that match merged together, plus items that don't match (outer join)",
+        "All of input 1, with data from input 2 added in (left join)",
+        "All of input 2, with data from input 1 added in (right join)"
+      ]
+    },
+    "outputDataFrom": {
+      "x-title": "Output Data From",
+      "default": "both",
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "combine"
+          ],
+          "combinationMode": [
+            "mergeByFields"
+          ],
+          "joinMode": [
+            "keepNonMatches"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "both",
+        "input1",
+        "input2"
+      ],
+      "x-enumNames": [
+        "Both Inputs Appended Together",
+        "Input 1",
+        "Input 2"
+      ]
+    },
+    "chooseBranchMode": {
+      "x-title": "Output Type",
+      "default": "waitForBoth",
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "chooseBranch"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "waitForBoth"
+      ],
+      "x-enumNames": [
+        "Wait for Both Inputs to Arrive"
+      ]
+    },
+    "output": {
+      "x-title": "Output",
+      "default": "input1",
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "chooseBranch"
+          ],
+          "chooseBranchMode": [
+            "waitForBoth"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "input1",
+        "input2",
+        "empty"
+      ],
+      "x-enumNames": [
+        "Input 1 Data",
+        "Input 2 Data",
+        "A Single, Empty Item"
+      ]
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "hide": {
+          "mode": [
+            "chooseBranch",
+            "append"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "clashHandling": {
+          "x-title": "Clash Handling",
+          "default": {
+            "values": {
+              "resolveClash": "preferInput2",
+              "mergeMode": "deepMerge",
+              "overrideEmpty": false
+            }
+          },
+          "x-displayOptions": {
+            "show": {
+              "/mode": [
+                "combine"
+              ],
+              "/combinationMode": [
+                "multiplex",
+                "mergeByPosition"
+              ]
+            }
+          },
+          "type": "object",
+          "properties": {
+            "values": {
+              "x-title": "Values",
+              "type": "object",
+              "properties": {
+                "resolveClash": {
+                  "x-title": "When Field Values Clash",
+                  "default": "",
+                  "type": "string",
+                  "enum": [
+                    "addSuffix",
+                    "preferInput1",
+                    "preferInput2"
+                  ],
+                  "x-enumNames": [
+                    "Always Add Input Number to Field Names",
+                    "Prefer Input 1 Version",
+                    "Prefer Input 2 Version"
+                  ]
+                },
+                "mergeMode": {
+                  "x-title": "Merging Nested Fields",
+                  "default": "deepMerge",
+                  "x-displayOptions": {
+                    "show": {
+                      "resolveClash": [
+                        "preferInput1",
+                        "preferInput2"
+                      ]
+                    }
+                  },
+                  "type": "string",
+                  "enum": [
+                    "deepMerge",
+                    "shallowMerge"
+                  ],
+                  "x-enumNames": [
+                    "Deep Merge",
+                    "Shallow Merge"
+                  ],
+                  "x-enumDescriptions": [
+                    "Merge at every level of nesting",
+                    "Merge at the top level only (all nested fields will come from the same input)"
+                  ]
+                },
+                "overrideEmpty": {
+                  "x-title": "Minimize Empty Fields",
+                  "description": "Whether to override the preferred input version for a field if it is empty and the other version isn't. Here 'empty' means undefined, null or an empty string.",
+                  "default": false,
+                  "x-displayOptions": {
+                    "show": {
+                      "resolveClash": [
+                        "preferInput1",
+                        "preferInput2"
+                      ]
+                    }
+                  },
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "disableDotNotation": {
+          "x-title": "Disable Dot Notation",
+          "description": "Whether to disallow referencing child fields using `parent.child` in the field name",
+          "default": false,
+          "x-displayOptions": {
+            "show": {
+              "/mode": [
+                "combine"
+              ],
+              "/combinationMode": [
+                "mergeByFields"
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "fuzzyCompare": {
+          "x-title": "Fuzzy Compare",
+          "description": "Whether to tolerate small type differences when comparing fields. E.g. the number 3 and the string '3' are treated as the same.",
+          "default": false,
+          "type": "boolean"
+        },
+        "includeUnpaired": {
+          "x-title": "Include Any Unpaired Items",
+          "description": "If there are different numbers of items in input 1 and input 2, whether to include the ones at the end with nothing to pair with",
+          "default": false,
+          "x-displayOptions": {
+            "show": {
+              "/mode": [
+                "combine"
+              ],
+              "/combinationMode": [
+                "mergeByPosition"
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "multipleMatches": {
+          "x-title": "Multiple Matches",
+          "default": "all",
+          "x-displayOptions": {
+            "show": {
+              "/mode": [
+                "combine"
+              ],
+              "/combinationMode": [
+                "mergeByFields"
+              ],
+              "/joinMode": [
+                "enrichInput1",
+                "enrichInput2",
+                "keepEverything"
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "all",
+            "first"
+          ],
+          "x-enumNames": [
+            "Include All Matches",
+            "Include First Match Only"
+          ],
+          "x-enumDescriptions": [
+            "Output multiple items if there are multiple matches",
+            "Only ever output a single item per match"
+          ]
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"mode\"]}}",
+  "x-icon": "file:merge.svg",
+  "x-inputs": [
+    "main",
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

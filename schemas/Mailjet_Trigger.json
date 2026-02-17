@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Mailjet Trigger",
+  "description": "Handle Mailjet events via webhooks",
+  "x-n8n-node-type": "mailjetTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "event": {
+      "x-title": "Event",
+      "description": "Determines which resource events the webhook is triggered for",
+      "default": "open",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "blocked",
+        "bounce",
+        "open",
+        "sent",
+        "spam",
+        "unsub"
+      ],
+      "x-enumNames": [
+        "email.blocked",
+        "email.bounce",
+        "email.open",
+        "email.sent",
+        "email.spam",
+        "email.unsub"
+      ]
+    }
+  },
+  "x-icon": "file:mailjet.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "mailjetEmailApi",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Mautic Trigger",
+  "description": "Handle Mautic events via webhooks",
+  "x-n8n-node-type": "mauticTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "credentials",
+      "type": "string",
+      "enum": [
+        "credentials",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "Credentials",
+        "OAuth2"
+      ]
+    },
+    "events": {
+      "x-title": "Event Names or IDs",
+      "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": [],
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "eventsOrder": {
+      "x-title": "Events Order",
+      "description": "Order direction for queued events in one webhook. Can be “DESC” or “ASC”.",
+      "default": "ASC",
+      "type": "string",
+      "enum": [
+        "ASC",
+        "DESC"
+      ],
+      "x-enumNames": [
+        "ASC",
+        "DESC"
+      ]
+    }
+  },
+  "x-icon": "file:mautic.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "mauticApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "credentials"
+          ]
+        }
+      }
+    },
+    {
+      "name": "mauticOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "x-webhooks": "true"
+}

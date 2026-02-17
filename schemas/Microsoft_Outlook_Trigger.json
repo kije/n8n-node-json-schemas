@@ -1,0 +1,200 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Microsoft Outlook Trigger",
+  "description": "Fetches emails from Microsoft Outlook and starts the workflow on specified polling intervals.",
+  "x-n8n-node-type": "microsoftOutlookTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "event": {
+      "x-title": "Trigger On",
+      "default": "messageReceived",
+      "type": "string",
+      "enum": [
+        "messageReceived"
+      ],
+      "x-enumNames": [
+        "Message Received"
+      ]
+    },
+    "output": {
+      "x-title": "Output",
+      "default": "simple",
+      "type": "string",
+      "enum": [
+        "simple",
+        "raw",
+        "fields"
+      ],
+      "x-enumNames": [
+        "Simplified",
+        "Raw",
+        "Select Included Fields"
+      ]
+    },
+    "fields": {
+      "x-title": "Fields",
+      "description": "The fields to add to the output",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "output": [
+            "fields"
+          ]
+        }
+      },
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "bccRecipients",
+          "body",
+          "bodyPreview",
+          "categories",
+          "ccRecipients",
+          "changeKey",
+          "conversationId",
+          "createdDateTime",
+          "flag",
+          "from",
+          "hasAttachments",
+          "importance",
+          "inferenceClassification",
+          "internetMessageId",
+          "isDeliveryReceiptRequested",
+          "isDraft",
+          "isRead",
+          "isReadReceiptRequested",
+          "lastModifiedDateTime",
+          "parentFolderId",
+          "receivedDateTime",
+          "replyTo",
+          "sender",
+          "sentDateTime",
+          "subject",
+          "toRecipients",
+          "webLink"
+        ]
+      },
+      "x-enumNames": [
+        "bccRecipients",
+        "body",
+        "bodyPreview",
+        "categories",
+        "ccRecipients",
+        "changeKey",
+        "conversationId",
+        "createdDateTime",
+        "flag",
+        "from",
+        "hasAttachments",
+        "importance",
+        "inferenceClassification",
+        "internetMessageId",
+        "isDeliveryReceiptRequested",
+        "isDraft",
+        "isRead",
+        "isReadReceiptRequested",
+        "lastModifiedDateTime",
+        "parentFolderId",
+        "receivedDateTime",
+        "replyTo",
+        "sender",
+        "sentDateTime",
+        "subject",
+        "toRecipients",
+        "webLink"
+      ]
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "custom": {
+          "x-title": "Filter Query",
+          "default": "",
+          "type": "string"
+        },
+        "hasAttachments": {
+          "x-title": "Has Attachments",
+          "default": false,
+          "type": "boolean"
+        },
+        "foldersToExclude": {
+          "x-title": "Folders to Exclude",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "foldersToInclude": {
+          "x-title": "Folders to Include",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "readStatus": {
+          "x-title": "Read Status",
+          "default": "unread",
+          "type": "string",
+          "enum": [
+            "both",
+            "unread",
+            "read"
+          ],
+          "x-enumNames": [
+            "Unread and read messages",
+            "Unread messages only",
+            "Read messages only"
+          ]
+        },
+        "sender": {
+          "x-title": "Sender",
+          "description": "Sender name or email to filter by",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "attachmentsPrefix": {
+          "x-title": "Attachments Prefix",
+          "description": "Prefix for name of the output fields to put the binary files data in. An index starting from 0 will be added. So if name is \"attachment_\" the first attachment is saved to \"attachment_0\".",
+          "default": "attachment_",
+          "type": "string"
+        },
+        "downloadAttachments": {
+          "x-title": "Download Attachments",
+          "description": "Whether the message's attachments will be downloaded and included in the output",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{\"Microsoft Outlook Trigger\"}}",
+  "x-icon": "file:outlook.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "microsoftOutlookOAuth2Api",
+      "required": true
+    }
+  ]
+}

@@ -1,0 +1,298 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "LinkedIn",
+  "description": "Consume LinkedIn API",
+  "x-n8n-node-type": "linkedIn",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "standard",
+      "type": "string",
+      "enum": [
+        "standard",
+        "communityManagement"
+      ],
+      "x-enumNames": [
+        "Standard",
+        "Community Management"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "post",
+      "type": "string",
+      "enum": [
+        "post"
+      ],
+      "x-enumNames": [
+        "Post"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create"
+      ],
+      "x-enumNames": [
+        "Create"
+      ],
+      "x-enumDescriptions": [
+        "Create a new post"
+      ]
+    },
+    "postAs": {
+      "x-title": "Post As",
+      "description": "If to post on behalf of a user or an organization",
+      "default": "person",
+      "type": "string",
+      "enum": [
+        "person",
+        "organization"
+      ],
+      "x-enumNames": [
+        "Person",
+        "Organization"
+      ]
+    },
+    "person": {
+      "x-title": "Person Name or ID",
+      "description": "Person as which the post should be posted as. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "postAs": [
+            "person"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "organization": {
+      "x-title": "Organization URN",
+      "description": "URN of Organization as which the post should be posted as",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "postAs": [
+            "organization"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "text": {
+      "x-title": "Text",
+      "description": "The primary content of the post",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "shareMediaCategory": {
+      "x-title": "Media Category",
+      "default": "NONE",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "NONE",
+        "ARTICLE",
+        "IMAGE"
+      ],
+      "x-enumNames": [
+        "None",
+        "Article",
+        "Image"
+      ],
+      "x-enumDescriptions": [
+        "The post does not contain any media, and will only consist of text",
+        "The post contains an article URL",
+        "The post contains an image"
+      ]
+    },
+    "binaryPropertyName": {
+      "x-title": "Input Binary Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "post"
+          ],
+          "shareMediaCategory": [
+            "IMAGE"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "post"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "description": {
+          "x-title": "Description",
+          "description": "Provide a short description for your image or article",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/shareMediaCategory": [
+                "ARTICLE"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "originalUrl": {
+          "x-title": "Original URL",
+          "description": "Provide the URL of the article you would like to share here",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/shareMediaCategory": [
+                "ARTICLE"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "thumbnailBinaryPropertyName": {
+          "x-title": "Input Binary Field",
+          "default": "data",
+          "x-displayOptions": {
+            "show": {
+              "/shareMediaCategory": [
+                "ARTICLE"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "title": {
+          "x-title": "Title",
+          "description": "Customize the title of your image or article",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/shareMediaCategory": [
+                "ARTICLE",
+                "IMAGE"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "visibility": {
+          "x-title": "Visibility",
+          "description": "Dictate if post will be seen by the public or only connections",
+          "default": "PUBLIC",
+          "x-displayOptions": {
+            "show": {
+              "/postAs": [
+                "person"
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "CONNECTIONS",
+            "PUBLIC"
+          ],
+          "x-enumNames": [
+            "Connections",
+            "Public"
+          ]
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:linkedin.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "linkedInOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "standard"
+          ]
+        }
+      }
+    },
+    {
+      "name": "linkedInCommunityManagementOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "communityManagement"
+          ]
+        }
+      }
+    }
+  ]
+}

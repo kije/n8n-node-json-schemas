@@ -1,0 +1,807 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Microsoft Dynamics CRM",
+  "description": "Consume Microsoft Dynamics CRM API",
+  "x-n8n-node-type": "microsoftDynamicsCrm",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "account",
+      "type": "string",
+      "enum": [
+        "account"
+      ],
+      "x-enumNames": [
+        "Account"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "account"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ]
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "Company or business name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "account"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "account"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "accountcategorycode": {
+          "x-title": "Account Category Name or ID",
+          "description": "Category to indicate whether the customer account is standard or preferred. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "accountratingcode": {
+          "x-title": "Account Rating Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "addresses": {
+          "x-title": "Address",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "address": {
+              "x-title": "Address Fields",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "addresstypecode": {
+                    "x-title": "Address Type Name or ID",
+                    "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "line1": {
+                    "x-title": "Line1",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "line2": {
+                    "x-title": "Line2",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "line3": {
+                    "x-title": "Line3",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "city": {
+                    "x-title": "City",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "stateorprovince": {
+                    "x-title": "State or Province",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "country": {
+                    "x-title": "Country",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "name": {
+                    "x-title": "Name",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "postalcode": {
+                    "x-title": "Postalcode",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "primarycontactname": {
+                    "x-title": "Primary Contact Name",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "telephone1": {
+                    "x-title": "Telephone1",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "telephone2": {
+                    "x-title": "Telephone2",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "fax": {
+                    "x-title": "Fax",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "businesstypecode": {
+          "x-title": "Business Type Name or ID",
+          "description": "The legal designation or other business type of the account for contracts or reporting purposes. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "customersizecode": {
+          "x-title": "Customer Size Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "customertypecode": {
+          "x-title": "Customer Type Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "description": {
+          "x-title": "Description",
+          "description": "Additional information to describe the account, such as an excerpt from the company’s website",
+          "default": "",
+          "type": "string"
+        },
+        "emailaddress1": {
+          "x-title": "Email Address 1",
+          "description": "The primary email address for the account",
+          "default": "",
+          "type": "string"
+        },
+        "emailaddress2": {
+          "x-title": "Email Address 2",
+          "description": "The secondary email address for the account",
+          "default": "",
+          "type": "string"
+        },
+        "emailaddress3": {
+          "x-title": "Email Address 3",
+          "description": "Alternate email address for the account",
+          "default": "",
+          "type": "string"
+        },
+        "fax": {
+          "x-title": "Fax",
+          "default": "",
+          "type": "string"
+        },
+        "ftpsiteurl": {
+          "x-title": "FTP site URL",
+          "description": "URL for the account’s FTP site to enable users to access data and share documents",
+          "default": "",
+          "type": "string"
+        },
+        "industrycode": {
+          "x-title": "Industry Name or ID",
+          "description": "The account’s primary industry for use in marketing segmentation and demographic analysis. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "name": {
+          "x-title": "Name",
+          "description": "Company o business name",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/resource": [
+                "account"
+              ],
+              "/operation": [
+                "update"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "creditlimit": {
+          "x-title": "Credit Limit",
+          "description": "Credit limit of the account. This is a useful reference when you address invoice and accounting issues with the customer.",
+          "default": "",
+          "type": "number"
+        },
+        "numberofemployees": {
+          "x-title": "Number Of Employees",
+          "description": "Number of employees that work at the account for use in marketing segmentation and demographic analysis",
+          "default": 0,
+          "type": "number"
+        },
+        "paymenttermscode": {
+          "x-title": "Payment Terms Name or ID",
+          "description": "The payment terms to indicate when the customer needs to pay the total amount. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "preferredappointmentdaycode": {
+          "x-title": "Preferred Appointment Day Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "preferredappointmenttimecode": {
+          "x-title": "Preferred Appointment Time Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "preferredcontactmethodcode": {
+          "x-title": "Preferred Contact Method Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "primarysatoriid": {
+          "x-title": "Primary Satori ID",
+          "default": "",
+          "type": "string"
+        },
+        "primarytwitterid": {
+          "x-title": "Primary Twitter ID",
+          "default": "",
+          "type": "string"
+        },
+        "revenue": {
+          "x-title": "Revenue",
+          "description": "The annual revenue for the account, used as an indicator in financial performance analysis",
+          "default": "",
+          "type": "number"
+        },
+        "sharesoutstanding": {
+          "x-title": "Shares Outstanding",
+          "description": "The number of shares available to the public for the account. This number is used as an indicator in financial performance analysis.",
+          "default": "",
+          "type": "number"
+        },
+        "shippingmethodcode": {
+          "x-title": "Shipping Method Name or ID",
+          "description": "Shipping method for deliveries sent to the account’s address to designate the preferred carrier or other delivery option. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "sic": {
+          "x-title": "SIC",
+          "description": "The Standard Industrial Classification (SIC) code that indicates the account’s primary industry of business, for use in marketing segmentation and demographic analysis",
+          "default": "",
+          "type": "string"
+        },
+        "stageid": {
+          "x-title": "Stage ID",
+          "default": "",
+          "type": "string"
+        },
+        "stockexchange": {
+          "x-title": "Stock Exchange",
+          "description": "The stock exchange at which the account is listed to track their stock and financial performance of the company",
+          "default": "",
+          "type": "string"
+        },
+        "telephone1": {
+          "x-title": "Telephone 1",
+          "description": "The main phone number for this account",
+          "default": "",
+          "type": "string"
+        },
+        "telephone2": {
+          "x-title": "Telephone 2",
+          "description": "The second phone number for this account",
+          "default": "",
+          "type": "string"
+        },
+        "telephone3": {
+          "x-title": "Telephone 3",
+          "description": "The third phone number for this account",
+          "default": "",
+          "type": "string"
+        },
+        "territorycode": {
+          "x-title": "Territory Name or ID",
+          "description": "Region or territory for the account for use in segmentation and analysis. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "tickersymbol": {
+          "x-title": "Ticker Symbol",
+          "description": "Type the stock exchange symbol for the account to track financial performance of the company. You can click the code entered in this field to access the latest trading information from MSN Money.",
+          "default": "",
+          "type": "string"
+        },
+        "websiteurl": {
+          "x-title": "Website URL",
+          "description": "The account’s website URL to get quick details about the company profile",
+          "default": "",
+          "type": "string"
+        },
+        "yominame": {
+          "x-title": "Yomi Name",
+          "description": "The phonetic spelling of the company name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "accountId": {
+      "x-title": "Account ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "account"
+          ],
+          "operation": [
+            "delete",
+            "get",
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "account"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 5,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "account"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 10
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "account"
+          ],
+          "operation": [
+            "create",
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "returnFields": {
+          "x-title": "Return Field Names or IDs",
+          "description": "Fields the response will include. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "account"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "query": {
+          "x-title": "Query",
+          "description": "Query to filter the results. Check <a href=\"https://docs.microsoft.com/en-us/powerapps/developer/data-platform/webapi/query-data-web-api#filter-results\" target=\"_blank\">filters</a>.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "account"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "accountcategorycode": {
+          "x-title": "Account Category Name or ID",
+          "description": "Category to indicate whether the customer account is standard or preferred. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "accountratingcode": {
+          "x-title": "Account Rating Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "addresses": {
+          "x-title": "Address",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "address": {
+              "x-title": "Address Fields",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "addresstypecode": {
+                    "x-title": "Address Type Name or ID",
+                    "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "line1": {
+                    "x-title": "Line1",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "line2": {
+                    "x-title": "Line2",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "line3": {
+                    "x-title": "Line3",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "city": {
+                    "x-title": "City",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "stateorprovince": {
+                    "x-title": "State or Province",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "country": {
+                    "x-title": "Country",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "name": {
+                    "x-title": "Name",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "postalcode": {
+                    "x-title": "Postalcode",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "primarycontactname": {
+                    "x-title": "Primary Contact Name",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "telephone1": {
+                    "x-title": "Telephone1",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "telephone2": {
+                    "x-title": "Telephone2",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "fax": {
+                    "x-title": "Fax",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "businesstypecode": {
+          "x-title": "Business Type Name or ID",
+          "description": "The legal designation or other business type of the account for contracts or reporting purposes. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "customersizecode": {
+          "x-title": "Customer Size Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "customertypecode": {
+          "x-title": "Customer Type Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "description": {
+          "x-title": "Description",
+          "description": "Additional information to describe the account, such as an excerpt from the company’s website",
+          "default": "",
+          "type": "string"
+        },
+        "emailaddress1": {
+          "x-title": "Email Address 1",
+          "description": "The primary email address for the account",
+          "default": "",
+          "type": "string"
+        },
+        "emailaddress2": {
+          "x-title": "Email Address 2",
+          "description": "The secondary email address for the account",
+          "default": "",
+          "type": "string"
+        },
+        "emailaddress3": {
+          "x-title": "Email Address 3",
+          "description": "Alternate email address for the account",
+          "default": "",
+          "type": "string"
+        },
+        "fax": {
+          "x-title": "Fax",
+          "default": "",
+          "type": "string"
+        },
+        "ftpsiteurl": {
+          "x-title": "FTP site URL",
+          "description": "URL for the account’s FTP site to enable users to access data and share documents",
+          "default": "",
+          "type": "string"
+        },
+        "industrycode": {
+          "x-title": "Industry Name or ID",
+          "description": "The account’s primary industry for use in marketing segmentation and demographic analysis. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "name": {
+          "x-title": "Name",
+          "description": "Company o business name",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/resource": [
+                "account"
+              ],
+              "/operation": [
+                "update"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "creditlimit": {
+          "x-title": "Credit Limit",
+          "description": "Credit limit of the account. This is a useful reference when you address invoice and accounting issues with the customer.",
+          "default": "",
+          "type": "number"
+        },
+        "numberofemployees": {
+          "x-title": "Number Of Employees",
+          "description": "Number of employees that work at the account for use in marketing segmentation and demographic analysis",
+          "default": 0,
+          "type": "number"
+        },
+        "paymenttermscode": {
+          "x-title": "Payment Terms Name or ID",
+          "description": "The payment terms to indicate when the customer needs to pay the total amount. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "preferredappointmentdaycode": {
+          "x-title": "Preferred Appointment Day Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "preferredappointmenttimecode": {
+          "x-title": "Preferred Appointment Time Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "preferredcontactmethodcode": {
+          "x-title": "Preferred Contact Method Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "primarysatoriid": {
+          "x-title": "Primary Satori ID",
+          "default": "",
+          "type": "string"
+        },
+        "primarytwitterid": {
+          "x-title": "Primary Twitter ID",
+          "default": "",
+          "type": "string"
+        },
+        "revenue": {
+          "x-title": "Revenue",
+          "description": "The annual revenue for the account, used as an indicator in financial performance analysis",
+          "default": "",
+          "type": "number"
+        },
+        "sharesoutstanding": {
+          "x-title": "Shares Outstanding",
+          "description": "The number of shares available to the public for the account. This number is used as an indicator in financial performance analysis.",
+          "default": "",
+          "type": "number"
+        },
+        "shippingmethodcode": {
+          "x-title": "Shipping Method Name or ID",
+          "description": "Shipping method for deliveries sent to the account’s address to designate the preferred carrier or other delivery option. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "sic": {
+          "x-title": "SIC",
+          "description": "The Standard Industrial Classification (SIC) code that indicates the account’s primary industry of business, for use in marketing segmentation and demographic analysis",
+          "default": "",
+          "type": "string"
+        },
+        "stageid": {
+          "x-title": "Stage ID",
+          "default": "",
+          "type": "string"
+        },
+        "stockexchange": {
+          "x-title": "Stock Exchange",
+          "description": "The stock exchange at which the account is listed to track their stock and financial performance of the company",
+          "default": "",
+          "type": "string"
+        },
+        "telephone1": {
+          "x-title": "Telephone 1",
+          "description": "The main phone number for this account",
+          "default": "",
+          "type": "string"
+        },
+        "telephone2": {
+          "x-title": "Telephone 2",
+          "description": "The second phone number for this account",
+          "default": "",
+          "type": "string"
+        },
+        "telephone3": {
+          "x-title": "Telephone 3",
+          "description": "The third phone number for this account",
+          "default": "",
+          "type": "string"
+        },
+        "territorycode": {
+          "x-title": "Territory Name or ID",
+          "description": "Region or territory for the account for use in segmentation and analysis. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "tickersymbol": {
+          "x-title": "Ticker Symbol",
+          "description": "Type the stock exchange symbol for the account to track financial performance of the company. You can click the code entered in this field to access the latest trading information from MSN Money.",
+          "default": "",
+          "type": "string"
+        },
+        "websiteurl": {
+          "x-title": "Website URL",
+          "description": "The account’s website URL to get quick details about the company profile",
+          "default": "",
+          "type": "string"
+        },
+        "yominame": {
+          "x-title": "Yomi Name",
+          "description": "The phonetic spelling of the company name, if specified in Japanese, to make sure the name is pronounced correctly in phone calls and other communications",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": {
+    "light": "file:microsoftDynamicsCrm.svg",
+    "dark": "file:microsoftDynamicsCrm.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "microsoftDynamicsOAuth2Api",
+      "required": true
+    }
+  ]
+}

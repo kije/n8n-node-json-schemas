@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Linear Trigger",
+  "description": "Starts the workflow when Linear events occur",
+  "x-n8n-node-type": "linearTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "apiToken",
+      "type": "string",
+      "enum": [
+        "apiToken",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "API Token",
+        "OAuth2"
+      ]
+    },
+    "teamId": {
+      "x-title": "Team Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "type": "string"
+    },
+    "resources": {
+      "x-title": "Listen to Resources",
+      "default": [],
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "reaction",
+          "cycle",
+          "issue",
+          "comment",
+          "issueLabel",
+          "project"
+        ]
+      },
+      "x-enumNames": [
+        "Comment Reaction",
+        "Cycle",
+        "Issue",
+        "Issue Comment",
+        "Issue Label",
+        "Project"
+      ]
+    }
+  },
+  "x-subtitle": "={{$parameter[\"triggerOn\"]}}",
+  "x-icon": "file:linear.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "linearApi",
+      "required": true,
+      "testedBy": "linearApiTest",
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "apiToken"
+          ]
+        }
+      }
+    },
+    {
+      "name": "linearOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "x-webhooks": "true"
+}

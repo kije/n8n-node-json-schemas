@@ -1,0 +1,426 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Microsoft OneDrive",
+  "description": "Consume Microsoft OneDrive API",
+  "x-n8n-node-type": "microsoftOneDrive",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "file",
+      "type": "string",
+      "enum": [
+        "file",
+        "folder"
+      ],
+      "x-enumNames": [
+        "File",
+        "Folder"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getChildren",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "getChildren",
+        "rename",
+        "search",
+        "share"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get Children",
+        "Rename",
+        "Search",
+        "Share"
+      ],
+      "x-enumDescriptions": [
+        "Create a folder",
+        "Delete a folder",
+        "Get items inside a folder",
+        "Rename a folder",
+        "Search a folder",
+        "Share a folder"
+      ]
+    },
+    "fileId": {
+      "x-title": "File ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "share"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "copy"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "name": {
+          "x-title": "Name",
+          "description": "The new name for the copy. If this isn't provided, the same name will be used as the original.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "parentReference": {
+      "x-title": "Parent Reference",
+      "description": "Reference to the parent item the copy will be created in <a href=\"https://docs.microsoft.com/en-us/onedrive/developer/rest-api/resources/itemreference?view=odsp-graph-online\"> Details </a>",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "copy"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "driveId": {
+          "x-title": "Drive ID",
+          "description": "Identifier of the drive instance that contains the item",
+          "default": "",
+          "type": "string"
+        },
+        "driveType": {
+          "x-title": "Drive Type",
+          "description": "Identifies the type of drive",
+          "default": "",
+          "type": "string"
+        },
+        "id": {
+          "x-title": "ID",
+          "description": "Identifier of the item in the drive",
+          "default": "",
+          "type": "string"
+        },
+        "listId": {
+          "x-title": "List ID",
+          "description": "Identifier of the list",
+          "default": "",
+          "type": "string"
+        },
+        "name": {
+          "x-title": "Name",
+          "description": "The name of the item being referenced",
+          "default": "",
+          "type": "string"
+        },
+        "path": {
+          "x-title": "Path",
+          "description": "Path that can be used to navigate to the item",
+          "default": "",
+          "type": "string"
+        },
+        "shareId": {
+          "x-title": "Share ID",
+          "description": "Identifier for a shared resource that can be accessed via the Shares API",
+          "default": "",
+          "type": "string"
+        },
+        "siteId": {
+          "x-title": "Site ID",
+          "description": "Identifier of the site",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "binaryPropertyName": {
+      "x-title": "Input Binary Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "binaryData": [
+            true
+          ],
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "itemId": {
+      "x-title": "Item ID",
+      "description": "ID of the folder",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "rename"
+          ],
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "newName": {
+      "x-title": "New Name",
+      "description": "New name for folder",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "rename"
+          ],
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "query": {
+      "x-title": "Query",
+      "description": "The query text used to search for items. Values may be matched across several fields including filename, metadata, and file content.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "type": {
+      "x-title": "Type",
+      "description": "The type of sharing link to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "share"
+          ],
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "view",
+        "edit",
+        "embed"
+      ],
+      "x-enumNames": [
+        "View",
+        "Edit",
+        "Embed"
+      ]
+    },
+    "scope": {
+      "x-title": "Scope",
+      "description": "The type of sharing link to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "share"
+          ],
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "anonymous",
+        "organization"
+      ],
+      "x-enumNames": [
+        "Anonymous",
+        "Organization"
+      ]
+    },
+    "fileName": {
+      "x-title": "File Name",
+      "description": "The name the file should be saved as",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "parentId": {
+      "x-title": "Parent ID",
+      "description": "ID of the parent folder that will contain the file",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "binaryData": {
+      "x-title": "Binary File",
+      "description": "Whether the data to upload should be taken from binary field",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "fileContent": {
+      "x-title": "File Content",
+      "description": "The text content of the file",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "binaryData": [
+            false
+          ],
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "The name or path of the folder",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "parentFolderId": {
+          "x-title": "Parent Folder ID",
+          "description": "ID of the folder you want to crate the new folder in",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "folderId": {
+      "x-title": "Folder ID",
+      "description": "File ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "share"
+          ],
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:oneDrive.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "microsoftOneDriveOAuth2Api",
+      "required": true
+    }
+  ]
+}

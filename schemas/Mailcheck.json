@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Mailcheck",
+  "description": "Consume Mailcheck API",
+  "x-n8n-node-type": "mailcheck",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "email",
+      "type": "string",
+      "enum": [
+        "email"
+      ],
+      "x-enumNames": [
+        "Email"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "check",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "email"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "check"
+      ],
+      "x-enumNames": [
+        "Check"
+      ]
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "Email address to check",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "email"
+          ],
+          "operation": [
+            "check"
+          ]
+        }
+      },
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:mailcheck.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "mailcheckApi",
+      "required": true
+    }
+  ]
+}

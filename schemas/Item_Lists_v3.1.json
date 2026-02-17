@@ -1,0 +1,619 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Item Lists",
+  "description": "Helper for working with lists of items and transforming arrays",
+  "x-n8n-node-type": "itemLists",
+  "x-n8n-version": 3.1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "itemList",
+      "type": "string"
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "splitOutItems",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "itemList"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "concatenateItems",
+        "limit",
+        "removeDuplicates",
+        "sort",
+        "splitOutItems",
+        "summarize"
+      ],
+      "x-enumNames": [
+        "Concatenate Items",
+        "Limit",
+        "Remove Duplicates",
+        "Sort",
+        "Split Out Items",
+        "Summarize"
+      ],
+      "x-enumDescriptions": [
+        "Combine fields into a list in a single new item",
+        "Remove items if there are too many",
+        "Remove extra items that are similar",
+        "Change the item order",
+        "Turn a list or values of object's properties inside item(s) into separate items",
+        "Aggregate items together (pivot table)"
+      ]
+    },
+    "aggregate": {
+      "x-title": "Aggregate",
+      "default": "aggregateIndividualFields",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "concatenateItems"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "aggregateIndividualFields",
+        "aggregateAllItemData"
+      ],
+      "x-enumNames": [
+        "Individual Fields",
+        "All Item Data (Into a Single List)"
+      ]
+    },
+    "fieldsToAggregate": {
+      "x-title": "Fields To Aggregate",
+      "default": {
+        "fieldToAggregate": [
+          {
+            "fieldToAggregate": "",
+            "renameField": false
+          }
+        ]
+      },
+      "x-displayOptions": {
+        "show": {
+          "aggregate": [
+            "aggregateIndividualFields"
+          ],
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "concatenateItems"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "fieldToAggregate": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "fieldToAggregate": {
+                "x-title": "Input Field Name",
+                "description": "The name of a field in the input items to aggregate together",
+                "default": "",
+                "type": "string"
+              },
+              "renameField": {
+                "x-title": "Rename Field",
+                "description": "Whether to give the field a different name in the output",
+                "default": false,
+                "type": "boolean"
+              },
+              "outputFieldName": {
+                "x-title": "Output Field Name",
+                "description": "The name of the field to put the aggregated data in. Leave blank to use the input field name.",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "renameField": [
+                      true
+                    ]
+                  }
+                },
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "destinationFieldName": {
+      "x-title": "Put Output in Field",
+      "description": "The name of the output field to put the data in",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "aggregate": [
+            "aggregateAllItemData"
+          ],
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "concatenateItems"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "include": {
+      "x-title": "Include",
+      "description": "Whether to copy any other fields into the new items",
+      "default": "noOtherFields",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "splitOutItems"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "noOtherFields",
+        "allOtherFields",
+        "selectedOtherFields"
+      ],
+      "x-enumNames": [
+        "No Other Fields",
+        "All Other Fields",
+        "Selected Other Fields"
+      ]
+    },
+    "fieldsToExclude": {
+      "x-title": "Fields To Exclude",
+      "description": "Fields in the input to exclude from the comparison",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "compare": [
+            "allFieldsExcept"
+          ],
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "removeDuplicates"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "fieldsToInclude": {
+      "x-title": "Fields To Include",
+      "description": "Fields in the input items to aggregate together",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "include": [
+            "selectedOtherFields"
+          ],
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "splitOutItems"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "summarize"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "disableDotNotation": {
+          "x-title": "Disable Dot Notation",
+          "description": "Whether to disallow referencing child fields using `parent.child` in the field name",
+          "default": false,
+          "type": "boolean"
+        },
+        "outputFormat": {
+          "x-title": "Output Format",
+          "default": "separateItems",
+          "type": "string",
+          "enum": [
+            "separateItems",
+            "singleItem"
+          ],
+          "x-enumNames": [
+            "Each Split in a Separate Item",
+            "All Splits in a Single Item"
+          ]
+        },
+        "skipEmptySplitFields": {
+          "x-title": "Ignore items without valid fields to group by",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "maxItems": {
+      "x-title": "Max Items",
+      "description": "If there are more items than this number, some are removed",
+      "default": 1,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "limit"
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "keep": {
+      "x-title": "Keep",
+      "description": "When removing items, whether to keep the ones at the start or the ending",
+      "default": "firstItems",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "limit"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "firstItems",
+        "lastItems"
+      ],
+      "x-enumNames": [
+        "First Items",
+        "Last Items"
+      ]
+    },
+    "compare": {
+      "x-title": "Compare",
+      "description": "The fields of the input items to compare to see if they are the same",
+      "default": "allFields",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "removeDuplicates"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "allFields",
+        "allFieldsExcept",
+        "selectedFields"
+      ],
+      "x-enumNames": [
+        "All Fields",
+        "All Fields Except",
+        "Selected Fields"
+      ]
+    },
+    "fieldsToCompare": {
+      "x-title": "Fields To Compare",
+      "description": "Fields in the input to add to the comparison",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "compare": [
+            "selectedFields"
+          ],
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "removeDuplicates"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "type": {
+      "x-title": "Type",
+      "description": "The fields of the input items to compare to see if they are the same",
+      "default": "simple",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "sort"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "simple",
+        "random",
+        "code"
+      ],
+      "x-enumNames": [
+        "Simple",
+        "Random",
+        "Code"
+      ]
+    },
+    "sortFieldsUi": {
+      "x-title": "Fields To Sort By",
+      "description": "The fields of the input items to compare to see if they are the same",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "type": [
+            "simple"
+          ],
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "sort"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "sortField": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "fieldName": {
+                "x-title": "Field Name",
+                "description": "The field to sort by",
+                "default": "",
+                "x-required": true,
+                "type": "string"
+              },
+              "order": {
+                "x-title": "Order",
+                "description": "The order to sort by",
+                "default": "ascending",
+                "type": "string",
+                "enum": [
+                  "ascending",
+                  "descending"
+                ],
+                "x-enumNames": [
+                  "Ascending",
+                  "Descending"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "code": {
+      "x-title": "Code",
+      "description": "Javascript code to determine the order of any two items",
+      "default": "// The two items to compare are in the variables a and b\n// Access the fields in a.json and b.json\n// Return -1 if a should go before b\n// Return 1 if b should go before a\n// Return 0 if there's no difference\n\nfieldName = 'myField';\n\nif (a.json[fieldName] < b.json[fieldName]) {\nreturn -1;\n}\nif (a.json[fieldName] > b.json[fieldName]) {\nreturn 1;\n}\nreturn 0;",
+      "x-displayOptions": {
+        "show": {
+          "type": [
+            "code"
+          ],
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "sort"
+          ]
+        }
+      },
+      "type": "string",
+      "x-rows": 10,
+      "x-editor": "jsEditor"
+    },
+    "fieldToSplitOut": {
+      "x-title": "Fields To Split Out",
+      "description": "The name of the input fields to break out into separate items. Separate multiple field names by commas. For binary data, use $binary.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "splitOutItems"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "fieldsToSummarize": {
+      "x-title": "Fields to Summarize",
+      "default": {
+        "values": [
+          {
+            "aggregation": "count",
+            "field": ""
+          }
+        ]
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "summarize"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "aggregation": {
+                "x-title": "Aggregation",
+                "description": "How to combine the values of the field you want to summarize",
+                "default": "count",
+                "type": "string",
+                "enum": [
+                  "append",
+                  "average",
+                  "concatenate",
+                  "count",
+                  "countUnique",
+                  "max",
+                  "min",
+                  "sum"
+                ],
+                "x-enumNames": [
+                  "Append",
+                  "Average",
+                  "Concatenate",
+                  "Count",
+                  "Count Unique",
+                  "Max",
+                  "Min",
+                  "Sum"
+                ]
+              },
+              "field": {
+                "x-title": "Field",
+                "description": "The name of an input field that you want to summarize; null, undefined, empty strings would be ignored",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "aggregation": [
+                      "countUnique",
+                      "count",
+                      "max",
+                      "min"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "includeEmpty": {
+                "x-title": "Include Empty Values",
+                "default": false,
+                "x-displayOptions": {
+                  "show": {
+                    "aggregation": [
+                      "append",
+                      "concatenate"
+                    ]
+                  }
+                },
+                "type": "boolean"
+              },
+              "separateBy": {
+                "x-title": "Separator",
+                "default": ",",
+                "x-displayOptions": {
+                  "show": {
+                    "aggregation": [
+                      "concatenate"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  ",",
+                  ", ",
+                  "\n",
+                  "",
+                  " ",
+                  "other"
+                ],
+                "x-enumNames": [
+                  "Comma",
+                  "Comma and Space",
+                  "New Line",
+                  "None",
+                  "Space",
+                  "Other"
+                ]
+              },
+              "customSeparator": {
+                "x-title": "Custom Separator",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "aggregation": [
+                      "concatenate"
+                    ],
+                    "separateBy": [
+                      "other"
+                    ]
+                  }
+                },
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "fieldsToSplitBy": {
+      "x-title": "Fields to Group By",
+      "description": "The name of the input fields that you want to split the summary by",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "/options.outputFormat": [
+            "singleItem"
+          ],
+          "resource": [
+            "itemList"
+          ],
+          "operation": [
+            "summarize"
+          ]
+        }
+      },
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:itemLists.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": []
+}

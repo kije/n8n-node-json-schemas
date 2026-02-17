@@ -1,0 +1,410 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Lemlist",
+  "description": "Consume the Lemlist API",
+  "x-n8n-node-type": "lemlist",
+  "x-n8n-version": 2,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "activity",
+      "type": "string",
+      "enum": [
+        "activity",
+        "campaign",
+        "enrich",
+        "lead",
+        "team",
+        "unsubscribe"
+      ],
+      "x-enumNames": [
+        "Activity",
+        "Campaign",
+        "Enrichment",
+        "Lead",
+        "Team",
+        "Unsubscribe"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "add",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "unsubscribe"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "add",
+        "delete",
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Add",
+        "Delete",
+        "Get Many"
+      ]
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "unsubscribe"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 5,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "unsubscribe"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 1000
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "campaign"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "version": {
+          "x-title": "Version",
+          "default": "v2",
+          "type": "string"
+        }
+      }
+    },
+    "campaignId": {
+      "x-title": "Campaign Name or ID",
+      "description": "ID of the campaign to unsubscribe the lead from. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "lead"
+          ],
+          "operation": [
+            "unsubscribe"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "startDate": {
+      "x-title": "Start Date",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "campaign"
+          ],
+          "operation": [
+            "getStats"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "endDate": {
+      "x-title": "End Date",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "campaign"
+          ],
+          "operation": [
+            "getStats"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "timezone": {
+      "x-title": "Timezone",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "campaign"
+          ],
+          "operation": [
+            "getStats"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "enrichId": {
+      "x-title": "Enrichment ID",
+      "description": "ID of the enrichment to retrieve",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "enrich"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "leadId": {
+      "x-title": "Lead ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "enrich"
+          ],
+          "operation": [
+            "enrichLead"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "findEmail": {
+      "x-title": "Find Email",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "enrich"
+          ],
+          "operation": [
+            "enrichLead",
+            "enrichPerson"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "verifyEmail": {
+      "x-title": "Verify Email",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "enrich"
+          ],
+          "operation": [
+            "enrichLead",
+            "enrichPerson"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "linkedinEnrichment": {
+      "x-title": "LinkedIn Enrichment",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "enrich"
+          ],
+          "operation": [
+            "enrichLead",
+            "enrichPerson"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "findPhone": {
+      "x-title": "Find Phone",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "enrich"
+          ],
+          "operation": [
+            "enrichLead",
+            "enrichPerson"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "lead"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "companyName": {
+          "x-title": "Company Name",
+          "description": "Company name of the lead to create",
+          "default": "",
+          "type": "string"
+        },
+        "companyDomain": {
+          "x-title": "Company Domain",
+          "description": "Company domain of the lead to create",
+          "default": "",
+          "type": "string"
+        },
+        "deduplicate": {
+          "x-title": "Deduplicate",
+          "description": "Whether to do not insert if this email is already present in another campaign",
+          "default": false,
+          "type": "boolean"
+        },
+        "findEmail": {
+          "x-title": "Find Email",
+          "description": "Whether to find verified email",
+          "default": false,
+          "type": "boolean"
+        },
+        "findPhone": {
+          "x-title": "Find Phone",
+          "description": "Whether to find phone number",
+          "default": false,
+          "type": "boolean"
+        },
+        "firstName": {
+          "x-title": "First Name",
+          "description": "First name of the lead to create",
+          "default": "",
+          "type": "string"
+        },
+        "icebreaker": {
+          "x-title": "Icebreaker",
+          "description": "Icebreaker of the lead to create",
+          "default": "",
+          "type": "string"
+        },
+        "jobTitle": {
+          "x-title": "Job Title",
+          "description": "Job title of the lead to create",
+          "default": "",
+          "type": "string"
+        },
+        "lastName": {
+          "x-title": "Last Name",
+          "description": "Last name of the lead to create",
+          "default": "",
+          "type": "string"
+        },
+        "linkedinEnrichment": {
+          "x-title": "LinkedIn Enrichment",
+          "description": "Whether to run the LinkedIn enrichment",
+          "default": false,
+          "type": "boolean"
+        },
+        "linkedinUrl": {
+          "x-title": "LinkedIn URL",
+          "description": "LinkedIn URL of the lead to create",
+          "default": "",
+          "type": "string"
+        },
+        "phone": {
+          "x-title": "Phone",
+          "description": "Phone number of the lead to create",
+          "default": "",
+          "type": "string"
+        },
+        "picture": {
+          "x-title": "Picture URL",
+          "description": "Picture URL of the lead to create",
+          "default": "",
+          "type": "string"
+        },
+        "verifyEmail": {
+          "x-title": "Verify Email",
+          "description": "Whether to verify existing email (debounce)",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "Email to delete from the unsubscribes",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "unsubscribe"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:lemlist.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "lemlistApi",
+      "required": true
+    }
+  ]
+}

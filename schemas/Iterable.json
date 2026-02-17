@@ -1,0 +1,255 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Iterable",
+  "description": "Consume Iterable API",
+  "x-n8n-node-type": "iterable",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "user",
+      "type": "string",
+      "enum": [
+        "event",
+        "user",
+        "userList"
+      ],
+      "x-enumNames": [
+        "Event",
+        "User",
+        "User List"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "add",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "userList"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "add",
+        "remove"
+      ],
+      "x-enumNames": [
+        "Add",
+        "Remove"
+      ],
+      "x-enumDescriptions": [
+        "Add user to list",
+        "Remove a user from a list"
+      ]
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "The name of the event to track",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "track"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "userList"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "campaignId": {
+          "x-title": "Campaign ID",
+          "description": "Attribute unsubscribe to a campaign",
+          "default": 0,
+          "type": "number"
+        },
+        "channelUnsubscribe": {
+          "x-title": "Channel Unsubscribe",
+          "description": "Whether to unsubscribe email from list's associated channel - essentially a global unsubscribe",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "identifier": {
+      "x-title": "Identifier",
+      "description": "Identifier to be used",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "userList"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "email",
+        "userId"
+      ],
+      "x-enumNames": [
+        "Email",
+        "User ID"
+      ]
+    },
+    "value": {
+      "x-title": "Value",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "userList"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "preferUserId": {
+      "x-title": "Create If Doesn't Exist",
+      "description": "Whether to create a new user if the idetifier does not exist",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "upsert"
+          ],
+          "identifier": [
+            "userId"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "by": {
+      "x-title": "By",
+      "description": "Identifier to be used",
+      "default": "email",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "email",
+        "userId"
+      ],
+      "x-enumNames": [
+        "Email",
+        "User ID"
+      ]
+    },
+    "userId": {
+      "x-title": "User ID",
+      "description": "Unique identifier for a particular user",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ],
+          "by": [
+            "userId"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "Email for a particular user",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ],
+          "by": [
+            "email"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "listId": {
+      "x-title": "List Name or ID",
+      "description": "Identifier to be used. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "userList"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:iterable.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "iterableApi",
+      "required": true
+    }
+  ]
+}

@@ -1,0 +1,298 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "LoneScale",
+  "description": "Create List, add / delete items",
+  "x-n8n-node-type": "loneScale",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "description": "Create a new list",
+      "default": "list",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "list",
+        "item"
+      ],
+      "x-enumNames": [
+        "List",
+        "Item"
+      ],
+      "x-enumDescriptions": [
+        "Manipulate list",
+        "Manipulate item"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "add",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "add"
+      ],
+      "x-enumNames": [
+        "Create"
+      ],
+      "x-enumDescriptions": [
+        "Create an item"
+      ]
+    },
+    "type": {
+      "x-title": "Type",
+      "description": "Type of your list",
+      "default": "COMPANY",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "COMPANY",
+        "PEOPLE"
+      ],
+      "x-enumNames": [
+        "Company",
+        "Contact"
+      ],
+      "x-enumDescriptions": [
+        "Create a list of companies",
+        "Create a list of contacts"
+      ]
+    },
+    "list": {
+      "x-title": "List Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "first_name": {
+      "x-title": "First Name",
+      "description": "Contact first name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "add"
+          ],
+          "resource": [
+            "item"
+          ],
+          "type": [
+            "PEOPLE"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "last_name": {
+      "x-title": "Last Name",
+      "description": "Contact last name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "add"
+          ],
+          "resource": [
+            "item"
+          ],
+          "type": [
+            "PEOPLE"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "company_name": {
+      "x-title": "Company Name",
+      "description": "Contact company name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "add"
+          ],
+          "resource": [
+            "item"
+          ],
+          "type": [
+            "COMPANY"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "peopleAdditionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "add"
+          ],
+          "resource": [
+            "item"
+          ],
+          "type": [
+            "PEOPLE"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "full_name": {
+          "x-title": "Full Name",
+          "description": "Contact full name",
+          "default": "",
+          "type": "string"
+        },
+        "email": {
+          "x-title": "Contact Email",
+          "default": "",
+          "type": "string"
+        },
+        "company_name": {
+          "x-title": "Company Name",
+          "description": "Contact company name",
+          "default": "",
+          "type": "string"
+        },
+        "current_position": {
+          "x-title": "Current Position",
+          "description": "Contact current position",
+          "default": "",
+          "type": "string"
+        },
+        "domain": {
+          "x-title": "Company Domain",
+          "description": "Contact company domain",
+          "default": "",
+          "type": "string"
+        },
+        "linkedin_url": {
+          "x-title": "Linkedin Url",
+          "description": "Contact Linkedin URL",
+          "default": "",
+          "type": "string"
+        },
+        "location": {
+          "x-title": "Contact Location",
+          "default": "",
+          "type": "string"
+        },
+        "contact_id": {
+          "x-title": "Contact ID",
+          "description": "Contact ID from your source",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "companyAdditionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "add"
+          ],
+          "resource": [
+            "item"
+          ],
+          "type": [
+            "COMPANY"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "linkedin_url": {
+          "x-title": "Linkedin Url",
+          "description": "Company Linkedin URL",
+          "default": "",
+          "type": "string"
+        },
+        "domain": {
+          "x-title": "Company Domain",
+          "description": "Company company domain",
+          "default": "",
+          "type": "string"
+        },
+        "location": {
+          "x-title": "Contact Location",
+          "default": "",
+          "type": "string"
+        },
+        "contact_id": {
+          "x-title": "Contact ID",
+          "description": "Contact ID from your source",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "Name of your list",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"resource\"] + \": \" + $parameter[\"operation\"]}}",
+  "x-icon": {
+    "light": "file:loneScale.svg",
+    "dark": "file:loneScale.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "loneScaleApi",
+      "required": true
+    }
+  ]
+}

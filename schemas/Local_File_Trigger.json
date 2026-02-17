@@ -1,0 +1,155 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Local File Trigger",
+  "description": "Triggers a workflow on file system changes",
+  "x-n8n-node-type": "localFileTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "triggerOn": {
+      "x-title": "Trigger On",
+      "default": "",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "file",
+        "folder"
+      ],
+      "x-enumNames": [
+        "Changes to a Specific File",
+        "Changes Involving a Specific Folder"
+      ]
+    },
+    "path": {
+      "x-title": "Folder to Watch",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "triggerOn": [
+            "folder"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "events": {
+      "x-title": "Watch for",
+      "description": "The events to listen to",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "triggerOn": [
+            "folder"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "add",
+          "change",
+          "unlink",
+          "addDir",
+          "unlinkDir"
+        ]
+      },
+      "x-enumNames": [
+        "File Added",
+        "File Changed",
+        "File Deleted",
+        "Folder Added",
+        "Folder Deleted"
+      ]
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "awaitWriteFinish": {
+          "x-title": "Await Write Finish",
+          "description": "Whether to wait until files finished writing to avoid partially read",
+          "default": false,
+          "type": "boolean"
+        },
+        "followSymlinks": {
+          "x-title": "Include Linked Files/Folders",
+          "description": "Whether linked files/folders will also be watched (this includes symlinks, aliases on MacOS and shortcuts on Windows). Otherwise only the links themselves will be monitored).",
+          "default": true,
+          "type": "boolean"
+        },
+        "ignored": {
+          "x-title": "Ignore",
+          "description": "Files or paths to ignore. The whole path is tested, not just the filename. Supports <a href=\"https://github.com/micromatch/anymatch\">Anymatch</a>- syntax. Regex patterns may not work on macOS. To ignore files based on substring matching, use the 'Ignore Mode' option with 'Contain'.",
+          "default": "",
+          "type": "string"
+        },
+        "ignoreInitial": {
+          "x-title": "Ignore Existing Files/Folders",
+          "description": "Whether to ignore existing files/folders to not trigger an event",
+          "default": true,
+          "type": "boolean"
+        },
+        "depth": {
+          "x-title": "Max Folder Depth",
+          "description": "How deep into the folder structure to watch for changes",
+          "default": -1,
+          "type": "string",
+          "enum": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            0,
+            -1
+          ],
+          "x-enumNames": [
+            "1 Levels Down",
+            "2 Levels Down",
+            "3 Levels Down",
+            "4 Levels Down",
+            "5 Levels Down",
+            "Top Folder Only",
+            "Unlimited"
+          ]
+        },
+        "usePolling": {
+          "x-title": "Use Polling",
+          "description": "Whether to use polling for watching. Typically necessary to successfully watch files over a network.",
+          "default": false,
+          "type": "boolean"
+        },
+        "ignoreMode": {
+          "x-title": "Ignore Mode",
+          "description": "Whether to ignore files using regex matching (Anymatch patterns) or by checking if the path contains a specified value",
+          "default": "match",
+          "type": "string",
+          "enum": [
+            "match",
+            "contain"
+          ],
+          "x-enumNames": [
+            "Match",
+            "Contain"
+          ],
+          "x-enumDescriptions": [
+            "Ignore files using regex patterns (e.g., **/*.txt), Not supported on macOS",
+            "Ignore files if their path contains the specified value"
+          ]
+        }
+      }
+    }
+  },
+  "x-subtitle": "=Path: {{$parameter[\"path\"]}}",
+  "x-icon": "fa:folder-open",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ]
+}

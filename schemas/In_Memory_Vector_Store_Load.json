@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "In Memory Vector Store Load",
+  "description": "Load embedded data from an in-memory vector store",
+  "x-n8n-node-type": "vectorStoreInMemoryLoad",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "memoryKey": {
+      "x-title": "Memory Key",
+      "description": "The key to use to store the vector memory in the workflow data. The key will be prefixed with the workflow ID to avoid collisions.",
+      "default": "vector_store_key",
+      "type": "string"
+    }
+  },
+  "x-icon": "fa:database",
+  "x-inputs": [
+    {
+      "displayName": "Embedding",
+      "maxConnections": 1,
+      "type": "ai_embedding",
+      "required": true
+    }
+  ],
+  "x-outputs": [
+    "ai_vectorStore"
+  ]
+}

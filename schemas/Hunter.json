@@ -1,0 +1,225 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Hunter",
+  "description": "Consume Hunter API",
+  "x-n8n-node-type": "hunter",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "operation": {
+      "x-title": "Operation",
+      "description": "Operation to consume",
+      "default": "domainSearch",
+      "type": "string",
+      "enum": [
+        "domainSearch",
+        "emailFinder",
+        "emailVerifier"
+      ],
+      "x-enumNames": [
+        "Domain Search",
+        "Email Finder",
+        "Email Verifier"
+      ],
+      "x-enumDescriptions": [
+        "Get every email address found on the internet using a given domain name, with sources",
+        "Generate or retrieve the most likely email address from a domain name, a first name and a last name",
+        "Verify the deliverability of an email address"
+      ]
+    },
+    "domain": {
+      "x-title": "Domain",
+      "description": "Domain name from which you want to find the email addresses. For example, \"stripe.com\".",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "emailFinder"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "onlyEmails": {
+      "x-title": "Only Emails",
+      "description": "Whether to return only the found emails",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "domainSearch"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "domainSearch"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "domainSearch"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "domainSearch"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "type": {
+          "x-title": "Type",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "personal",
+            "generic"
+          ],
+          "x-enumNames": [
+            "Personal",
+            "Generic"
+          ]
+        },
+        "seniority": {
+          "x-title": "Seniority",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "junior",
+              "senior",
+              "executive"
+            ]
+          },
+          "x-enumNames": [
+            "Junior",
+            "Senior",
+            "Executive"
+          ]
+        },
+        "department": {
+          "x-title": "Department",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "communication",
+              "executive",
+              "finance",
+              "hr",
+              "it",
+              "legal",
+              "management",
+              "marketing",
+              "sales",
+              "support"
+            ]
+          },
+          "x-enumNames": [
+            "Communication",
+            "Executive",
+            "Finance",
+            "HR",
+            "IT",
+            "Legal",
+            "Management",
+            "Marketing",
+            "Sales",
+            "Support"
+          ]
+        }
+      }
+    },
+    "firstname": {
+      "x-title": "First Name",
+      "description": "The person's first name. It doesn't need to be in lowercase.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "emailFinder"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "lastname": {
+      "x-title": "Last Name",
+      "description": "The person's last name. It doesn't need to be in lowercase.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "emailFinder"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "The email address you want to verify",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "emailVerifier"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"]}}",
+  "x-icon": "file:hunter.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "hunterApi",
+      "required": true
+    }
+  ]
+}

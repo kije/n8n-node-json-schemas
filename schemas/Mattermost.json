@@ -1,0 +1,776 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Mattermost",
+  "description": "Sends data to Mattermost",
+  "x-n8n-node-type": "mattermost",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "message",
+      "type": "string",
+      "enum": [
+        "channel",
+        "message",
+        "reaction",
+        "user"
+      ],
+      "x-enumNames": [
+        "Channel",
+        "Message",
+        "Reaction",
+        "User"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "deactive",
+        "getByEmail",
+        "getById",
+        "getAll",
+        "invite"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Deactive",
+        "Get By Email",
+        "Get By ID",
+        "Get Many",
+        "Invite"
+      ],
+      "x-enumDescriptions": [
+        "Create a new user",
+        "Deactivates the user and revokes all its sessions by archiving its user object",
+        "Get a user by email",
+        "Get a user by ID",
+        "Retrieve many users",
+        "Invite user to team"
+      ]
+    },
+    "teamId": {
+      "x-title": "Team Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "invite"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "displayName": {
+      "x-title": "Display Name",
+      "description": "The non-unique UI name for the channel",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "channel"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "channel": {
+      "x-title": "Name",
+      "description": "The unique handle for the channel, will be present in the channel URL",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "channel"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "type": {
+      "x-title": "Type",
+      "description": "The type of channel to create",
+      "default": "public",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "channel"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "private",
+        "public"
+      ],
+      "x-enumNames": [
+        "Private",
+        "Public"
+      ]
+    },
+    "channelId": {
+      "x-title": "Channel Name or ID",
+      "description": "ID of the channel to send the ephemeral message in. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "postEphemeral"
+          ],
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "resolveData": {
+      "x-title": "Resolve Data",
+      "description": "By default the response only contain the ID of the user. If this option gets activated, it will resolve the user automatically.",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "channel"
+          ],
+          "operation": [
+            "members"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "userId": {
+      "x-title": "User ID",
+      "description": "User GUID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "deactive"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "term": {
+      "x-title": "Search Term",
+      "description": "The search term for Channels in a Team",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "channel"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "postId": {
+      "x-title": "Post ID",
+      "description": "One or more (comma-separated) posts to retrieve reactions from",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "reaction"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "message": {
+      "x-title": "Message",
+      "description": "Text to send in the ephemeral message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "postEphemeral"
+          ],
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "attachments": {
+      "x-title": "Attachments",
+      "description": "The attachment to add",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "post"
+          ],
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "actions": {
+          "x-title": "Actions",
+          "description": "Actions to add to message. More information can be found <a href=\"https://docs.mattermost.com/developer/interactive-messages.html\" target=\"_blank\">here</a>.",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "item": {
+              "x-title": "Item",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "x-title": "Type",
+                    "description": "The type of the action",
+                    "default": "button",
+                    "type": "string",
+                    "enum": [
+                      "button",
+                      "select"
+                    ],
+                    "x-enumNames": [
+                      "Button",
+                      "Select"
+                    ]
+                  },
+                  "data_source": {
+                    "x-title": "Data Source",
+                    "description": "The type of the action",
+                    "default": "custom",
+                    "x-displayOptions": {
+                      "show": {
+                        "type": [
+                          "select"
+                        ]
+                      }
+                    },
+                    "type": "string",
+                    "enum": [
+                      "channels",
+                      "custom",
+                      "users"
+                    ],
+                    "x-enumNames": [
+                      "Channels",
+                      "Custom",
+                      "Users"
+                    ]
+                  },
+                  "options": {
+                    "x-title": "Options",
+                    "description": "Adds a new option to select field",
+                    "default": {},
+                    "x-displayOptions": {
+                      "show": {
+                        "data_source": [
+                          "custom"
+                        ],
+                        "type": [
+                          "select"
+                        ]
+                      }
+                    },
+                    "type": "object",
+                    "properties": {
+                      "option": {
+                        "x-title": "Option",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "text": {
+                              "x-title": "Option Text",
+                              "description": "Text of the option",
+                              "default": "",
+                              "type": "string"
+                            },
+                            "value": {
+                              "x-title": "Option Value",
+                              "description": "Value of the option",
+                              "default": "",
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "name": {
+                    "x-title": "Name",
+                    "description": "Name of the Action",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "integration": {
+                    "x-title": "Integration",
+                    "description": "Integration to add to message",
+                    "default": {},
+                    "type": "object",
+                    "properties": {
+                      "item": {
+                        "x-title": "Item",
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "x-title": "URL",
+                            "description": "URL of the Integration",
+                            "default": "",
+                            "type": "string"
+                          },
+                          "context": {
+                            "x-title": "Context",
+                            "description": "Adds a Context values set",
+                            "default": {},
+                            "type": "object",
+                            "properties": {
+                              "property": {
+                                "x-title": "Property",
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "name": {
+                                      "x-title": "Property Name",
+                                      "description": "Name of the property to set",
+                                      "default": "",
+                                      "type": "string"
+                                    },
+                                    "value": {
+                                      "x-title": "Property Value",
+                                      "description": "Value of the property to set",
+                                      "default": "",
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "author_icon": {
+          "x-title": "Author Icon",
+          "description": "Icon which should appear for the user",
+          "default": "",
+          "type": "string"
+        },
+        "author_link": {
+          "x-title": "Author Link",
+          "description": "Link for the author",
+          "default": "",
+          "type": "string"
+        },
+        "author_name": {
+          "x-title": "Author Name",
+          "description": "Name that should appear",
+          "default": "",
+          "type": "string"
+        },
+        "color": {
+          "x-title": "Color",
+          "description": "Color of the line left of text",
+          "default": "#ff0000",
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$",
+          "x-format": "color"
+        },
+        "fallback": {
+          "x-title": "Fallback Text",
+          "description": "Required plain-text summary of the attachment",
+          "default": "",
+          "type": "string"
+        },
+        "fields": {
+          "x-title": "Fields",
+          "description": "Fields to add to message",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "item": {
+              "x-title": "Item",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "x-title": "Title",
+                    "description": "Title of the item",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "Value of the item",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "short": {
+                    "x-title": "Short",
+                    "description": "Whether items can be displayed next to each other",
+                    "default": true,
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "footer": {
+          "x-title": "Footer",
+          "description": "Text of footer to add",
+          "default": "",
+          "type": "string"
+        },
+        "footer_icon": {
+          "x-title": "Footer Icon",
+          "description": "Icon which should appear next to footer",
+          "default": "",
+          "type": "string"
+        },
+        "image_url": {
+          "x-title": "Image URL",
+          "description": "URL of image",
+          "default": "",
+          "type": "string"
+        },
+        "pretext": {
+          "x-title": "Pretext",
+          "description": "Text which appears before the message block",
+          "default": "",
+          "type": "string"
+        },
+        "text": {
+          "x-title": "Text",
+          "description": "Text to send",
+          "default": "",
+          "type": "string"
+        },
+        "thumb_url": {
+          "x-title": "Thumbnail URL",
+          "description": "URL of thumbnail",
+          "default": "",
+          "type": "string"
+        },
+        "title": {
+          "x-title": "Title",
+          "description": "Title of the message",
+          "default": "",
+          "type": "string"
+        },
+        "title_link": {
+          "x-title": "Title Link",
+          "description": "Link of the title",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "otherOptions": {
+      "x-title": "Other Options",
+      "description": "Other options to set",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "post"
+          ],
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "root_id": {
+          "x-title": "Parent Post ID",
+          "description": "If set, the created message will be a threaded reply to the specified parent post ID",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "emojiName": {
+      "x-title": "Emoji Name",
+      "description": "Name of the emoji to delete",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "reaction"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "username": {
+      "x-title": "Username",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "authService": {
+      "x-title": "Auth Service",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "email",
+        "gitlab",
+        "google",
+        "ldap",
+        "office365",
+        "saml"
+      ],
+      "x-enumNames": [
+        "Email",
+        "Gitlab",
+        "Google",
+        "LDAP",
+        "Office365",
+        "SAML"
+      ]
+    },
+    "authData": {
+      "x-title": "Auth Data",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        },
+        "hide": {
+          "authService": [
+            "email"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "User's email",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getByEmail"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "password": {
+      "x-title": "Password",
+      "description": "The password used for email authentication",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ],
+          "authService": [
+            "email"
+          ]
+        }
+      },
+      "type": "string",
+      "format": "password"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getById"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "since": {
+          "x-title": "Since",
+          "description": "Only return users that have been modified since the given Unix timestamp (in milliseconds)",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "userIds": {
+      "x-title": "User IDs",
+      "description": "User's ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getById"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "emails": {
+      "x-title": "Emails",
+      "description": "User's email. Multiple emails can be set separated by comma.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "invite"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:mattermost.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "mattermostApi",
+      "required": true
+    }
+  ]
+}

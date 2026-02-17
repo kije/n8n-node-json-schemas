@@ -1,0 +1,76 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MCP Server Trigger",
+  "description": "Expose n8n tools as an MCP Server endpoint",
+  "x-n8n-node-type": "mcpTrigger",
+  "x-n8n-version": [
+    1,
+    1.1,
+    2
+  ],
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "description": "The way to authenticate",
+      "default": "none",
+      "type": "string",
+      "enum": [
+        "none",
+        "bearerAuth",
+        "headerAuth"
+      ],
+      "x-enumNames": [
+        "None",
+        "Bearer Auth",
+        "Header Auth"
+      ]
+    },
+    "path": {
+      "x-title": "Path",
+      "description": "The base path for this MCP server",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-icon": {
+    "light": "file:../mcp.svg",
+    "dark": "file:../mcp.dark.svg"
+  },
+  "x-inputs": [
+    {
+      "type": "ai_tool",
+      "displayName": "Tools"
+    }
+  ],
+  "x-outputs": [],
+  "x-credentials": [
+    {
+      "name": "httpBearerAuth",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "bearerAuth"
+          ]
+        }
+      }
+    },
+    {
+      "name": "httpHeaderAuth",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "headerAuth"
+          ]
+        }
+      }
+    }
+  ],
+  "x-webhooks": "true"
+}

@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "JSON Input Loader",
+  "description": "Use JSON data from a previous step in the workflow",
+  "x-n8n-node-type": "documentJsonInputLoader",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "pointers": {
+      "x-title": "Pointers",
+      "description": "Pointers to extract from JSON, e.g. \"/text\" or \"/text, /meta/title\"",
+      "default": "",
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "metadata": {
+          "x-title": "Metadata",
+          "description": "Metadata to add to each document. Could be used for filtering during retrieval",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "metadataValues": {
+              "x-title": "Fields to Set",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "x-title": "Name",
+                    "default": "",
+                    "x-required": true,
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-icon": "file:json.svg",
+  "x-inputs": [
+    {
+      "displayName": "Text Splitter",
+      "maxConnections": 1,
+      "type": "ai_textSplitter"
+    }
+  ],
+  "x-outputs": [
+    "ai_document"
+  ]
+}

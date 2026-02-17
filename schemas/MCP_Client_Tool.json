@@ -1,0 +1,246 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MCP Client Tool",
+  "description": "Connect tools from an MCP Server",
+  "x-n8n-node-type": "mcpClientTool",
+  "x-n8n-version": [
+    1,
+    1.1,
+    1.2
+  ],
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "sseEndpoint": {
+      "x-title": "SSE Endpoint",
+      "description": "SSE Endpoint of your MCP server",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            1
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "endpointUrl": {
+      "x-title": "Endpoint",
+      "description": "Endpoint of your MCP server",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.1
+              }
+            }
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "serverTransport": {
+      "x-title": "Server Transport",
+      "description": "The transport used by your endpoint",
+      "default": "httpStreamable",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.2
+              }
+            }
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "httpStreamable",
+        "sse"
+      ],
+      "x-enumNames": [
+        "HTTP Streamable",
+        "Server Sent Events (Deprecated)"
+      ]
+    },
+    "authentication": {
+      "x-title": "Authentication",
+      "description": "The way to authenticate with your endpoint",
+      "default": "none",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.2
+              }
+            }
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "bearerAuth",
+        "headerAuth",
+        "mcpOAuth2Api",
+        "multipleHeadersAuth",
+        "none"
+      ],
+      "x-enumNames": [
+        "Bearer Auth",
+        "Header Auth",
+        "MCP OAuth2",
+        "Multiple Headers Auth",
+        "None"
+      ]
+    },
+    "credentials": {
+      "x-title": "Credentials",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "authentication": [
+            "headerAuth",
+            "bearerAuth",
+            "mcpOAuth2Api",
+            "multipleHeadersAuth"
+          ]
+        }
+      },
+      "type": "string",
+      "x-n8n-type": "credentials"
+    },
+    "include": {
+      "x-title": "Tools to Include",
+      "description": "How to select the tools you want to be exposed to the AI Agent",
+      "default": "all",
+      "type": "string",
+      "enum": [
+        "all",
+        "selected",
+        "except"
+      ],
+      "x-enumNames": [
+        "All",
+        "Selected",
+        "All Except"
+      ],
+      "x-enumDescriptions": [
+        "Also include all unchanged fields from the input",
+        "Also include the tools listed in the parameter \"Tools to Include\"",
+        "Exclude the tools listed in the parameter \"Tools to Exclude\""
+      ]
+    },
+    "includeTools": {
+      "x-title": "Tools to Include",
+      "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "include": [
+            "selected"
+          ]
+        }
+      },
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "excludeTools": {
+      "x-title": "Tools to Exclude",
+      "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "include": [
+            "except"
+          ]
+        }
+      },
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "description": "Additional options to add",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "timeout": {
+          "x-title": "Timeout",
+          "description": "Time in ms to wait for tool calls to finish",
+          "default": 60000,
+          "type": "number",
+          "minimum": 1
+        }
+      }
+    }
+  },
+  "x-icon": {
+    "light": "file:../mcp.svg",
+    "dark": "file:../mcp.dark.svg"
+  },
+  "x-inputs": [],
+  "x-outputs": [
+    {
+      "type": "ai_tool",
+      "displayName": "Tools"
+    }
+  ],
+  "x-credentials": [
+    {
+      "name": "httpBearerAuth",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "bearerAuth"
+          ]
+        }
+      }
+    },
+    {
+      "name": "httpHeaderAuth",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "headerAuth"
+          ]
+        }
+      }
+    },
+    {
+      "name": "mcpOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "mcpOAuth2Api"
+          ]
+        }
+      }
+    },
+    {
+      "name": "httpMultipleHeadersAuth",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "multipleHeadersAuth"
+          ]
+        }
+      }
+    }
+  ]
+}

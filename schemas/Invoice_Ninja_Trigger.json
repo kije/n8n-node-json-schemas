@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Invoice Ninja Trigger",
+  "description": "Starts the workflow when Invoice Ninja events occur",
+  "x-n8n-node-type": "invoiceNinjaTrigger",
+  "x-n8n-version": [
+    1,
+    2
+  ],
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "x-title": "API Version",
+      "default": "v5",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            2
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "v4",
+        "v5"
+      ],
+      "x-enumNames": [
+        "Version 4",
+        "Version 5"
+      ]
+    },
+    "event": {
+      "x-title": "Event",
+      "default": "",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "create_client",
+        "create_invoice",
+        "create_payment",
+        "create_quote",
+        "create_vendor"
+      ],
+      "x-enumNames": [
+        "Client Created",
+        "Invoice Created",
+        "Payment Created",
+        "Quote Created",
+        "Vendor Created"
+      ]
+    }
+  },
+  "x-icon": "file:invoiceNinja.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "invoiceNinjaApi",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

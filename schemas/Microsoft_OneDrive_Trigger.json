@@ -1,0 +1,217 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Microsoft OneDrive Trigger",
+  "description": "Trigger for Microsoft OneDrive API.",
+  "x-n8n-node-type": "microsoftOneDriveTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "event": {
+      "x-title": "Trigger On",
+      "default": "fileCreated",
+      "type": "string",
+      "enum": [
+        "fileCreated",
+        "fileUpdated",
+        "folderCreated",
+        "folderUpdated"
+      ],
+      "x-enumNames": [
+        "File Created",
+        "File Updated",
+        "Folder Created",
+        "Folder Updated"
+      ],
+      "x-enumDescriptions": [
+        "When a new file is created",
+        "When an existing file is modified",
+        "When a new folder is created",
+        "When an existing folder is modified"
+      ]
+    },
+    "simple": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "type": "boolean"
+    },
+    "watchFolder": {
+      "x-title": "Watch Folder",
+      "description": "Whether to watch for the created folder in a given folder, rather than the entire OneDrive",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "event": [
+            "folderCreated"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "watch": {
+      "x-title": "Watch",
+      "description": "How to select which folder to watch",
+      "default": "anyFolder",
+      "x-displayOptions": {
+        "show": {
+          "event": [
+            "folderUpdated"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "anyFolder",
+        "selectedFolder",
+        "oneSelectedFolder"
+      ],
+      "x-enumNames": [
+        "Any Folder",
+        "Inside a Folder",
+        "A Selected Folder"
+      ],
+      "x-enumDescriptions": [
+        "Watch for updated folders in the entire OneDrive",
+        "Watch for updated folders inside a selected folder",
+        "Watch a specific folder for updates"
+      ]
+    },
+    "fileId": {
+      "x-title": "File",
+      "description": "The file to operate on. The 'By URL' option only accepts URLs that start with 'https://onedrive.live.com'.",
+      "default": {
+        "mode": "id",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "event": [
+            "fileUpdated"
+          ],
+          "watch": [
+            "selectedFile"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "url",
+          "displayName": "Link",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "folderId": {
+      "x-title": "Folder",
+      "description": "The folder to operate on. The 'By URL' option only accepts URLs that start with 'https://onedrive.live.com'.",
+      "default": {
+        "mode": "id",
+        "value": "",
+        "cachedResultName": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "watchFolder": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "url",
+          "displayName": "Link",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "watchFolder": [
+            true
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "folderChild": {
+          "x-title": "Watch Nested Folders",
+          "description": "Whether to look for modified files/folders in all nested folders, rather than only direct descendants",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{($parameter[\"event\"])}}",
+  "x-icon": "file:oneDrive.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "microsoftOneDriveOAuth2Api",
+      "required": true
+    }
+  ]
+}

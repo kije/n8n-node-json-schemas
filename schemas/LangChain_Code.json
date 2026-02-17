@@ -1,0 +1,157 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "LangChain Code",
+  "description": "LangChain Code Node",
+  "x-n8n-node-type": "code",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "code": {
+      "x-title": "Code",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "execute": {
+          "x-title": "Execute",
+          "type": "object",
+          "properties": {
+            "code": {
+              "x-title": "JavaScript - Execute",
+              "default": "const { PromptTemplate } = require('@langchain/core/prompts');\n\nconst query = 'Tell me a joke';\nconst prompt = PromptTemplate.fromTemplate(query);\n\n// If you are allowing more than one language model input connection (-1 or\n// anything greater than 1), getInputConnectionData returns an array, so you\n// will have to change the code below it to deal with that. For example, use\n// llm[0] in the chain definition\n\nconst llm = await this.getInputConnectionData('ai_languageModel', 0);\nlet chain = prompt.pipe(llm);\nconst output = await chain.invoke();\nreturn [ {json: { output } } ];\n\n// NOTE: Old langchain imports (e.g., 'langchain/chains') are automatically\n// converted to '@langchain/classic' imports for backwards compatibility.",
+              "type": "string",
+              "x-editor": "jsEditor"
+            }
+          }
+        },
+        "supplyData": {
+          "x-title": "Supply Data",
+          "type": "object",
+          "properties": {
+            "code": {
+              "x-title": "JavaScript - Supply Data",
+              "default": "const { WikipediaQueryRun } = require( '@langchain/community/tools/wikipedia_query_run');\nreturn new WikipediaQueryRun();",
+              "type": "string",
+              "x-editor": "jsEditor"
+            }
+          }
+        }
+      }
+    },
+    "inputs": {
+      "x-title": "Inputs",
+      "description": "The input to add",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "input": {
+          "x-title": "Input",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "x-title": "Type",
+                "description": "The type of the input",
+                "default": "",
+                "x-required": true,
+                "type": "string",
+                "enum": [
+                  "ai_chain",
+                  "ai_document",
+                  "ai_embedding",
+                  "ai_languageModel",
+                  "ai_memory",
+                  "ai_outputParser",
+                  "ai_textSplitter",
+                  "ai_tool",
+                  "ai_vectorStore",
+                  "main"
+                ],
+                "x-enumNames": [
+                  "Chain",
+                  "Document",
+                  "Embedding",
+                  "Language Model",
+                  "Memory",
+                  "Output Parser",
+                  "Text Splitter",
+                  "Tool",
+                  "Vector Store",
+                  "Main"
+                ]
+              },
+              "maxConnections": {
+                "x-title": "Max Connections",
+                "description": "How many nodes of this type are allowed to be connected. Set it to -1 for unlimited.",
+                "default": -1,
+                "x-required": true,
+                "type": "number"
+              },
+              "required": {
+                "x-title": "Required",
+                "description": "Whether the input needs a connection",
+                "default": false,
+                "x-required": true,
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "outputs": {
+      "x-title": "Outputs",
+      "description": "The output to add",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "output": {
+          "x-title": "Output",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "x-title": "Type",
+                "description": "The type of the input",
+                "default": "",
+                "x-required": true,
+                "type": "string",
+                "enum": [
+                  "ai_chain",
+                  "ai_document",
+                  "ai_embedding",
+                  "ai_languageModel",
+                  "ai_memory",
+                  "ai_outputParser",
+                  "ai_textSplitter",
+                  "ai_tool",
+                  "ai_vectorStore",
+                  "main"
+                ],
+                "x-enumNames": [
+                  "Chain",
+                  "Document",
+                  "Embedding",
+                  "Language Model",
+                  "Memory",
+                  "Output Parser",
+                  "Text Splitter",
+                  "Tool",
+                  "Vector Store",
+                  "Main"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-icon": "fa:code",
+  "x-inputs": "={{ ((values) => { const connectorTypes = {\"ai_chain\":\"Chain\",\"ai_document\":\"Document\",\"ai_embedding\":\"Embedding\",\"ai_languageModel\":\"Language Model\",\"ai_memory\":\"Memory\",\"ai_outputParser\":\"Output Parser\",\"ai_textSplitter\":\"Text Splitter\",\"ai_tool\":\"Tool\",\"ai_vectorStore\":\"Vector Store\",\"main\":\"Main\"}; return values.map(value => { return { type: value.type, required: value.required, maxConnections: value.maxConnections === -1 ? undefined : value.maxConnections, displayName: connectorTypes[value.type] !== 'Main' ? connectorTypes[value.type] : undefined } } ) })($parameter.inputs.input) }}",
+  "x-outputs": "={{ ((values) => { const connectorTypes = {\"ai_chain\":\"Chain\",\"ai_document\":\"Document\",\"ai_embedding\":\"Embedding\",\"ai_languageModel\":\"Language Model\",\"ai_memory\":\"Memory\",\"ai_outputParser\":\"Output Parser\",\"ai_textSplitter\":\"Text Splitter\",\"ai_tool\":\"Tool\",\"ai_vectorStore\":\"Vector Store\",\"main\":\"Main\"}; return values.map(value => { return { type: value.type, displayName: connectorTypes[value.type] !== 'Main' ? connectorTypes[value.type] : undefined } } ) })($parameter.outputs.output) }}"
+}

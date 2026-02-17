@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Interval",
+  "description": "Triggers the workflow in a given interval",
+  "x-n8n-node-type": "interval",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger",
+    "schedule"
+  ],
+  "type": "object",
+  "properties": {
+    "interval": {
+      "x-title": "Interval",
+      "description": "Interval value",
+      "default": 1,
+      "type": "number",
+      "minimum": 1
+    },
+    "unit": {
+      "x-title": "Unit",
+      "description": "Unit of the interval value",
+      "default": "seconds",
+      "type": "string",
+      "enum": [
+        "seconds",
+        "minutes",
+        "hours"
+      ],
+      "x-enumNames": [
+        "Seconds",
+        "Minutes",
+        "Hours"
+      ]
+    }
+  },
+  "x-icon": "fa:hourglass",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ]
+}

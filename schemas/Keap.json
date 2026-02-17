@@ -1,0 +1,1173 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Keap",
+  "description": "Consume Keap API",
+  "x-n8n-node-type": "keap",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "company",
+      "type": "string",
+      "enum": [
+        "company",
+        "contact",
+        "contactNote",
+        "contactTag",
+        "ecommerceOrder",
+        "ecommerceProduct",
+        "email",
+        "file"
+      ],
+      "x-enumNames": [
+        "Company",
+        "Contact",
+        "Contact Note",
+        "Contact Tag",
+        "Ecommerce Order",
+        "Ecommerce Product",
+        "Email",
+        "File"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "delete",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "delete",
+        "getAll",
+        "upload"
+      ],
+      "x-enumNames": [
+        "Delete",
+        "Get Many",
+        "Upload"
+      ],
+      "x-enumDescriptions": [
+        "Delete a file",
+        "Retrieve many files",
+        "Upload a file"
+      ]
+    },
+    "companyName": {
+      "x-title": "Company Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "company"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "email"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "addressField": {
+          "x-title": "Address Field",
+          "description": "Email field of each Contact record to address the email to, such as 'EmailAddress1', 'EmailAddress2', 'EmailAddress3', defaulting to the contact's primary email",
+          "default": "",
+          "type": "string"
+        },
+        "htmlContent": {
+          "x-title": "HTML Content",
+          "description": "The HTML-formatted content of the email, encoded in Base64",
+          "default": "",
+          "type": "string"
+        },
+        "plainContent": {
+          "x-title": "Plain Content",
+          "description": "The plain-text content of the email, encoded in Base64",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "addressesUi": {
+      "x-title": "Addresses",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "addressesValues": {
+          "x-title": "Address",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "field": {
+                "x-title": "Field",
+                "default": "",
+                "type": "string",
+                "enum": [
+                  "BILLING",
+                  "SHIPPING",
+                  "OTHER"
+                ],
+                "x-enumNames": [
+                  "Billing",
+                  "Shipping",
+                  "Other"
+                ]
+              },
+              "countryCode": {
+                "x-title": "Country Code Name or ID",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": "",
+                "type": "string"
+              },
+              "line1": {
+                "x-title": "Line 1",
+                "default": "",
+                "type": "string"
+              },
+              "line2": {
+                "x-title": "Line 2",
+                "default": "",
+                "type": "string"
+              },
+              "locality": {
+                "x-title": "Locality",
+                "default": "",
+                "type": "string"
+              },
+              "postalCode": {
+                "x-title": "Postal Code",
+                "default": "",
+                "type": "string"
+              },
+              "region": {
+                "x-title": "Region",
+                "default": "",
+                "type": "string"
+              },
+              "zipCode": {
+                "x-title": "Zip Code",
+                "default": "",
+                "type": "string"
+              },
+              "zipFour": {
+                "x-title": "Zip Four",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "faxesUi": {
+      "x-title": "Faxes",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "faxesValues": {
+          "x-title": "Fax",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "field": {
+                "x-title": "Field",
+                "default": "",
+                "type": "string",
+                "enum": [
+                  "FAX1",
+                  "FAX2"
+                ],
+                "x-enumNames": [
+                  "Fax 1",
+                  "Fax 2"
+                ]
+              },
+              "number": {
+                "x-title": "Number",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "phonesUi": {
+      "x-title": "Phones",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "phonesValues": {
+          "x-title": "Phones",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "field": {
+                "x-title": "Field",
+                "default": "",
+                "type": "string",
+                "enum": [
+                  "PHONE1",
+                  "PHONE2",
+                  "PHONE3",
+                  "PHONE4",
+                  "PHONE5"
+                ],
+                "x-enumNames": [
+                  "Phone 1",
+                  "Phone 2",
+                  "Phone 3",
+                  "Phone 4",
+                  "Phone 5"
+                ]
+              },
+              "number": {
+                "x-title": "Number",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "file"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 200
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "ecommerceOrder"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "since": {
+          "x-title": "Since",
+          "description": "Date to start searching from",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "until": {
+          "x-title": "Until",
+          "description": "Date to search to",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "paid": {
+          "x-title": "Paid",
+          "default": false,
+          "type": "boolean"
+        },
+        "order": {
+          "x-title": "Order",
+          "description": "Attribute to order items by",
+          "default": "",
+          "type": "string"
+        },
+        "contactId": {
+          "x-title": "Contact ID",
+          "default": 0,
+          "type": "number",
+          "minimum": 0
+        },
+        "productId": {
+          "x-title": "Product ID",
+          "default": 0,
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "duplicateOption": {
+      "x-title": "Duplicate Option",
+      "description": "Performs duplicate checking by one of the following options: Email, EmailAndName. If a match is found using the option provided, the existing contact will be updated.",
+      "default": "email",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upsert"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "email",
+        "emailAndName"
+      ],
+      "x-enumNames": [
+        "Email",
+        "Email And Name"
+      ]
+    },
+    "emailsUi": {
+      "x-title": "Emails",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "emailsValues": {
+          "x-title": "Email",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "field": {
+                "x-title": "Field",
+                "default": "",
+                "type": "string",
+                "enum": [
+                  "EMAIL1",
+                  "EMAIL2",
+                  "EMAIL3"
+                ],
+                "x-enumNames": [
+                  "Email 1",
+                  "Email 2",
+                  "Email 3"
+                ]
+              },
+              "email": {
+                "x-title": "Email",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "socialAccountsUi": {
+      "x-title": "Social Accounts",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "socialAccountsValues": {
+          "x-title": "Social Account",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "x-title": "Type",
+                "default": "",
+                "type": "string",
+                "enum": [
+                  "Facebook",
+                  "Twitter",
+                  "LinkedIn"
+                ],
+                "x-enumNames": [
+                  "Facebook",
+                  "Twitter",
+                  "LinkedIn"
+                ]
+              },
+              "name": {
+                "x-title": "Name",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "contactId": {
+      "x-title": "Contact ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ],
+          "fileAssociation": [
+            "contact"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "userId": {
+      "x-title": "User Name or ID",
+      "description": "The infusionsoft user to send the email on behalf of. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "email"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "noteId": {
+      "x-title": "Note ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "contactNote"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "contactId": {
+          "x-title": "Contact ID",
+          "description": "Filter based on Contact ID, if user has permission to see Contact files",
+          "default": 0,
+          "type": "number",
+          "minimum": 0
+        },
+        "name": {
+          "x-title": "Name",
+          "description": "Filter files based on name, with '*' preceding or following to indicate LIKE queries",
+          "default": "",
+          "type": "string"
+        },
+        "permission": {
+          "x-title": "Permission",
+          "description": "Filter based on the permission of files",
+          "default": "both",
+          "type": "string",
+          "enum": [
+            "user",
+            "company",
+            "both"
+          ],
+          "x-enumNames": [
+            "User",
+            "Company",
+            "Both"
+          ]
+        },
+        "type": {
+          "x-title": "Type",
+          "description": "Filter based on the type of file",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "application",
+            "attachment",
+            "contact",
+            "digitalProduct",
+            "fax",
+            "funnel",
+            "hidden",
+            "image",
+            "import",
+            "logoThumnail",
+            "reSampledImage",
+            "styleCart",
+            "templateThumnail",
+            "ticket",
+            "webform"
+          ],
+          "x-enumNames": [
+            "Application",
+            "Attachment",
+            "Contact",
+            "Digital Product",
+            "Fax",
+            "Funnel",
+            "Hidden",
+            "Image",
+            "Import",
+            "Logo Thumnail",
+            "Re Sampled Image",
+            "Style Cart",
+            "Template Thumnail",
+            "Ticket",
+            "Webform"
+          ]
+        },
+        "viewable": {
+          "x-title": "Viewable",
+          "description": "Include public or private files in response",
+          "default": "both",
+          "type": "string",
+          "enum": [
+            "public",
+            "private",
+            "both"
+          ],
+          "x-enumNames": [
+            "Public",
+            "Private",
+            "Both"
+          ]
+        }
+      }
+    },
+    "tagIds": {
+      "x-title": "Tag IDs",
+      "default": "Tag IDs, multiple IDs can be set separated by comma.",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "contactTag"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "orderDate": {
+      "x-title": "Order Date",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "ecommerceOrder"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "orderTitle": {
+      "x-title": "Order Title",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "ecommerceOrder"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "orderType": {
+      "x-title": "Order Type",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "ecommerceOrder"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "offline",
+        "online"
+      ],
+      "x-enumNames": [
+        "Offline",
+        "Online"
+      ]
+    },
+    "addressUi": {
+      "x-title": "Shipping Address",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ecommerceOrder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "addressValues": {
+          "x-title": "Address",
+          "type": "object",
+          "properties": {
+            "company": {
+              "x-title": "Company",
+              "default": "",
+              "type": "string"
+            },
+            "countryCode": {
+              "x-title": "Country Code Name or ID",
+              "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+              "default": "",
+              "type": "string"
+            },
+            "firstName": {
+              "x-title": "First Name",
+              "default": "",
+              "type": "string"
+            },
+            "middleName": {
+              "x-title": "Middle Name",
+              "default": "",
+              "type": "string"
+            },
+            "lastName": {
+              "x-title": "Last Name",
+              "default": "",
+              "type": "string"
+            },
+            "line1": {
+              "x-title": "Line 1",
+              "default": "",
+              "type": "string"
+            },
+            "line2": {
+              "x-title": "Line 2",
+              "default": "",
+              "type": "string"
+            },
+            "locality": {
+              "x-title": "Locality",
+              "default": "",
+              "type": "string"
+            },
+            "region": {
+              "x-title": "Region",
+              "default": "",
+              "type": "string"
+            },
+            "zipCode": {
+              "x-title": "Zip Code",
+              "default": "",
+              "type": "string"
+            },
+            "zipFour": {
+              "x-title": "Zip Four",
+              "default": "",
+              "type": "string"
+            },
+            "phone": {
+              "x-title": "Phone",
+              "default": "",
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "orderItemsUi": {
+      "x-title": "Order Items",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ecommerceOrder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "orderItemsValues": {
+          "x-title": "Order Item",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "description": {
+                "x-title": "Description",
+                "default": "",
+                "type": "string"
+              },
+              "price": {
+                "x-title": "Price",
+                "description": "Overridable price of the product, if not specified, the default will be used",
+                "default": 0,
+                "type": "number",
+                "minimum": 0
+              },
+              "product ID": {
+                "x-title": "Product ID",
+                "default": 0,
+                "type": "number",
+                "minimum": 0
+              },
+              "quantity": {
+                "x-title": "Quantity",
+                "default": 1,
+                "type": "number",
+                "minimum": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "orderId": {
+      "x-title": "Order ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "ecommerceOrder"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "productName": {
+      "x-title": "Product Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "ecommerceProduct"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "productId": {
+      "x-title": "Product ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "ecommerceProduct"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "sentToAddress": {
+      "x-title": "Sent To Address",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "createRecord"
+          ],
+          "resource": [
+            "email"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "sentFromAddress": {
+      "x-title": "Sent From Address",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "createRecord"
+          ],
+          "resource": [
+            "email"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "contactIds": {
+      "x-title": "Contact IDs",
+      "description": "Contact IDs to receive the email. Multiple can be added seperated by comma.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "email"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "subject": {
+      "x-title": "Subject",
+      "description": "The subject line of the email",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "email"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "attachmentsUi": {
+      "x-title": "Attachments",
+      "description": "Attachments to be sent with each copy of the email, maximum of 10 with size of 1MB each",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "email"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "attachmentsValues": {
+          "x-title": "Attachments Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "fileData": {
+                "x-title": "File Data",
+                "description": "The content of the attachment, encoded in Base64",
+                "default": "",
+                "type": "string"
+              },
+              "fileName": {
+                "x-title": "File Name",
+                "description": "The filename of the attached file, including extension",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "attachmentsBinary": {
+          "x-title": "Attachments Binary",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "property": {
+                "x-title": "Property",
+                "description": "Name of the binary properties which contain data which should be added to email as attachment",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "binaryData": {
+      "x-title": "Binary File",
+      "description": "Whether the data to upload should be taken from binary field",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "binaryPropertyName": {
+      "x-title": "Input Binary Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ],
+          "binaryData": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "fileAssociation": {
+      "x-title": "File Association",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "company",
+        "contact",
+        "user"
+      ],
+      "x-enumNames": [
+        "Company",
+        "Contact",
+        "User"
+      ]
+    },
+    "fileName": {
+      "x-title": "File Name",
+      "description": "The filename of the attached file, including extension",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ],
+          "binaryData": [
+            false
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "fileData": {
+      "x-title": "File Data",
+      "description": "The content of the attachment, encoded in Base64",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ],
+          "binaryData": [
+            false
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "isPublic": {
+      "x-title": "Is Public",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "fileId": {
+      "x-title": "File ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:keap.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "keapOAuth2Api",
+      "required": true
+    }
+  ]
+}

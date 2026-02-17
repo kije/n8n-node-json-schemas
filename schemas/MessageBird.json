@@ -1,0 +1,226 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MessageBird",
+  "description": "Sends SMS via MessageBird",
+  "x-n8n-node-type": "messageBird",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "sms",
+      "type": "string",
+      "enum": [
+        "sms",
+        "balance"
+      ],
+      "x-enumNames": [
+        "SMS",
+        "Balance"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "balance"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "get"
+      ],
+      "x-enumNames": [
+        "Get"
+      ],
+      "x-enumDescriptions": [
+        "Get the balance"
+      ]
+    },
+    "originator": {
+      "x-title": "From",
+      "description": "The number from which to send the message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "sms"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "recipients": {
+      "x-title": "To",
+      "description": "All recipients separated by commas",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "sms"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "message": {
+      "x-title": "Message",
+      "description": "The message to be send",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "sms"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "send"
+          ],
+          "resource": [
+            "sms"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "createdDatetime": {
+          "x-title": "Created Date-Time",
+          "description": "The date and time of the creation of the message in RFC3339 format (Y-m-dTH:i:sP)",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "datacoding": {
+          "x-title": "Datacoding",
+          "description": "Using unicode will limit the maximum number of characters to 70 instead of 160",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "auto",
+            "plain",
+            "unicode"
+          ],
+          "x-enumNames": [
+            "Auto",
+            "Plain",
+            "Unicode"
+          ]
+        },
+        "gateway": {
+          "x-title": "Gateway",
+          "description": "The SMS route that is used to send the message",
+          "default": "",
+          "type": "number"
+        },
+        "groupIds": {
+          "x-title": "Group IDs",
+          "description": "Group IDs separated by commas, If provided recipients can be omitted",
+          "default": "",
+          "type": "string"
+        },
+        "mclass": {
+          "x-title": "Message Type",
+          "description": "Indicated the message type. 1 is a normal message, 0 is a flash message.",
+          "default": 1,
+          "type": "string",
+          "enum": [
+            1,
+            0
+          ],
+          "x-enumNames": [
+            "Flash",
+            "Normal"
+          ]
+        },
+        "reference": {
+          "x-title": "Reference",
+          "description": "A client reference",
+          "default": "",
+          "type": "string"
+        },
+        "reportUrl": {
+          "x-title": "Report Url",
+          "description": "The status report URL to be used on a per-message basis. Reference is required for a status report webhook to be sent.",
+          "default": "",
+          "type": "string"
+        },
+        "scheduledDatetime": {
+          "x-title": "Scheduled Date-Time",
+          "description": "The scheduled date and time of the message in RFC3339 format (Y-m-dTH:i:sP)",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "type": {
+          "x-title": "Type",
+          "description": "The type of message. Values can be: sms, binary, or flash.",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "binary",
+            "flash",
+            "sms"
+          ],
+          "x-enumNames": [
+            "Binary",
+            "Flash",
+            "SMS"
+          ]
+        },
+        "typeDetails": {
+          "x-title": "Type Details",
+          "description": "A hash with extra information. Is only used when a binary message is sent.",
+          "default": "",
+          "type": "string"
+        },
+        "validity": {
+          "x-title": "Validity",
+          "description": "The amount of seconds that the message is valid",
+          "default": 1,
+          "type": "number",
+          "minimum": 1
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:messagebird.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "messageBirdApi",
+      "required": true
+    }
+  ]
+}

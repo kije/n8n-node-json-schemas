@@ -1,0 +1,512 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Matrix",
+  "description": "Consume Matrix API",
+  "x-n8n-node-type": "matrix",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "message",
+      "type": "string",
+      "enum": [
+        "account",
+        "event",
+        "media",
+        "message",
+        "room",
+        "roomMember"
+      ],
+      "x-enumNames": [
+        "Account",
+        "Event",
+        "Media",
+        "Message",
+        "Room",
+        "Room Member"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "roomMember"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Get Many"
+      ],
+      "x-enumDescriptions": [
+        "Get many members"
+      ]
+    },
+    "roomId": {
+      "x-title": "Room Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "roomMember"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "eventId": {
+      "x-title": "Event ID",
+      "description": "The room related to the event",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "binaryPropertyName": {
+      "x-title": "Input Binary Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "media"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "mediaType": {
+      "x-title": "Media Type",
+      "description": "Type of file being uploaded",
+      "default": "image",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "media"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "file",
+        "image",
+        "audio",
+        "video"
+      ],
+      "x-enumNames": [
+        "File",
+        "Image",
+        "Audio",
+        "Video"
+      ],
+      "x-enumDescriptions": [
+        "General file",
+        "Image media type",
+        "Audio media type",
+        "Video media type"
+      ]
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "media"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "fileName": {
+          "x-title": "File Name",
+          "description": "Name of the file being uploaded",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "text": {
+      "x-title": "Text",
+      "description": "The text to send",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "messageType": {
+      "x-title": "Message Type",
+      "description": "The type of message to send",
+      "default": "m.text",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "m.emote",
+        "m.notice",
+        "m.text"
+      ],
+      "x-enumNames": [
+        "Emote",
+        "Notice",
+        "Text"
+      ],
+      "x-enumDescriptions": [
+        "Perform an action (similar to /me in IRC)",
+        "Send a notice",
+        "Send a text message"
+      ]
+    },
+    "messageFormat": {
+      "x-title": "Message Format",
+      "description": "The format of the message's body",
+      "default": "plain",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "message"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "plain",
+        "org.matrix.custom.html"
+      ],
+      "x-enumNames": [
+        "Plain Text",
+        "HTML"
+      ],
+      "x-enumDescriptions": [
+        "Text only",
+        "HTML-formatted text"
+      ]
+    },
+    "fallbackText": {
+      "x-title": "Fallback Text",
+      "description": "A plain text message to display in case the HTML cannot be rendered by the Matrix client",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "create"
+          ],
+          "messageFormat": [
+            "org.matrix.custom.html"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "otherOptions": {
+      "x-title": "Other Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "filter": {
+          "x-title": "Filter",
+          "description": "A JSON RoomEventFilter to filter returned events with. More information can be found on this <a href=\"https://matrix.org/docs/spec/client_server/r0.6.0\">page</a>.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "roomName": {
+      "x-title": "Room Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "room"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "preset": {
+      "x-title": "Preset",
+      "default": "public_chat",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "room"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "private_chat",
+        "public_chat"
+      ],
+      "x-enumNames": [
+        "Private Chat",
+        "Public Chat"
+      ],
+      "x-enumDescriptions": [
+        "",
+        "Open and public chat"
+      ]
+    },
+    "roomAlias": {
+      "x-title": "Room Alias",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "room"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "roomIdOrAlias": {
+      "x-title": "Room ID or Alias",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "room"
+          ],
+          "operation": [
+            "join"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "userId": {
+      "x-title": "User ID",
+      "description": "The fully qualified user ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "room"
+          ],
+          "operation": [
+            "kick"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "reason": {
+      "x-title": "Reason",
+      "description": "Reason for kick",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "room"
+          ],
+          "operation": [
+            "kick"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "filters": {
+      "x-title": "Filters",
+      "description": "Filtering options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "roomMember"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "notMembership": {
+          "x-title": "Exclude Membership",
+          "description": "Excludes members whose membership is other than selected (uses OR filter with membership)",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "",
+            "ban",
+            "invite",
+            "join",
+            "leave"
+          ],
+          "x-enumNames": [
+            "Any",
+            "Ban",
+            "Invite",
+            "Join",
+            "Leave"
+          ],
+          "x-enumDescriptions": [
+            "Any user membership",
+            "Users removed from the room",
+            "Users invited to join",
+            "Users currently in the room",
+            "Users who left"
+          ]
+        },
+        "membership": {
+          "x-title": "Membership",
+          "description": "Only fetch users with selected membership status (uses OR filter with exclude membership)",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "",
+            "ban",
+            "invite",
+            "join",
+            "leave"
+          ],
+          "x-enumNames": [
+            "Any",
+            "Ban",
+            "Invite",
+            "Join",
+            "Leave"
+          ],
+          "x-enumDescriptions": [
+            "Any user membership",
+            "Users removed from the room",
+            "Users invited to join",
+            "Users currently in the room",
+            "Users who left"
+          ]
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:matrix.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "matrixApi",
+      "required": true
+    }
+  ]
+}

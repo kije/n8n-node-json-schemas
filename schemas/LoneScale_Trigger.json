@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "LoneScale Trigger",
+  "description": "Trigger LoneScale Workflow",
+  "x-n8n-node-type": "loneScaleTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "workflow": {
+      "x-title": "Workflow Name",
+      "description": "Select one workflow. Choose from the list",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-icon": {
+    "light": "file:loneScale.svg",
+    "dark": "file:loneScale.dark.svg"
+  },
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "loneScaleApi",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

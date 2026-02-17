@@ -1,0 +1,514 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Intercom",
+  "description": "Consume Intercom API",
+  "x-n8n-node-type": "intercom",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "user",
+      "type": "string",
+      "enum": [
+        "company",
+        "lead",
+        "user"
+      ],
+      "x-enumNames": [
+        "Company",
+        "Lead",
+        "User"
+      ],
+      "x-enumDescriptions": [
+        "Companies allow you to represent commercial organizations using your product",
+        "Leads are useful for representing logged-out users of your application",
+        "The Users resource is the primary way of interacting with Intercom"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "get",
+        "getAll",
+        "update",
+        "users"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Get",
+        "Get Many",
+        "Update",
+        "Users"
+      ],
+      "x-enumDescriptions": [
+        "Create a new company",
+        "Get data of a company",
+        "Get data of many companies",
+        "Update a company",
+        "List company's users"
+      ]
+    },
+    "id": {
+      "x-title": "ID",
+      "description": "The Intercom defined ID representing the Lead",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 60
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "segment_id": {
+          "x-title": "Segment ID",
+          "description": "Segment representing the Lead",
+          "default": "",
+          "type": "string"
+        },
+        "tag_id": {
+          "x-title": "Tag ID",
+          "description": "Tag representing the Lead",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "selectBy": {
+      "x-title": "Select By",
+      "description": "What property to use to query the company",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "companyId",
+        "id",
+        "name"
+      ],
+      "x-enumNames": [
+        "Company ID",
+        "ID",
+        "Name"
+      ],
+      "x-enumDescriptions": [
+        "The company_id you have given to the company",
+        "The Intercom defined ID representing the company",
+        "The name of the company"
+      ]
+    },
+    "value": {
+      "x-title": "Value",
+      "description": "View by value",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "updateBy": {
+      "x-title": "Update By",
+      "description": "The property via which to query the lead",
+      "default": "id",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "lead"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "userId",
+        "id"
+      ],
+      "x-enumNames": [
+        "User ID",
+        "ID"
+      ],
+      "x-enumDescriptions": [
+        "Automatically generated identifier for the Lead",
+        "The Intercom defined ID representing the Lead"
+      ]
+    },
+    "identifierType": {
+      "x-title": "Identifier Type",
+      "description": "Unique string identifier",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "userId",
+        "email"
+      ],
+      "x-enumNames": [
+        "User ID",
+        "Email"
+      ],
+      "x-enumDescriptions": [
+        "A unique string identifier for the user. It is required on creation if an email is not supplied.",
+        "The user's email address. It is required on creation if a user_id is not supplied."
+      ]
+    },
+    "idValue": {
+      "x-title": "Value",
+      "description": "Unique string identifier value",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "jsonParameters": {
+      "x-title": "JSON Parameters",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "update"
+          ],
+          "resource": [
+            "company"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "update"
+          ],
+          "resource": [
+            "company"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "industry": {
+          "x-title": "Industry",
+          "description": "The industry that this company operates in",
+          "default": "",
+          "type": "string"
+        },
+        "monthlySpend": {
+          "x-title": "Monthly Spend",
+          "description": "The phone number of the user",
+          "default": "",
+          "type": "string"
+        },
+        "name": {
+          "x-title": "Name",
+          "description": "Name of the user",
+          "default": "",
+          "type": "string"
+        },
+        "plan": {
+          "x-title": "Plan",
+          "description": "The name of the plan you have associated with the company",
+          "default": "",
+          "type": "string"
+        },
+        "size": {
+          "x-title": "Size",
+          "description": "The number of employees in this company",
+          "default": "",
+          "type": "number"
+        },
+        "website": {
+          "x-title": "Website",
+          "description": "The URL for this company's website. Please note that the value specified here is not validated. Accepts any string.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "customAttributesJson": {
+      "x-title": "Custom Attributes",
+      "description": "A hash of key/value pairs to represent custom data you want to attribute to a user",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "create",
+            "update"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "customAttributesUi": {
+      "x-title": "Custom Attributes",
+      "description": "A hash of key/value pairs to represent custom data you want to attribute to a user",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "create",
+            "update"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "customAttributesValues": {
+          "x-title": "Attributes",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Name",
+                "default": "",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "deleteBy": {
+      "x-title": "Delete By",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "lead"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "id",
+        "userId"
+      ],
+      "x-enumNames": [
+        "ID",
+        "User ID"
+      ],
+      "x-enumDescriptions": [
+        "The Intercom defined ID representing the Lead",
+        "Automatically generated identifier for the Lead"
+      ]
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "The email of the user",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "lead"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "listBy": {
+      "x-title": "List By",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "users"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "id",
+        "companyId"
+      ],
+      "x-enumNames": [
+        "ID",
+        "Company ID"
+      ],
+      "x-enumDescriptions": [
+        "The Intercom defined ID representing the company",
+        "The company_id you have given to the company"
+      ]
+    },
+    "companyId": {
+      "x-title": "Company ID",
+      "description": "The company ID you have defined for the company",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "create",
+            "update"
+          ]
+        }
+      },
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:intercom.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "intercomApi",
+      "required": true
+    }
+  ]
+}

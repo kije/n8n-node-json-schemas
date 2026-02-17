@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Mailgun",
+  "description": "Sends an email via Mailgun",
+  "x-n8n-node-type": "mailgun",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "fromEmail": {
+      "x-title": "From Email",
+      "description": "Email address of the sender optional with name",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "toEmail": {
+      "x-title": "To Email",
+      "description": "Email address of the recipient. Multiple ones can be separated by comma.",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "ccEmail": {
+      "x-title": "Cc Email",
+      "description": "Cc Email address of the recipient. Multiple ones can be separated by comma.",
+      "default": "",
+      "type": "string"
+    },
+    "bccEmail": {
+      "x-title": "Bcc Email",
+      "description": "Bcc Email address of the recipient. Multiple ones can be separated by comma.",
+      "default": "",
+      "type": "string"
+    },
+    "subject": {
+      "x-title": "Subject",
+      "description": "Subject line of the email",
+      "default": "",
+      "type": "string"
+    },
+    "text": {
+      "x-title": "Text",
+      "description": "Plain text message of email",
+      "default": "",
+      "type": "string",
+      "x-rows": 5
+    },
+    "html": {
+      "x-title": "HTML",
+      "description": "HTML text message of email",
+      "default": "",
+      "type": "string",
+      "x-rows": 5,
+      "x-editor": "htmlEditor"
+    },
+    "attachments": {
+      "x-title": "Attachments",
+      "description": "Name of the binary properties which contain data which should be added to email as attachment. Multiple ones can be comma-separated.",
+      "default": "",
+      "type": "string"
+    }
+  },
+  "x-icon": "file:mailgun.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "mailgunApi",
+      "required": true
+    }
+  ]
+}

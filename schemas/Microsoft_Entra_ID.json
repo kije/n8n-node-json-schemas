@@ -1,0 +1,1117 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Microsoft Entra ID",
+  "description": "Interact with Microsoft Entra ID API",
+  "x-n8n-node-type": "microsoftEntra",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "user",
+      "type": "string",
+      "enum": [
+        "group",
+        "user"
+      ],
+      "x-enumNames": [
+        "Group",
+        "User"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "addGroup",
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "removeGroup",
+        "update"
+      ],
+      "x-enumNames": [
+        "Add to Group",
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Remove from Group",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Add user to group",
+        "Create a user",
+        "Delete a user",
+        "Retrieve data for a specific user",
+        "Retrieve a list of users",
+        "Remove user from group",
+        "Update a user"
+      ]
+    },
+    "groupType": {
+      "x-title": "Group Type",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "Unified",
+        ""
+      ],
+      "x-enumNames": [
+        "Microsoft 365",
+        "Security"
+      ]
+    },
+    "displayName": {
+      "x-title": "Display Name",
+      "description": "The name to display in the address book for the user",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "mailNickname": {
+      "x-title": "Mail Nickname",
+      "description": "The mail alias for the user",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "mailEnabled": {
+      "x-title": "Mail Enabled",
+      "description": "Whether the group is mail-enabled",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "create"
+          ],
+          "groupType": [
+            "Unified"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "membershipType": {
+      "x-title": "Membership Type",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "",
+        "DynamicMembership"
+      ],
+      "x-enumNames": [
+        "Assigned",
+        "Dynamic"
+      ],
+      "x-enumDescriptions": [
+        "Lets you add specific users as members of a group and have unique permissions",
+        "Lets you use rules to automatically add and remove users as members"
+      ]
+    },
+    "securityEnabled": {
+      "x-title": "Security Enabled",
+      "description": "Whether the group is a security group",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "create"
+          ],
+          "groupType": [
+            "Unified"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "aboutMe": {
+          "x-title": "About Me",
+          "description": "A freeform text entry field for the user to describe themselves",
+          "default": "",
+          "type": "string"
+        },
+        "ageGroup": {
+          "x-title": "Age Group",
+          "description": "Sets the age group of the user",
+          "default": "Adult",
+          "type": "string",
+          "enum": [
+            "Adult",
+            "Minor",
+            "NotAdult"
+          ],
+          "x-enumNames": [
+            "Adult",
+            "Minor",
+            "Not Adult"
+          ]
+        },
+        "birthday": {
+          "x-title": "Birthday",
+          "description": "The birthday of the user",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "businessPhones": {
+          "x-title": "Business Phone",
+          "description": "The telephone number for the user",
+          "default": "",
+          "type": "string"
+        },
+        "city": {
+          "x-title": "City",
+          "description": "The city in which the user is located",
+          "default": "",
+          "type": "string"
+        },
+        "companyName": {
+          "x-title": "Company Name",
+          "description": "The name of the company associated with the user",
+          "default": "",
+          "type": "string"
+        },
+        "consentProvidedForMinor": {
+          "x-title": "Consent Provided",
+          "description": "Specifies if consent is provided for minors",
+          "default": "Denied",
+          "type": "string",
+          "enum": [
+            "Denied",
+            "Granted",
+            "NotRequired"
+          ],
+          "x-enumNames": [
+            "Denied",
+            "Granted",
+            "Not Required"
+          ]
+        },
+        "country": {
+          "x-title": "Country",
+          "description": "The country/region of the user",
+          "default": "",
+          "type": "string"
+        },
+        "department": {
+          "x-title": "Department",
+          "description": "The department name where the user works",
+          "default": "",
+          "type": "string"
+        },
+        "employeeId": {
+          "x-title": "Employee ID",
+          "description": "Employee identifier assigned by the organization",
+          "default": "",
+          "type": "string"
+        },
+        "employeeType": {
+          "x-title": "Employee Type",
+          "description": "Defines enterprise worker type",
+          "default": "",
+          "type": "string"
+        },
+        "employeeHireDate": {
+          "x-title": "Employee Hire Date",
+          "description": "The hire date of the user",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "employeeLeaveDateTime": {
+          "x-title": "Employee Leave Date",
+          "description": "The date and time when the user left or will leave the organization",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "employeeOrgData": {
+          "x-title": "Employee Organization Data",
+          "description": "Represents organization data (for example, division and costCenter) associated with a user",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "employeeOrgValues": {
+              "x-title": "Employee Organization Data",
+              "type": "object",
+              "properties": {
+                "costCenter": {
+                  "x-title": "Cost Center",
+                  "description": "The cost center associated with the user",
+                  "default": "",
+                  "type": "string"
+                },
+                "division": {
+                  "x-title": "Division",
+                  "description": "The name of the division in which the user works",
+                  "default": "",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "givenName": {
+          "x-title": "First Name",
+          "description": "The given name (first name) of the user",
+          "default": "",
+          "type": "string"
+        },
+        "forceChangePassword": {
+          "x-title": "Force Change Password",
+          "description": "Whether the user must change their password on the next sign-in",
+          "default": "forceChangePasswordNextSignIn",
+          "type": "string",
+          "enum": [
+            "forceChangePasswordNextSignIn",
+            "forceChangePasswordNextSignInWithMfa"
+          ],
+          "x-enumNames": [
+            "Next Sign In",
+            "Next Sign In with MFA"
+          ]
+        },
+        "interests": {
+          "x-title": "Interests",
+          "description": "A list for the user to describe their interests",
+          "default": [],
+          "type": "string"
+        },
+        "jobTitle": {
+          "x-title": "Job Title",
+          "description": "The user's job title",
+          "default": "",
+          "type": "string"
+        },
+        "surname": {
+          "x-title": "Last Name",
+          "description": "The user's last name (family name)",
+          "default": "",
+          "type": "string"
+        },
+        "mail": {
+          "x-title": "Mail",
+          "description": "The SMTP address for the user",
+          "default": "",
+          "type": "string"
+        },
+        "mobilePhone": {
+          "x-title": "Mobile Phone",
+          "description": "The primary cellular telephone number for the user",
+          "default": "",
+          "type": "string"
+        },
+        "mySite": {
+          "x-title": "My Site",
+          "description": "The URL for the user's personal site",
+          "default": "",
+          "type": "string"
+        },
+        "officeLocation": {
+          "x-title": "Office Location",
+          "description": "The office location for the user",
+          "default": "",
+          "type": "string"
+        },
+        "onPremisesImmutableId": {
+          "x-title": "On Premises Immutable ID",
+          "description": "This property is used to associate an on-premises Active Directory user account to their Microsoft Entra user object",
+          "default": "",
+          "type": "string"
+        },
+        "otherMails": {
+          "x-title": "Other Emails",
+          "description": "Additional email addresses for the user",
+          "default": [],
+          "type": "string"
+        },
+        "passwordPolicies": {
+          "x-title": "Password Policies",
+          "description": "Specifies password policies",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "DisablePasswordExpiration",
+              "DisableStrongPassword"
+            ]
+          },
+          "x-enumNames": [
+            "Disable Password Expiration",
+            "Disable Strong Password"
+          ]
+        },
+        "pastProjects": {
+          "x-title": "Past Projects",
+          "description": "A list of past projects the user has worked on",
+          "default": [],
+          "type": "string"
+        },
+        "postalCode": {
+          "x-title": "Postal Code",
+          "description": "The postal code for the user's address",
+          "default": "",
+          "type": "string"
+        },
+        "preferredLanguage": {
+          "x-title": "Preferred Language",
+          "description": "User's preferred language in ISO 639-1 code",
+          "default": "",
+          "type": "string"
+        },
+        "responsibilities": {
+          "x-title": "Responsibilities",
+          "description": "A list of responsibilities the user has",
+          "default": [],
+          "type": "string"
+        },
+        "schools": {
+          "x-title": "Schools Attended",
+          "description": "A list of schools the user attended",
+          "default": [],
+          "type": "string"
+        },
+        "skills": {
+          "x-title": "Skills",
+          "description": "A list of skills the user possesses",
+          "default": [],
+          "type": "string"
+        },
+        "state": {
+          "x-title": "State",
+          "description": "The state or province of the user's address",
+          "default": "",
+          "type": "string"
+        },
+        "streetAddress": {
+          "x-title": "Street Address",
+          "description": "The street address of the user's place of business",
+          "default": "",
+          "type": "string"
+        },
+        "usageLocation": {
+          "x-title": "Usage Location",
+          "description": "Two-letter country code where the user is located",
+          "default": "",
+          "type": "string"
+        },
+        "userType": {
+          "x-title": "User Type",
+          "description": "Classifies the user type",
+          "default": "Guest",
+          "type": "string",
+          "enum": [
+            "Guest",
+            "Member"
+          ],
+          "x-enumNames": [
+            "Guest",
+            "Member"
+          ]
+        }
+      }
+    },
+    "group": {
+      "x-title": "Group",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "removeGroup"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        }
+      ]
+    },
+    "output": {
+      "x-title": "Output",
+      "default": "simple",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "simple",
+        "raw",
+        "fields"
+      ],
+      "x-enumNames": [
+        "Simplified",
+        "Raw",
+        "Selected Fields"
+      ]
+    },
+    "fields": {
+      "x-title": "Fields",
+      "description": "The fields to add to the output",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "output": [
+            "fields"
+          ]
+        }
+      },
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "includeMembers": {
+          "x-title": "Include Members",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "filter": {
+      "x-title": "Filter",
+      "description": "<a href=\"https://docs.microsoft.com/en-us/graph/query-parameters#filter-parameter\">Query parameter</a> to filter results by",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "aboutMe": {
+          "x-title": "About Me",
+          "description": "A freeform text entry field for the user to describe themselves",
+          "default": "",
+          "type": "string"
+        },
+        "accountEnabled": {
+          "x-title": "Account Enabled",
+          "description": "Whether the account is enabled",
+          "default": true,
+          "type": "boolean"
+        },
+        "ageGroup": {
+          "x-title": "Age Group",
+          "description": "Sets the age group of the user",
+          "default": "Adult",
+          "type": "string",
+          "enum": [
+            "Adult",
+            "Minor",
+            "NotAdult"
+          ],
+          "x-enumNames": [
+            "Adult",
+            "Minor",
+            "Not Adult"
+          ]
+        },
+        "birthday": {
+          "x-title": "Birthday",
+          "description": "The birthday of the user",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "businessPhones": {
+          "x-title": "Business Phone",
+          "description": "The telephone number for the user",
+          "default": "",
+          "type": "string"
+        },
+        "city": {
+          "x-title": "City",
+          "description": "The city in which the user is located",
+          "default": "",
+          "type": "string"
+        },
+        "companyName": {
+          "x-title": "Company Name",
+          "description": "The name of the company associated with the user",
+          "default": "",
+          "type": "string"
+        },
+        "consentProvidedForMinor": {
+          "x-title": "Consent Provided",
+          "description": "Specifies if consent is provided for minors",
+          "default": "Denied",
+          "type": "string",
+          "enum": [
+            "Denied",
+            "Granted",
+            "NotRequired"
+          ],
+          "x-enumNames": [
+            "Denied",
+            "Granted",
+            "Not Required"
+          ]
+        },
+        "country": {
+          "x-title": "Country",
+          "description": "The country/region of the user",
+          "default": "",
+          "type": "string"
+        },
+        "department": {
+          "x-title": "Department",
+          "description": "The department name where the user works",
+          "default": "",
+          "type": "string"
+        },
+        "displayName": {
+          "x-title": "Display Name",
+          "description": "The name to display in the address book for the user",
+          "default": "",
+          "type": "string"
+        },
+        "employeeId": {
+          "x-title": "Employee ID",
+          "description": "Employee identifier assigned by the organization",
+          "default": "",
+          "type": "string"
+        },
+        "employeeType": {
+          "x-title": "Employee Type",
+          "description": "Defines enterprise worker type",
+          "default": "",
+          "type": "string"
+        },
+        "givenName": {
+          "x-title": "First Name",
+          "description": "The given name (first name) of the user",
+          "default": "",
+          "type": "string"
+        },
+        "employeeHireDate": {
+          "x-title": "Employee Hire Date",
+          "description": "The hire date of the user",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "employeeLeaveDateTime": {
+          "x-title": "Employee Leave Date",
+          "description": "The date and time when the user left or will leave the organization",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "employeeOrgData": {
+          "x-title": "Employee Organization Data",
+          "description": "Represents organization data (for example, division and costCenter) associated with a user",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "employeeOrgValues": {
+              "x-title": "Employee Organization Data",
+              "type": "object",
+              "properties": {
+                "costCenter": {
+                  "x-title": "Cost Center",
+                  "description": "The cost center associated with the user",
+                  "default": "",
+                  "type": "string"
+                },
+                "division": {
+                  "x-title": "Division",
+                  "description": "The name of the division in which the user works",
+                  "default": "",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "forceChangePassword": {
+          "x-title": "Force Change Password",
+          "description": "Whether the user must change their password on the next sign-in",
+          "default": "forceChangePasswordNextSignIn",
+          "type": "string",
+          "enum": [
+            "forceChangePasswordNextSignIn",
+            "forceChangePasswordNextSignInWithMfa"
+          ],
+          "x-enumNames": [
+            "Next Sign In",
+            "Next Sign In with MFA"
+          ]
+        },
+        "interests": {
+          "x-title": "Interests",
+          "description": "A list for the user to describe their interests",
+          "default": [],
+          "type": "string"
+        },
+        "jobTitle": {
+          "x-title": "Job Title",
+          "description": "The user's job title",
+          "default": "",
+          "type": "string"
+        },
+        "surname": {
+          "x-title": "Last Name",
+          "description": "The user's last name (family name)",
+          "default": "",
+          "type": "string"
+        },
+        "mail": {
+          "x-title": "Mail",
+          "description": "The SMTP address for the user",
+          "default": "",
+          "type": "string"
+        },
+        "mailNickname": {
+          "x-title": "Mail Nickname",
+          "description": "The mail alias for the user",
+          "default": "",
+          "type": "string"
+        },
+        "mobilePhone": {
+          "x-title": "Mobile Phone",
+          "description": "The primary cellular telephone number for the user",
+          "default": "",
+          "type": "string"
+        },
+        "mySite": {
+          "x-title": "My Site",
+          "description": "The URL for the user's personal site",
+          "default": "",
+          "type": "string"
+        },
+        "officeLocation": {
+          "x-title": "Office Location",
+          "description": "The office location for the user",
+          "default": "",
+          "type": "string"
+        },
+        "onPremisesImmutableId": {
+          "x-title": "On Premises Immutable ID",
+          "description": "This property is used to associate an on-premises Active Directory user account to their Microsoft Entra user object",
+          "default": "",
+          "type": "string"
+        },
+        "otherMails": {
+          "x-title": "Other Emails",
+          "description": "Additional email addresses for the user",
+          "default": [],
+          "type": "string"
+        },
+        "password": {
+          "x-title": "Password",
+          "description": "The password for the user. The password must satisfy minimum requirements as specified by the passwordPolicies property.",
+          "default": "",
+          "type": "string",
+          "format": "password"
+        },
+        "passwordPolicies": {
+          "x-title": "Password Policies",
+          "description": "Specifies password policies",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "DisablePasswordExpiration",
+              "DisableStrongPassword"
+            ]
+          },
+          "x-enumNames": [
+            "Disable Password Expiration",
+            "Disable Strong Password"
+          ]
+        },
+        "pastProjects": {
+          "x-title": "Past Projects",
+          "description": "A list of past projects the user has worked on",
+          "default": [],
+          "type": "string"
+        },
+        "postalCode": {
+          "x-title": "Postal Code",
+          "description": "The postal code for the user's address",
+          "default": "",
+          "type": "string"
+        },
+        "preferredLanguage": {
+          "x-title": "Preferred Language",
+          "description": "User's preferred language in ISO 639-1 code",
+          "default": "",
+          "type": "string"
+        },
+        "responsibilities": {
+          "x-title": "Responsibilities",
+          "description": "A list of responsibilities the user has",
+          "default": [],
+          "type": "string"
+        },
+        "schools": {
+          "x-title": "Schools Attended",
+          "description": "A list of schools the user attended",
+          "default": [],
+          "type": "string"
+        },
+        "skills": {
+          "x-title": "Skills",
+          "description": "A list of skills the user possesses",
+          "default": [],
+          "type": "string"
+        },
+        "state": {
+          "x-title": "State",
+          "description": "The state or province of the user's address",
+          "default": "",
+          "type": "string"
+        },
+        "streetAddress": {
+          "x-title": "Street Address",
+          "description": "The street address of the user's place of business",
+          "default": "",
+          "type": "string"
+        },
+        "usageLocation": {
+          "x-title": "Usage Location",
+          "description": "Two-letter country code where the user is located",
+          "default": "",
+          "type": "string"
+        },
+        "userPrincipalName": {
+          "x-title": "User Principal Name",
+          "description": "The user principal name (UPN)",
+          "default": "",
+          "type": "string"
+        },
+        "userType": {
+          "x-title": "User Type",
+          "description": "Classifies the user type",
+          "default": "Guest",
+          "type": "string",
+          "enum": [
+            "Guest",
+            "Member"
+          ],
+          "x-enumNames": [
+            "Guest",
+            "Member"
+          ]
+        }
+      }
+    },
+    "user": {
+      "x-title": "User to Update",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        }
+      ]
+    },
+    "accountEnabled": {
+      "x-title": "Account Enabled",
+      "description": "Whether the account is enabled",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "userPrincipalName": {
+      "x-title": "User Principal Name",
+      "description": "The user principal name (UPN)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "password": {
+      "x-title": "Password",
+      "description": "The password for the user",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "password"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": {
+    "light": "file:microsoftEntra.svg",
+    "dark": "file:microsoftEntra.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "microsoftEntraOAuth2Api",
+      "required": true
+    }
+  ]
+}

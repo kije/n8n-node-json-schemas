@@ -1,0 +1,288 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Jira Trigger",
+  "description": "Starts the workflow when Jira events occur",
+  "x-n8n-node-type": "jiraTrigger",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "jiraVersion": {
+      "x-title": "Jira Version",
+      "default": "cloud",
+      "type": "string",
+      "enum": [
+        "cloud",
+        "server",
+        "serverPat"
+      ],
+      "x-enumNames": [
+        "Cloud",
+        "Server (Self Hosted)",
+        "Server (Pat) (Self Hosted)"
+      ]
+    },
+    "authenticateWebhook": {
+      "x-title": "Authenticate Incoming Webhook",
+      "description": "Whether authentication should be activated for the incoming webhooks (makes it more secure)",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.1
+              }
+            }
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "incomingAuthentication": {
+      "x-title": "Authenticate Webhook With",
+      "description": "If authentication should be activated for the webhook (makes it more secure)",
+      "default": "none",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            1
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "queryAuth",
+        "none"
+      ],
+      "x-enumNames": [
+        "Query Auth",
+        "None"
+      ]
+    },
+    "events": {
+      "x-title": "Events",
+      "description": "The events to listen to",
+      "default": [],
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "*",
+          "board_configuration_changed",
+          "board_created",
+          "board_deleted",
+          "board_updated",
+          "comment_created",
+          "comment_deleted",
+          "comment_updated",
+          "jira:issue_created",
+          "jira:issue_deleted",
+          "issuelink_created",
+          "issuelink_deleted",
+          "jira:issue_updated",
+          "option_attachments_changed",
+          "option_issuelinks_changed",
+          "option_subtasks_changed",
+          "option_timetracking_changed",
+          "option_unassigned_issues_changed",
+          "option_voting_changed",
+          "option_watching_changed",
+          "project_created",
+          "project_deleted",
+          "project_updated",
+          "sprint_closed",
+          "sprint_created",
+          "sprint_deleted",
+          "sprint_started",
+          "sprint_updated",
+          "user_created",
+          "user_deleted",
+          "user_updated",
+          "jira:version_created",
+          "jira:version_deleted",
+          "jira:version_moved",
+          "jira:version_released",
+          "jira:version_unreleased",
+          "jira:version_updated",
+          "worklog_created",
+          "worklog_deleted",
+          "worklog_updated"
+        ]
+      },
+      "x-enumNames": [
+        "*",
+        "Board Configuration Changed",
+        "Board Created",
+        "Board Deleted",
+        "Board Updated",
+        "Comment Created",
+        "Comment Deleted",
+        "Comment Updated",
+        "Issue Created",
+        "Issue Deleted",
+        "Issue Link Created",
+        "Issue Link Deleted",
+        "Issue Updated",
+        "Option Attachments Changed",
+        "Option Issue Links Changed",
+        "Option Subtasks Changed",
+        "Option Timetracking Changed",
+        "Option Unassigned Issues Changed",
+        "Option Voting Changed",
+        "Option Watching Changed",
+        "Project Created",
+        "Project Deleted",
+        "Project Updated",
+        "Sprint Closed",
+        "Sprint Created",
+        "Sprint Deleted",
+        "Sprint Started",
+        "Sprint Updated",
+        "User Created",
+        "User Deleted",
+        "User Updated",
+        "Version Created",
+        "Version Deleted",
+        "Version Moved",
+        "Version Released",
+        "Version Unreleased",
+        "Version Updated",
+        "Worklog Created",
+        "Worklog Deleted",
+        "Worklog Updated"
+      ]
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "excludeBody": {
+          "x-title": "Exclude Body",
+          "description": "Whether a request with empty body will be sent to the URL. Leave unchecked if you want to receive JSON.",
+          "default": false,
+          "type": "boolean"
+        },
+        "filter": {
+          "x-title": "Filter",
+          "description": "You can specify a JQL query to send only events triggered by matching issues. The JQL filter only applies to events under the Issue and Comment columns.",
+          "default": "",
+          "type": "string"
+        },
+        "includeFields": {
+          "x-title": "Include Fields",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "attachment.id",
+              "board.id",
+              "comment.id",
+              "issue.id",
+              "mergeVersion.id",
+              "modifiedUser.accountId",
+              "modifiedUser.key",
+              "modifiedUser.name",
+              "project.id",
+              "project.key",
+              "property.key",
+              "sprint.id",
+              "version.id",
+              "worklog.id"
+            ]
+          },
+          "x-enumNames": [
+            "Attachment ID",
+            "Board ID",
+            "Comment ID",
+            "Issue ID",
+            "Merge Version ID",
+            "Modified User Account ID",
+            "Modified User Key",
+            "Modified User Name",
+            "Project ID",
+            "Project Key",
+            "Propery Key",
+            "Sprint ID",
+            "Version ID",
+            "Worklog ID"
+          ]
+        }
+      }
+    }
+  },
+  "x-icon": "file:jira.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "displayName": "Credentials to Connect to Jira",
+      "name": "jiraSoftwareCloudApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "jiraVersion": [
+            "cloud"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Credentials to Connect to Jira",
+      "name": "jiraSoftwareServerApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "jiraVersion": [
+            "server"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Credentials to Connect to Jira",
+      "name": "jiraSoftwareServerPatApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "jiraVersion": [
+            "serverPat"
+          ]
+        }
+      }
+    },
+    {
+      "name": "httpQueryAuth",
+      "displayName": "Credentials to Authenticate Webhook",
+      "displayOptions": {
+        "show": {
+          "authenticateWebhook": [
+            true
+          ]
+        }
+      }
+    },
+    {
+      "name": "httpQueryAuth",
+      "displayName": "Credentials to Authenticate Webhook",
+      "displayOptions": {
+        "show": {
+          "incomingAuthentication": [
+            "queryAuth"
+          ]
+        }
+      }
+    }
+  ],
+  "x-webhooks": "true"
+}

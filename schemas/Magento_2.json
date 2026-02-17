@@ -1,0 +1,715 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Magento 2",
+  "description": "Consume Magento API",
+  "x-n8n-node-type": "magento2",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "customer",
+      "type": "string",
+      "enum": [
+        "customer",
+        "invoice",
+        "order",
+        "product"
+      ],
+      "x-enumNames": [
+        "Customer",
+        "Invoice",
+        "Order",
+        "Product"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "product"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a product",
+        "Delete a product",
+        "Get a product",
+        "Get many products",
+        "Update a product"
+      ]
+    },
+    "email": {
+      "x-title": "Email",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customer"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "firstname": {
+      "x-title": "First Name",
+      "description": "First name of the user to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customer"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "lastname": {
+      "x-title": "Last Name",
+      "description": "Last name of the user to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customer"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "product"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "attribute_set_id": {
+          "x-title": "Attribute Set Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/operation": [
+                "update"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "name": {
+          "x-title": "Name",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/operation": [
+                "update"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "price": {
+          "x-title": "Price",
+          "default": 0,
+          "x-displayOptions": {
+            "show": {
+              "/operation": [
+                "update"
+              ]
+            }
+          },
+          "type": "number"
+        },
+        "status": {
+          "x-title": "Status",
+          "default": 1,
+          "type": "string",
+          "enum": [
+            1,
+            2
+          ],
+          "x-enumNames": [
+            "Enabled",
+            "Disabled"
+          ]
+        },
+        "type_id": {
+          "x-title": "Type Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "visibility": {
+          "x-title": "Visibility",
+          "default": 4,
+          "type": "string",
+          "enum": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "x-enumNames": [
+            "Not Visible",
+            "Catalog",
+            "Search",
+            "Catalog & Search"
+          ]
+        },
+        "weight": {
+          "x-title": "Weight (LBS)",
+          "default": 0,
+          "type": "number"
+        }
+      }
+    },
+    "customerId": {
+      "x-title": "Customer ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customer"
+          ],
+          "operation": [
+            "delete",
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "firstName": {
+      "x-title": "First Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customer"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "lastName": {
+      "x-title": "Last Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customer"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "website_id": {
+      "x-title": "Website Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customer"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "product"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "attribute_set_id": {
+          "x-title": "Attribute Set Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/operation": [
+                "update"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "name": {
+          "x-title": "Name",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/operation": [
+                "update"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "price": {
+          "x-title": "Price",
+          "default": 0,
+          "x-displayOptions": {
+            "show": {
+              "/operation": [
+                "update"
+              ]
+            }
+          },
+          "type": "number"
+        },
+        "status": {
+          "x-title": "Status",
+          "default": 1,
+          "type": "string",
+          "enum": [
+            1,
+            2
+          ],
+          "x-enumNames": [
+            "Enabled",
+            "Disabled"
+          ]
+        },
+        "type_id": {
+          "x-title": "Type Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "visibility": {
+          "x-title": "Visibility",
+          "default": 4,
+          "type": "string",
+          "enum": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "x-enumNames": [
+            "Not Visible",
+            "Catalog",
+            "Search",
+            "Catalog & Search"
+          ]
+        },
+        "weight": {
+          "x-title": "Weight (LBS)",
+          "default": 0,
+          "type": "number"
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "product"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 5,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "product"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 10
+    },
+    "filterType": {
+      "x-title": "Filter",
+      "default": "none",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "product"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "none",
+        "manual",
+        "json"
+      ],
+      "x-enumNames": [
+        "None",
+        "Build Manually",
+        "JSON"
+      ]
+    },
+    "matchType": {
+      "x-title": "Must Match",
+      "default": "anyFilter",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "product"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "manual"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "anyFilter",
+        "allFilters"
+      ],
+      "x-enumNames": [
+        "Any filter",
+        "All Filters"
+      ]
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "product"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "manual"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "conditions": {
+          "x-title": "Conditions",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "field": {
+                "x-title": "Field",
+                "default": "",
+                "type": "string"
+              },
+              "condition_type": {
+                "x-title": "Condition Type",
+                "default": "eq",
+                "type": "string",
+                "enum": [
+                  "eq",
+                  "gt",
+                  "gteq",
+                  "in",
+                  "lt",
+                  "lte",
+                  "like",
+                  "moreq",
+                  "neq",
+                  "nin",
+                  "notnull",
+                  "null"
+                ],
+                "x-enumNames": [
+                  "Equals",
+                  "Greater than",
+                  "Greater than or equal",
+                  "In",
+                  "Less Than",
+                  "Less Than or Equal",
+                  "Like",
+                  "More or Equal",
+                  "Not Equal",
+                  "Not In",
+                  "Not Null",
+                  "Null"
+                ],
+                "x-enumDescriptions": [
+                  "",
+                  "",
+                  "",
+                  "The value can contain a comma-separated list of values",
+                  "",
+                  "",
+                  "The value can contain the SQL wildcard characters when like is specified",
+                  "",
+                  "",
+                  "The value can contain a comma-separated list of values",
+                  "",
+                  ""
+                ]
+              },
+              "value": {
+                "x-title": "Value",
+                "default": "",
+                "x-displayOptions": {
+                  "hide": {
+                    "condition_type": [
+                      "null",
+                      "notnull"
+                    ]
+                  }
+                },
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "filterJson": {
+      "x-title": "Filters (JSON)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "product"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "json"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "product"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "sort": {
+          "x-title": "Sort",
+          "default": [],
+          "type": "object",
+          "properties": {
+            "sort": {
+              "x-title": "Sort",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "direction": {
+                    "x-title": "Direction",
+                    "description": "The sorting direction",
+                    "default": "ASC",
+                    "type": "string",
+                    "enum": [
+                      "ASC",
+                      "DESC"
+                    ],
+                    "x-enumNames": [
+                      "Ascending",
+                      "Descending"
+                    ]
+                  },
+                  "field": {
+                    "x-title": "Field",
+                    "description": "The sorting field",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "orderId": {
+      "x-title": "Order ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "order"
+          ],
+          "operation": [
+            "cancel",
+            "get",
+            "ship"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "sku": {
+      "x-title": "SKU",
+      "description": "Stock-keeping unit of the product",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "product"
+          ],
+          "operation": [
+            "delete",
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "name": {
+      "x-title": "Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "product"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "attributeSetId": {
+      "x-title": "Attribute Set Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "product"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "price": {
+      "x-title": "Price",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "product"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "number"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:magento.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "magento2Api",
+      "required": true
+    }
+  ]
+}

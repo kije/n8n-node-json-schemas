@@ -1,0 +1,1076 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Jira Software",
+  "description": "Consume Jira Software API",
+  "x-n8n-node-type": "jira",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "jiraVersion": {
+      "x-title": "Jira Version",
+      "default": "cloud",
+      "type": "string",
+      "enum": [
+        "cloud",
+        "server",
+        "serverPat"
+      ],
+      "x-enumNames": [
+        "Cloud",
+        "Server (Self Hosted)",
+        "Server Pat (Self Hosted)"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "issue",
+      "type": "string",
+      "enum": [
+        "issue",
+        "issueAttachment",
+        "issueComment",
+        "user"
+      ],
+      "x-enumNames": [
+        "Issue",
+        "Issue Attachment",
+        "Issue Comment",
+        "User"
+      ],
+      "x-enumDescriptions": [
+        "Creates an issue or, where the option to create subtasks is enabled in Jira, a subtask",
+        "Add, remove, and get an attachment from an issue",
+        "Get, create, update, and delete a comment from an issue",
+        "Get, create and delete a user"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get"
+      ],
+      "x-enumDescriptions": [
+        "Create a new user",
+        "Delete a user",
+        "Retrieve a user"
+      ]
+    },
+    "project": {
+      "x-title": "Project",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "issue"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "Project",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "issueType": {
+      "x-title": "Issue Type",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "issue"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "Issue Type",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "summary": {
+      "x-title": "Summary",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "issue"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "expand": {
+          "x-title": "Expand",
+          "description": "Include more information about the user",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "groups",
+              "applicationRoles"
+            ]
+          },
+          "x-enumNames": [
+            "Groups",
+            "Application Roles"
+          ]
+        }
+      }
+    },
+    "issueKey": {
+      "x-title": "Issue Key",
+      "description": "The Issue Comment key",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "issueComment"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "issue"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "assignee": {
+          "x-title": "Assignee",
+          "default": {
+            "mode": "list",
+            "value": ""
+          },
+          "type": "object",
+          "properties": {
+            "__rl": {
+              "type": "boolean",
+              "const": true
+            },
+            "mode": {
+              "type": "string",
+              "enum": [
+                "list",
+                "id"
+              ]
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "mode",
+            "value"
+          ],
+          "x-modes": [
+            {
+              "name": "list",
+              "displayName": "Assignee",
+              "type": "list"
+            },
+            {
+              "name": "id",
+              "displayName": "ID",
+              "type": "string"
+            }
+          ]
+        },
+        "description": {
+          "x-title": "Description",
+          "default": "",
+          "type": "string"
+        },
+        "customFieldsUi": {
+          "x-title": "Custom Fields",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "customFieldsValues": {
+              "x-title": "Custom Field",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "fieldId": {
+                    "x-title": "Field",
+                    "default": {
+                      "mode": "list",
+                      "value": ""
+                    },
+                    "type": "object",
+                    "properties": {
+                      "__rl": {
+                        "type": "boolean",
+                        "const": true
+                      },
+                      "mode": {
+                        "type": "string",
+                        "enum": [
+                          "list",
+                          "id"
+                        ]
+                      },
+                      "value": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "mode",
+                      "value"
+                    ],
+                    "x-modes": [
+                      {
+                        "name": "list",
+                        "displayName": "Field",
+                        "type": "list"
+                      },
+                      {
+                        "name": "id",
+                        "displayName": "ID",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "fieldValue": {
+                    "x-title": "Field Value",
+                    "description": "Value of the field to set",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "issueType": {
+          "x-title": "Issue Type",
+          "description": "Issue Types",
+          "default": "",
+          "type": "string"
+        },
+        "labels": {
+          "x-title": "Label Names or IDs",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "x-displayOptions": {
+            "show": {
+              "/jiraVersion": [
+                "cloud"
+              ]
+            }
+          },
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "serverLabels": {
+          "x-title": "Labels",
+          "default": [],
+          "x-displayOptions": {
+            "show": {
+              "/jiraVersion": [
+                "server"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "parentIssueKey": {
+          "x-title": "Parent Issue Key",
+          "default": "",
+          "type": "string"
+        },
+        "priority": {
+          "x-title": "Priority",
+          "default": {
+            "mode": "list",
+            "value": ""
+          },
+          "type": "object",
+          "properties": {
+            "__rl": {
+              "type": "boolean",
+              "const": true
+            },
+            "mode": {
+              "type": "string",
+              "enum": [
+                "list",
+                "id"
+              ]
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "mode",
+            "value"
+          ],
+          "x-modes": [
+            {
+              "name": "list",
+              "displayName": "Priority",
+              "type": "list"
+            },
+            {
+              "name": "id",
+              "displayName": "ID",
+              "type": "string"
+            }
+          ]
+        },
+        "reporter": {
+          "x-title": "Reporter",
+          "default": {
+            "mode": "list",
+            "value": ""
+          },
+          "type": "object",
+          "properties": {
+            "__rl": {
+              "type": "boolean",
+              "const": true
+            },
+            "mode": {
+              "type": "string",
+              "enum": [
+                "list",
+                "id"
+              ]
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "mode",
+            "value"
+          ],
+          "x-modes": [
+            {
+              "name": "list",
+              "displayName": "Reporter",
+              "type": "list"
+            },
+            {
+              "name": "id",
+              "displayName": "ID",
+              "type": "string"
+            }
+          ]
+        },
+        "summary": {
+          "x-title": "Summary",
+          "default": "",
+          "type": "string"
+        },
+        "statusId": {
+          "x-title": "Status",
+          "default": {
+            "mode": "list",
+            "value": ""
+          },
+          "type": "object",
+          "properties": {
+            "__rl": {
+              "type": "boolean",
+              "const": true
+            },
+            "mode": {
+              "type": "string",
+              "enum": [
+                "list",
+                "id"
+              ]
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "mode",
+            "value"
+          ],
+          "x-modes": [
+            {
+              "name": "list",
+              "displayName": "Status",
+              "type": "list"
+            },
+            {
+              "name": "id",
+              "displayName": "ID",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    "deleteSubtasks": {
+      "x-title": "Delete Subtasks",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "issue"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "simplifyOutput": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "issue"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "issueComment"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "issueComment"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "issueComment"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "expand": {
+          "x-title": "Expand",
+          "description": "Use expand to include additional information about comments in the response. This parameter accepts Rendered Body, which returns the comment body rendered in HTML.",
+          "default": "renderedBody",
+          "type": "string",
+          "enum": [
+            "renderedBody"
+          ],
+          "x-enumNames": [
+            "Rendered Body"
+          ]
+        },
+        "wikiMarkup": {
+          "x-title": "Use Wiki Markup",
+          "description": "Whether to enable parsing of wikiformatting for this comment. Default is false.",
+          "default": false,
+          "x-displayOptions": {
+            "show": {
+              "/jiraVersion": [
+                "cloud"
+              ]
+            }
+          },
+          "type": "boolean"
+        }
+      }
+    },
+    "jsonParameters": {
+      "x-title": "JSON Parameters",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "issueComment"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "notificationRecipientsUi": {
+      "x-title": "Notification Recipients",
+      "description": "The recipients of the email notification for the issue",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "issue"
+          ],
+          "operation": [
+            "notify"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "notificationRecipientsValues": {
+          "x-title": "Recipients",
+          "type": "object",
+          "properties": {
+            "reporter": {
+              "x-title": "Reporter",
+              "description": "Whether the notification should be sent to the issue's reporter",
+              "default": false,
+              "type": "boolean"
+            },
+            "assignee": {
+              "x-title": "Assignee",
+              "description": "Whether the notification should be sent to the issue's assignees",
+              "default": false,
+              "type": "boolean"
+            },
+            "watchers": {
+              "x-title": "Watchers",
+              "description": "Whether the notification should be sent to the issue's assignees",
+              "default": false,
+              "type": "boolean"
+            },
+            "voters": {
+              "x-title": "Voters",
+              "description": "Whether the notification should be sent to the issue's voters",
+              "default": false,
+              "type": "boolean"
+            },
+            "users": {
+              "x-title": "User Names or IDs",
+              "description": "List of users to receive the notification. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+              "default": [],
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "groups": {
+              "x-title": "Group Names or IDs",
+              "description": "List of groups to receive the notification. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+              "default": [],
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "notificationRecipientsJson": {
+      "x-title": "Notification Recipients",
+      "description": "The recipients of the email notification for the issue",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "issue"
+          ],
+          "operation": [
+            "notify"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "notificationRecipientsRestrictionsUi": {
+      "x-title": "Notification Recipients Restrictions",
+      "description": "Restricts the notifications to users with the specified permissions",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "issue"
+          ],
+          "operation": [
+            "notify"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "notificationRecipientsRestrictionsValues": {
+          "x-title": "Recipients Restrictions",
+          "type": "object",
+          "properties": {
+            "users": {
+              "x-title": "User Names or IDs",
+              "description": "List of users to receive the notification. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+              "default": [],
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "groups": {
+              "x-title": "Group Names or IDs",
+              "description": "List of groups to receive the notification. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+              "default": [],
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "notificationRecipientsRestrictionsJson": {
+      "x-title": "Notification Recipients Restrictions",
+      "description": "Restricts the notifications to users with the specified permissions",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "issue"
+          ],
+          "operation": [
+            "notify"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "binaryPropertyName": {
+      "x-title": "Input Binary Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "issueAttachment"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "attachmentId": {
+      "x-title": "Attachment ID",
+      "description": "The ID of the attachment",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "issueAttachment"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "download": {
+      "x-title": "Download",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "issueAttachment"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "binaryProperty": {
+      "x-title": "Put Output File in Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "issueAttachment"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "download": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "comment": {
+      "x-title": "Comment",
+      "description": "Comment's text",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "issueComment"
+          ],
+          "operation": [
+            "update"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "commentJson": {
+      "x-title": "Document Format (JSON)",
+      "description": "The Atlassian Document Format (ADF). Online builder can be found <a href=\"https://developer.atlassian.com/cloud/jira/platform/apis/document/playground/\">here</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "issueComment"
+          ],
+          "operation": [
+            "update"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "commentId": {
+      "x-title": "Comment ID",
+      "description": "The ID of the comment",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "issueComment"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "username": {
+      "x-title": "Username",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "emailAddress": {
+      "x-title": "Email Address",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "displayName": {
+      "x-title": "Display Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "accountId": {
+      "x-title": "Account ID",
+      "description": "Account ID of the user to retrieve",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:jira.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "jiraSoftwareCloudApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "jiraVersion": [
+            "cloud"
+          ]
+        }
+      }
+    },
+    {
+      "name": "jiraSoftwareServerApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "jiraVersion": [
+            "server"
+          ]
+        }
+      }
+    },
+    {
+      "name": "jiraSoftwareServerPatApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "jiraVersion": [
+            "serverPat"
+          ]
+        }
+      }
+    }
+  ]
+}

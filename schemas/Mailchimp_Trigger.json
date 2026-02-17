@@ -1,0 +1,114 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Mailchimp Trigger",
+  "description": "Handle Mailchimp events via webhooks",
+  "x-n8n-node-type": "mailchimpTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "apiKey",
+      "type": "string",
+      "enum": [
+        "apiKey",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "API Key",
+        "OAuth2"
+      ]
+    },
+    "list": {
+      "x-title": "List Name or ID",
+      "description": "The list that is gonna fire the event. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-required": true,
+      "type": "string",
+      "enum": [],
+      "x-enumNames": []
+    },
+    "events": {
+      "x-title": "Events",
+      "description": "The events that can trigger the webhook and whether they are enabled",
+      "default": [],
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "campaign",
+          "cleaned",
+          "upemail",
+          "profile",
+          "subscribe",
+          "unsubscribe"
+        ]
+      },
+      "x-enumNames": [
+        "Campaign Sent",
+        "Cleaned",
+        "Email Address Updated",
+        "Profile Updated",
+        "Subscribe",
+        "Unsubscribe"
+      ]
+    },
+    "sources": {
+      "x-title": "Sources",
+      "description": "The possible sources of any events that can trigger the webhook and whether they are enabled",
+      "default": [],
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "user",
+          "admin",
+          "api"
+        ]
+      },
+      "x-enumNames": [
+        "User",
+        "Admin",
+        "API"
+      ]
+    }
+  },
+  "x-icon": {
+    "light": "file:mailchimp.svg",
+    "dark": "file:mailchimp.dark.svg"
+  },
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "mailchimpApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "apiKey"
+          ]
+        }
+      }
+    },
+    {
+      "name": "mailchimpOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "x-webhooks": "true"
+}

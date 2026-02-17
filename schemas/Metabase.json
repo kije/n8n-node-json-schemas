@@ -1,0 +1,369 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Metabase",
+  "description": "Use the Metabase API",
+  "x-n8n-node-type": "metabase",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "questions",
+      "type": "string",
+      "enum": [
+        "alerts",
+        "databases",
+        "metrics",
+        "questions"
+      ],
+      "x-enumNames": [
+        "Alert",
+        "Database",
+        "Metric",
+        "Question"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "alerts"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "get",
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Get",
+        "Get Many"
+      ],
+      "x-enumDescriptions": [
+        "Get specific alert",
+        "Get many alerts"
+      ]
+    },
+    "questionId": {
+      "x-title": "Question ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "questions"
+          ],
+          "operation": [
+            "get",
+            "resultData"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "format": {
+      "x-title": "Format",
+      "default": "csv",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "questions"
+          ],
+          "operation": [
+            "resultData"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "csv",
+        "json",
+        "xlsx"
+      ],
+      "x-enumNames": [
+        "CSV",
+        "JSON",
+        "XLSX"
+      ]
+    },
+    "metricId": {
+      "x-title": "Metric ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "metrics"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "databaseId": {
+      "x-title": "Database ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "databases"
+          ],
+          "operation": [
+            "getFields"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "engine": {
+      "x-title": "Engine",
+      "default": "postgres",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "databases"
+          ],
+          "operation": [
+            "addNewDatasource"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "h2",
+        "mongo",
+        "mysql",
+        "postgres",
+        "redshift",
+        "sqlite"
+      ],
+      "x-enumNames": [
+        "H2",
+        "MongoDB",
+        "Mysql",
+        "PostgreSQL",
+        "Redshift",
+        "Sqlite"
+      ]
+    },
+    "host": {
+      "x-title": "Host",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "databases"
+          ],
+          "operation": [
+            "addNewDatasource"
+          ],
+          "engine": [
+            "postgres",
+            "redshift",
+            "mysql",
+            "mongo"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "name": {
+      "x-title": "Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "databases"
+          ],
+          "operation": [
+            "addNewDatasource"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "port": {
+      "x-title": "Port",
+      "default": 5432,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "databases"
+          ],
+          "operation": [
+            "addNewDatasource"
+          ],
+          "engine": [
+            "postgres",
+            "redshift",
+            "mysql",
+            "mongo"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "user": {
+      "x-title": "User",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "databases"
+          ],
+          "operation": [
+            "addNewDatasource"
+          ],
+          "engine": [
+            "postgres",
+            "redshift",
+            "mysql",
+            "mongo"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "password": {
+      "x-title": "Password",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "databases"
+          ],
+          "operation": [
+            "addNewDatasource"
+          ],
+          "engine": [
+            "postgres",
+            "redshift",
+            "mysql",
+            "mongo"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "password"
+    },
+    "dbName": {
+      "x-title": "Database Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "databases"
+          ],
+          "operation": [
+            "addNewDatasource"
+          ],
+          "engine": [
+            "postgres",
+            "redshift",
+            "mysql",
+            "mongo"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "filePath": {
+      "x-title": "File Path",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "databases"
+          ],
+          "operation": [
+            "addNewDatasource"
+          ],
+          "engine": [
+            "h2",
+            "sqlite"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "fullSync": {
+      "x-title": "Full Sync",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "databases"
+          ],
+          "operation": [
+            "addNewDatasource"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "simple": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "databases"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "alertId": {
+      "x-title": "Alert ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "alerts"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:metabase.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "metabaseApi",
+      "required": true
+    }
+  ]
+}

@@ -1,0 +1,555 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Microsoft Outlook",
+  "description": "Consume Microsoft Outlook API",
+  "x-n8n-node-type": "microsoftOutlook",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "message",
+      "type": "string",
+      "enum": [
+        "draft",
+        "folder",
+        "folderMessage",
+        "message",
+        "messageAttachment"
+      ],
+      "x-enumNames": [
+        "Draft",
+        "Folder",
+        "Folder Message",
+        "Message",
+        "Message Attachment"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "folderMessage"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Get Many"
+      ],
+      "x-enumDescriptions": [
+        "Get many messages in a folder"
+      ]
+    },
+    "messageId": {
+      "x-title": "Message ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "messageAttachment"
+          ],
+          "operation": [
+            "add",
+            "download",
+            "get",
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "subject": {
+      "x-title": "Subject",
+      "description": "The subject of the message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "create",
+            "send"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "bodyContent": {
+      "x-title": "Body Content",
+      "description": "Message body content",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "create",
+            "send"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "draft",
+            "message"
+          ],
+          "operation": [
+            "get",
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "dataPropertyAttachmentsPrefixName": {
+          "x-title": "Attachments Prefix",
+          "description": "Prefix for name of the binary property to which to write the attachments. An index starting with 0 will be added. So if name is \"attachment_\" the first attachment is saved to \"attachment_0\"",
+          "default": "attachment_",
+          "type": "string"
+        },
+        "fields": {
+          "x-title": "Fields",
+          "description": "Fields the response will contain. Multiple can be added separated by comma.",
+          "default": "",
+          "type": "string"
+        },
+        "filter": {
+          "x-title": "Filter",
+          "description": "Microsoft Graph API OData $filter query. Information about the syntax can be found <a href=\"https://docs.microsoft.com/en-us/graph/query-parameters#filter-parameter\">here</a>.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "replyType": {
+      "x-title": "Reply Type",
+      "default": "reply",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "reply"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "reply",
+        "replyAll"
+      ],
+      "x-enumNames": [
+        "Reply",
+        "Reply All"
+      ]
+    },
+    "comment": {
+      "x-title": "Comment",
+      "description": "A comment to include. Can be an empty string.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "reply"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "send": {
+      "x-title": "Send",
+      "description": "Whether to send the reply message directly. If not set, it will be saved as draft.",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "reply"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "folderMessage"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "folderMessage"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "toRecipients": {
+      "x-title": "Recipients",
+      "description": "Email addresses of recipients. Multiple can be added separated by comma.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "binaryPropertyName": {
+      "x-title": "Put Output File in Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "messageAttachment"
+          ],
+          "operation": [
+            "add",
+            "download"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "folderId": {
+      "x-title": "Folder ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "folderMessage"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "attachmentId": {
+      "x-title": "Attachment ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "messageAttachment"
+          ],
+          "operation": [
+            "download",
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "folderType": {
+      "x-title": "Type",
+      "description": "Folder Type",
+      "default": "folder",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "folder",
+        "searchFolder"
+      ],
+      "x-enumNames": [
+        "Folder",
+        "Search Folder"
+      ]
+    },
+    "displayName": {
+      "x-title": "Display Name",
+      "description": "Name of the folder",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "includeNestedFolders": {
+      "x-title": "Include Nested Folders",
+      "description": "Whether to include child folders in the search",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "create"
+          ],
+          "folderType": [
+            "searchFolder"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "sourceFolderIds": {
+      "x-title": "Source Folder IDs",
+      "description": "The mailbox folders that should be mined",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "create"
+          ],
+          "folderType": [
+            "searchFolder"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "filterQuery": {
+      "x-title": "Filter Query",
+      "description": "The OData query to filter the messages",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "create"
+          ],
+          "folderType": [
+            "searchFolder"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "draft",
+            "message"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "bccRecipients": {
+          "x-title": "BCC Recipients",
+          "description": "Email addresses of BCC recipients",
+          "default": "",
+          "type": "string"
+        },
+        "bodyContent": {
+          "x-title": "Body Content",
+          "description": "Message body content",
+          "default": "",
+          "type": "string"
+        },
+        "bodyContentType": {
+          "x-title": "Body Content Type",
+          "description": "Message body content type",
+          "default": "html",
+          "type": "string",
+          "enum": [
+            "html",
+            "Text"
+          ],
+          "x-enumNames": [
+            "HTML",
+            "Text"
+          ]
+        },
+        "categories": {
+          "x-title": "Category Names or IDs",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ccRecipients": {
+          "x-title": "CC Recipients",
+          "description": "Email addresses of CC recipients",
+          "default": "",
+          "type": "string"
+        },
+        "internetMessageHeaders": {
+          "x-title": "Custom Headers",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "headers": {
+              "x-title": "Header",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "x-title": "Name",
+                    "description": "Name of the header",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "Value to set for the header",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "from": {
+          "x-title": "From",
+          "description": "The owner of the mailbox which the message is sent. Must correspond to the actual mailbox used.",
+          "default": "",
+          "type": "string"
+        },
+        "importance": {
+          "x-title": "Importance",
+          "description": "The importance of the message",
+          "default": "Low",
+          "type": "string",
+          "enum": [
+            "Low",
+            "Normal",
+            "High"
+          ],
+          "x-enumNames": [
+            "Low",
+            "Normal",
+            "High"
+          ]
+        },
+        "isRead": {
+          "x-title": "Is Read",
+          "description": "Whether the message has been read",
+          "default": false,
+          "type": "boolean"
+        },
+        "isReadReceiptRequested": {
+          "x-title": "Read Receipt Requested",
+          "description": "Whether a read receipt is requested for the message",
+          "default": false,
+          "type": "boolean"
+        },
+        "toRecipients": {
+          "x-title": "Recipients",
+          "description": "Email addresses of recipients. Multiple can be added separated by comma.",
+          "default": "",
+          "type": "string"
+        },
+        "replyTo": {
+          "x-title": "Reply To",
+          "description": "Email addresses to use when replying",
+          "default": "",
+          "type": "string"
+        },
+        "subject": {
+          "x-title": "Subject",
+          "description": "The subject of the message",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:outlook.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "microsoftOutlookOAuth2Api",
+      "required": true
+    }
+  ]
+}
