@@ -1,0 +1,190 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Cron",
+  "description": "Triggers the workflow at a specific time",
+  "x-n8n-node-type": "cron",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger",
+    "schedule"
+  ],
+  "type": "object",
+  "properties": {
+    "triggerTimes": {
+      "x-title": "Trigger Times",
+      "description": "Triggers for the workflow",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "item": {
+          "x-title": "Item",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "mode": {
+                "x-title": "Mode",
+                "description": "How often to trigger.",
+                "default": "everyDay",
+                "type": "string",
+                "enum": [
+                  "everyMinute",
+                  "everyHour",
+                  "everyDay",
+                  "everyWeek",
+                  "everyMonth",
+                  "everyX",
+                  "custom"
+                ],
+                "x-enumNames": [
+                  "Every Minute",
+                  "Every Hour",
+                  "Every Day",
+                  "Every Week",
+                  "Every Month",
+                  "Every X",
+                  "Custom"
+                ]
+              },
+              "hour": {
+                "x-title": "Hour",
+                "description": "The hour of the day to trigger (24h format)",
+                "default": 14,
+                "x-displayOptions": {
+                  "hide": {
+                    "mode": [
+                      "custom",
+                      "everyHour",
+                      "everyMinute",
+                      "everyX"
+                    ]
+                  }
+                },
+                "type": "number",
+                "minimum": 0,
+                "maximum": 23
+              },
+              "minute": {
+                "x-title": "Minute",
+                "description": "The minute of the day to trigger",
+                "default": 0,
+                "x-displayOptions": {
+                  "hide": {
+                    "mode": [
+                      "custom",
+                      "everyMinute",
+                      "everyX"
+                    ]
+                  }
+                },
+                "type": "number",
+                "minimum": 0,
+                "maximum": 59
+              },
+              "dayOfMonth": {
+                "x-title": "Day of Month",
+                "description": "The day of the month to trigger",
+                "default": 1,
+                "x-displayOptions": {
+                  "show": {
+                    "mode": [
+                      "everyMonth"
+                    ]
+                  }
+                },
+                "type": "number",
+                "minimum": 1,
+                "maximum": 31
+              },
+              "weekday": {
+                "x-title": "Weekday",
+                "description": "The weekday to trigger",
+                "default": "1",
+                "x-displayOptions": {
+                  "show": {
+                    "mode": [
+                      "everyWeek"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5",
+                  "6",
+                  "0"
+                ],
+                "x-enumNames": [
+                  "Monday",
+                  "Tuesday",
+                  "Wednesday",
+                  "Thursday",
+                  "Friday",
+                  "Saturday",
+                  "Sunday"
+                ]
+              },
+              "cronExpression": {
+                "x-title": "Cron Expression",
+                "description": "Use custom cron expression. Values and ranges as follows:<ul><li>Seconds: 0-59</li><li>Minutes: 0 - 59</li><li>Hours: 0 - 23</li><li>Day of Month: 1 - 31</li><li>Months: 0 - 11 (Jan - Dec)</li><li>Day of Week: 0 - 6 (Sun - Sat)</li></ul>",
+                "default": "* * * * * *",
+                "x-displayOptions": {
+                  "show": {
+                    "mode": [
+                      "custom"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "All how many X minutes/hours it should trigger",
+                "default": 2,
+                "x-displayOptions": {
+                  "show": {
+                    "mode": [
+                      "everyX"
+                    ]
+                  }
+                },
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1000
+              },
+              "unit": {
+                "x-title": "Unit",
+                "description": "If it should trigger all X minutes or hours",
+                "default": "hours",
+                "x-displayOptions": {
+                  "show": {
+                    "mode": [
+                      "everyX"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "minutes",
+                  "hours"
+                ],
+                "x-enumNames": [
+                  "Minutes",
+                  "Hours"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-icon": "fa:clock",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ]
+}

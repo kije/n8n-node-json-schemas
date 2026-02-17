@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Embeddings Google Gemini",
+  "description": "Use Google Gemini Embeddings",
+  "x-n8n-node-type": "embeddingsGoogleGemini",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "modelName": {
+      "x-title": "Model",
+      "description": "The model which will generate the embeddings. <a href=\"https://developers.generativeai.google/api/rest/generativelanguage/models/list\">Learn more</a>.",
+      "default": "models/text-embedding-004",
+      "type": "string"
+    }
+  },
+  "x-icon": "file:google.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "ai_embedding"
+  ],
+  "x-credentials": [
+    {
+      "name": "googlePalmApi",
+      "required": true
+    }
+  ]
+}

@@ -1,0 +1,353 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Elasticsearch",
+  "description": "Consume the Elasticsearch API",
+  "x-n8n-node-type": "elasticsearch",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "document",
+      "type": "string",
+      "enum": [
+        "document",
+        "index"
+      ],
+      "x-enumNames": [
+        "Document",
+        "Index"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "index"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many"
+      ]
+    },
+    "indexId": {
+      "x-title": "Index ID",
+      "description": "ID of the index to retrieve",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "index"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "documentId": {
+      "x-title": "Document ID",
+      "description": "ID of the document to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "bulkOperation": {
+          "x-title": "Bulk Update",
+          "description": "Whether to use the bulk operation to update the document/s",
+          "default": false,
+          "type": "boolean"
+        },
+        "refresh": {
+          "x-title": "Refresh",
+          "description": "If true, Elasticsearch refreshes the affected shards to make this operation visible to search,if wait_for then wait for a refresh to make this operation visible to search,if false do nothing with refreshes",
+          "default": "false",
+          "type": "string",
+          "enum": [
+            "true",
+            "wait_for",
+            "false"
+          ],
+          "x-enumNames": [
+            "True",
+            "Wait For",
+            "False"
+          ],
+          "x-enumDescriptions": [
+            "Refreshes the affected shards to make this operation visible to search",
+            "Wait for a refresh to make this operation visible",
+            "Do nothing with refreshes"
+          ]
+        }
+      }
+    },
+    "simple": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "index"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "index"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "dataToSend": {
+      "x-title": "Data to Send",
+      "description": "Whether to insert the input data this node receives in the new row",
+      "default": "defineBelow",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "defineBelow",
+        "autoMapInputData"
+      ],
+      "x-enumNames": [
+        "Define Below for Each Column",
+        "Auto-Map Input Data to Columns"
+      ],
+      "x-enumDescriptions": [
+        "Set the value for each destination column",
+        "Use when node input properties match destination column names"
+      ]
+    },
+    "inputsToIgnore": {
+      "x-title": "Inputs to Ignore",
+      "description": "List of input properties to avoid sending, separated by commas. Leave empty to send all properties.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "update"
+          ],
+          "dataToSend": [
+            "autoMapInputData"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "fieldsUi": {
+      "x-title": "Fields to Send",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "update"
+          ],
+          "dataToSend": [
+            "defineBelow"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "fieldValues": {
+          "x-title": "Field",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "fieldId": {
+                "x-title": "Field Name",
+                "default": "",
+                "type": "string"
+              },
+              "fieldValue": {
+                "x-title": "Field Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "index"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "allow_no_indices": {
+          "x-title": "Allow No Indices",
+          "description": "If false, return an error if any of the following targets only missing/closed indices: wildcard expression, index alias, or <code>_all</code> value. Defaults to true.",
+          "default": true,
+          "type": "boolean"
+        },
+        "expand_wildcards": {
+          "x-title": "Expand Wildcards",
+          "description": "Type of index that wildcard expressions can match. Defaults to <code>open</code>",
+          "default": "all",
+          "type": "string",
+          "enum": [
+            "all",
+            "closed",
+            "hidden",
+            "none",
+            "open"
+          ],
+          "x-enumNames": [
+            "All",
+            "Closed",
+            "Hidden",
+            "None",
+            "Open"
+          ]
+        },
+        "flat_settings": {
+          "x-title": "Flat Settings",
+          "description": "Whether to return settings in flat format. Defaults to false.",
+          "default": false,
+          "type": "boolean"
+        },
+        "ignore_unavailable": {
+          "x-title": "Ignore Unavailable",
+          "description": "Whether to request that target a missing index return an error. Defaults to false.",
+          "default": false,
+          "type": "boolean"
+        },
+        "include_defaults": {
+          "x-title": "Include Defaults",
+          "description": "Whether to return all default settings in the response. Defaults to false.",
+          "default": false,
+          "type": "boolean"
+        },
+        "local": {
+          "x-title": "Local",
+          "description": "Whether to retrieve information from the local node only. Defaults to false.",
+          "default": false,
+          "type": "boolean"
+        },
+        "master_timeout": {
+          "x-title": "Master Timeout",
+          "description": "Period to wait for a connection to the master node. If no response is received before the timeout expires, the request fails and returns an error. Defaults to <code>1m</code>. See the <a href=\"https://www.elastic.co/guide/en/elasticsearch/reference/current/common-options.html#time-units\">Elasticsearch time units reference</a>",
+          "default": "1m",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:elasticsearch.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "elasticsearchApi",
+      "required": true
+    }
+  ]
+}

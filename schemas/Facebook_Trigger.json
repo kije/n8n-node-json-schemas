@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Facebook Trigger",
+  "description": "Starts the workflow when Facebook events occur",
+  "x-n8n-node-type": "facebookTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "appId": {
+      "x-title": "APP ID",
+      "description": "Facebook APP ID",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "object": {
+      "x-title": "Object",
+      "description": "The object to subscribe to",
+      "default": "user",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "adAccount",
+        "application",
+        "certificateTransparency",
+        "group",
+        "instagram",
+        "link",
+        "page",
+        "permissions",
+        "user",
+        "whatsappBusinessAccount",
+        "workplaceSecurity"
+      ],
+      "x-enumNames": [
+        "Ad Account",
+        "Application",
+        "Certificate Transparency",
+        "Group",
+        "Instagram",
+        "Link",
+        "Page",
+        "Permissions",
+        "User",
+        "Whatsapp Business Account",
+        "Workplace Security"
+      ],
+      "x-enumDescriptions": [
+        "Get updates about Ad Account",
+        "Get updates about the app",
+        "Get updates about Certificate Transparency",
+        "Get updates about activity in groups and events in groups for Workplace",
+        "Get updates about comments on your media",
+        "Get updates about links for rich previews by an external provider",
+        "Page updates",
+        "Updates regarding granting or revoking permissions",
+        "User profile updates",
+        "Get updates about Whatsapp business account",
+        "Get updates about Workplace Security"
+      ]
+    },
+    "fields": {
+      "x-title": "Field Names or IDs",
+      "description": "The set of fields in this object that are subscribed to. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "includeValues": {
+          "x-title": "Include Values",
+          "description": "Whether change notifications should include the new values",
+          "default": true,
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"appId\"] +\"/\"+ $parameter[\"object\"]}}",
+  "x-icon": "file:facebook.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "facebookGraphAppApi",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

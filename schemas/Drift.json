@@ -1,0 +1,203 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Drift",
+  "description": "Consume Drift API",
+  "x-n8n-node-type": "drift",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "accessToken",
+      "type": "string",
+      "enum": [
+        "accessToken",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "Access Token",
+        "OAuth2"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "contact",
+      "type": "string",
+      "enum": [
+        "contact"
+      ],
+      "x-enumNames": [
+        "Contact"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "getCustomAttributes",
+        "delete",
+        "get",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Custom Attributes",
+        "Delete",
+        "Get",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a contact",
+        "Get custom attributes",
+        "Delete a contact",
+        "Get a contact",
+        "Update a contact"
+      ]
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "The email of the contact",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "name": {
+          "x-title": "Name",
+          "description": "The name of the contact",
+          "default": "",
+          "type": "string"
+        },
+        "phone": {
+          "x-title": "Phone",
+          "description": "The phone number associated with the contact",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "contactId": {
+      "x-title": "Contact ID",
+      "description": "Unique identifier for the contact",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "email": {
+          "x-title": "Email",
+          "description": "The email of the contact",
+          "default": "",
+          "type": "string"
+        },
+        "name": {
+          "x-title": "Name",
+          "description": "The name of the contact",
+          "default": "",
+          "type": "string"
+        },
+        "phone": {
+          "x-title": "Phone",
+          "description": "The phone number associated with the contact",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": {
+    "light": "file:drift.svg",
+    "dark": "file:drift.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "driftApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "accessToken"
+          ]
+        }
+      }
+    },
+    {
+      "name": "driftOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

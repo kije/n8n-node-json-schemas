@@ -1,0 +1,188 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Compare Datasets",
+  "description": "Compare two inputs for changes",
+  "x-n8n-node-type": "compareDatasets",
+  "x-n8n-version": [
+    1,
+    2,
+    2.1,
+    2.2,
+    2.3
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "mergeByFields": {
+      "x-title": "Fields to Match",
+      "default": {
+        "values": [
+          {
+            "field1": "",
+            "field2": ""
+          }
+        ]
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "field1": {
+                "x-title": "Input A Field",
+                "default": "",
+                "type": "string"
+              },
+              "field2": {
+                "x-title": "Input B Field",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "resolve": {
+      "x-title": "When There Are Differences",
+      "default": "includeBoth",
+      "x-displayOptions": {
+        "hide": {
+          "@version": [
+            1,
+            2
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "preferInput1",
+        "preferInput2",
+        "mix",
+        "includeBoth"
+      ],
+      "x-enumNames": [
+        "Use Input A Version",
+        "Use Input B Version",
+        "Use a Mix of Versions",
+        "Include Both Versions"
+      ],
+      "x-enumDescriptions": [
+        "",
+        "",
+        "Output uses different inputs for different fields",
+        "Output contains all data (but structure more complex)"
+      ]
+    },
+    "fuzzyCompare": {
+      "x-title": "Fuzzy Compare",
+      "description": "Whether to tolerate small type differences when comparing fields. E.g. the number 3 and the string '3' are treated as the same.",
+      "default": false,
+      "x-displayOptions": {
+        "hide": {
+          "@version": [
+            1
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "preferWhenMix": {
+      "x-title": "Prefer",
+      "default": "input1",
+      "x-displayOptions": {
+        "show": {
+          "resolve": [
+            "mix"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "input1",
+        "input2"
+      ],
+      "x-enumNames": [
+        "Input A Version",
+        "Input B Version"
+      ]
+    },
+    "exceptWhenMix": {
+      "x-title": "For Everything Except",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resolve": [
+            "mix"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "skipFields": {
+          "x-title": "Fields to Skip Comparing",
+          "description": "Fields that shouldn't be included when checking whether two items are the same",
+          "default": "",
+          "type": "string"
+        },
+        "fuzzyCompare": {
+          "x-title": "Fuzzy Compare",
+          "description": "Whether to tolerate small type differences when comparing fields. E.g. the number 3 and the string '3' are treated as the same.",
+          "default": false,
+          "x-displayOptions": {
+            "show": {
+              "@version": [
+                1
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "disableDotNotation": {
+          "x-title": "Disable Dot Notation",
+          "description": "Whether to disallow referencing child fields using `parent.child` in the field name",
+          "default": false,
+          "type": "boolean"
+        },
+        "multipleMatches": {
+          "x-title": "Multiple Matches",
+          "default": "first",
+          "type": "string",
+          "enum": [
+            "first",
+            "all"
+          ],
+          "x-enumNames": [
+            "Include First Match Only",
+            "Include All Matches"
+          ],
+          "x-enumDescriptions": [
+            "Only ever output a single item per match",
+            "Output multiple items if there are multiple matches"
+          ]
+        }
+      }
+    }
+  },
+  "x-icon": "file:compare.svg",
+  "x-inputs": [
+    "main",
+    "main"
+  ],
+  "x-outputs": [
+    "main",
+    "main",
+    "main",
+    "main"
+  ]
+}

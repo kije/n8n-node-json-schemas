@@ -1,0 +1,218 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Date & Time",
+  "description": "Allows you to manipulate date and time values",
+  "x-n8n-node-type": "dateTime",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "action": {
+      "x-title": "Action",
+      "default": "format",
+      "type": "string",
+      "enum": [
+        "calculate",
+        "format"
+      ],
+      "x-enumNames": [
+        "Calculate a Date",
+        "Format a Date"
+      ],
+      "x-enumDescriptions": [
+        "Add or subtract time from a date",
+        "Convert a date to a different format"
+      ]
+    },
+    "value": {
+      "x-title": "Date Value",
+      "description": "The date string or timestamp from which you want to add/subtract time",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "action": [
+            "calculate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "dataPropertyName": {
+      "x-title": "Property Name",
+      "description": "Name of the output property to which to write the converted date",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "action": [
+            "calculate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "custom": {
+      "x-title": "Custom Format",
+      "description": "Whether a predefined format should be selected or custom format entered",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "action": [
+            "format"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "toFormat": {
+      "x-title": "To Format",
+      "description": "The format to convert the date to",
+      "default": "MM/DD/YYYY",
+      "x-displayOptions": {
+        "show": {
+          "action": [
+            "format"
+          ],
+          "custom": [
+            false
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "MM/DD/YYYY",
+        "YYYY/MM/DD",
+        "MMMM DD YYYY",
+        "MM-DD-YYYY",
+        "YYYY-MM-DD",
+        "X",
+        "x"
+      ],
+      "x-enumNames": [
+        "MM/DD/YYYY",
+        "YYYY/MM/DD",
+        "MMMM DD YYYY",
+        "MM-DD-YYYY",
+        "YYYY-MM-DD",
+        "Unix Timestamp",
+        "Unix Ms Timestamp"
+      ],
+      "x-enumDescriptions": [
+        "Example: 09/04/1986",
+        "Example: 1986/04/09",
+        "Example: April 09 1986",
+        "Example: 09-04-1986",
+        "Example: 1986-04-09",
+        "Example: 513388800.879",
+        "Example: 513388800"
+      ]
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "action": [
+            "calculate"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "fromFormat": {
+          "x-title": "From Format",
+          "description": "Format for parsing the value as a date. If unrecognized, specify the <a href=\"https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.datetime/#faqs\">format</a> for the value.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "add",
+      "x-displayOptions": {
+        "show": {
+          "action": [
+            "calculate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "add",
+        "subtract"
+      ],
+      "x-enumNames": [
+        "Add",
+        "Subtract"
+      ],
+      "x-enumDescriptions": [
+        "Add time to Date Value",
+        "Subtract time from Date Value"
+      ]
+    },
+    "duration": {
+      "x-title": "Duration",
+      "description": "E.g. enter “10” then select “Days” if you want to add 10 days to Date Value.",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "action": [
+            "calculate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number",
+      "minimum": 0
+    },
+    "timeUnit": {
+      "x-title": "Time Unit",
+      "description": "Time unit for Duration parameter above",
+      "default": "days",
+      "x-displayOptions": {
+        "show": {
+          "action": [
+            "calculate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "quarters",
+        "years",
+        "months",
+        "weeks",
+        "days",
+        "hours",
+        "minutes",
+        "seconds",
+        "milliseconds"
+      ],
+      "x-enumNames": [
+        "Quarters",
+        "Years",
+        "Months",
+        "Weeks",
+        "Days",
+        "Hours",
+        "Minutes",
+        "Seconds",
+        "Milliseconds"
+      ]
+    }
+  },
+  "x-subtitle": "={{$parameter[\"action\"]}}",
+  "x-icon": "fa:clock",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Embeddings Ollama",
+  "description": "Use Ollama Embeddings",
+  "x-n8n-node-type": "embeddingsOllama",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "model": {
+      "x-title": "Model",
+      "description": "The model which will generate the completion. To download models, visit <a href=\"https://ollama.ai/library\">Ollama Models Library</a>.",
+      "default": "llama3.2",
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-icon": "file:ollama.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "ai_embedding"
+  ],
+  "x-credentials": [
+    {
+      "name": "ollamaApi",
+      "required": true
+    }
+  ]
+}

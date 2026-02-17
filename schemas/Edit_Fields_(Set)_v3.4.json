@@ -1,0 +1,421 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Edit Fields (Set)",
+  "description": "Modify, add, or remove item fields",
+  "x-n8n-node-type": "set",
+  "x-n8n-version": 3.4,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "mode": {
+      "x-title": "Mode",
+      "default": "manual",
+      "type": "string",
+      "enum": [
+        "manual",
+        "raw"
+      ],
+      "x-enumNames": [
+        "Manual Mapping",
+        "JSON"
+      ],
+      "x-enumDescriptions": [
+        "Edit item fields one by one",
+        "Customize item output with JSON"
+      ]
+    },
+    "duplicateItem": {
+      "x-title": "Duplicate Item",
+      "description": "Whether this item should be duplicated a set number of times",
+      "default": false,
+      "type": "boolean"
+    },
+    "duplicateCount": {
+      "x-title": "Duplicate Item Count",
+      "description": "How many times the item should be duplicated, mainly used for testing and debugging",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "duplicateItem": [
+            true
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 0
+    },
+    "jsonOutput": {
+      "x-title": "JSON",
+      "default": "{\n  \"my_field_1\": \"value\",\n  \"my_field_2\": 1\n}\n",
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "raw"
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "fields": {
+      "x-title": "Fields to Set",
+      "description": "Edit existing fields or add new ones to modify the output data",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            3,
+            3.1,
+            3.2
+          ],
+          "mode": [
+            "manual"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Name",
+                "description": "Name of the field to set the value of. Supports dot-notation. Example: data.person[0].name.",
+                "default": "",
+                "type": "string"
+              },
+              "type": {
+                "x-title": "Type",
+                "description": "The field value type",
+                "default": "stringValue",
+                "type": "string",
+                "enum": [
+                  "stringValue",
+                  "numberValue",
+                  "booleanValue",
+                  "arrayValue",
+                  "objectValue"
+                ],
+                "x-enumNames": [
+                  "String",
+                  "Number",
+                  "Boolean",
+                  "Array",
+                  "Object"
+                ]
+              },
+              "stringValue": {
+                "x-title": "Value",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "stringValue"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "numberValue": {
+                "x-title": "Value",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "numberValue"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "booleanValue": {
+                "x-title": "Value",
+                "default": "true",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "booleanValue"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "true",
+                  "false"
+                ],
+                "x-enumNames": [
+                  "True",
+                  "False"
+                ]
+              },
+              "arrayValue": {
+                "x-title": "Value",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "arrayValue"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "objectValue": {
+                "x-title": "Value",
+                "default": "={}",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "objectValue"
+                    ]
+                  }
+                },
+                "oneOf": [
+                  {
+                    "type": "string",
+                    "description": "JSON string"
+                  },
+                  {
+                    "type": "object"
+                  },
+                  {
+                    "type": "array"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "assignments": {
+      "x-title": "Fields to Set",
+      "default": {},
+      "x-displayOptions": {
+        "hide": {
+          "@version": [
+            3,
+            3.1,
+            3.2
+          ]
+        },
+        "show": {
+          "mode": [
+            "manual"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "assignments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "value": {},
+              "type": {
+                "type": "string",
+                "enum": [
+                  "string",
+                  "number",
+                  "boolean",
+                  "object",
+                  "array"
+                ]
+              }
+            },
+            "required": [
+              "name"
+            ]
+          }
+        }
+      }
+    },
+    "include": {
+      "x-title": "Input Fields to Include",
+      "description": "How to select the fields you want to include in your output items",
+      "default": "all",
+      "x-displayOptions": {
+        "hide": {
+          "@version": [
+            3,
+            3.1,
+            3.2
+          ],
+          "/includeOtherFields": [
+            false
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "all",
+        "selected",
+        "except"
+      ],
+      "x-enumNames": [
+        "All",
+        "Selected",
+        "All Except"
+      ],
+      "x-enumDescriptions": [
+        "Also include all unchanged fields from the input",
+        "Also include the fields listed in the parameter “Fields to Include”",
+        "Exclude the fields listed in the parameter “Fields to Exclude”"
+      ]
+    },
+    "includeOtherFields": {
+      "x-title": "Include Other Input Fields",
+      "description": "Whether to pass to the output all the input fields (along with the fields set in 'Fields to Set')",
+      "default": false,
+      "x-displayOptions": {
+        "hide": {
+          "@version": [
+            3,
+            3.1,
+            3.2
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "includeFields": {
+      "x-title": "Fields to Include",
+      "description": "Comma-separated list of the field names you want to include in the output. You can drag the selected fields from the input panel.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "include": [
+            "selected"
+          ],
+          "/includeOtherFields": [
+            true
+          ]
+        },
+        "hide": {
+          "@version": [
+            3,
+            3.1,
+            3.2
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "excludeFields": {
+      "x-title": "Fields to Exclude",
+      "description": "Comma-separated list of the field names you want to exclude from the output. You can drag the selected fields from the input panel.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "include": [
+            "except"
+          ],
+          "/includeOtherFields": [
+            true
+          ]
+        },
+        "hide": {
+          "@version": [
+            3,
+            3.1,
+            3.2
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "includeBinary": {
+          "x-title": "Include Binary File",
+          "description": "Whether binary data should be included if present in the input item",
+          "default": true,
+          "x-displayOptions": {
+            "hide": {
+              "@version": [
+                {
+                  "_cnd": {
+                    "gte": 3.4
+                  }
+                }
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "stripBinary": {
+          "x-title": "Strip Binary Data",
+          "description": "Whether binary data should be stripped from the input item. Only applies when \"Include Other Input Fields\" is enabled.",
+          "default": true,
+          "x-displayOptions": {
+            "show": {
+              "@version": [
+                {
+                  "_cnd": {
+                    "gte": 3.4
+                  }
+                }
+              ],
+              "/includeOtherFields": [
+                true
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "ignoreConversionErrors": {
+          "x-title": "Ignore Type Conversion Errors",
+          "description": "Whether to ignore field type errors and apply a less strict type conversion",
+          "default": false,
+          "x-displayOptions": {
+            "show": {
+              "/mode": [
+                "manual"
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "dotNotation": {
+          "x-title": "Support Dot Notation",
+          "description": "By default, dot-notation is used in property names. This means that \"a.b\" will set the property \"b\" underneath \"a\" so { \"a\": { \"b\": value} }. If that is not intended this can be deactivated, it will then set { \"a.b\": value } instead.",
+          "default": true,
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"mode\"]}}",
+  "x-icon": "fa:pen",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

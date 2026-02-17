@@ -1,0 +1,357 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Cortex",
+  "description": "Apply the Cortex analyzer/responder on the given entity",
+  "x-n8n-node-type": "cortex",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "description": "Choose a resource",
+      "default": "analyzer",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "analyzer",
+        "job",
+        "responder"
+      ],
+      "x-enumNames": [
+        "Analyzer",
+        "Job",
+        "Responder"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "description": "Choose an operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "job"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "get",
+        "report"
+      ],
+      "x-enumNames": [
+        "Get",
+        "Report"
+      ],
+      "x-enumDescriptions": [
+        "Get job details",
+        "Get job report"
+      ]
+    },
+    "analyzer": {
+      "x-title": "Analyzer Type Name or ID",
+      "description": "Choose the analyzer. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "analyzer"
+          ],
+          "operation": [
+            "execute"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "observableType": {
+      "x-title": "Observable Type Name or ID",
+      "description": "Choose the observable type. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "analyzer"
+          ],
+          "operation": [
+            "execute"
+          ]
+        },
+        "hide": {
+          "analyzer": [
+            ""
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "observableValue": {
+      "x-title": "Observable Value",
+      "description": "Enter the observable value",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "analyzer"
+          ],
+          "operation": [
+            "execute"
+          ]
+        },
+        "hide": {
+          "observableType": [
+            "file"
+          ],
+          "analyzer": [
+            ""
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "binaryPropertyName": {
+      "x-title": "Put Output File in Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "observableType": [
+            "file"
+          ],
+          "resource": [
+            "analyzer"
+          ],
+          "operation": [
+            "execute"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "tlp": {
+      "x-title": "TLP",
+      "description": "The TLP of the analyzed observable",
+      "default": 2,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "analyzer"
+          ],
+          "operation": [
+            "execute"
+          ]
+        },
+        "hide": {
+          "observableType": [
+            ""
+          ],
+          "analyzer": [
+            ""
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "x-enumNames": [
+        "White",
+        "Green",
+        "Amber",
+        "Red"
+      ]
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "analyzer"
+          ],
+          "operation": [
+            "execute"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "force": {
+          "x-title": "Force",
+          "description": "Whether to force bypassing the cache",
+          "default": false,
+          "type": "boolean"
+        },
+        "timeout": {
+          "x-title": "Timeout (Seconds)",
+          "description": "Timeout to wait for the report in case it is not available at the time the query was made",
+          "default": 3,
+          "type": "number"
+        }
+      }
+    },
+    "responder": {
+      "x-title": "Responder Type Name or ID",
+      "description": "Choose the responder. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "responder"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "entityType": {
+      "x-title": "Entity Type Name or ID",
+      "description": "Choose the Data type. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "responder"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "jsonObject": {
+      "x-title": "JSON Parameters",
+      "description": "Choose between providing JSON object or seperated attributes",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "responder"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "objectData": {
+      "x-title": "Entity Object (JSON)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "responder"
+          ],
+          "jsonObject": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "parameters": {
+      "x-title": "Parameters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "responder"
+          ],
+          "jsonObject": [
+            false
+          ],
+          "entityType": [
+            "case_task_log"
+          ]
+        },
+        "hide": {
+          "responder": [
+            ""
+          ],
+          "entityType": [
+            "",
+            "case",
+            "alert",
+            "case_artifact",
+            "case_task"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Log Attributes",
+          "type": "object",
+          "properties": {
+            "message": {
+              "x-title": "Message",
+              "default": "",
+              "type": "string"
+            },
+            "startDate": {
+              "x-title": "Start Date",
+              "description": "Date and time of the begin of the case default=now",
+              "default": "",
+              "type": "string",
+              "format": "date-time"
+            },
+            "status": {
+              "x-title": "Status",
+              "default": "",
+              "x-required": true,
+              "type": "string",
+              "enum": [
+                "Ok",
+                "Deleted"
+              ],
+              "x-enumNames": [
+                "Ok",
+                "Deleted"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "jobId": {
+      "x-title": "Job ID",
+      "description": "ID of the job",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "job"
+          ],
+          "operation": [
+            "get",
+            "report"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"]+ \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:cortex.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "cortexApi",
+      "required": true
+    }
+  ]
+}

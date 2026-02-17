@@ -1,0 +1,976 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ClickUp",
+  "description": "Consume ClickUp API (Beta)",
+  "x-n8n-node-type": "clickUp",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "accessToken",
+      "type": "string",
+      "enum": [
+        "accessToken",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "Access Token",
+        "OAuth2"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "task",
+      "type": "string",
+      "enum": [
+        "checklist",
+        "checklistItem",
+        "comment",
+        "folder",
+        "goal",
+        "goalKeyResult",
+        "list",
+        "spaceTag",
+        "task",
+        "taskDependency",
+        "taskList",
+        "taskTag",
+        "timeEntry",
+        "timeEntryTag"
+      ],
+      "x-enumNames": [
+        "Checklist",
+        "Checklist Item",
+        "Comment",
+        "Folder",
+        "Goal",
+        "Goal Key Result",
+        "List",
+        "Space Tag",
+        "Task",
+        "Task Dependency",
+        "Task List",
+        "Task Tag",
+        "Time Entry",
+        "Time Entry Tag"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "customFields",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "customFields",
+        "delete",
+        "get",
+        "getAll",
+        "member",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Custom Fields",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Member",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a list",
+        "Retrieve list's custom fields",
+        "Delete a list",
+        "Get a list",
+        "Get many lists",
+        "Get list members",
+        "Update a list"
+      ]
+    },
+    "task": {
+      "x-title": "Task ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "taskDependency"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "name": {
+      "x-title": "Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "checklist": {
+      "x-title": "Checklist ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "checklistItem"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "assignee": {
+          "x-title": "Assignee Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "content": {
+          "x-title": "Content",
+          "default": "",
+          "type": "string"
+        },
+        "dueDate": {
+          "x-title": "Due Date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "dueDateTime": {
+          "x-title": "Due Date Time",
+          "default": false,
+          "type": "boolean"
+        },
+        "name": {
+          "x-title": "Name",
+          "default": "",
+          "type": "string"
+        },
+        "priority": {
+          "x-title": "Priority",
+          "description": "Integer mapping as 1 : Urgent, 2 : High, 3 : Normal, 4 : Low",
+          "default": 3,
+          "type": "number",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "unsetStatus": {
+          "x-title": "Unset Status",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "assignee": {
+          "x-title": "Assignee",
+          "default": "",
+          "type": "string"
+        },
+        "content": {
+          "x-title": "Content",
+          "default": "",
+          "type": "string"
+        },
+        "dueDate": {
+          "x-title": "Due Date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "dueDateTime": {
+          "x-title": "Due Date Time",
+          "default": false,
+          "type": "boolean"
+        },
+        "priority": {
+          "x-title": "Priority",
+          "description": "Integer mapping as 1 : Urgent, 2 : High, 3 : Normal, 4 : Low",
+          "default": 3,
+          "type": "number",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "status": {
+          "x-title": "Status Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "checklistItem": {
+      "x-title": "Checklist Item ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "checklistItem"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "commentOn": {
+      "x-title": "Comment On",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "comment"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "list",
+        "task",
+        "view"
+      ],
+      "x-enumNames": [
+        "List",
+        "Task",
+        "View"
+      ]
+    },
+    "id": {
+      "x-title": "List ID",
+      "description": "Task ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "member"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "commentText": {
+      "x-title": "Comment Text",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "comment"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "comment": {
+      "x-title": "Comment ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "comment"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "commentsOn": {
+      "x-title": "Comments On",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "comment"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "list",
+        "task",
+        "view"
+      ],
+      "x-enumNames": [
+        "List",
+        "Task",
+        "View"
+      ]
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "team": {
+      "x-title": "Team Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "space": {
+      "x-title": "Space Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "folder": {
+      "x-title": "Folder Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "update"
+          ],
+          "folderless": [
+            false
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "archived": {
+          "x-title": "Archived",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "goal": {
+      "x-title": "Goal ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "goalKeyResult"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "type": {
+      "x-title": "Type",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "goalKeyResult"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "automatic",
+        "boolean",
+        "currency",
+        "number",
+        "percentage"
+      ],
+      "x-enumNames": [
+        "Automatic",
+        "Boolean",
+        "Currency",
+        "Number",
+        "Percentage"
+      ]
+    },
+    "keyResult": {
+      "x-title": "Key Result ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "goalKeyResult"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "taskId": {
+      "x-title": "Task ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "taskList"
+          ],
+          "operation": [
+            "remove",
+            "add"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "tagName": {
+      "x-title": "Tag Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "taskTag"
+          ],
+          "operation": [
+            "remove",
+            "add"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "listId": {
+      "x-title": "List ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "taskList"
+          ],
+          "operation": [
+            "remove",
+            "add"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "newName": {
+      "x-title": "New Name",
+      "description": "New name to set for the tag",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "spaceTag"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "foregroundColor": {
+      "x-title": "Foreground Color",
+      "default": "#000000",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "spaceTag"
+          ],
+          "operation": [
+            "create",
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "pattern": "^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$",
+      "x-format": "color"
+    },
+    "backgroundColor": {
+      "x-title": "Background Color",
+      "default": "#000000",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "spaceTag"
+          ],
+          "operation": [
+            "create",
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "pattern": "^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$",
+      "x-format": "color"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "member"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "folderless": {
+      "x-title": "Folderless List",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "list": {
+      "x-title": "List ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "includeSubtasks": {
+      "x-title": "Include Subtasks",
+      "description": "Whether to also fetch and include subtasks for this task",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "includeMarkdownDescription": {
+      "x-title": "Include Markdown Description",
+      "description": "Whether to include the markdown_description field in the response. This is important for preserving links in the description.",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "field": {
+      "x-title": "Field ID",
+      "description": "The ID of the field to add custom field to",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "setCustomField"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "jsonParse": {
+      "x-title": "Value Is JSON",
+      "description": "The value is JSON and will be parsed as such. Is needed if for example needed for labels which expects the value to be an array.",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "setCustomField"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "value": {
+      "x-title": "Value",
+      "description": "The value to set on custom field",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "setCustomField"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "dependsOnTask": {
+      "x-title": "Depends On Task ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "taskDependency"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "running": {
+      "x-title": "Running",
+      "description": "Whether to return just the current running time entry",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "timeEntry"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "timeEntry": {
+      "x-title": "Time Entry ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "timeEntry"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "start": {
+      "x-title": "Start",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "timeEntry"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "duration": {
+      "x-title": "Duration (Minutes)",
+      "description": "Duration in minutes",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "timeEntry"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "archived": {
+      "x-title": "Archived",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "timeEntry"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "timeEntryIds": {
+      "x-title": "Time Entry IDs",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "timeEntryTag"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "tagsUi": {
+      "x-title": "Tags",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "timeEntryTag"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "tagsValues": {
+          "x-title": "Tag",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Name",
+                "default": "",
+                "type": "string"
+              },
+              "tag_bg": {
+                "x-title": "Background Color",
+                "default": "#ff0000",
+                "type": "string",
+                "pattern": "^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$",
+                "x-format": "color"
+              },
+              "tag_fg": {
+                "x-title": "Foreground Color",
+                "default": "#ff0000",
+                "type": "string",
+                "pattern": "^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$",
+                "x-format": "color"
+              }
+            }
+          }
+        }
+      }
+    },
+    "tagNames": {
+      "x-title": "Tag Names or IDs",
+      "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "timeEntryTag"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \":\" + $parameter[\"resource\"]}}",
+  "x-icon": "file:clickup.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "clickUpApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "accessToken"
+          ]
+        }
+      }
+    },
+    {
+      "name": "clickUpOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

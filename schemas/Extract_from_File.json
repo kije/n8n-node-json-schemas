@@ -1,0 +1,157 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Extract from File",
+  "description": "Convert binary data to JSON",
+  "x-n8n-node-type": "extractFromFile",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "operation": {
+      "x-title": "Operation",
+      "default": "csv",
+      "type": "string",
+      "enum": [
+        "csv",
+        "html",
+        "fromIcs",
+        "fromJson",
+        "ods",
+        "pdf",
+        "rtf",
+        "text",
+        "xml",
+        "xls",
+        "xlsx",
+        "binaryToPropery"
+      ],
+      "x-enumNames": [
+        "Extract From CSV",
+        "Extract From HTML",
+        "Extract From ICS",
+        "Extract From JSON",
+        "Extract From ODS",
+        "Extract From PDF",
+        "Extract From RTF",
+        "Extract From Text File",
+        "Extract From XML",
+        "Extract From XLS",
+        "Extract From XLSX",
+        "Move File to Base64 String"
+      ],
+      "x-enumDescriptions": [
+        "Transform a CSV file into output items",
+        "Transform a table in an HTML file into output items",
+        "Transform a ICS file into output items",
+        "Transform a JSON file into output items",
+        "Transform an ODS file into output items",
+        "Extracts the content and metadata from a PDF file",
+        "Transform a table in an RTF file into output items",
+        "Extracts the content of a text file",
+        "Extracts the content of an XML file",
+        "Transform an Excel file into output items",
+        "Transform an Excel file into output items",
+        "Convert a file into a base64-encoded string"
+      ]
+    },
+    "binaryPropertyName": {
+      "x-title": "Input Binary Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "pdf"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "pdf"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "joinPages": {
+          "x-title": "Join Pages",
+          "description": "Whether to join the text from all pages or return an array of text from each page",
+          "default": true,
+          "type": "boolean"
+        },
+        "keepSource": {
+          "x-title": "Keep Source",
+          "default": "json",
+          "type": "string",
+          "enum": [
+            "json",
+            "binary",
+            "both"
+          ],
+          "x-enumNames": [
+            "JSON",
+            "Binary",
+            "Both"
+          ],
+          "x-enumDescriptions": [
+            "Include JSON data of the input item",
+            "Include binary data of the input item",
+            "Include both JSON and binary data of the input item"
+          ]
+        },
+        "maxPages": {
+          "x-title": "Max Pages",
+          "description": "Maximum number of pages to include",
+          "default": 0,
+          "type": "number"
+        },
+        "password": {
+          "x-title": "Password",
+          "description": "Prowide password, if the PDF is encrypted",
+          "default": "",
+          "type": "string",
+          "format": "password"
+        }
+      }
+    },
+    "destinationKey": {
+      "x-title": "Destination Output Field",
+      "description": "The name of the output field that will contain the extracted data",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "binaryToPropery",
+            "fromJson",
+            "text",
+            "fromIcs",
+            "xml"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-icon": {
+    "light": "file:extractFromFile.svg",
+    "dark": "file:extractFromFile.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

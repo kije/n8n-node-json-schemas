@@ -1,0 +1,210 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Cloudflare",
+  "description": "Consume Cloudflare API",
+  "x-n8n-node-type": "cloudflare",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "zoneCertificate",
+      "type": "string",
+      "enum": [
+        "zoneCertificate"
+      ],
+      "x-enumNames": [
+        "Zone Certificate"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "upload",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "zoneCertificate"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "delete",
+        "get",
+        "getMany",
+        "upload"
+      ],
+      "x-enumNames": [
+        "Delete",
+        "Get",
+        "Get Many",
+        "Upload"
+      ],
+      "x-enumDescriptions": [
+        "Delete a certificate",
+        "Get a certificate",
+        "Get many certificates",
+        "Upload a certificate"
+      ]
+    },
+    "zoneId": {
+      "x-title": "Zone Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "zoneCertificate"
+          ],
+          "operation": [
+            "upload",
+            "getMany",
+            "get",
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "certificate": {
+      "x-title": "Certificate Content",
+      "description": "The zone's leaf certificate",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "zoneCertificate"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "privateKey": {
+      "x-title": "Private Key",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "zoneCertificate"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "zoneCertificate"
+          ],
+          "operation": [
+            "getMany"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 25,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "zoneCertificate"
+          ],
+          "operation": [
+            "getMany"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 50
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "zoneCertificate"
+          ],
+          "operation": [
+            "getMany"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "status": {
+          "x-title": "Status",
+          "description": "Status of the zone's custom SSL",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "active",
+            "expired",
+            "deleted",
+            "pending"
+          ],
+          "x-enumNames": [
+            "Active",
+            "Expired",
+            "Deleted",
+            "Pending"
+          ]
+        }
+      }
+    },
+    "certificateId": {
+      "x-title": "Certificate ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "zoneCertificate"
+          ],
+          "operation": [
+            "get",
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:cloudflare.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "cloudflareApi",
+      "required": true
+    }
+  ]
+}

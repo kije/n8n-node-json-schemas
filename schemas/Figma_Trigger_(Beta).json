@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Figma Trigger (Beta)",
+  "description": "Starts the workflow when Figma events occur",
+  "x-n8n-node-type": "figmaTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "teamId": {
+      "x-title": "Team ID",
+      "description": "Trigger will monitor this Figma Team for changes. Team ID can be found in the URL of a Figma Team page when viewed in a web browser: figma.com/files/team/{TEAM-ID}/.",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "triggerOn": {
+      "x-title": "Trigger On",
+      "default": "",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "fileComment",
+        "fileDelete",
+        "fileUpdate",
+        "fileVersionUpdate",
+        "libraryPublish"
+      ],
+      "x-enumNames": [
+        "File Commented",
+        "File Deleted",
+        "File Updated",
+        "File Version Updated",
+        "Library Publish"
+      ],
+      "x-enumDescriptions": [
+        "Triggers when someone comments on a file",
+        "Triggers whenever a file has been deleted. Does not trigger on all files within a folder, if the folder is deleted.",
+        "Triggers whenever a file saves or is deleted. This occurs whenever a file is closed or within 30 seconds after changes have been made.",
+        "Triggers whenever a named version is created in the version history of a file",
+        "Triggers whenever a library file is published"
+      ]
+    }
+  },
+  "x-subtitle": "={{$parameter[\"triggerOn\"]}}",
+  "x-icon": "file:figma.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "figmaApi",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

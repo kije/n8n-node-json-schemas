@@ -1,0 +1,673 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Currents",
+  "description": "Interact with the Currents API for test orchestration and analytics",
+  "x-n8n-node-type": "currents",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "run",
+      "type": "string",
+      "enum": [
+        "action",
+        "instance",
+        "project",
+        "run",
+        "signature",
+        "specFile",
+        "test",
+        "testResult"
+      ],
+      "x-enumNames": [
+        "Action",
+        "Instance",
+        "Project",
+        "Run",
+        "Signature",
+        "Spec File",
+        "Test",
+        "Test Result"
+      ],
+      "x-enumDescriptions": [
+        "Test action rules (skip, quarantine, tag)",
+        "Spec file execution instance",
+        "Test project",
+        "Test run",
+        "Generate unique test signatures",
+        "Spec file performance metrics",
+        "Individual test performance metrics",
+        "Historical test execution results"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "testResult"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Get Many"
+      ],
+      "x-enumDescriptions": [
+        "Get historical test execution results for a specific test signature"
+      ]
+    },
+    "actionId": {
+      "x-title": "Action ID",
+      "description": "The ID of the action",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "action"
+          ],
+          "operation": [
+            "get",
+            "delete",
+            "enable",
+            "disable",
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "projectId": {
+      "x-title": "Project",
+      "description": "The Currents project",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "test"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        }
+      ]
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "testResult"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "branches": {
+          "x-title": "Branches",
+          "description": "Filter by branches (comma-separated for multiple)",
+          "default": "",
+          "type": "string"
+        },
+        "authors": {
+          "x-title": "Git Authors",
+          "description": "Filter by git authors (comma-separated for multiple)",
+          "default": "",
+          "type": "string"
+        },
+        "groups": {
+          "x-title": "Groups",
+          "description": "Filter by groups (comma-separated for multiple)",
+          "default": "",
+          "type": "string"
+        },
+        "status": {
+          "x-title": "Status",
+          "description": "Filter by test status",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "failed",
+              "passed",
+              "pending",
+              "skipped"
+            ]
+          },
+          "x-enumNames": [
+            "Failed",
+            "Passed",
+            "Pending",
+            "Skipped"
+          ]
+        },
+        "tags": {
+          "x-title": "Tags",
+          "description": "Filter by run tags (multiple values supported)",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "The name of the action (1-255 characters)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "action"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "actionType": {
+      "x-title": "Action Type",
+      "default": "quarantine",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "action"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "quarantine",
+        "skip",
+        "tag"
+      ],
+      "x-enumNames": [
+        "Quarantine",
+        "Skip",
+        "Tag"
+      ],
+      "x-enumDescriptions": [
+        "Quarantine matching tests",
+        "Skip matching tests",
+        "Add tags to matching tests"
+      ]
+    },
+    "actionTags": {
+      "x-title": "Tags",
+      "description": "Comma-separated list of tags to apply",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "action"
+          ],
+          "operation": [
+            "create"
+          ],
+          "actionType": [
+            "tag"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "matcherType": {
+      "x-title": "Matcher Type",
+      "description": "How to match tests for this action",
+      "default": "titleContains",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "action"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "specContains",
+        "specEquals",
+        "signature",
+        "titleContains",
+        "titleEquals"
+      ],
+      "x-enumNames": [
+        "Spec File Contains",
+        "Spec File Equals",
+        "Test Signature",
+        "Test Title Contains",
+        "Test Title Equals"
+      ]
+    },
+    "matcherValue": {
+      "x-title": "Matcher Value",
+      "description": "The value to match against (test title, spec file path, or signature)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "action"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "createOptions": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "action"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "description": {
+          "x-title": "Description",
+          "description": "A description for the action",
+          "default": "",
+          "type": "string"
+        },
+        "expiresAfter": {
+          "x-title": "Expires After",
+          "description": "When the action should expire (ISO 8601 format)",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "action"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "name": {
+          "x-title": "Name",
+          "description": "The name of the action (1-255 characters)",
+          "default": "",
+          "type": "string"
+        },
+        "description": {
+          "x-title": "Description",
+          "description": "A description for the action",
+          "default": "",
+          "type": "string"
+        },
+        "expiresAfter": {
+          "x-title": "Expires After",
+          "description": "When the action should expire (ISO 8601 format)",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "instanceId": {
+      "x-title": "Instance ID",
+      "description": "The ID of the spec file execution instance",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "instance"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 10,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "testResult"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "dateStart": {
+      "x-title": "Date Start",
+      "description": "Start date for results (ISO 8601 format)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "testResult"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "dateEnd": {
+      "x-title": "Date End",
+      "description": "End date for results (ISO 8601 format)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "testResult"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "testResult"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "startingAfter": {
+          "x-title": "Starting After",
+          "description": "Cursor for forward pagination",
+          "default": "",
+          "type": "string"
+        },
+        "endingBefore": {
+          "x-title": "Ending Before",
+          "description": "Cursor for backward pagination",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "runId": {
+      "x-title": "Run ID",
+      "description": "The ID of the run",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "run"
+          ],
+          "operation": [
+            "get",
+            "cancel",
+            "delete",
+            "reset"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "machineIds": {
+      "x-title": "Machine IDs",
+      "description": "Comma-separated list of machine identifiers to reset (1-63 items)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "run"
+          ],
+          "operation": [
+            "reset"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "resetOptions": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "run"
+          ],
+          "operation": [
+            "reset"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "isBatchedOr8n": {
+          "x-title": "Batched Orchestration",
+          "description": "Whether to enable batched orchestration",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "githubRunId": {
+      "x-title": "GitHub Run ID",
+      "description": "The GitHub Actions workflow run ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "run"
+          ],
+          "operation": [
+            "cancelGithub"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "githubRunAttempt": {
+      "x-title": "GitHub Run Attempt",
+      "description": "The GitHub Actions workflow attempt number",
+      "default": 1,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "run"
+          ],
+          "operation": [
+            "cancelGithub"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "cancelGithubOptions": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "run"
+          ],
+          "operation": [
+            "cancelGithub"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "projectId": {
+          "x-title": "Project ID",
+          "description": "Limit cancellation to a specific project",
+          "default": "",
+          "type": "string"
+        },
+        "ciBuildId": {
+          "x-title": "CI Build ID",
+          "description": "Limit cancellation to a specific CI build",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "specFilePath": {
+      "x-title": "Spec File Path",
+      "description": "The complete path to the spec file",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "signature"
+          ],
+          "operation": [
+            "generate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "testTitle": {
+      "x-title": "Test Title",
+      "description": "The test title. For nested describe blocks, use \" > \" as separator (e.g., \"Login > should login with valid credentials\").",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "signature"
+          ],
+          "operation": [
+            "generate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "signature": {
+      "x-title": "Test Signature",
+      "description": "The unique test signature. Use the Signature resource to generate this from project ID, spec file path, and test title.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "testResult"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:currents.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "currentsApi",
+      "required": true
+    }
+  ]
+}

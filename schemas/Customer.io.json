@@ -1,0 +1,295 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Customer.io",
+  "description": "Consume Customer.io API",
+  "x-n8n-node-type": "customerIo",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "customer",
+      "type": "string",
+      "enum": [
+        "customer",
+        "event",
+        "campaign",
+        "segment"
+      ],
+      "x-enumNames": [
+        "Customer",
+        "Event",
+        "Campaign",
+        "Segment"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "add",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "segment"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "add",
+        "remove"
+      ],
+      "x-enumNames": [
+        "Add Customer",
+        "Remove Customer"
+      ]
+    },
+    "campaignId": {
+      "x-title": "Campaign ID",
+      "description": "The unique identifier for the campaign",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "campaign"
+          ],
+          "operation": [
+            "getMetrics"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "period": {
+      "x-title": "Period",
+      "description": "Specify metric period",
+      "default": "days",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "campaign"
+          ],
+          "operation": [
+            "getMetrics"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "hours",
+        "days",
+        "weeks",
+        "months"
+      ],
+      "x-enumNames": [
+        "Hours",
+        "Days",
+        "Weeks",
+        "Months"
+      ]
+    },
+    "jsonParameters": {
+      "x-title": "JSON Parameters",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "trackAnonymous"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "trackAnonymous"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "customAttributes": {
+          "x-title": "Custom Attributes",
+          "description": "Custom Properties",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "customAttribute": {
+              "x-title": "Attribute",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "x-title": "Key",
+                    "description": "Attribute name",
+                    "default": "",
+                    "x-required": true,
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "Attribute value",
+                    "default": "",
+                    "x-required": true,
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "id": {
+      "x-title": "ID",
+      "description": "The unique identifier for the customer",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customer"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFieldsJson": {
+      "x-title": "Additional Fields",
+      "description": "Object of values to set as described <a href=\"https://customer.io/docs/api-triggered-data-format#basic-data-formatting\">here</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "trackAnonymous"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "customerId": {
+      "x-title": "Customer ID",
+      "description": "The unique identifier for the customer",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "track"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "eventName": {
+      "x-title": "Event Name",
+      "description": "The unique identifier for the customer",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "trackAnonymous"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "segmentId": {
+      "x-title": "Segment ID",
+      "description": "The unique identifier of the segment",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "segment"
+          ],
+          "operation": [
+            "add",
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "customerIds": {
+      "x-title": "Customer IDs",
+      "description": "A list of customer IDs to add to the segment",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "segment"
+          ],
+          "operation": [
+            "add",
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": {
+    "light": "file:customerio.svg",
+    "dark": "file:customerio.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "customerIoApi",
+      "required": true
+    }
+  ]
+}

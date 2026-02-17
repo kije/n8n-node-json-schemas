@@ -1,0 +1,1341 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Discord",
+  "description": "Sends data to Discord",
+  "x-n8n-node-type": "discord",
+  "x-n8n-version": 2,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Connection Type",
+      "default": "botToken",
+      "type": "string",
+      "enum": [
+        "botToken",
+        "oAuth2",
+        "webhook"
+      ],
+      "x-enumNames": [
+        "Bot Token",
+        "OAuth2",
+        "Webhook"
+      ],
+      "x-enumDescriptions": [
+        "Manage messages, channels, and members on a server",
+        "Same features as 'Bot Token' with easier Bot installation",
+        "Send messages to a specific channel"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "channel",
+      "x-displayOptions": {
+        "hide": {
+          "authentication": [
+            "webhook"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "channel",
+        "message",
+        "member"
+      ],
+      "x-enumNames": [
+        "Channel",
+        "Message",
+        "Member"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "sendLegacy",
+      "x-displayOptions": {
+        "show": {
+          "authentication": [
+            "webhook"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "sendLegacy"
+      ],
+      "x-enumNames": [
+        "Send a Message"
+      ],
+      "x-enumDescriptions": [
+        "Send a message to a channel using the webhook"
+      ]
+    },
+    "guildId": {
+      "x-title": "Server",
+      "description": "Select the server (guild) that your bot is connected to",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "authentication": [
+            "botToken",
+            "oAuth2"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "By Name",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "By URL",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        }
+      ]
+    },
+    "channelId": {
+      "x-title": "Channel",
+      "description": "Select the channel by name, URL, or ID",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "channel"
+          ],
+          "operation": [
+            "update"
+          ]
+        },
+        "hide": {
+          "authentication": [
+            "webhook"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "By Name",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "By URL",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        }
+      ]
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        },
+        "hide": {
+          "authentication": [
+            "webhook"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "returnAll": [
+            false
+          ],
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        },
+        "hide": {
+          "authentication": [
+            "webhook"
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "sendLegacy"
+          ]
+        },
+        "hide": {
+          "authentication": [
+            "botToken",
+            "oAuth2"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "avatar_url": {
+          "x-title": "Avatar URL",
+          "description": "Override the default avatar of the webhook",
+          "default": "",
+          "type": "string"
+        },
+        "flags": {
+          "x-title": "Flags",
+          "description": "Message flags. <a href=\"https://discord.com/developers/docs/resources/channel#message-object-message-flags\" target=\"_blank\">More info</a>.”.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "SUPPRESS_EMBEDS",
+              "SUPPRESS_NOTIFICATIONS"
+            ]
+          },
+          "x-enumNames": [
+            "Suppress Embeds",
+            "Suppress Notifications"
+          ]
+        },
+        "tts": {
+          "x-title": "Text-to-Speech (TTS)",
+          "description": "Whether to have a bot reading the message directly in the channel",
+          "default": false,
+          "type": "boolean"
+        },
+        "username": {
+          "x-title": "Username",
+          "description": "Override the default username of the webhook",
+          "default": "",
+          "type": "string"
+        },
+        "wait": {
+          "x-title": "Wait",
+          "description": "Whether wait for the message to be created before returning its response",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "messageId": {
+      "x-title": "Message ID",
+      "description": "The ID of the message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "get"
+          ]
+        },
+        "hide": {
+          "authentication": [
+            "webhook"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "emoji": {
+      "x-title": "Emoji",
+      "description": "The emoji you want to react with",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "react"
+          ]
+        },
+        "hide": {
+          "authentication": [
+            "webhook"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "sendTo": {
+      "x-title": "Send To",
+      "description": "Send message to a channel or DM to a user",
+      "default": "channel",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "user",
+        "channel"
+      ],
+      "x-enumNames": [
+        "User",
+        "Channel"
+      ]
+    },
+    "userId": {
+      "x-title": "User",
+      "description": "Select the user you want to assign a role to",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "roleRemove"
+          ]
+        },
+        "hide": {
+          "authentication": [
+            "webhook"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "By Name",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        }
+      ]
+    },
+    "content": {
+      "x-title": "Message",
+      "description": "The content of the message (up to 2000 characters)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "sendLegacy"
+          ]
+        },
+        "hide": {
+          "authentication": [
+            "botToken",
+            "oAuth2"
+          ]
+        }
+      },
+      "type": "string",
+      "x-rows": 2
+    },
+    "embeds": {
+      "x-title": "Embeds",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "sendLegacy"
+          ]
+        },
+        "hide": {
+          "authentication": [
+            "botToken",
+            "oAuth2"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "inputMethod": {
+                "x-title": "Input Method",
+                "default": "fields",
+                "type": "string",
+                "enum": [
+                  "fields",
+                  "json"
+                ],
+                "x-enumNames": [
+                  "Enter Fields",
+                  "Raw JSON"
+                ]
+              },
+              "json": {
+                "x-title": "Value",
+                "default": "={}",
+                "x-displayOptions": {
+                  "show": {
+                    "inputMethod": [
+                      "json"
+                    ]
+                  }
+                },
+                "oneOf": [
+                  {
+                    "type": "string",
+                    "description": "JSON string"
+                  },
+                  {
+                    "type": "object"
+                  },
+                  {
+                    "type": "array"
+                  }
+                ]
+              },
+              "description": {
+                "x-title": "Description",
+                "description": "The description of embed",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "inputMethod": [
+                      "fields"
+                    ]
+                  }
+                },
+                "type": "string",
+                "x-rows": 2
+              },
+              "author": {
+                "x-title": "Author",
+                "description": "The name of the author",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "inputMethod": [
+                      "fields"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "color": {
+                "x-title": "Color",
+                "description": "Color code of the embed",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "inputMethod": [
+                      "fields"
+                    ]
+                  }
+                },
+                "type": "string",
+                "pattern": "^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$",
+                "x-format": "color"
+              },
+              "timestamp": {
+                "x-title": "Timestamp",
+                "description": "The time displayed at the bottom of the embed. Provide in ISO8601 format.",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "inputMethod": [
+                      "fields"
+                    ]
+                  }
+                },
+                "type": "string",
+                "format": "date-time"
+              },
+              "title": {
+                "x-title": "Title",
+                "description": "The title of embed",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "inputMethod": [
+                      "fields"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "url": {
+                "x-title": "URL",
+                "description": "The URL where you want to link the embed to",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "inputMethod": [
+                      "fields"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "image": {
+                "x-title": "URL Image",
+                "description": "Source URL of image (only supports http(s) and attachments)",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "inputMethod": [
+                      "fields"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "thumbnail": {
+                "x-title": "URL Thumbnail",
+                "description": "Source URL of thumbnail (only supports http(s) and attachments)",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "inputMethod": [
+                      "fields"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "video": {
+                "x-title": "URL Video",
+                "description": "Source URL of video",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "inputMethod": [
+                      "fields"
+                    ]
+                  }
+                },
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "files": {
+      "x-title": "Files",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "sendLegacy"
+          ]
+        },
+        "hide": {
+          "authentication": [
+            "botToken",
+            "oAuth2"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "inputFieldName": {
+                "x-title": "Input Data Field Name",
+                "description": "The contents of the file being sent with the message",
+                "default": "data",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "message": {
+      "x-title": "Message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-rows": 4
+    },
+    "responseType": {
+      "x-title": "Response Type",
+      "default": "approval",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "approval",
+        "freeText",
+        "customForm"
+      ],
+      "x-enumNames": [
+        "Approval",
+        "Free Text",
+        "Custom Form"
+      ],
+      "x-enumDescriptions": [
+        "User can approve/disapprove from within the message",
+        "User can submit a response via a form",
+        "User can submit a response via a custom form"
+      ]
+    },
+    "defineForm": {
+      "x-title": "Define Form",
+      "default": "fields",
+      "x-displayOptions": {
+        "show": {
+          "responseType": [
+            "customForm"
+          ],
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "fields",
+        "json"
+      ],
+      "x-enumNames": [
+        "Using Fields Below",
+        "Using JSON"
+      ]
+    },
+    "jsonOutput": {
+      "x-title": "Form Fields",
+      "default": "[\n  {\n    \"fieldLabel\": \"Name\",\n    \"placeholder\": \"enter your name\",\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Age\",\n    \"fieldType\": \"number\",\n    \"placeholder\": \"enter your age\"\n  },\n  {\n    \"fieldLabel\": \"Email\",\n    \"fieldType\": \"email\",\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Textarea\",\n    \"fieldType\": \"textarea\"\n  },\n  {\n    \"fieldLabel\": \"Dropdown Options\",\n    \"fieldType\": \"dropdown\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    },\n    \"requiredField\": true\n  },\n  {\n    \"fieldLabel\": \"Checkboxes\",\n    \"fieldType\": \"checkbox\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    }\n  },\n  {\n    \"fieldLabel\": \"Radio\",\n    \"fieldType\": \"radio\",\n    \"fieldOptions\": {\n      \"values\": [\n        {\n          \"option\": \"option 1\"\n        },\n        {\n          \"option\": \"option 2\"\n        }\n      ]\n    }\n  },\n  {\n    \"fieldLabel\": \"Email\",\n    \"fieldType\": \"email\",\n    \"placeholder\": \"me@mail.con\"\n  },\n  {\n    \"fieldLabel\": \"File\",\n    \"fieldType\": \"file\",\n    \"multipleFiles\": true,\n    \"acceptFileTypes\": \".jpg, .png\"\n  },\n  {\n    \"fieldLabel\": \"Number\",\n    \"fieldType\": \"number\"\n  },\n  {\n    \"fieldLabel\": \"Password\",\n    \"fieldType\": \"password\"\n  }\n]\n",
+      "x-displayOptions": {
+        "show": {
+          "defineForm": [
+            "json"
+          ],
+          "responseType": [
+            "customForm"
+          ],
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "formFields": {
+      "x-title": "Form Elements",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 2.5
+              }
+            }
+          ],
+          "defineForm": [
+            "fields"
+          ],
+          "responseType": [
+            "customForm"
+          ],
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "fieldName": {
+                "x-title": "Custom Field Name",
+                "description": "The name of the field, used in input attributes and referenced by the workflow",
+                "default": "",
+                "x-displayOptions": {
+                  "hide": {
+                    "fieldType": [
+                      "html"
+                    ]
+                  },
+                  "show": {
+                    "@version": [
+                      {
+                        "_cnd": {
+                          "gte": 2.5
+                        }
+                      }
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "fieldLabel": {
+                "x-title": "Field Name",
+                "description": "Label that appears above the input field",
+                "default": "",
+                "x-displayOptions": {
+                  "hide": {
+                    "fieldType": [
+                      "hiddenField",
+                      "html"
+                    ]
+                  },
+                  "show": {
+                    "@version": [
+                      {
+                        "_cnd": {
+                          "lt": 2.4
+                        }
+                      }
+                    ]
+                  }
+                },
+                "x-required": true,
+                "type": "string"
+              },
+              "fieldType": {
+                "x-title": "Element Type",
+                "description": "The type of field to add to the form",
+                "default": "text",
+                "x-required": true,
+                "type": "string",
+                "enum": [
+                  "checkbox",
+                  "html",
+                  "date",
+                  "dropdown",
+                  "email",
+                  "file",
+                  "hiddenField",
+                  "number",
+                  "password",
+                  "radio",
+                  "text",
+                  "textarea"
+                ],
+                "x-enumNames": [
+                  "Checkboxes",
+                  "Custom HTML",
+                  "Date",
+                  "Dropdown",
+                  "Email",
+                  "File",
+                  "Hidden Field",
+                  "Number",
+                  "Password",
+                  "Radio Buttons",
+                  "Text Input",
+                  "Textarea"
+                ]
+              },
+              "elementName": {
+                "x-title": "Element Name",
+                "description": "Optional field. It can be used to include the html in the output.",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "html"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "placeholder": {
+                "x-title": "Placeholder",
+                "description": "Sample text to display inside the field",
+                "default": "",
+                "x-displayOptions": {
+                  "hide": {
+                    "fieldType": [
+                      "dropdown",
+                      "date",
+                      "file",
+                      "html",
+                      "hiddenField",
+                      "radio",
+                      "checkbox"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "defaultValue": {
+                "x-title": "Default Value",
+                "description": "Default value(s) that will be pre-selected. Must match one or multiple of the option labels. Separate multiple pre-selected options with a comma.",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "checkbox"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "fieldValue": {
+                "x-title": "Field Value",
+                "description": "Input value can be set here or will be passed as a query parameter via Field Name if no value is set",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "hiddenField"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "fieldOptions": {
+                "x-title": "Radio Buttons",
+                "default": {
+                  "values": [
+                    {
+                      "option": ""
+                    }
+                  ]
+                },
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "radio"
+                    ]
+                  }
+                },
+                "x-required": true,
+                "type": "object",
+                "properties": {
+                  "values": {
+                    "x-title": "Values",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "option": {
+                          "x-title": "Radio Button Label",
+                          "default": "",
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "multiselect": {
+                "x-title": "Multiple Choice",
+                "description": "Whether to allow the user to select multiple options from the dropdown list",
+                "default": false,
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "dropdown"
+                    ],
+                    "@version": [
+                      {
+                        "_cnd": {
+                          "lt": 2.3
+                        }
+                      }
+                    ]
+                  }
+                },
+                "type": "boolean"
+              },
+              "limitSelection": {
+                "x-title": "Limit Selection",
+                "default": "unlimited",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "checkbox"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "exact",
+                  "range",
+                  "unlimited"
+                ],
+                "x-enumNames": [
+                  "Exact Number",
+                  "Range",
+                  "Unlimited"
+                ]
+              },
+              "numberOfSelections": {
+                "x-title": "Number of Selections",
+                "default": 1,
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "checkbox"
+                    ],
+                    "limitSelection": [
+                      "exact"
+                    ]
+                  }
+                },
+                "type": "number",
+                "minimum": 1,
+                "x-precision": 0
+              },
+              "minSelections": {
+                "x-title": "Minimum Selections",
+                "default": 0,
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "checkbox"
+                    ],
+                    "limitSelection": [
+                      "range"
+                    ]
+                  }
+                },
+                "type": "number",
+                "minimum": 0,
+                "x-precision": 0
+              },
+              "maxSelections": {
+                "x-title": "Maximum Selections",
+                "default": 1,
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "checkbox"
+                    ],
+                    "limitSelection": [
+                      "range"
+                    ]
+                  }
+                },
+                "type": "number",
+                "minimum": 1,
+                "x-precision": 0
+              },
+              "html": {
+                "x-title": "HTML",
+                "description": "HTML elements to display on the form page",
+                "default": "<!-- Your custom HTML here --->\n\n\n",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "html"
+                    ]
+                  }
+                },
+                "type": "string",
+                "x-editor": "htmlEditor"
+              },
+              "multipleFiles": {
+                "x-title": "Multiple Files",
+                "description": "Whether to allow the user to select multiple files from the file input or just one",
+                "default": true,
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "file"
+                    ]
+                  }
+                },
+                "type": "boolean"
+              },
+              "acceptFileTypes": {
+                "x-title": "Accepted File Types",
+                "description": "Comma-separated list of allowed file extensions",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "fieldType": [
+                      "file"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "requiredField": {
+                "x-title": "Required Field",
+                "description": "Whether to require the user to enter a value for this field before submitting the form",
+                "default": false,
+                "x-displayOptions": {
+                  "hide": {
+                    "fieldType": [
+                      "html",
+                      "hiddenField"
+                    ]
+                  }
+                },
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "approvalOptions": {
+      "x-title": "Approval Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "responseType": [
+            "approval"
+          ],
+          "resource": [
+            "message"
+          ],
+          "operation": [
+            "sendAndWait"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "object",
+          "properties": {
+            "approvalType": {
+              "x-title": "Type of Approval",
+              "default": "single",
+              "type": "string",
+              "enum": [
+                "single",
+                "double"
+              ],
+              "x-enumNames": [
+                "Approve Only",
+                "Approve and Disapprove"
+              ]
+            },
+            "approveLabel": {
+              "x-title": "Approve Button Label",
+              "default": "✓ Approve",
+              "x-displayOptions": {
+                "show": {
+                  "approvalType": [
+                    "single",
+                    "double"
+                  ]
+                }
+              },
+              "type": "string"
+            },
+            "disapproveLabel": {
+              "x-title": "Disapprove Button Label",
+              "default": "✗ Decline",
+              "x-displayOptions": {
+                "show": {
+                  "approvalType": [
+                    "double"
+                  ]
+                }
+              },
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "The new name of the channel. Fill this field only if you want to change the channel's name.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "channel"
+          ],
+          "operation": [
+            "update"
+          ]
+        },
+        "hide": {
+          "authentication": [
+            "webhook"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "type": {
+      "x-title": "Type",
+      "description": "The type of channel to create",
+      "default": "0",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "channel"
+          ],
+          "operation": [
+            "create"
+          ]
+        },
+        "hide": {
+          "authentication": [
+            "webhook"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "0",
+        "2",
+        "4"
+      ],
+      "x-enumNames": [
+        "Guild Text",
+        "Guild Voice",
+        "Guild Category"
+      ]
+    },
+    "after": {
+      "x-title": "After",
+      "description": "The ID of the user after which to return the members",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        },
+        "hide": {
+          "authentication": [
+            "webhook"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "role": {
+      "x-title": "Role",
+      "description": "Select the roles you want to add to the user",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "roleRemove"
+          ]
+        },
+        "hide": {
+          "authentication": [
+            "webhook"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "x-subtitle": "={{ $parameter[\"operation\"] + \": \" + $parameter[\"resource\"] }}",
+  "x-icon": "file:discord.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "discordBotApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "botToken"
+          ]
+        }
+      }
+    },
+    {
+      "name": "discordOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    },
+    {
+      "name": "discordWebhookApi",
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "webhook"
+          ]
+        }
+      }
+    }
+  ],
+  "x-webhooks": "true"
+}

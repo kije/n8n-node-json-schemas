@@ -1,0 +1,320 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Dropbox",
+  "description": "Access data on Dropbox",
+  "x-n8n-node-type": "dropbox",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "description": "Means of authenticating with the service",
+      "default": "accessToken",
+      "type": "string",
+      "enum": [
+        "accessToken",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "Access Token",
+        "OAuth2"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "file",
+      "type": "string",
+      "enum": [
+        "file",
+        "folder",
+        "search"
+      ],
+      "x-enumNames": [
+        "File",
+        "Folder",
+        "Search"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "query",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "search"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "query"
+      ],
+      "x-enumNames": [
+        "Query"
+      ]
+    },
+    "path": {
+      "x-title": "Folder Path",
+      "description": "The path of which to list the content",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "list"
+          ],
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "toPath": {
+      "x-title": "To Path",
+      "description": "The new path of file or folder",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "move"
+          ],
+          "resource": [
+            "file",
+            "folder"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "binaryPropertyName": {
+      "x-title": "Input Binary Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ],
+          "binaryData": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "binaryData": {
+      "x-title": "Binary File",
+      "description": "Whether the data to upload should be taken from binary field",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "fileContent": {
+      "x-title": "File Content",
+      "description": "The text content of the file to upload",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ],
+          "binaryData": [
+            false
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "query": {
+      "x-title": "Query",
+      "description": "The string to search for. May match across multiple fields based on the request arguments.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "query"
+          ],
+          "resource": [
+            "search"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "fileStatus": {
+      "x-title": "File Status",
+      "description": "The string to search for. May match across multiple fields based on the request arguments.",
+      "default": "active",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "query"
+          ],
+          "resource": [
+            "search"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "active",
+        "deleted"
+      ],
+      "x-enumNames": [
+        "Active",
+        "Deleted"
+      ]
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "list"
+          ],
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "list"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "simple": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "query"
+          ],
+          "resource": [
+            "search"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ],
+          "operation": [
+            "list"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "include_deleted": {
+          "x-title": "Include Deleted",
+          "description": "Whether the results will include entries for files and folders that used to exist but were deleted. The default for this field is False.",
+          "default": false,
+          "type": "boolean"
+        },
+        "include_has_explicit_shared_members": {
+          "x-title": "Include Shared Members",
+          "description": "Whether the results will include a flag for each file indicating whether or not that file has any explicit members. The default for this field is False.",
+          "default": false,
+          "type": "boolean"
+        },
+        "include_mounted_folders": {
+          "x-title": "Include Mounted Folders",
+          "description": "Whether the results will include entries under mounted folders which includes app folder, shared folder and team folder. The default for this field is True.",
+          "default": true,
+          "type": "boolean"
+        },
+        "include_non_downloadable_files": {
+          "x-title": "Include Non Downloadable Files",
+          "description": "Whether to include files that are not downloadable, i.e. Google Docs. The default for this field is True.",
+          "default": true,
+          "type": "boolean"
+        },
+        "recursive": {
+          "x-title": "Recursive",
+          "description": "Whether the list folder operation will be applied recursively to all subfolders and the response will contain contents of all subfolders. The default for this field is False.",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:dropbox.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "dropboxApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "accessToken"
+          ]
+        }
+      }
+    },
+    {
+      "name": "dropboxOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

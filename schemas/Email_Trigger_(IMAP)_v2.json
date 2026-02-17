@@ -1,0 +1,130 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Email Trigger (IMAP)",
+  "description": "Triggers the workflow when a new email is received",
+  "x-n8n-node-type": "emailReadImap",
+  "x-n8n-version": 2,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "mailbox": {
+      "x-title": "Mailbox Name",
+      "default": "INBOX",
+      "type": "string"
+    },
+    "postProcessAction": {
+      "x-title": "Action",
+      "description": "What to do after the email has been received. If \"nothing\" gets selected it will be processed multiple times.",
+      "default": "read",
+      "type": "string",
+      "enum": [
+        "read",
+        "nothing"
+      ],
+      "x-enumNames": [
+        "Mark as Read",
+        "Nothing"
+      ]
+    },
+    "downloadAttachments": {
+      "x-title": "Download Attachments",
+      "description": "Whether attachments of emails should be downloaded. Only set if needed as it increases processing.",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "format": [
+            "simple"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "format": {
+      "x-title": "Format",
+      "description": "The format to return the message in",
+      "default": "simple",
+      "type": "string",
+      "enum": [
+        "raw",
+        "resolved",
+        "simple"
+      ],
+      "x-enumNames": [
+        "RAW",
+        "Resolved",
+        "Simple"
+      ],
+      "x-enumDescriptions": [
+        "Returns the full email message data with body content in the raw field as a base64url encoded string; the payload field is not used",
+        "Returns the full email with all data resolved and attachments saved as binary data",
+        "Returns the full email; do not use if you wish to gather inline attachments"
+      ]
+    },
+    "dataPropertyAttachmentsPrefixName": {
+      "x-title": "Property Prefix Name",
+      "description": "Prefix for name of the binary property to which to write the attachments. An index starting with 0 will be added. So if name is \"attachment_\" the first attachment is saved to \"attachment_0\"",
+      "default": "attachment_",
+      "x-displayOptions": {
+        "show": {
+          "format": [
+            "simple"
+          ],
+          "downloadAttachments": [
+            true
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "customEmailConfig": {
+          "x-title": "Custom Email Rules",
+          "description": "Custom email fetching rules. See <a href=\"https://github.com/mscdex/node-imap\">node-imap</a>'s search function for more details.",
+          "default": "[\"UNSEEN\"]",
+          "type": "string"
+        },
+        "forceReconnect": {
+          "x-title": "Force Reconnect Every Minutes",
+          "description": "Sets an interval (in minutes) to force a reconnection",
+          "default": 60,
+          "type": "number"
+        },
+        "trackLastMessageId": {
+          "x-title": "Fetch Only New Emails",
+          "description": "Whether to fetch only new emails since the last run, or all emails that match the \"Custom Email Rules\" ([\"UNSEEN\"] by default)",
+          "default": true,
+          "x-displayOptions": {
+            "show": {
+              "@version": [
+                {
+                  "_cnd": {
+                    "gte": 2.1
+                  }
+                }
+              ]
+            }
+          },
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-icon": "fa:inbox",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "imap",
+      "required": true,
+      "testedBy": "imapConnectionTest"
+    }
+  ]
+}

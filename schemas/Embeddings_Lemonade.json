@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Embeddings Lemonade",
+  "description": "Use Lemonade Embeddings",
+  "x-n8n-node-type": "embeddingsLemonade",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "model": {
+      "x-title": "Model",
+      "description": "The model which will generate the completion. Models are loaded and managed through the Lemonade server.",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-icon": "file:lemonade.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "ai_embedding"
+  ],
+  "x-credentials": [
+    {
+      "name": "lemonadeApi",
+      "required": true
+    }
+  ]
+}

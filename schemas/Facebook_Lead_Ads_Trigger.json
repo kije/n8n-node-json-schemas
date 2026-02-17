@@ -1,0 +1,135 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Facebook Lead Ads Trigger",
+  "description": "Handle Facebook Lead Ads events via webhooks",
+  "x-n8n-node-type": "facebookLeadAdsTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "event": {
+      "x-title": "Event",
+      "default": "newLead",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "newLead"
+      ],
+      "x-enumNames": [
+        "New Lead"
+      ]
+    },
+    "page": {
+      "x-title": "Page",
+      "description": "The page linked to the form for retrieving new leads",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        }
+      ]
+    },
+    "form": {
+      "x-title": "Form",
+      "description": "The form to monitor for fetching lead details upon submission",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        }
+      ]
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "simplifyOutput": {
+          "x-title": "Simplify Output",
+          "description": "Whether to return a simplified version of the webhook event instead of all fields",
+          "default": true,
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"event\"]}}",
+  "x-icon": "file:facebook.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "facebookLeadAdsOAuth2Api",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

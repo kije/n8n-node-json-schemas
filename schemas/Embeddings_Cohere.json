@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Embeddings Cohere",
+  "description": "Use Cohere Embeddings",
+  "x-n8n-node-type": "embeddingsCohere",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "modelName": {
+      "x-title": "Model",
+      "description": "The model which will generate the embeddings. <a href=\"https://docs.cohere.com/docs/models\">Learn more</a>.",
+      "default": "embed-english-v2.0",
+      "type": "string",
+      "enum": [
+        "embed-english-light-v2.0",
+        "embed-english-light-v3.0",
+        "embed-english-v2.0",
+        "embed-english-v3.0",
+        "embed-multilingual-light-v3.0",
+        "embed-multilingual-v2.0",
+        "embed-multilingual-v3.0"
+      ],
+      "x-enumNames": [
+        "Embed-English-Light-v2.0 (1024 Dimensions)",
+        "Embed-English-Light-v3.0 (384 Dimensions)",
+        "Embed-English-v2.0 (4096 Dimensions)",
+        "Embed-English-v3.0 (1024 Dimensions)",
+        "Embed-Multilingual-Light-v3.0 (384 Dimensions)",
+        "Embed-Multilingual-v2.0 (768 Dimensions)",
+        "Embed-Multilingual-v3.0 (1024 Dimensions)"
+      ]
+    }
+  },
+  "x-icon": {
+    "light": "file:cohere.svg",
+    "dark": "file:cohere.dark.svg"
+  },
+  "x-inputs": [],
+  "x-outputs": [
+    "ai_embedding"
+  ],
+  "x-credentials": [
+    {
+      "name": "cohereApi",
+      "required": true
+    }
+  ]
+}

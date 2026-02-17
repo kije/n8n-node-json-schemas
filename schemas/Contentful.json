@@ -1,0 +1,251 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Contentful",
+  "description": "Consume Contentful API",
+  "x-n8n-node-type": "contentful",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "source": {
+      "x-title": "Source",
+      "description": "Pick where your data comes from, delivery or preview API",
+      "default": "deliveryApi",
+      "type": "string",
+      "enum": [
+        "deliveryApi",
+        "previewApi"
+      ],
+      "x-enumNames": [
+        "Delivery API",
+        "Preview API"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "entry",
+      "type": "string",
+      "enum": [
+        "asset",
+        "contentType",
+        "entry",
+        "locale",
+        "space"
+      ],
+      "x-enumNames": [
+        "Asset",
+        "Content Type",
+        "Entry",
+        "Locale",
+        "Space"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "locale"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Get Many"
+      ]
+    },
+    "environmentId": {
+      "x-title": "Environment ID",
+      "description": "The ID for the Contentful environment (e.g. master, staging, etc.). Depending on your plan, you might not have environments. In that case use \"master\".",
+      "default": "master",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "locale"
+          ],
+          "operation": [
+            "get",
+            "getAll"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "contentTypeId": {
+      "x-title": "Content Type ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contentType"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "asset"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "equal": {
+          "x-title": "Equal",
+          "description": "Search for all data that matches the condition: {attribute}={value}. Attribute can use dot notation.",
+          "default": "",
+          "type": "string"
+        },
+        "exclude": {
+          "x-title": "Exclude",
+          "description": "Search for all data that matches the condition: {attribute}[nin]={value}. Attribute can use dot notation.",
+          "default": "",
+          "type": "string"
+        },
+        "exist": {
+          "x-title": "Exist",
+          "description": "Search for all data that matches the condition: {attribute}[exists]={value}. Attribute can use dot notation.",
+          "default": "",
+          "type": "string"
+        },
+        "select": {
+          "x-title": "Fields",
+          "description": "The select operator allows you to choose what fields to return from an entity. You can choose multiple values by combining comma-separated operators.",
+          "default": "",
+          "type": "string"
+        },
+        "include": {
+          "x-title": "Include",
+          "description": "Search for all data that matches the condition: {attribute}[in]={value}. Attribute can use dot notation.",
+          "default": "",
+          "type": "string"
+        },
+        "notEqual": {
+          "x-title": "Not Equal",
+          "description": "Search for all data that matches the condition: {attribute}[ne]={value}. Attribute can use dot notation.",
+          "default": "",
+          "type": "string"
+        },
+        "order": {
+          "x-title": "Order",
+          "description": "You can order items in the response by specifying the order search parameter. You can use sys properties (such as sys.createdAt) or field values (such as fields.myCustomDateField) for ordering.",
+          "default": "",
+          "type": "string"
+        },
+        "query": {
+          "x-title": "Query",
+          "description": "Full-text search is case insensitive and might return more results than expected. A query will only take values with more than 1 character.",
+          "default": "",
+          "type": "string"
+        },
+        "rawData": {
+          "x-title": "RAW Data",
+          "description": "Whether the data should be returned RAW instead of parsed",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "locale"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "locale"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "entryId": {
+      "x-title": "Entry ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "entry"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "assetId": {
+      "x-title": "Asset ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "asset"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:contentful.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "contentfulApi",
+      "required": true
+    }
+  ]
+}

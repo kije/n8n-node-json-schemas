@@ -1,0 +1,404 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "E-goi",
+  "description": "Consume E-goi API",
+  "x-n8n-node-type": "egoi",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "contact",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "contact"
+      ],
+      "x-enumNames": [
+        "Contact"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "create",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a member",
+        "Get a member",
+        "Get many members",
+        "Update a member"
+      ]
+    },
+    "list": {
+      "x-title": "List Name or ID",
+      "description": "ID of list to operate on. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll",
+            "create",
+            "update",
+            "get"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "Email address for subscriber",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "get"
+          ],
+          "by": [
+            "email"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "contactId": {
+      "x-title": "Contact ID",
+      "description": "Contact ID of the subscriber",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "get"
+          ],
+          "by": [
+            "id"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "resolveData": {
+      "x-title": "Resolve Data",
+      "description": "By default the response just includes the contact ID. If this option gets activated, it will resolve the data automatically.",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "update"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "birth_date": {
+          "x-title": "Birth Date",
+          "description": "Birth date of a subscriber",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "cellphone": {
+          "x-title": "Cellphone",
+          "description": "Cellphone of a subscriber",
+          "default": "",
+          "type": "string"
+        },
+        "extraFieldsUi": {
+          "x-title": "Extra Fields",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "extraFieldValues": {
+              "x-title": "Extra Field",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "field_id": {
+                    "x-title": "Field Name or ID",
+                    "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "first_name": {
+          "x-title": "First Name",
+          "description": "Name of a subscriber",
+          "default": "",
+          "type": "string"
+        },
+        "last_name": {
+          "x-title": "Last Name",
+          "description": "Name of a subscriber",
+          "default": "",
+          "type": "string"
+        },
+        "status": {
+          "x-title": "Status",
+          "description": "Subscriber's current status",
+          "default": "active",
+          "type": "string",
+          "enum": [
+            "unconfirmed",
+            "active",
+            "inactive",
+            "removed"
+          ],
+          "x-enumNames": [
+            "Unconfirmed",
+            "Active",
+            "Inactive",
+            "Removed"
+          ]
+        },
+        "tagIds": {
+          "x-title": "Tag Names or IDs",
+          "description": "List of tag IDs to be added. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "birth_date": {
+          "x-title": "Birth Date",
+          "description": "Birth date of subscriber",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "cellphone": {
+          "x-title": "Cellphone",
+          "description": "Cellphone of subscriber",
+          "default": "",
+          "type": "string"
+        },
+        "email": {
+          "x-title": "Email",
+          "description": "Email address for subscriber",
+          "default": "",
+          "type": "string"
+        },
+        "extraFieldsUi": {
+          "x-title": "Extra Fields",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "extraFieldValues": {
+              "x-title": "Extra Field",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "field_id": {
+                    "x-title": "Field Name or ID",
+                    "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "first_name": {
+          "x-title": "First Name",
+          "description": "Name of subscriber",
+          "default": "",
+          "type": "string"
+        },
+        "last_name": {
+          "x-title": "Last Name",
+          "description": "Name of subscriber",
+          "default": "",
+          "type": "string"
+        },
+        "status": {
+          "x-title": "Status",
+          "description": "Subscriber's current status",
+          "default": "active",
+          "type": "string",
+          "enum": [
+            "unconfirmed",
+            "active",
+            "inactive",
+            "removed"
+          ],
+          "x-enumNames": [
+            "Unconfirmed",
+            "Active",
+            "Inactive",
+            "Removed"
+          ]
+        },
+        "tagIds": {
+          "x-title": "Tag Names or IDs",
+          "description": "List of tag IDs to be added. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "by": {
+      "x-title": "By",
+      "description": "Search by",
+      "default": "id",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "id",
+        "email"
+      ],
+      "x-enumNames": [
+        "Contact ID",
+        "Email"
+      ]
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "contact"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "simple": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get",
+            "getAll"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:egoi.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "egoiApi",
+      "required": true
+    }
+  ]
+}

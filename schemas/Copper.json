@@ -1,0 +1,402 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Copper",
+  "description": "Consume the Copper API",
+  "x-n8n-node-type": "copper",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "company",
+      "type": "string",
+      "enum": [
+        "company",
+        "customerSource",
+        "lead",
+        "opportunity",
+        "person",
+        "project",
+        "task",
+        "user"
+      ],
+      "x-enumNames": [
+        "Company",
+        "Customer Source",
+        "Lead",
+        "Opportunity",
+        "Person",
+        "Project",
+        "Task",
+        "User"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Get Many"
+      ]
+    },
+    "name": {
+      "x-title": "Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "assignee_id": {
+          "x-title": "Assignee ID",
+          "description": "ID of the user who will own the task to create",
+          "default": "",
+          "type": "string"
+        },
+        "details": {
+          "x-title": "Details",
+          "description": "Description of the task to create",
+          "default": "",
+          "type": "string"
+        },
+        "priority": {
+          "x-title": "Priority",
+          "default": "High",
+          "type": "string",
+          "enum": [
+            "High",
+            "None"
+          ],
+          "x-enumNames": [
+            "High",
+            "None"
+          ]
+        },
+        "status": {
+          "x-title": "Status",
+          "default": "Open",
+          "type": "string",
+          "enum": [
+            "Completed",
+            "Open"
+          ],
+          "x-enumNames": [
+            "Completed",
+            "Open"
+          ]
+        }
+      }
+    },
+    "companyId": {
+      "x-title": "Company ID",
+      "description": "ID of the company to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 5,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 1000
+    },
+    "filterFields": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "assignee_ids": {
+          "x-title": "Assignee IDs",
+          "description": "Comma-separated IDs of assignee IDs to filter by",
+          "default": "",
+          "type": "string"
+        },
+        "project_ids": {
+          "x-title": "Project IDs",
+          "description": "Comma-separated IDs of project IDs to filter by",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "assignee_id": {
+          "x-title": "Assignee ID",
+          "description": "ID of the user who will own the task",
+          "default": "",
+          "type": "string"
+        },
+        "details": {
+          "x-title": "Details",
+          "description": "Description to set for the task",
+          "default": "",
+          "type": "string"
+        },
+        "name": {
+          "x-title": "Name",
+          "description": "Name to set for the task",
+          "default": "",
+          "type": "string"
+        },
+        "priority": {
+          "x-title": "Priority",
+          "default": "High",
+          "type": "string",
+          "enum": [
+            "High",
+            "None"
+          ],
+          "x-enumNames": [
+            "High",
+            "None"
+          ]
+        },
+        "status": {
+          "x-title": "Status",
+          "default": "Open",
+          "type": "string",
+          "enum": [
+            "Completed",
+            "Open"
+          ],
+          "x-enumNames": [
+            "Completed",
+            "Open"
+          ]
+        }
+      }
+    },
+    "leadId": {
+      "x-title": "Lead ID",
+      "description": "ID of the lead to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "lead"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "customerSourceId": {
+      "x-title": "Customer Source ID",
+      "description": "ID of the customer source that generated this opportunity",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "primaryContactId": {
+      "x-title": "Primary Contact ID",
+      "description": "ID of the primary company associated with this opportunity",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "opportunityId": {
+      "x-title": "Opportunity ID",
+      "description": "ID of the opportunity to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "opportunity"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "personId": {
+      "x-title": "Person ID",
+      "description": "ID of the person to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "projectId": {
+      "x-title": "Project ID",
+      "description": "ID of the project to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "project"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "taskId": {
+      "x-title": "Task ID",
+      "description": "ID of the task to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:copper.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "copperApi",
+      "required": true
+    }
+  ]
+}

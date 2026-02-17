@@ -1,0 +1,77 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Flow Trigger",
+  "description": "Handle Flow events via webhooks",
+  "x-n8n-node-type": "flowTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "description": "Resource that triggers the webhook",
+      "default": "",
+      "type": "string",
+      "enum": [
+        "list",
+        "task"
+      ],
+      "x-enumNames": [
+        "Project",
+        "Task"
+      ]
+    },
+    "listIds": {
+      "x-title": "Project ID",
+      "description": "Lists IDs, perhaps known better as \"Projects\" separated by a comma (,)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ]
+        },
+        "hide": {
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "taskIds": {
+      "x-title": "Task ID",
+      "description": "Task IDs separated by a comma (,)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ]
+        },
+        "hide": {
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-icon": "file:flow.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "flowApi",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

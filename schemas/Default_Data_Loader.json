@@ -1,0 +1,282 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Default Data Loader",
+  "description": "Load data from previous step in the workflow",
+  "x-n8n-node-type": "documentDefaultDataLoader",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "dataType": {
+      "x-title": "Type of Data",
+      "default": "json",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "json",
+        "binary"
+      ],
+      "x-enumNames": [
+        "JSON",
+        "Binary"
+      ],
+      "x-enumDescriptions": [
+        "Process JSON data from previous step in the workflow",
+        "Process binary data from previous step in the workflow"
+      ]
+    },
+    "jsonMode": {
+      "x-title": "Mode",
+      "default": "allInputData",
+      "x-displayOptions": {
+        "show": {
+          "dataType": [
+            "json"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "allInputData",
+        "expressionData"
+      ],
+      "x-enumNames": [
+        "Load All Input Data",
+        "Load Specific Data"
+      ],
+      "x-enumDescriptions": [
+        "Use all JSON data that flows into the parent agent or chain",
+        "Load a subset of data, and/or data from any previous step in the workflow"
+      ]
+    },
+    "binaryMode": {
+      "x-title": "Mode",
+      "default": "allInputData",
+      "x-displayOptions": {
+        "show": {
+          "dataType": [
+            "binary"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "allInputData",
+        "specificField"
+      ],
+      "x-enumNames": [
+        "Load All Input Data",
+        "Load Specific Data"
+      ],
+      "x-enumDescriptions": [
+        "Use all Binary data that flows into the parent agent or chain",
+        "Load data from a specific field in the parent agent or chain"
+      ]
+    },
+    "loader": {
+      "x-title": "Data Format",
+      "default": "auto",
+      "x-displayOptions": {
+        "show": {
+          "dataType": [
+            "binary"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "auto",
+        "csvLoader",
+        "docxLoader",
+        "epubLoader",
+        "jsonLoader",
+        "pdfLoader",
+        "textLoader"
+      ],
+      "x-enumNames": [
+        "Automatically Detect by Mime Type",
+        "CSV",
+        "Docx",
+        "EPub",
+        "JSON",
+        "PDF",
+        "Text"
+      ],
+      "x-enumDescriptions": [
+        "Uses the mime type to detect the format",
+        "Load CSV files",
+        "Load Docx documents",
+        "Load EPub files",
+        "Load JSON files",
+        "Load PDF documents",
+        "Load plain text files"
+      ]
+    },
+    "jsonData": {
+      "x-title": "Data",
+      "description": "Drag and drop fields from the input pane, or use an expression",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "dataType": [
+            "json"
+          ],
+          "jsonMode": [
+            "expressionData"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-rows": 6
+    },
+    "binaryDataKey": {
+      "x-title": "Input Data Field Name",
+      "description": "The name of the field in the agent or chain’s input that contains the binary file to be processed",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "dataType": [
+            "binary"
+          ]
+        },
+        "hide": {
+          "binaryMode": [
+            "allInputData"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "textSplittingMode": {
+      "x-title": "Text Splitting",
+      "default": "simple",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            1.1
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "simple",
+        "custom"
+      ],
+      "x-enumNames": [
+        "Simple",
+        "Custom"
+      ],
+      "x-enumDescriptions": [
+        "Splits every 1000 characters with a 200 character overlap",
+        "Connect a custom text-splitting sub-node"
+      ]
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "pointers": {
+          "x-title": "JSON Pointers",
+          "description": "Pointers to extract from JSON, e.g. \"/text\" or \"/text, /meta/title\"",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/loader": [
+                "jsonLoader",
+                "auto"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "separator": {
+          "x-title": "CSV Separator",
+          "description": "Separator to use for CSV",
+          "default": ",",
+          "x-displayOptions": {
+            "show": {
+              "/loader": [
+                "csvLoader",
+                "auto"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "column": {
+          "x-title": "CSV Column",
+          "description": "Column to extract from CSV",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/loader": [
+                "csvLoader",
+                "auto"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "splitPages": {
+          "x-title": "Split Pages in PDF",
+          "description": "Whether to split PDF pages into separate documents",
+          "default": true,
+          "x-displayOptions": {
+            "show": {
+              "/loader": [
+                "pdfLoader",
+                "auto"
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "metadata": {
+          "x-title": "Metadata",
+          "description": "Metadata to add to each document. Could be used for filtering during retrieval",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "metadataValues": {
+              "x-title": "Fields to Set",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "x-title": "Name",
+                    "default": "",
+                    "x-required": true,
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-icon": "file:binary.svg",
+  "x-inputs": "={{ ((parameter) => { function getInputs(parameters) {\n    const inputs = [];\n    const textSplittingMode = parameters?.textSplittingMode;\n    if (!textSplittingMode || textSplittingMode === 'custom') {\n        inputs.push({\n            displayName: 'Text Splitter',\n            maxConnections: 1,\n            type: 'ai_textSplitter',\n            required: true,\n        });\n    }\n    return inputs;\n}; return getInputs(parameter) })($parameter) }}",
+  "x-outputs": [
+    "ai_document"
+  ]
+}

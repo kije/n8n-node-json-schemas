@@ -1,0 +1,289 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Demio",
+  "description": "Consume the Demio API",
+  "x-n8n-node-type": "demio",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "event",
+      "type": "string",
+      "enum": [
+        "event",
+        "report"
+      ],
+      "x-enumNames": [
+        "Event",
+        "Report"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "get"
+      ],
+      "x-enumNames": [
+        "Get"
+      ],
+      "x-enumDescriptions": [
+        "Get an event report"
+      ]
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "event"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "status": {
+          "x-title": "Status",
+          "description": "Filter results by participation status",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "attended",
+            "banned",
+            "completed",
+            "did-not-attend",
+            "left-early"
+          ],
+          "x-enumNames": [
+            "Attended",
+            "Banned",
+            "Completed",
+            "Did Not Attend",
+            "Left Early"
+          ]
+        }
+      }
+    },
+    "eventId": {
+      "x-title": "Event Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "register"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "company": {
+          "x-title": "Company",
+          "description": "The value for the predefined Company field",
+          "default": "",
+          "type": "string"
+        },
+        "customFieldsUi": {
+          "x-title": "Custom Fields",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "customFieldsValues": {
+              "x-title": "Custom Field",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "fieldId": {
+                    "x-title": "Field ID",
+                    "description": "Each custom field's unique identifier can be found within the Event's Registration block in the Customize tab",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "The value to set on custom field",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "ref_url": {
+          "x-title": "Event Registration URL",
+          "description": "Event Registration page URL. It can be useful when you do not know Event ID, but have Event link.",
+          "default": "",
+          "type": "string"
+        },
+        "gdpr": {
+          "x-title": "GDPR",
+          "description": "The value for the predefined GDPR field",
+          "default": "",
+          "type": "string"
+        },
+        "last_name": {
+          "x-title": "Last Name",
+          "description": "The value for the predefined Last Name field",
+          "default": "",
+          "type": "string"
+        },
+        "phone_number": {
+          "x-title": "Phone Number",
+          "description": "The value for the predefined Phone Number field",
+          "default": "",
+          "type": "string"
+        },
+        "date_id": {
+          "x-title": "Session Name or ID",
+          "description": "Event Session ID. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "website": {
+          "x-title": "Website",
+          "description": "The value for the predefined Website field",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "firstName": {
+      "x-title": "First Name",
+      "description": "The registrant's first name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "register"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "The registrant's email address",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "register"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "dateId": {
+      "x-title": "Session Name or ID",
+      "description": "ID of the session. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "report"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:demio.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "demioApi",
+      "required": true
+    }
+  ]
+}

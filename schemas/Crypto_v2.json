@@ -1,0 +1,338 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Crypto",
+  "description": "Provide cryptographic utilities",
+  "x-n8n-node-type": "crypto",
+  "x-n8n-version": 2,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "action": {
+      "x-title": "Action",
+      "default": "hash",
+      "type": "string",
+      "enum": [
+        "generate",
+        "hash",
+        "hmac",
+        "sign"
+      ],
+      "x-enumNames": [
+        "Generate",
+        "Hash",
+        "Hmac",
+        "Sign"
+      ],
+      "x-enumDescriptions": [
+        "Generate random string",
+        "Hash a text or file in a specified format",
+        "Hmac a text or file in a specified format",
+        "Sign a string using a private key"
+      ]
+    },
+    "binaryData": {
+      "x-title": "Binary File",
+      "description": "Whether the data to hashed should be taken from binary field",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "action": [
+            "hash",
+            "hmac"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "binaryPropertyName": {
+      "x-title": "Binary Property Name",
+      "description": "Name of the binary property which contains the input data",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "action": [
+            "hash",
+            "hmac"
+          ],
+          "binaryData": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "type": {
+      "x-title": "Type",
+      "description": "The hash type to use",
+      "default": "SHA256",
+      "x-displayOptions": {
+        "show": {
+          "action": [
+            "hmac"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "MD5",
+        "SHA256",
+        "SHA3-256",
+        "SHA3-384",
+        "SHA3-512",
+        "SHA384",
+        "SHA512"
+      ],
+      "x-enumNames": [
+        "MD5",
+        "SHA256",
+        "SHA3-256",
+        "SHA3-384",
+        "SHA3-512",
+        "SHA384",
+        "SHA512"
+      ]
+    },
+    "value": {
+      "x-title": "Value",
+      "description": "The value that should be signed",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "action": [
+            "sign"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "dataPropertyName": {
+      "x-title": "Property Name",
+      "description": "Name of the property to which to write the random string",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "action": [
+            "generate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "encoding": {
+      "x-title": "Encoding",
+      "default": "hex",
+      "x-displayOptions": {
+        "show": {
+          "action": [
+            "sign"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "base64",
+        "hex"
+      ],
+      "x-enumNames": [
+        "BASE64",
+        "HEX"
+      ]
+    },
+    "algorithm": {
+      "x-title": "Algorithm Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "action": [
+            "sign"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "RSA-MD5",
+        "RSA-RIPEMD160",
+        "RSA-SHA1",
+        "RSA-SHA1-2",
+        "RSA-SHA224",
+        "RSA-SHA256",
+        "RSA-SHA3-224",
+        "RSA-SHA3-256",
+        "RSA-SHA3-384",
+        "RSA-SHA3-512",
+        "RSA-SHA384",
+        "RSA-SHA512",
+        "RSA-SHA512/224",
+        "RSA-SHA512/256",
+        "RSA-SM3",
+        "blake2b512",
+        "blake2s256",
+        "id-rsassa-pkcs1-v1_5-with-sha3-224",
+        "id-rsassa-pkcs1-v1_5-with-sha3-256",
+        "id-rsassa-pkcs1-v1_5-with-sha3-384",
+        "id-rsassa-pkcs1-v1_5-with-sha3-512",
+        "md5",
+        "md5-sha1",
+        "md5WithRSAEncryption",
+        "ripemd",
+        "ripemd160",
+        "ripemd160WithRSA",
+        "rmd160",
+        "sha1",
+        "sha1WithRSAEncryption",
+        "sha224",
+        "sha224WithRSAEncryption",
+        "sha256",
+        "sha256WithRSAEncryption",
+        "sha3-224",
+        "sha3-256",
+        "sha3-384",
+        "sha3-512",
+        "sha384",
+        "sha384WithRSAEncryption",
+        "sha512",
+        "sha512-224",
+        "sha512-224WithRSAEncryption",
+        "sha512-256",
+        "sha512-256WithRSAEncryption",
+        "sha512WithRSAEncryption",
+        "shake128",
+        "shake256",
+        "sm3",
+        "sm3WithRSAEncryption",
+        "ssl3-md5",
+        "ssl3-sha1"
+      ],
+      "x-enumNames": [
+        "RSA-MD5",
+        "RSA-RIPEMD160",
+        "RSA-SHA1",
+        "RSA-SHA1-2",
+        "RSA-SHA224",
+        "RSA-SHA256",
+        "RSA-SHA3-224",
+        "RSA-SHA3-256",
+        "RSA-SHA3-384",
+        "RSA-SHA3-512",
+        "RSA-SHA384",
+        "RSA-SHA512",
+        "RSA-SHA512/224",
+        "RSA-SHA512/256",
+        "RSA-SM3",
+        "blake2b512",
+        "blake2s256",
+        "id-rsassa-pkcs1-v1_5-with-sha3-224",
+        "id-rsassa-pkcs1-v1_5-with-sha3-256",
+        "id-rsassa-pkcs1-v1_5-with-sha3-384",
+        "id-rsassa-pkcs1-v1_5-with-sha3-512",
+        "md5",
+        "md5-sha1",
+        "md5WithRSAEncryption",
+        "ripemd",
+        "ripemd160",
+        "ripemd160WithRSA",
+        "rmd160",
+        "sha1",
+        "sha1WithRSAEncryption",
+        "sha224",
+        "sha224WithRSAEncryption",
+        "sha256",
+        "sha256WithRSAEncryption",
+        "sha3-224",
+        "sha3-256",
+        "sha3-384",
+        "sha3-512",
+        "sha384",
+        "sha384WithRSAEncryption",
+        "sha512",
+        "sha512-224",
+        "sha512-224WithRSAEncryption",
+        "sha512-256",
+        "sha512-256WithRSAEncryption",
+        "sha512WithRSAEncryption",
+        "shake128",
+        "shake256",
+        "sm3",
+        "sm3WithRSAEncryption",
+        "ssl3-md5",
+        "ssl3-sha1"
+      ]
+    },
+    "encodingType": {
+      "x-title": "Type",
+      "description": "Encoding that will be used to generate string",
+      "default": "uuid",
+      "x-displayOptions": {
+        "show": {
+          "action": [
+            "generate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "ascii",
+        "base64",
+        "hex",
+        "uuid"
+      ],
+      "x-enumNames": [
+        "ASCII",
+        "BASE64",
+        "HEX",
+        "UUID"
+      ]
+    },
+    "stringLength": {
+      "x-title": "Length",
+      "description": "Length of the generated string",
+      "default": 32,
+      "x-displayOptions": {
+        "show": {
+          "action": [
+            "generate"
+          ],
+          "encodingType": [
+            "ascii",
+            "base64",
+            "hex"
+          ]
+        }
+      },
+      "type": "number"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"action\"]}}",
+  "x-icon": "fa:key",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "crypto",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "action": [
+            "hmac",
+            "sign"
+          ]
+        }
+      }
+    }
+  ]
+}

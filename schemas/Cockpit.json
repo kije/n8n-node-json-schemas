@@ -1,0 +1,330 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Cockpit",
+  "description": "Consume Cockpit API",
+  "x-n8n-node-type": "cockpit",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "collection",
+      "type": "string",
+      "enum": [
+        "collection",
+        "form",
+        "singleton"
+      ],
+      "x-enumNames": [
+        "Collection",
+        "Form",
+        "Singleton"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "singleton"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "get"
+      ],
+      "x-enumNames": [
+        "Get"
+      ],
+      "x-enumDescriptions": [
+        "Get a singleton"
+      ]
+    },
+    "collection": {
+      "x-title": "Collection Name or ID",
+      "description": "Name of the collection to operate on. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "collection"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "collection"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "collection"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "collection"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "fields": {
+          "x-title": "Fields",
+          "description": "Comma-separated list of fields to get",
+          "default": "",
+          "type": "string"
+        },
+        "filter": {
+          "x-title": "Filter Query",
+          "description": "Filter query in <a href=\"https://jeroen.github.io/mongolite/query-data.html\">Mongolite format</a>",
+          "default": "",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "language": {
+          "x-title": "Language",
+          "description": "Return normalized language fields",
+          "default": "",
+          "type": "string"
+        },
+        "populate": {
+          "x-title": "Populate",
+          "description": "Whether to resolve linked collection items",
+          "default": true,
+          "type": "boolean"
+        },
+        "rawData": {
+          "x-title": "RAW Data",
+          "description": "Whether to return the data exactly in the way it got received from the API",
+          "default": false,
+          "type": "boolean"
+        },
+        "skip": {
+          "x-title": "Skip",
+          "description": "Skip number of entries",
+          "default": "",
+          "type": "number"
+        },
+        "sort": {
+          "x-title": "Sort Query",
+          "description": "Sort query in <a href=\"https://jeroen.github.io/mongolite/query-data.html\">Mongolite format</a>",
+          "default": "",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        }
+      }
+    },
+    "id": {
+      "x-title": "Entry ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "collection"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "jsonDataFields": {
+      "x-title": "JSON Data Fields",
+      "description": "Whether form fields should be set via the value-key pair UI or JSON",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "form"
+          ],
+          "operation": [
+            "submit"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "dataFieldsJson": {
+      "x-title": "Form Data",
+      "description": "Form data to send as JSON",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "jsonDataFields": [
+            true
+          ],
+          "resource": [
+            "form"
+          ],
+          "operation": [
+            "submit"
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "dataFieldsUi": {
+      "x-title": "Form Data",
+      "description": "Form data to send",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "jsonDataFields": [
+            false
+          ],
+          "resource": [
+            "form"
+          ],
+          "operation": [
+            "submit"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "field": {
+          "x-title": "Field",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Name",
+                "description": "Name of the field",
+                "default": "",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "Value of the field",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "form": {
+      "x-title": "Form",
+      "description": "Name of the form to operate on",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "form"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "singleton": {
+      "x-title": "Singleton Name or ID",
+      "description": "Name of the singleton to operate on. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "singleton"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{ $parameter[\"operation\"] + \": \" + $parameter[\"resource\"] }}",
+  "x-icon": {
+    "light": "file:cockpit.svg",
+    "dark": "file:cockpit.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "cockpitApi",
+      "required": true
+    }
+  ]
+}

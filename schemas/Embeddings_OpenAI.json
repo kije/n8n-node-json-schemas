@@ -1,0 +1,122 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Embeddings OpenAI",
+  "description": "Use Embeddings OpenAI",
+  "x-n8n-node-type": "embeddingsOpenAi",
+  "x-n8n-version": [
+    1,
+    1.1,
+    1.2
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "model": {
+      "x-title": "Model",
+      "description": "The model which will generate the embeddings. <a href=\"https://platform.openai.com/docs/models/overview\">Learn more</a>.",
+      "default": "text-embedding-3-small",
+      "x-displayOptions": {
+        "hide": {
+          "@version": [
+            1
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "description": "Additional options to add",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "dimensions": {
+          "x-title": "Dimensions",
+          "description": "The number of dimensions the resulting output embeddings should have. Only supported in text-embedding-3 and later models.",
+          "default": 1536,
+          "type": "string",
+          "enum": [
+            256,
+            512,
+            1024,
+            1536,
+            3072
+          ],
+          "x-enumNames": [
+            "256",
+            "512",
+            "1024",
+            "1536",
+            "3072"
+          ]
+        },
+        "baseURL": {
+          "x-title": "Base URL",
+          "description": "Override the default base URL for the API",
+          "default": "https://api.openai.com/v1",
+          "x-displayOptions": {
+            "hide": {
+              "@version": [
+                {
+                  "_cnd": {
+                    "gte": 1.2
+                  }
+                }
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "batchSize": {
+          "x-title": "Batch Size",
+          "description": "Maximum number of documents to send in each request",
+          "default": 512,
+          "type": "number",
+          "maximum": 2048
+        },
+        "stripNewLines": {
+          "x-title": "Strip New Lines",
+          "description": "Whether to strip new lines from the input text",
+          "default": true,
+          "type": "boolean"
+        },
+        "timeout": {
+          "x-title": "Timeout",
+          "description": "Maximum amount of time a request is allowed to take in seconds. Set to -1 for no timeout.",
+          "default": -1,
+          "type": "number"
+        },
+        "encodingFormat": {
+          "x-title": "Encoding Format",
+          "description": "The format to return the embeddings in",
+          "default": "float",
+          "type": "string",
+          "enum": [
+            "float",
+            "base64"
+          ],
+          "x-enumNames": [
+            "Float",
+            "Base64"
+          ]
+        }
+      }
+    }
+  },
+  "x-icon": {
+    "light": "file:openAiLight.svg",
+    "dark": "file:openAiLight.dark.svg"
+  },
+  "x-inputs": [],
+  "x-outputs": [
+    "ai_embedding"
+  ],
+  "x-credentials": [
+    {
+      "name": "openAiApi",
+      "required": true
+    }
+  ]
+}

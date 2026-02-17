@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Execution Data",
+  "description": "Add execution data for search",
+  "x-n8n-node-type": "executionData",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "operation": {
+      "x-title": "Operation",
+      "default": "save",
+      "type": "string",
+      "enum": [
+        "save"
+      ],
+      "x-enumNames": [
+        "Save Highlight Data (for Search/review)"
+      ]
+    },
+    "dataToSave": {
+      "x-title": "Data to Save",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "save"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "x-title": "Key",
+                "default": "",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-icon": "fa:tasks",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

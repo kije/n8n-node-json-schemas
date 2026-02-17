@@ -1,0 +1,603 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Convert to File",
+  "description": "Convert JSON data to binary data",
+  "x-n8n-node-type": "convertToFile",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "operation": {
+      "x-title": "Operation",
+      "default": "csv",
+      "type": "string",
+      "enum": [
+        "csv",
+        "html",
+        "iCal",
+        "toJson",
+        "ods",
+        "rtf",
+        "toText",
+        "xls",
+        "xlsx",
+        "toBinary"
+      ],
+      "x-enumNames": [
+        "Convert to CSV",
+        "Convert to HTML",
+        "Convert to ICS",
+        "Convert to JSON",
+        "Convert to ODS",
+        "Convert to RTF",
+        "Convert to Text File",
+        "Convert to XLS",
+        "Convert to XLSX",
+        "Move Base64 String to File"
+      ],
+      "x-enumDescriptions": [
+        "Transform input data into a CSV file",
+        "Transform input data into a table in an HTML file",
+        "Converts each input item to an ICS event file",
+        "Transform input data into a single or multiple JSON files",
+        "Transform input data into an ODS file",
+        "Transform input data into a table in an RTF file",
+        "Transform input data string into a file",
+        "Transform input data into an Excel file",
+        "Transform input data into an Excel file",
+        "Convert a base64-encoded string into its original file format"
+      ]
+    },
+    "binaryPropertyName": {
+      "x-title": "Put Output File in Field",
+      "description": "The field that your iCalendar file will be available under in the output",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "iCal"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "toJson"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "addBOM": {
+          "x-title": "Add Byte Order Mark (BOM)",
+          "description": "Whether to add special marker at the start of your text file. This marker helps some programs understand how to read the file correctly.",
+          "default": false,
+          "x-displayOptions": {
+            "show": {
+              "encoding": [
+                "utf8",
+                "cesu8",
+                "ucs2"
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "format": {
+          "x-title": "Format",
+          "description": "Whether to format the JSON data for easier reading",
+          "default": false,
+          "type": "boolean"
+        },
+        "encoding": {
+          "x-title": "Encoding",
+          "description": "Choose the character set to use to encode the data",
+          "default": "utf8",
+          "type": "string",
+          "enum": [
+            "armscii8",
+            "ascii",
+            "base64",
+            "big5hkscs",
+            "binary",
+            "cesu8",
+            "cp1046",
+            "cp1124",
+            "cp1125",
+            "cp1129",
+            "cp1133",
+            "cp1161",
+            "cp1162",
+            "cp1163",
+            "cp437",
+            "cp720",
+            "cp737",
+            "cp775",
+            "cp808",
+            "cp850",
+            "cp852",
+            "cp855",
+            "cp856",
+            "cp857",
+            "cp858",
+            "cp860",
+            "cp861",
+            "cp862",
+            "cp863",
+            "cp864",
+            "cp865",
+            "cp866",
+            "cp869",
+            "cp922",
+            "cp936",
+            "cp949",
+            "cp950",
+            "eucjp",
+            "gb18030",
+            "gbk",
+            "georgianacademy",
+            "georgianps",
+            "hex",
+            "hproman8",
+            "iso646cn",
+            "iso646jp",
+            "iso88591",
+            "iso885910",
+            "iso885911",
+            "iso885913",
+            "iso885914",
+            "iso885915",
+            "iso885916",
+            "iso88592",
+            "iso88593",
+            "iso88594",
+            "iso88595",
+            "iso88596",
+            "iso88597",
+            "iso88598",
+            "iso88599",
+            "koi8r",
+            "koi8ru",
+            "koi8t",
+            "koi8u",
+            "maccenteuro",
+            "maccroatian",
+            "maccyrillic",
+            "macgreek",
+            "maciceland",
+            "macintosh",
+            "macroman",
+            "macromania",
+            "macthai",
+            "macturkish",
+            "macukraine",
+            "mik",
+            "pt154",
+            "rk1048",
+            "shiftjis",
+            "tcvn",
+            "tis620",
+            "ucs2",
+            "utf16",
+            "utf16be",
+            "utf32",
+            "utf32be",
+            "utf32le",
+            "utf7",
+            "utf7imap",
+            "utf8",
+            "viscii",
+            "windows1250",
+            "windows1251",
+            "windows1252",
+            "windows1253",
+            "windows1254",
+            "windows1255",
+            "windows1256",
+            "windows1257",
+            "windows1258",
+            "windows874"
+          ],
+          "x-enumNames": [
+            "armscii8",
+            "ascii",
+            "base64",
+            "big5hkscs",
+            "binary",
+            "cesu8",
+            "cp1046",
+            "cp1124",
+            "cp1125",
+            "cp1129",
+            "cp1133",
+            "cp1161",
+            "cp1162",
+            "cp1163",
+            "cp437",
+            "cp720",
+            "cp737",
+            "cp775",
+            "cp808",
+            "cp850",
+            "cp852",
+            "cp855",
+            "cp856",
+            "cp857",
+            "cp858",
+            "cp860",
+            "cp861",
+            "cp862",
+            "cp863",
+            "cp864",
+            "cp865",
+            "cp866",
+            "cp869",
+            "cp922",
+            "cp936",
+            "cp949",
+            "cp950",
+            "eucjp",
+            "gb18030",
+            "gbk",
+            "georgianacademy",
+            "georgianps",
+            "hex",
+            "hproman8",
+            "iso646cn",
+            "iso646jp",
+            "iso88591",
+            "iso885910",
+            "iso885911",
+            "iso885913",
+            "iso885914",
+            "iso885915",
+            "iso885916",
+            "iso88592",
+            "iso88593",
+            "iso88594",
+            "iso88595",
+            "iso88596",
+            "iso88597",
+            "iso88598",
+            "iso88599",
+            "koi8r",
+            "koi8ru",
+            "koi8t",
+            "koi8u",
+            "maccenteuro",
+            "maccroatian",
+            "maccyrillic",
+            "macgreek",
+            "maciceland",
+            "macintosh",
+            "macroman",
+            "macromania",
+            "macthai",
+            "macturkish",
+            "macukraine",
+            "mik",
+            "pt154",
+            "rk1048",
+            "shiftjis",
+            "tcvn",
+            "tis620",
+            "ucs2",
+            "utf16",
+            "utf16be",
+            "utf32",
+            "utf32be",
+            "utf32le",
+            "utf7",
+            "utf7imap",
+            "utf8",
+            "viscii",
+            "windows1250",
+            "windows1251",
+            "windows1252",
+            "windows1253",
+            "windows1254",
+            "windows1255",
+            "windows1256",
+            "windows1257",
+            "windows1258",
+            "windows874"
+          ]
+        },
+        "fileName": {
+          "x-title": "File Name",
+          "description": "Name of the output file",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "sourceProperty": {
+      "x-title": "Text Input Field",
+      "description": "The name of the input field that contains a string to convert to a file. Use dot-notation for deep fields (e.g. 'level1.level2.currentKey').",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "toText"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "mode": {
+      "x-title": "Mode",
+      "default": "once",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "toJson"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "once",
+        "each"
+      ],
+      "x-enumNames": [
+        "All Items to One File",
+        "Each Item to Separate File"
+      ]
+    },
+    "title": {
+      "x-title": "Event Title",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "iCal"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "start": {
+      "x-title": "Start",
+      "description": "Date and time at which the event begins. (For all-day events, the time will be ignored.).",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "iCal"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "end": {
+      "x-title": "End",
+      "description": "Date and time at which the event ends. (For all-day events, the time will be ignored.).",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "iCal"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "allDay": {
+      "x-title": "All Day",
+      "description": "Whether the event lasts all day or not",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "iCal"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "additionalFields": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "iCal"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "attendeesUi": {
+          "x-title": "Attendees",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "attendeeValues": {
+              "x-title": "Attendees",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "x-title": "Name",
+                    "default": "",
+                    "x-required": true,
+                    "type": "string"
+                  },
+                  "email": {
+                    "x-title": "Email",
+                    "default": "",
+                    "x-required": true,
+                    "type": "string"
+                  },
+                  "rsvp": {
+                    "x-title": "RSVP",
+                    "description": "Whether the attendee has to confirm attendance or not",
+                    "default": false,
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "busyStatus": {
+          "x-title": "Busy Status",
+          "description": "Used to specify busy status for Microsoft applications, like Outlook",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "BUSY",
+            "TENTATIVE"
+          ],
+          "x-enumNames": [
+            "Busy",
+            "Tentative"
+          ]
+        },
+        "calName": {
+          "x-title": "Calendar Name",
+          "description": "Specifies the calendar (not event) name. Used by Apple iCal and Microsoft Outlook. <a href=\"https://docs.microsoft.com/en-us/openspecs/exchange_server_protocols/ms-oxcical/1da58449-b97e-46bd-b018-a1ce576f3e6d\">More info</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "description": {
+          "x-title": "Description",
+          "default": "",
+          "type": "string"
+        },
+        "fileName": {
+          "x-title": "File Name",
+          "description": "The name of the file to be generated. Default name is event.ics.",
+          "default": "",
+          "type": "string"
+        },
+        "geolocationUi": {
+          "x-title": "Geolocation",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "geolocationValues": {
+              "x-title": "Geolocation",
+              "type": "object",
+              "properties": {
+                "lat": {
+                  "x-title": "Latitude",
+                  "default": "",
+                  "type": "string"
+                },
+                "lon": {
+                  "x-title": "Longitude",
+                  "default": "",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "location": {
+          "x-title": "Location",
+          "description": "The intended venue",
+          "default": "",
+          "type": "string"
+        },
+        "recurrenceRule": {
+          "x-title": "Recurrence Rule",
+          "description": "A rule to define the repeat pattern of the event (RRULE). (<a href=\"https://icalendar.org/rrule-tool.html\">Rule generator</a>).",
+          "default": "",
+          "type": "string"
+        },
+        "organizerUi": {
+          "x-title": "Organizer",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "organizerValues": {
+              "x-title": "Organizer",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "x-title": "Name",
+                  "default": "",
+                  "x-required": true,
+                  "type": "string"
+                },
+                "email": {
+                  "x-title": "Email",
+                  "default": "",
+                  "x-required": true,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "sequence": {
+          "x-title": "Sequence",
+          "description": "When sending an update for an event (with the same uid), defines the revision sequence number",
+          "default": 0,
+          "type": "number"
+        },
+        "status": {
+          "x-title": "Status",
+          "default": "CONFIRMED",
+          "type": "string",
+          "enum": [
+            "CONFIRMED",
+            "CANCELLED",
+            "TENTATIVE"
+          ],
+          "x-enumNames": [
+            "Confirmed",
+            "Cancelled",
+            "Tentative"
+          ]
+        },
+        "uid": {
+          "x-title": "UID",
+          "description": "Universally unique ID for the event (will be auto-generated if not specified here). Should be globally unique.",
+          "default": "",
+          "type": "string"
+        },
+        "url": {
+          "x-title": "URL",
+          "description": "URL associated with event",
+          "default": "",
+          "type": "string"
+        },
+        "useWorkflowTimezone": {
+          "x-title": "Use Workflow Timezone",
+          "description": "Whether to use the workflow timezone set in node's settings rather than UTC",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-icon": {
+    "light": "file:convertToFile.svg",
+    "dark": "file:convertToFile.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

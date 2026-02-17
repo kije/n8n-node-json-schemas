@@ -1,0 +1,288 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Coda",
+  "description": "Consume Coda API",
+  "x-n8n-node-type": "coda",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "table",
+      "type": "string",
+      "enum": [
+        "control",
+        "formula",
+        "table",
+        "view"
+      ],
+      "x-enumNames": [
+        "Control",
+        "Formula",
+        "Table",
+        "View"
+      ],
+      "x-enumDescriptions": [
+        "Controls provide a user-friendly way to input a value that can affect other parts of the doc",
+        "Formulas can be great for performing one-off computations",
+        "Access data of tables in documents",
+        "Access data of views in documents"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "view"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "deleteViewRow",
+        "get",
+        "getAllViewColumns",
+        "getAll",
+        "getAllViewRows",
+        "pushViewButton",
+        "updateViewRow"
+      ],
+      "x-enumNames": [
+        "Delete Row",
+        "Get",
+        "Get Columns",
+        "Get Many",
+        "Get Rows",
+        "Push Button",
+        "Update Row"
+      ],
+      "x-enumDescriptions": [
+        "Delete view row",
+        "Get a view",
+        "Get all views columns",
+        "Get many views",
+        "Get all views rows",
+        "Push view button",
+        ""
+      ]
+    },
+    "docId": {
+      "x-title": "Doc Name or ID",
+      "description": "ID of the doc. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "view"
+          ],
+          "operation": [
+            "updateViewRow"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "tableId": {
+      "x-title": "Table Name or ID",
+      "description": "The table to get the row from. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "table"
+          ],
+          "operation": [
+            "getAllColumns"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "view"
+          ],
+          "operation": [
+            "updateViewRow"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "disableParsing": {
+          "x-title": "Disable Parsing",
+          "description": "Whether the API will not attempt to parse the data in any way",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "rowId": {
+      "x-title": "Row Name or ID",
+      "description": "The view to get the row from. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "view"
+          ],
+          "operation": [
+            "updateViewRow"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "view"
+          ],
+          "operation": [
+            "getAllViewColumns"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "view"
+          ],
+          "operation": [
+            "getAllViewColumns"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "columnId": {
+      "x-title": "Column Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "view"
+          ],
+          "operation": [
+            "pushViewButton"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "formulaId": {
+      "x-title": "Formula ID",
+      "description": "The formula to get the row from",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "formula"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "controlId": {
+      "x-title": "Control ID",
+      "description": "The control to get the row from",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "control"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "viewId": {
+      "x-title": "View Name or ID",
+      "description": "The view to get the row from. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "view"
+          ],
+          "operation": [
+            "updateViewRow"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "keyName": {
+      "x-title": "Key Name",
+      "description": "The view to get the row from",
+      "default": "columns",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "view"
+          ],
+          "operation": [
+            "updateViewRow"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:coda.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "codaApi",
+      "required": true
+    }
+  ]
+}

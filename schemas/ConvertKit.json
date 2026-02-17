@@ -1,0 +1,231 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ConvertKit",
+  "description": "Consume ConvertKit API",
+  "x-n8n-node-type": "convertKit",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "form",
+      "type": "string",
+      "enum": [
+        "customField",
+        "form",
+        "sequence",
+        "tag",
+        "tagSubscriber"
+      ],
+      "x-enumNames": [
+        "Custom Field",
+        "Form",
+        "Sequence",
+        "Tag",
+        "Tag Subscriber"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "tagSubscriber"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "add",
+        "getAll",
+        "delete"
+      ],
+      "x-enumNames": [
+        "Add",
+        "Get Many",
+        "Delete"
+      ],
+      "x-enumDescriptions": [
+        "Add a tag to a subscriber",
+        "List subscriptions to a tag including subscriber data",
+        "Delete a tag from a subscriber"
+      ]
+    },
+    "id": {
+      "x-title": "Sequence Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sequence"
+          ],
+          "operation": [
+            "addSubscriber",
+            "getSubscriptions"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "label": {
+      "x-title": "Label",
+      "description": "The label of the custom field",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customField"
+          ],
+          "operation": [
+            "update",
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "tagSubscriber"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "tagSubscriber"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "Subscriber email address",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "tagSubscriber"
+          ],
+          "operation": [
+            "add",
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "description": "Receive only active subscribers or cancelled subscribers",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "tagSubscriber"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "subscriberState": {
+          "x-title": "Subscriber State",
+          "default": "active",
+          "type": "string",
+          "enum": [
+            "active",
+            "cancelled"
+          ],
+          "x-enumNames": [
+            "Active",
+            "Cancelled"
+          ]
+        }
+      }
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "Tag name, multiple can be added separated by comma",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "tagId": {
+      "x-title": "Tag Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "tagSubscriber"
+          ],
+          "operation": [
+            "add",
+            "getAll",
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:convertKit.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "convertKitApi",
+      "required": true
+    }
+  ]
+}

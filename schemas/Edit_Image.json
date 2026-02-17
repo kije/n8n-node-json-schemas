@@ -1,0 +1,1179 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Edit Image",
+  "description": "Edits an image like blur, resize or adding border and text",
+  "x-n8n-node-type": "editImage",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "operation": {
+      "x-title": "Operation",
+      "default": "border",
+      "type": "string",
+      "enum": [
+        "blur",
+        "border",
+        "composite",
+        "create",
+        "crop",
+        "draw",
+        "information",
+        "multiStep",
+        "resize",
+        "rotate",
+        "shear",
+        "text",
+        "transparent"
+      ],
+      "x-enumNames": [
+        "Blur",
+        "Border",
+        "Composite",
+        "Create",
+        "Crop",
+        "Draw",
+        "Get Information",
+        "Multi Step",
+        "Resize",
+        "Rotate",
+        "Shear",
+        "Text",
+        "Transparent"
+      ],
+      "x-enumDescriptions": [
+        "Adds a blur to the image and so makes it less sharp",
+        "Adds a border to the image",
+        "Composite image on top of another one",
+        "Create a new image",
+        "Crops the image",
+        "Draw on image",
+        "Returns image information like resolution",
+        "Perform multiple operations",
+        "Change the size of image",
+        "Rotate image",
+        "Shear image along the X or Y axis",
+        "Adds text to image",
+        "Make a color in image transparent"
+      ]
+    },
+    "dataPropertyName": {
+      "x-title": "Property Name",
+      "description": "Name of the binary property in which the image data can be found",
+      "default": "data",
+      "type": "string"
+    },
+    "operations": {
+      "x-title": "Operations",
+      "description": "The operations to perform",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "multiStep"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "operations": {
+          "x-title": "Operations",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "operation": {
+                "x-title": "Operation",
+                "default": "",
+                "type": "string",
+                "enum": [
+                  "blur",
+                  "border",
+                  "composite",
+                  "create",
+                  "crop",
+                  "draw",
+                  "rotate",
+                  "resize",
+                  "shear",
+                  "text",
+                  "transparent"
+                ],
+                "x-enumNames": [
+                  "Blur",
+                  "Border",
+                  "Composite",
+                  "Create",
+                  "Crop",
+                  "Draw",
+                  "Rotate",
+                  "Resize",
+                  "Shear",
+                  "Text",
+                  "Transparent"
+                ],
+                "x-enumDescriptions": [
+                  "Adds a blur to the image and so makes it less sharp",
+                  "Adds a border to the image",
+                  "Composite image on top of another one",
+                  "Create a new image",
+                  "Crops the image",
+                  "Draw on image",
+                  "Rotate image",
+                  "Change the size of image",
+                  "Shear image along the X or Y axis",
+                  "Adds text to image",
+                  "Make a color in image transparent"
+                ]
+              },
+              "backgroundColor": {
+                "x-title": "Background Color",
+                "description": "The color to use for the background when image gets rotated by anything which is not a multiple of 90",
+                "default": "#ffffffff",
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "rotate"
+                    ]
+                  }
+                },
+                "type": "string",
+                "pattern": "^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$",
+                "x-format": "color"
+              },
+              "width": {
+                "x-title": "Width",
+                "description": "New width of the image",
+                "default": 500,
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "resize"
+                    ]
+                  }
+                },
+                "type": "number"
+              },
+              "height": {
+                "x-title": "Height",
+                "description": "New height of the image",
+                "default": 500,
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "resize"
+                    ]
+                  }
+                },
+                "type": "number"
+              },
+              "primitive": {
+                "x-title": "Primitive",
+                "description": "The primitive to draw",
+                "default": "rectangle",
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "draw"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "circle",
+                  "line",
+                  "rectangle"
+                ],
+                "x-enumNames": [
+                  "Circle",
+                  "Line",
+                  "Rectangle"
+                ]
+              },
+              "color": {
+                "x-title": "Color",
+                "description": "The color to make transparent",
+                "default": "#ff0000",
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "transparent"
+                    ]
+                  }
+                },
+                "type": "string",
+                "pattern": "^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$",
+                "x-format": "color"
+              },
+              "startPositionX": {
+                "x-title": "Start Position X",
+                "description": "X (horizontal) start position of the primitive",
+                "default": 50,
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "draw"
+                    ],
+                    "primitive": [
+                      "circle",
+                      "line",
+                      "rectangle"
+                    ]
+                  }
+                },
+                "type": "number"
+              },
+              "startPositionY": {
+                "x-title": "Start Position Y",
+                "description": "Y (horizontal) start position of the primitive",
+                "default": 50,
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "draw"
+                    ],
+                    "primitive": [
+                      "circle",
+                      "line",
+                      "rectangle"
+                    ]
+                  }
+                },
+                "type": "number"
+              },
+              "endPositionX": {
+                "x-title": "End Position X",
+                "description": "X (horizontal) end position of the primitive",
+                "default": 250,
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "draw"
+                    ],
+                    "primitive": [
+                      "circle",
+                      "line",
+                      "rectangle"
+                    ]
+                  }
+                },
+                "type": "number"
+              },
+              "endPositionY": {
+                "x-title": "End Position Y",
+                "description": "Y (horizontal) end position of the primitive",
+                "default": 250,
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "draw"
+                    ],
+                    "primitive": [
+                      "circle",
+                      "line",
+                      "rectangle"
+                    ]
+                  }
+                },
+                "type": "number"
+              },
+              "cornerRadius": {
+                "x-title": "Corner Radius",
+                "description": "The radius of the corner to create round corners",
+                "default": 0,
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "draw"
+                    ],
+                    "primitive": [
+                      "rectangle"
+                    ]
+                  }
+                },
+                "type": "number"
+              },
+              "text": {
+                "x-title": "Text",
+                "description": "Text to write on the image",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "text"
+                    ]
+                  }
+                },
+                "type": "string",
+                "x-rows": 5
+              },
+              "fontSize": {
+                "x-title": "Font Size",
+                "description": "Size of the text",
+                "default": 18,
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "text"
+                    ]
+                  }
+                },
+                "type": "number"
+              },
+              "fontColor": {
+                "x-title": "Font Color",
+                "description": "Color of the text",
+                "default": "#000000",
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "text"
+                    ]
+                  }
+                },
+                "type": "string",
+                "pattern": "^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$",
+                "x-format": "color"
+              },
+              "positionX": {
+                "x-title": "Position X",
+                "description": "X (horizontal) position to crop from",
+                "default": 0,
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "crop"
+                    ]
+                  }
+                },
+                "type": "number"
+              },
+              "positionY": {
+                "x-title": "Position Y",
+                "description": "Y (vertical) position to crop from",
+                "default": 0,
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "crop"
+                    ]
+                  }
+                },
+                "type": "number"
+              },
+              "lineLength": {
+                "x-title": "Max Line Length",
+                "description": "Max amount of characters in a line before a line-break should get added",
+                "default": 80,
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "text"
+                    ]
+                  }
+                },
+                "type": "number",
+                "minimum": 1
+              },
+              "blur": {
+                "x-title": "Blur",
+                "description": "How strong the blur should be",
+                "default": 5,
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "blur"
+                    ]
+                  }
+                },
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1000
+              },
+              "sigma": {
+                "x-title": "Sigma",
+                "description": "The sigma of the blur",
+                "default": 2,
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "blur"
+                    ]
+                  }
+                },
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1000
+              },
+              "borderWidth": {
+                "x-title": "Border Width",
+                "description": "The width of the border",
+                "default": 10,
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "border"
+                    ]
+                  }
+                },
+                "type": "number"
+              },
+              "borderHeight": {
+                "x-title": "Border Height",
+                "description": "The height of the border",
+                "default": 10,
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "border"
+                    ]
+                  }
+                },
+                "type": "number"
+              },
+              "borderColor": {
+                "x-title": "Border Color",
+                "description": "Color of the border",
+                "default": "#000000",
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "border"
+                    ]
+                  }
+                },
+                "type": "string",
+                "pattern": "^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$",
+                "x-format": "color"
+              },
+              "dataPropertyNameComposite": {
+                "x-title": "Composite Image Property",
+                "description": "The name of the binary property which contains the data of the image to composite on top of image which is found in Property Name",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "composite"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "operator": {
+                "x-title": "Operator",
+                "description": "The operator to use to combine the images",
+                "default": "Over",
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "composite"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "Add",
+                  "Atop",
+                  "Bumpmap",
+                  "Copy",
+                  "CopyBlack",
+                  "CopyBlue",
+                  "CopyCyan",
+                  "CopyGreen",
+                  "CopyMagenta",
+                  "CopyOpacity",
+                  "CopyRed",
+                  "CopyYellow",
+                  "Difference",
+                  "Divide",
+                  "In",
+                  "Minus",
+                  "Multiply",
+                  "Out",
+                  "Over",
+                  "Plus",
+                  "Subtract",
+                  "Xor"
+                ],
+                "x-enumNames": [
+                  "Add",
+                  "Atop",
+                  "Bumpmap",
+                  "Copy",
+                  "Copy Black",
+                  "Copy Blue",
+                  "Copy Cyan",
+                  "Copy Green",
+                  "Copy Magenta",
+                  "Copy Opacity",
+                  "Copy Red",
+                  "Copy Yellow",
+                  "Difference",
+                  "Divide",
+                  "In",
+                  "Minus",
+                  "Multiply",
+                  "Out",
+                  "Over",
+                  "Plus",
+                  "Subtract",
+                  "Xor"
+                ]
+              },
+              "resizeOption": {
+                "x-title": "Option",
+                "description": "How to resize the image",
+                "default": "maximumArea",
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "resize"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "ignoreAspectRatio",
+                  "maximumArea",
+                  "minimumArea",
+                  "onlyIfLarger",
+                  "onlyIfSmaller",
+                  "percent"
+                ],
+                "x-enumNames": [
+                  "Ignore Aspect Ratio",
+                  "Maximum Area",
+                  "Minimum Area",
+                  "Only if Larger",
+                  "Only if Smaller",
+                  "Percent"
+                ],
+                "x-enumDescriptions": [
+                  "Ignore aspect ratio and resize exactly to specified values",
+                  "Specified values are maximum area",
+                  "Specified values are minimum area",
+                  "Resize only if image is larger than width or height",
+                  "Resize only if image is smaller than width or height",
+                  "Width and height are specified in percents"
+                ]
+              },
+              "rotate": {
+                "x-title": "Rotate",
+                "description": "How much the image should be rotated",
+                "default": 0,
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "rotate"
+                    ]
+                  }
+                },
+                "type": "number",
+                "minimum": -360,
+                "maximum": 360
+              },
+              "degreesX": {
+                "x-title": "Degrees X",
+                "description": "X (horizontal) shear degrees",
+                "default": 0,
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "shear"
+                    ]
+                  }
+                },
+                "type": "number"
+              },
+              "degreesY": {
+                "x-title": "Degrees Y",
+                "description": "Y (vertical) shear degrees",
+                "default": 0,
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "shear"
+                    ]
+                  }
+                },
+                "type": "number"
+              },
+              "font": {
+                "x-title": "Font Name or ID",
+                "description": "The font to use. Defaults to Arial. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "operation": [
+                      "text"
+                    ]
+                  }
+                },
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "backgroundColor": {
+      "x-title": "Background Color",
+      "description": "The color to use for the background when image gets rotated by anything which is not a multiple of 90",
+      "default": "#ffffffff",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "rotate"
+          ]
+        }
+      },
+      "type": "string",
+      "pattern": "^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$",
+      "x-format": "color"
+    },
+    "width": {
+      "x-title": "Width",
+      "description": "New width of the image",
+      "default": 500,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "resize"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "height": {
+      "x-title": "Height",
+      "description": "New height of the image",
+      "default": 500,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "resize"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "primitive": {
+      "x-title": "Primitive",
+      "description": "The primitive to draw",
+      "default": "rectangle",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "draw"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "circle",
+        "line",
+        "rectangle"
+      ],
+      "x-enumNames": [
+        "Circle",
+        "Line",
+        "Rectangle"
+      ]
+    },
+    "color": {
+      "x-title": "Color",
+      "description": "The color to make transparent",
+      "default": "#ff0000",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "transparent"
+          ]
+        }
+      },
+      "type": "string",
+      "pattern": "^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$",
+      "x-format": "color"
+    },
+    "startPositionX": {
+      "x-title": "Start Position X",
+      "description": "X (horizontal) start position of the primitive",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "draw"
+          ],
+          "primitive": [
+            "circle",
+            "line",
+            "rectangle"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "startPositionY": {
+      "x-title": "Start Position Y",
+      "description": "Y (horizontal) start position of the primitive",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "draw"
+          ],
+          "primitive": [
+            "circle",
+            "line",
+            "rectangle"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "endPositionX": {
+      "x-title": "End Position X",
+      "description": "X (horizontal) end position of the primitive",
+      "default": 250,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "draw"
+          ],
+          "primitive": [
+            "circle",
+            "line",
+            "rectangle"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "endPositionY": {
+      "x-title": "End Position Y",
+      "description": "Y (horizontal) end position of the primitive",
+      "default": 250,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "draw"
+          ],
+          "primitive": [
+            "circle",
+            "line",
+            "rectangle"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "cornerRadius": {
+      "x-title": "Corner Radius",
+      "description": "The radius of the corner to create round corners",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "draw"
+          ],
+          "primitive": [
+            "rectangle"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "text": {
+      "x-title": "Text",
+      "description": "Text to write on the image",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "text"
+          ]
+        }
+      },
+      "type": "string",
+      "x-rows": 5
+    },
+    "fontSize": {
+      "x-title": "Font Size",
+      "description": "Size of the text",
+      "default": 18,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "text"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "fontColor": {
+      "x-title": "Font Color",
+      "description": "Color of the text",
+      "default": "#000000",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "text"
+          ]
+        }
+      },
+      "type": "string",
+      "pattern": "^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$",
+      "x-format": "color"
+    },
+    "positionX": {
+      "x-title": "Position X",
+      "description": "X (horizontal) position to crop from",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "crop"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "positionY": {
+      "x-title": "Position Y",
+      "description": "Y (vertical) position to crop from",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "crop"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "lineLength": {
+      "x-title": "Max Line Length",
+      "description": "Max amount of characters in a line before a line-break should get added",
+      "default": 80,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "text"
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "blur": {
+      "x-title": "Blur",
+      "description": "How strong the blur should be",
+      "default": 5,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "blur"
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1000
+    },
+    "sigma": {
+      "x-title": "Sigma",
+      "description": "The sigma of the blur",
+      "default": 2,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "blur"
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1000
+    },
+    "borderWidth": {
+      "x-title": "Border Width",
+      "description": "The width of the border",
+      "default": 10,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "border"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "borderHeight": {
+      "x-title": "Border Height",
+      "description": "The height of the border",
+      "default": 10,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "border"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "borderColor": {
+      "x-title": "Border Color",
+      "description": "Color of the border",
+      "default": "#000000",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "border"
+          ]
+        }
+      },
+      "type": "string",
+      "pattern": "^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$",
+      "x-format": "color"
+    },
+    "dataPropertyNameComposite": {
+      "x-title": "Composite Image Property",
+      "description": "The name of the binary property which contains the data of the image to composite on top of image which is found in Property Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "composite"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "operator": {
+      "x-title": "Operator",
+      "description": "The operator to use to combine the images",
+      "default": "Over",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "composite"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "Add",
+        "Atop",
+        "Bumpmap",
+        "Copy",
+        "CopyBlack",
+        "CopyBlue",
+        "CopyCyan",
+        "CopyGreen",
+        "CopyMagenta",
+        "CopyOpacity",
+        "CopyRed",
+        "CopyYellow",
+        "Difference",
+        "Divide",
+        "In",
+        "Minus",
+        "Multiply",
+        "Out",
+        "Over",
+        "Plus",
+        "Subtract",
+        "Xor"
+      ],
+      "x-enumNames": [
+        "Add",
+        "Atop",
+        "Bumpmap",
+        "Copy",
+        "Copy Black",
+        "Copy Blue",
+        "Copy Cyan",
+        "Copy Green",
+        "Copy Magenta",
+        "Copy Opacity",
+        "Copy Red",
+        "Copy Yellow",
+        "Difference",
+        "Divide",
+        "In",
+        "Minus",
+        "Multiply",
+        "Out",
+        "Over",
+        "Plus",
+        "Subtract",
+        "Xor"
+      ]
+    },
+    "resizeOption": {
+      "x-title": "Option",
+      "description": "How to resize the image",
+      "default": "maximumArea",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "resize"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "ignoreAspectRatio",
+        "maximumArea",
+        "minimumArea",
+        "onlyIfLarger",
+        "onlyIfSmaller",
+        "percent"
+      ],
+      "x-enumNames": [
+        "Ignore Aspect Ratio",
+        "Maximum Area",
+        "Minimum Area",
+        "Only if Larger",
+        "Only if Smaller",
+        "Percent"
+      ],
+      "x-enumDescriptions": [
+        "Ignore aspect ratio and resize exactly to specified values",
+        "Specified values are maximum area",
+        "Specified values are minimum area",
+        "Resize only if image is larger than width or height",
+        "Resize only if image is smaller than width or height",
+        "Width and height are specified in percents"
+      ]
+    },
+    "rotate": {
+      "x-title": "Rotate",
+      "description": "How much the image should be rotated",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "rotate"
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": -360,
+      "maximum": 360
+    },
+    "degreesX": {
+      "x-title": "Degrees X",
+      "description": "X (horizontal) shear degrees",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "shear"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "degreesY": {
+      "x-title": "Degrees Y",
+      "description": "Y (vertical) shear degrees",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "shear"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "hide": {
+          "operation": [
+            "information"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "destinationKey": {
+          "x-title": "Destination Output Field",
+          "description": "The name of the output field that will contain the file data",
+          "default": "data",
+          "type": "string"
+        },
+        "fileName": {
+          "x-title": "File Name",
+          "description": "File name to set in binary data",
+          "default": "",
+          "type": "string"
+        },
+        "font": {
+          "x-title": "Font Name or ID",
+          "description": "The font to use. Defaults to Arial. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/operation": [
+                "text"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "format": {
+          "x-title": "Format",
+          "description": "Set the output image format",
+          "default": "jpeg",
+          "type": "string",
+          "enum": [
+            "bmp",
+            "gif",
+            "jpeg",
+            "png",
+            "tiff",
+            "webp"
+          ],
+          "x-enumNames": [
+            "bmp",
+            "gif",
+            "jpeg",
+            "png",
+            "tiff",
+            "WebP"
+          ]
+        },
+        "quality": {
+          "x-title": "Quality",
+          "description": "Sets the jpeg|png|tiff compression level from 0 to 100 (best)",
+          "default": 100,
+          "x-displayOptions": {
+            "show": {
+              "format": [
+                "jpeg",
+                "png",
+                "tiff"
+              ]
+            }
+          },
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        }
+      }
+    }
+  },
+  "x-icon": "fa:image",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

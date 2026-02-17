@@ -1,0 +1,255 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ERPNext",
+  "description": "Consume ERPNext API",
+  "x-n8n-node-type": "erpNext",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "document",
+      "type": "string",
+      "enum": [
+        "document"
+      ],
+      "x-enumNames": [
+        "Document"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a document",
+        "Delete a document",
+        "Retrieve a document",
+        "Retrieve many documents",
+        "Update a document"
+      ]
+    },
+    "docType": {
+      "x-title": "DocType Name or ID",
+      "description": "The type of document you would like to update. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 10,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "fields": {
+          "x-title": "Field Names or IDs",
+          "description": "Comma-separated list of fields to return. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "filters": {
+          "x-title": "Filters",
+          "description": "Custom Properties",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "customProperty": {
+              "x-title": "Property",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "x-title": "Field Name or ID",
+                    "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "operator": {
+                    "x-title": "Operator",
+                    "default": "is",
+                    "type": "string",
+                    "enum": [
+                      "equalsGreater",
+                      "equalsLess",
+                      "is",
+                      "greater",
+                      "less",
+                      "isNot"
+                    ],
+                    "x-enumNames": [
+                      "EQUALS, or GREATER",
+                      "EQUALS, or LESS",
+                      "IS",
+                      "IS GREATER",
+                      "IS LESS",
+                      "IS NOT"
+                    ]
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "Value of the operator condition",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "properties": {
+      "x-title": "Properties",
+      "description": "Properties of request body",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "customProperty": {
+          "x-title": "Property",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "field": {
+                "x-title": "Field Name or ID",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": "",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "documentName": {
+      "x-title": "Document Name",
+      "description": "The name (ID) of document you would like to get",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "document"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"resource\"] + \": \" + $parameter[\"operation\"]}}",
+  "x-icon": "file:erpnext.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "erpNextApi",
+      "required": true
+    }
+  ]
+}

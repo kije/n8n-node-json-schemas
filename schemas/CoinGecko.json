@@ -1,0 +1,397 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CoinGecko",
+  "description": "Consume CoinGecko API",
+  "x-n8n-node-type": "coinGecko",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "coin",
+      "type": "string",
+      "enum": [
+        "coin",
+        "event"
+      ],
+      "x-enumNames": [
+        "Coin",
+        "Event"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Get Many"
+      ],
+      "x-enumDescriptions": [
+        "Get many events"
+      ]
+    },
+    "searchBy": {
+      "x-title": "Search By",
+      "description": "Search by coin ID or contract address",
+      "default": "coinId",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get",
+            "marketChart",
+            "price"
+          ],
+          "resource": [
+            "coin"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "coinId",
+        "contractAddress"
+      ],
+      "x-enumNames": [
+        "Coin ID",
+        "Contract Address"
+      ]
+    },
+    "coinId": {
+      "x-title": "Coin Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "ticker",
+            "history"
+          ],
+          "resource": [
+            "coin"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "baseCurrency": {
+      "x-title": "Base Currency Name or ID",
+      "description": "The first currency in the pair. For BTC:ETH this is BTC. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "marketChart"
+          ],
+          "resource": [
+            "coin"
+          ],
+          "searchBy": [
+            "coinId"
+          ]
+        },
+        "hide": {
+          "searchBy": [
+            "contractAddress"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "baseCurrencies": {
+      "x-title": "Base Currency Names or IDs",
+      "description": "The first currency in the pair. For BTC:ETH this is BTC. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "price"
+          ],
+          "resource": [
+            "coin"
+          ],
+          "searchBy": [
+            "coinId"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "platformId": {
+      "x-title": "Platform ID",
+      "description": "The ID of the platform issuing tokens",
+      "default": "ethereum",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get",
+            "marketChart",
+            "price"
+          ],
+          "resource": [
+            "coin"
+          ],
+          "searchBy": [
+            "contractAddress"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "ethereum"
+      ],
+      "x-enumNames": [
+        "Ethereum"
+      ]
+    },
+    "contractAddress": {
+      "x-title": "Contract Address",
+      "description": "Token's contract address",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get",
+            "marketChart"
+          ],
+          "resource": [
+            "coin"
+          ],
+          "searchBy": [
+            "contractAddress"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "contractAddresses": {
+      "x-title": "Contract Addresses",
+      "description": "The contract address of tokens, comma-separated",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "price"
+          ],
+          "resource": [
+            "coin"
+          ],
+          "searchBy": [
+            "contractAddress"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "quoteCurrency": {
+      "x-title": "Quote Currency Name or ID",
+      "description": "The second currency in the pair. For BTC:ETH this is ETH. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "candlestick",
+            "marketChart"
+          ],
+          "resource": [
+            "coin"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "quoteCurrencies": {
+      "x-title": "Quote Currency Names or IDs",
+      "description": "The second currency in the pair. For BTC:ETH this is ETH. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "price"
+          ],
+          "resource": [
+            "coin"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "days": {
+      "x-title": "Range (Days)",
+      "description": "Return data for this many days in the past from now",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "marketChart",
+            "candlestick"
+          ],
+          "resource": [
+            "coin"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "1",
+        "7",
+        "14",
+        "30",
+        "90",
+        "180",
+        "365",
+        "max"
+      ],
+      "x-enumNames": [
+        "1",
+        "7",
+        "14",
+        "30",
+        "90",
+        "180",
+        "365",
+        "Max"
+      ]
+    },
+    "date": {
+      "x-title": "Date",
+      "description": "The date of data snapshot",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "history"
+          ],
+          "resource": [
+            "coin"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "event"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "event"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "country_code": {
+          "x-title": "Country Code",
+          "description": "Country code of event. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "from_date": {
+          "x-title": "From Date",
+          "description": "Lists events after this date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "to_date": {
+          "x-title": "To Date",
+          "description": "Lists events before this date",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "type": {
+          "x-title": "Type Name or ID",
+          "description": "Type of event. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "upcoming_events_only": {
+          "x-title": "Upcoming Events Only",
+          "description": "Whether to list only upcoming events",
+          "default": true,
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:coinGecko.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

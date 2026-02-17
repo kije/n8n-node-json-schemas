@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Copper Trigger",
+  "description": "Handle Copper events via webhooks",
+  "x-n8n-node-type": "copperTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "description": "The resource which will fire the event",
+      "default": "",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "company",
+        "lead",
+        "opportunity",
+        "person",
+        "project",
+        "task"
+      ],
+      "x-enumNames": [
+        "Company",
+        "Lead",
+        "Opportunity",
+        "Person",
+        "Project",
+        "Task"
+      ]
+    },
+    "event": {
+      "x-title": "Event",
+      "description": "The event to listen to",
+      "default": "",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "delete",
+        "new",
+        "update"
+      ],
+      "x-enumNames": [
+        "Delete",
+        "New",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "An existing record is removed",
+        "A new record is created",
+        "Any field in the existing entity record is changed"
+      ]
+    }
+  },
+  "x-icon": "file:copper.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "copperApi",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

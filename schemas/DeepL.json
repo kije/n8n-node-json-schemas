@@ -1,0 +1,159 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DeepL",
+  "description": "Translate data using DeepL",
+  "x-n8n-node-type": "deepL",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input",
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "language",
+      "type": "string",
+      "enum": [
+        "language"
+      ],
+      "x-enumNames": [
+        "Language"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "translate",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "language"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "translate"
+      ],
+      "x-enumNames": [
+        "Translate"
+      ],
+      "x-enumDescriptions": [
+        "Translate data"
+      ]
+    },
+    "text": {
+      "x-title": "Text",
+      "description": "Input text to translate",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "translate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "translateTo": {
+      "x-title": "Target Language Name or ID",
+      "description": "Language to translate to. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "translate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "sourceLang": {
+          "x-title": "Source Language Name or ID",
+          "description": "Language to translate from. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "splitSentences": {
+          "x-title": "Split Sentences",
+          "description": "How the translation engine should split sentences",
+          "default": "1",
+          "type": "string",
+          "enum": [
+            "nonewlines",
+            "0",
+            "1"
+          ],
+          "x-enumNames": [
+            "Interpunction Only",
+            "No Splitting",
+            "On Punctuation and Newlines"
+          ],
+          "x-enumDescriptions": [
+            "Split text on interpunction only, ignoring newlines",
+            "Treat all text as a single sentence",
+            "Split text on interpunction and newlines"
+          ]
+        },
+        "preserveFormatting": {
+          "x-title": "Preserve Formatting",
+          "description": "Whether the translation engine should respect the original formatting, even if it would usually correct some aspects",
+          "default": "0",
+          "type": "string",
+          "enum": [
+            "0",
+            "1"
+          ],
+          "x-enumNames": [
+            "Apply Corrections",
+            "Do Not Correct"
+          ],
+          "x-enumDescriptions": [
+            "Fix punctuation at the beginning and end of sentences and fixes lower/upper caseing at the beginning",
+            "Keep text as similar as possible to the original"
+          ]
+        },
+        "formality": {
+          "x-title": "Formality",
+          "description": "How formal or informal the target text should be. May not be supported with all languages.",
+          "default": "default",
+          "type": "string",
+          "enum": [
+            "more",
+            "less",
+            "default"
+          ],
+          "x-enumNames": [
+            "Formal",
+            "Informal",
+            "Neutral"
+          ]
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": {
+    "light": "file:deepl.svg",
+    "dark": "file:deepL.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "deepLApi",
+      "required": true
+    }
+  ]
+}

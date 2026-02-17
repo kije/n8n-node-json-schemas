@@ -1,0 +1,518 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Discourse",
+  "description": "Consume Discourse API",
+  "x-n8n-node-type": "discourse",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "post",
+      "type": "string",
+      "enum": [
+        "category",
+        "group",
+        "post",
+        "user",
+        "userGroup"
+      ],
+      "x-enumNames": [
+        "Category",
+        "Group",
+        "Post",
+        "User",
+        "User Group"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "description": "Choose an operation",
+      "default": "add",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "userGroup"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "add",
+        "remove"
+      ],
+      "x-enumNames": [
+        "Add",
+        "Remove"
+      ],
+      "x-enumDescriptions": [
+        "Create a user to group",
+        "Remove user from group"
+      ]
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "Name of the user to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "color": {
+      "x-title": "Color",
+      "description": "Color of the category",
+      "default": "0000FF",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "category"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "pattern": "^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$",
+      "x-format": "color"
+    },
+    "textColor": {
+      "x-title": "Text Color",
+      "description": "Text color of the category",
+      "default": "0000FF",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "category"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "pattern": "^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$",
+      "x-format": "color"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "categoryId": {
+      "x-title": "Category ID",
+      "description": "ID of the category",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "category"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "edit_reason": {
+          "x-title": "Edit Reason",
+          "default": "",
+          "type": "string"
+        },
+        "cooked": {
+          "x-title": "Cooked",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "groupId": {
+      "x-title": "Group ID",
+      "description": "ID of the group to remove",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "userGroup"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "Title of the post",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "content": {
+      "x-title": "Content",
+      "description": "Content of the post. HTML is supported.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "active": {
+          "x-title": "Active",
+          "default": false,
+          "type": "boolean"
+        },
+        "approved": {
+          "x-title": "Approved",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "postId": {
+      "x-title": "Post ID",
+      "description": "ID of the post",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "post"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "Email of the user to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "username": {
+      "x-title": "Username",
+      "description": "The username of the user to return",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ],
+          "by": [
+            "username"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "password": {
+      "x-title": "Password",
+      "description": "The password of the user to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "password"
+    },
+    "by": {
+      "x-title": "By",
+      "description": "What to search by",
+      "default": "username",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "username",
+        "externalId"
+      ],
+      "x-enumNames": [
+        "Username",
+        "SSO External ID"
+      ]
+    },
+    "externalId": {
+      "x-title": "SSO External ID",
+      "description": "Discourse SSO external ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "get"
+          ],
+          "by": [
+            "externalId"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "flag": {
+      "x-title": "Flag",
+      "description": "User flags to search for",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "active",
+        "blocked",
+        "new",
+        "staff",
+        "suspect",
+        "suspended"
+      ],
+      "x-enumNames": [
+        "Active",
+        "Blocked",
+        "New",
+        "Staff",
+        "Suspect",
+        "Suspended"
+      ]
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "asc": {
+          "x-title": "Ascending",
+          "description": "Whether to sort ascending",
+          "default": true,
+          "type": "boolean"
+        },
+        "order": {
+          "x-title": "Order",
+          "description": "What to order by",
+          "default": "created",
+          "type": "string",
+          "enum": [
+            "created",
+            "days_visited",
+            "email",
+            "last_emailed",
+            "posts",
+            "posts_read",
+            "read_time",
+            "seen",
+            "topics_viewed",
+            "trust_level",
+            "username"
+          ],
+          "x-enumNames": [
+            "Created",
+            "Days Visited",
+            "Email",
+            "Last Emailed",
+            "Posts",
+            "Posts Read",
+            "Read Time",
+            "Seen",
+            "Topics Viewed",
+            "Trust Level",
+            "Username"
+          ]
+        },
+        "showEmails": {
+          "x-title": "Show Emails",
+          "description": "Whether to include user email addresses",
+          "default": false,
+          "type": "boolean"
+        },
+        "stats": {
+          "x-title": "Stats",
+          "description": "Whether to return user stats",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "usernames": {
+      "x-title": "Usernames",
+      "description": "Usernames to remove from group. Multiples can be defined separated by comma.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "userGroup"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:discourse.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "discourseApi",
+      "required": true
+    }
+  ]
+}

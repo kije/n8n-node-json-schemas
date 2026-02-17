@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Clockify Trigger",
+  "description": "Listens to Clockify events",
+  "x-n8n-node-type": "clockifyTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "workspaceId": {
+      "x-title": "Workspace Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "watchField": {
+      "x-title": "Trigger",
+      "default": 0,
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        0
+      ],
+      "x-enumNames": [
+        "New Time Entry"
+      ]
+    }
+  },
+  "x-icon": {
+    "light": "file:clockify.svg",
+    "dark": "file:clockify.dark.svg"
+  },
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "clockifyApi",
+      "required": true
+    }
+  ]
+}

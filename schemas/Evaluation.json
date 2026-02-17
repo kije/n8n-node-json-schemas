@@ -1,0 +1,582 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Evaluation",
+  "description": "Runs an evaluation",
+  "x-n8n-node-type": "evaluation",
+  "x-n8n-version": [
+    4.6,
+    4.7,
+    4.8
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "operation": {
+      "x-title": "Operation",
+      "default": "setOutputs",
+      "type": "string",
+      "enum": [
+        "setInputs",
+        "setOutputs",
+        "setMetrics",
+        "checkIfEvaluating"
+      ],
+      "x-enumNames": [
+        "Set Inputs",
+        "Set Outputs",
+        "Set Metrics",
+        "Check If Evaluating"
+      ]
+    },
+    "source": {
+      "x-title": "Source",
+      "description": "Where to get the test dataset from",
+      "default": "googleSheets",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "lte": 4.7
+              }
+            }
+          ],
+          "operation": [
+            "setOutputs"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "dataTable",
+        "googleSheets"
+      ],
+      "x-enumNames": [
+        "Data table",
+        "Google Sheets"
+      ],
+      "x-enumDescriptions": [
+        "Load the test dataset from a local Data table",
+        "Load the test dataset from a Google Sheets document"
+      ]
+    },
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "oAuth2",
+      "x-displayOptions": {
+        "hide": {
+          "source": [
+            "dataTable"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "serviceAccount",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "Service Account",
+        "OAuth2 (recommended)"
+      ]
+    },
+    "inputs": {
+      "x-title": "Inputs",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "setInputs"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Filter",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "inputName": {
+                "x-title": "Name",
+                "default": "",
+                "type": "string"
+              },
+              "inputValue": {
+                "x-title": "Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "credentials": {
+      "x-title": "Credentials",
+      "default": "",
+      "x-displayOptions": {
+        "hide": {
+          "source": [
+            "dataTable"
+          ]
+        }
+      },
+      "type": "string",
+      "x-n8n-type": "credentials"
+    },
+    "documentId": {
+      "x-title": "Document Containing Dataset",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "setOutputs"
+          ]
+        },
+        "hide": {
+          "source": [
+            "dataTable"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "By URL",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        }
+      ]
+    },
+    "sheetName": {
+      "x-title": "Sheet Containing Dataset",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "setOutputs"
+          ]
+        },
+        "hide": {
+          "source": [
+            "dataTable"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "By URL",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        }
+      ]
+    },
+    "dataTableId": {
+      "x-title": "Data table",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "dataTable"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "outputs": {
+      "x-title": "Outputs",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "setOutputs"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Filter",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "outputName": {
+                "x-title": "Name",
+                "default": "",
+                "type": "string"
+              },
+              "outputValue": {
+                "x-title": "Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "metric": {
+      "x-title": "Metric",
+      "default": "correctness",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "setMetrics"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 4.7
+              }
+            }
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "correctness",
+        "helpfulness",
+        "stringSimilarity",
+        "categorization",
+        "toolsUsed",
+        "customMetrics"
+      ],
+      "x-enumNames": [
+        "Correctness (AI-based)",
+        "Helpfulness (AI-based)",
+        "String Similarity",
+        "Categorization",
+        "Tools Used",
+        "Custom Metrics"
+      ],
+      "x-enumDescriptions": [
+        "Whether the answer’s meaning is consistent with a reference answer. Uses a scale of 1 (worst) to 5 (best).",
+        "Whether the response addresses the query. Uses a scale of 1 (worst) to 5 (best).",
+        "How close the answer is to a reference answer, measured character-by-character (edit distance). Returns a score between 0 and 1.",
+        "Whether the answer exactly matches the reference answer. Returns 1 if so and 0 otherwise.",
+        "Whether tool(s) were used or not. Returns a score between 0 and 1.",
+        "Define your own metric(s)"
+      ]
+    },
+    "expectedAnswer": {
+      "x-title": "Expected Answer",
+      "description": "The expected output defined in your evaluation dataset, used as ground truth",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "setMetrics"
+          ],
+          "metric": [
+            "correctness",
+            "stringSimilarity",
+            "categorization"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "actualAnswer": {
+      "x-title": "Response",
+      "description": "The response generated by AI (e.g. an agent or LLM in the workflow)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "setMetrics"
+          ],
+          "metric": [
+            "helpfulness"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "userQuery": {
+      "x-title": "User Query",
+      "description": "The original input or question submitted by the user",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "setMetrics"
+          ],
+          "metric": [
+            "helpfulness"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "expectedTools": {
+      "x-title": "Expected Tools",
+      "description": "Enter the name(s) of the tool(s) you expect the AI to call (separated by commas)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "setMetrics"
+          ],
+          "metric": [
+            "toolsUsed"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "intermediateSteps": {
+      "x-title": "Intermediate Steps (of Agent)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "setMetrics"
+          ],
+          "metric": [
+            "toolsUsed"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "prompt": {
+      "x-title": "Prompt",
+      "description": "Instruction used to guide the model in scoring the actual answer’s helpfulness against the expected answer",
+      "default": "You are an expert evaluator assessing the helpfulness of responses to user queries.\n\nEvaluate how helpful and useful a given response is to the user's question or request on a scale from 1 to 5. Consider whether the response addresses the user's needs, provides actionable information, and is relevant to their query.\n\n# Scoring Criteria\n\n- 5: Extremely helpful - The response fully addresses the user's needs, provides comprehensive and actionable information, and goes above and beyond to be useful.\n- 4: Very helpful - The response addresses most of the user's needs, provides useful information, and is highly relevant.\n- 3: Moderately helpful - The response addresses some of the user's needs, provides some useful information, but may lack completeness or depth.\n- 2: Slightly helpful - The response provides minimal useful information and only partially addresses the user's needs.\n- 1: Not helpful - The response fails to address the user's needs, provides no useful information, or is irrelevant.\n\n# Evaluation Steps\n\n1. Analyze the user's question or request to understand what they're looking for.\n2. Evaluate how well the response addresses the specific needs expressed in the query.\n3. Assess the completeness and quality of the information provided.\n4. Consider the relevance and applicability of the response to the user's situation.\n5. Evaluate whether the response provides actionable insights or next steps.\n6. Determine the overall helpfulness according to the defined criteria.\n\n# Output Format\n\nProvide:\n- A detailed analysis of the response's helpfulness (extended reasoning)\n- A one-sentence summary highlighting the key strengths or weaknesses\n- The final helpfulness score as an integer (1, 2, 3, 4, or 5)\n\nAlways follow the JSON format below and return nothing else:\n{\n  \"extended_reasoning\": \"<detailed step-by-step analysis of the response's helpfulness>\",\n  \"reasoning_summary\": \"<one sentence summary of the response's helpfulness>\",\n  \"score\": <number: integer from 1 to 5>\n}\n\n# Examples\n\n**Example 1:**\n\nInput:\n- Query: \"How do I fix a leaky faucet?\"\n- Response: \"A leaky faucet is usually caused by a worn washer or O-ring. Turn off the water supply, remove the handle, replace the washer or O-ring, and reassemble. If the leak persists, you may need to replace the entire cartridge.\"\n\nExpected Output:\n{\n  \"extended_reasoning\": \"The user asked for help fixing a leaky faucet, which is a practical home maintenance question. The response directly addresses the query by identifying the most common cause (worn washer or O-ring) and provides a clear step-by-step solution. It includes important safety information (turning off water supply) and offers a backup solution if the initial fix doesn't work. The response is concise, actionable, and comprehensive for this common problem.\",\n  \"reasoning_summary\": \"The response provides a complete, actionable solution with clear steps and troubleshooting advice.\",\n  \"score\": 5\n}\n\n**Example 2:**\n\nInput:\n- Query: \"What's the weather like?\"\n- Response: \"Weather can be sunny, rainy, cloudy, or snowy depending on various atmospheric conditions.\"\n\nExpected Output:\n{\n  \"extended_reasoning\": \"The user asked about the weather, which typically implies they want current weather conditions for their location or a specific place. However, the response provides only generic information about weather types without addressing the specific query. It doesn't provide current conditions, forecasts, or ask for location clarification. The response is factually correct but completely unhelpful for the user's actual need.\",\n  \"reasoning_summary\": \"The response provides generic weather information instead of addressing the user's likely need for current conditions.\",\n  \"score\": 1\n}\n\n# Notes\n\n- Focus on practical utility and how well the response serves the user's actual needs\n- Consider completeness, accuracy, and actionability of the information\n- Pay attention to whether the response asks for clarification when needed\n- Evaluate whether the response is appropriately detailed for the query complexity",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "setMetrics"
+          ],
+          "metric": [
+            "helpfulness"
+          ]
+        }
+      },
+      "type": "string",
+      "x-rows": 4
+    },
+    "metrics": {
+      "x-title": "Metrics to Return",
+      "default": {
+        "assignments": [
+          {
+            "name": "",
+            "value": "",
+            "type": "number"
+          }
+        ]
+      },
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "setMetrics"
+          ],
+          "metric": [
+            "customMetrics"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "assignments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "value": {},
+              "type": {
+                "type": "string",
+                "enum": [
+                  "string",
+                  "number",
+                  "boolean",
+                  "object",
+                  "array"
+                ]
+              }
+            },
+            "required": [
+              "name"
+            ]
+          }
+        }
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "setMetrics"
+          ],
+          "metric": [
+            "toolsUsed"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "metricName": {
+          "x-title": "Metric Name",
+          "default": "Tools Used",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"]}}",
+  "x-icon": "fa:check-double",
+  "x-inputs": "={{(function getInputConnectionTypes(parameters, metricRequiresModelConnectionFn) {\n    if (parameters.operation === 'setMetrics' &&\n        metricRequiresModelConnectionFn(parameters.metric)) {\n        return [\n            { type: 'main' },\n            { type: 'ai_languageModel', displayName: 'Model', maxConnections: 1 },\n        ];\n    }\n    return [{ type: 'main' }];\n})($parameter, function metricRequiresModelConnection(metric) {\n        return ['correctness', 'helpfulness'].includes(metric);\n    })}}",
+  "x-outputs": "={{(function getOutputConnectionTypes(parameters) {\n    if (parameters.operation === 'checkIfEvaluating') {\n        return [\n            { type: 'main', displayName: 'Evaluation' },\n            { type: 'main', displayName: 'Normal' },\n        ];\n    }\n    return [{ type: 'main' }];\n})($parameter)}}",
+  "x-credentials": [
+    {
+      "name": "googleApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "serviceAccount"
+          ],
+          "operation": [
+            "setOutputs"
+          ]
+        }
+      },
+      "testedBy": "googleApiCredentialTest"
+    },
+    {
+      "name": "googleSheetsOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ],
+          "operation": [
+            "setOutputs"
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,400 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Evaluation Trigger",
+  "description": "Run a test dataset through your workflow to check performance",
+  "x-n8n-node-type": "evaluationTrigger",
+  "x-n8n-version": [
+    4.6,
+    4.7
+  ],
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "source": {
+      "x-title": "Source",
+      "description": "Where to get the test dataset from",
+      "default": "googleSheets",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "lte": 4.6
+              }
+            }
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "dataTable",
+        "googleSheets"
+      ],
+      "x-enumNames": [
+        "Data table",
+        "Google Sheets"
+      ],
+      "x-enumDescriptions": [
+        "Load the test dataset from a local Data table",
+        "Load the test dataset from a Google Sheets document"
+      ]
+    },
+    "credentials": {
+      "x-title": "Credentials",
+      "default": "",
+      "x-displayOptions": {
+        "hide": {
+          "source": [
+            "dataTable"
+          ]
+        }
+      },
+      "type": "string",
+      "x-n8n-type": "credentials"
+    },
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "oAuth2",
+      "x-displayOptions": {
+        "hide": {
+          "source": [
+            "dataTable"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "serviceAccount",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "Service Account",
+        "OAuth2 (recommended)"
+      ]
+    },
+    "documentId": {
+      "x-title": "Document Containing Dataset",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "hide": {
+          "source": [
+            "dataTable"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "By URL",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        }
+      ]
+    },
+    "sheetName": {
+      "x-title": "Sheet Containing Dataset",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "hide": {
+          "source": [
+            "dataTable"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "By URL",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        }
+      ]
+    },
+    "dataTableId": {
+      "x-title": "Data table",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "dataTable"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "limitRows": {
+      "x-title": "Limit Rows",
+      "description": "Whether to limit number of rows to process",
+      "default": false,
+      "type": "boolean"
+    },
+    "maxRows": {
+      "x-title": "Max Rows to Process",
+      "description": "Maximum number of rows to process",
+      "default": 10,
+      "x-displayOptions": {
+        "show": {
+          "limitRows": [
+            true
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "filtersUI": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "hide": {
+          "source": [
+            "dataTable"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Filter",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "lookupColumn": {
+                "x-title": "Column",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": "",
+                "type": "string"
+              },
+              "lookupValue": {
+                "x-title": "Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "filterRows": {
+      "x-title": "Filter Rows",
+      "description": "Whether to filter rows to process",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "dataTable"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "matchType": {
+      "x-title": "Must Match",
+      "default": "anyCondition",
+      "x-displayOptions": {
+        "show": {
+          "filterRows": [
+            true
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "anyCondition",
+        "allConditions"
+      ],
+      "x-enumNames": [
+        "Any Condition",
+        "All Conditions"
+      ]
+    },
+    "filters": {
+      "x-title": "Conditions",
+      "description": "Filter to decide which rows get",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "filterRows": [
+            true
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "conditions": {
+          "x-title": "Conditions",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "keyName": {
+                "x-title": "Column",
+                "description": "Choose from the list, or specify using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": "id",
+                "type": "string"
+              },
+              "condition": {
+                "x-title": "Condition",
+                "default": "eq",
+                "type": "string"
+              },
+              "keyValue": {
+                "x-title": "Value",
+                "default": "",
+                "x-displayOptions": {
+                  "hide": {
+                    "condition": [
+                      "isEmpty",
+                      "isNotEmpty",
+                      "isTrue",
+                      "isFalse"
+                    ]
+                  }
+                },
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-icon": "fa:check-double",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "googleApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "serviceAccount"
+          ]
+        }
+      },
+      "testedBy": "googleApiCredentialTest"
+    },
+    {
+      "name": "googleSheetsOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

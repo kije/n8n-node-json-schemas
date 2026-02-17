@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Customer Datastore (n8n training)",
+  "description": "Dummy node used for n8n training",
+  "x-n8n-node-type": "n8nTrainingCustomerDatastore",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "operation": {
+      "x-title": "Operation",
+      "default": "getOnePerson",
+      "type": "string",
+      "enum": [
+        "getOnePerson",
+        "getAllPeople"
+      ],
+      "x-enumNames": [
+        "Get One Person",
+        "Get All People"
+      ]
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAllPeople"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 5,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAllPeople"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 10
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"]}}",
+  "x-icon": {
+    "light": "file:n8nTrainingCustomerDatastore.svg",
+    "dark": "file:n8nTrainingCustomerDatastore.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

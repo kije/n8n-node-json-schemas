@@ -1,0 +1,121 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Eventbrite Trigger",
+  "description": "Handle Eventbrite events via webhooks",
+  "x-n8n-node-type": "eventbriteTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "privateKey",
+      "type": "string",
+      "enum": [
+        "privateKey",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "Private Key",
+        "OAuth2"
+      ]
+    },
+    "organization": {
+      "x-title": "Organization Name or ID",
+      "description": "The Eventbrite Organization to work on. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "event": {
+      "x-title": "Event Name or ID",
+      "description": "Limit the triggers to this event. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "actions": {
+      "x-title": "Actions",
+      "description": "One or more action to subscribe to",
+      "default": [],
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "attendee.checked_in",
+          "attendee.checked_out",
+          "attendee.updated",
+          "event.created",
+          "event.published",
+          "event.unpublished",
+          "event.updated",
+          "order.placed",
+          "order.refunded",
+          "order.updated",
+          "organizer.updated",
+          "ticket_class.created",
+          "ticket_class.deleted",
+          "ticket_class.updated",
+          "venue.updated"
+        ]
+      },
+      "x-enumNames": [
+        "attendee.checked_in",
+        "attendee.checked_out",
+        "attendee.updated",
+        "event.created",
+        "event.published",
+        "event.unpublished",
+        "event.updated",
+        "order.placed",
+        "order.refunded",
+        "order.updated",
+        "organizer.updated",
+        "ticket_class.created",
+        "ticket_class.deleted",
+        "ticket_class.updated",
+        "venue.updated"
+      ]
+    },
+    "resolveData": {
+      "x-title": "Resolve Data",
+      "description": "By default does the webhook-data only contain the URL to receive the object data manually. If this option gets activated, it will resolve the data automatically.",
+      "default": true,
+      "type": "boolean"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"event\"]}}",
+  "x-icon": "file:eventbrite.png",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "eventbriteApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "privateKey"
+          ]
+        }
+      }
+    },
+    {
+      "name": "eventbriteOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "x-webhooks": "true"
+}

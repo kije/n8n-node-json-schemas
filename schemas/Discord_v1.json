@@ -1,0 +1,139 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Discord",
+  "description": "Sends data to Discord",
+  "x-n8n-node-type": "discord",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "webhookUri": {
+      "x-title": "Webhook URL",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "text": {
+      "x-title": "Content",
+      "default": "",
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "allowedMentions": {
+          "x-title": "Allowed Mentions",
+          "default": "",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "attachments": {
+          "x-title": "Attachments",
+          "default": "",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "avatarUrl": {
+          "x-title": "Avatar URL",
+          "default": "",
+          "type": "string"
+        },
+        "components": {
+          "x-title": "Components",
+          "default": "",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "embeds": {
+          "x-title": "Embeds",
+          "default": "",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "flags": {
+          "x-title": "Flags",
+          "default": "",
+          "type": "number"
+        },
+        "payloadJson": {
+          "x-title": "JSON Payload",
+          "default": "",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "username": {
+          "x-title": "Username",
+          "default": "",
+          "type": "string"
+        },
+        "tts": {
+          "x-title": "TTS",
+          "description": "Whether this message be sent as a Text To Speech message",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-icon": "file:discord.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

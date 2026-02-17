@@ -1,0 +1,389 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Date & Time",
+  "description": "Manipulate date and time values",
+  "x-n8n-node-type": "dateTime",
+  "x-n8n-version": 2,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "operation": {
+      "x-title": "Operation",
+      "default": "getCurrentDate",
+      "type": "string",
+      "enum": [
+        "addToDate",
+        "extractDate",
+        "formatDate",
+        "getCurrentDate",
+        "getTimeBetweenDates",
+        "roundDate",
+        "subtractFromDate"
+      ],
+      "x-enumNames": [
+        "Add to a Date",
+        "Extract Part of a Date",
+        "Format a Date",
+        "Get Current Date",
+        "Get Time Between Dates",
+        "Round a Date",
+        "Subtract From a Date"
+      ]
+    },
+    "includeTime": {
+      "x-title": "Include Current Time",
+      "description": "When deactivated, the time will be set to midnight",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getCurrentDate"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "outputFieldName": {
+      "x-title": "Output Field Name",
+      "description": "Name of the field to put the output in",
+      "default": "datePart",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "extractDate"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "extractDate"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "includeInputFields": {
+          "x-title": "Include Input Fields",
+          "description": "Whether to include all fields of the input item in the output item",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "magnitude": {
+      "x-title": "Date to Subtract From",
+      "description": "The date that you want to change",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "subtractFromDate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "timeUnit": {
+      "x-title": "Time Unit to Subtract",
+      "description": "Time unit for Duration parameter below",
+      "default": "days",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "subtractFromDate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "years",
+        "quarters",
+        "months",
+        "weeks",
+        "days",
+        "hours",
+        "minutes",
+        "seconds",
+        "milliseconds"
+      ],
+      "x-enumNames": [
+        "Years",
+        "Quarters",
+        "Months",
+        "Weeks",
+        "Days",
+        "Hours",
+        "Minutes",
+        "Seconds",
+        "Milliseconds"
+      ]
+    },
+    "duration": {
+      "x-title": "Duration",
+      "description": "The number of time units to subtract from the date",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "subtractFromDate"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "date": {
+      "x-title": "Date",
+      "description": "The date that you want to round",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "extractDate"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "format": {
+      "x-title": "Format",
+      "description": "The format to convert the date to",
+      "default": "MM/dd/yyyy",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "formatDate"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "custom",
+        "MM/dd/yyyy",
+        "yyyy/MM/dd",
+        "MMMM dd yyyy",
+        "MM-dd-yyyy",
+        "yyyy-MM-dd",
+        "X",
+        "x"
+      ],
+      "x-enumNames": [
+        "Custom Format",
+        "MM/DD/YYYY",
+        "YYYY/MM/DD",
+        "MMMM DD YYYY",
+        "MM-DD-YYYY",
+        "YYYY-MM-DD",
+        "Unix Timestamp",
+        "Unix Ms Timestamp"
+      ],
+      "x-enumDescriptions": [
+        "",
+        "Example: 09/04/1986",
+        "Example: 1986/04/09",
+        "Example: April 09 1986",
+        "Example: 09-04-1986",
+        "Example: 1986-04-09",
+        "Example: 1672531200",
+        "Example: 1674691200000"
+      ]
+    },
+    "customFormat": {
+      "x-title": "Custom Format",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "format": [
+            "custom"
+          ],
+          "operation": [
+            "formatDate"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "mode": {
+      "x-title": "Mode",
+      "default": "roundDown",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "roundDate"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "roundDown",
+        "roundUp"
+      ],
+      "x-enumNames": [
+        "Round Down",
+        "Round Up"
+      ]
+    },
+    "toNearest": {
+      "x-title": "To Nearest",
+      "default": "month",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "roundDate"
+          ],
+          "mode": [
+            "roundDown"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "year",
+        "month",
+        "week",
+        "day",
+        "hour",
+        "minute",
+        "second"
+      ],
+      "x-enumNames": [
+        "Year",
+        "Month",
+        "Week",
+        "Day",
+        "Hour",
+        "Minute",
+        "Second"
+      ]
+    },
+    "to": {
+      "x-title": "To",
+      "default": "month",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "roundDate"
+          ],
+          "mode": [
+            "roundUp"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "month"
+      ],
+      "x-enumNames": [
+        "End of Month"
+      ]
+    },
+    "startDate": {
+      "x-title": "Start Date",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getTimeBetweenDates"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "endDate": {
+      "x-title": "End Date",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getTimeBetweenDates"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "units": {
+      "x-title": "Units",
+      "default": [
+        "day"
+      ],
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getTimeBetweenDates"
+          ]
+        }
+      },
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "year",
+          "month",
+          "week",
+          "day",
+          "hour",
+          "minute",
+          "second",
+          "millisecond"
+        ]
+      },
+      "x-enumNames": [
+        "Year",
+        "Month",
+        "Week",
+        "Day",
+        "Hour",
+        "Minute",
+        "Second",
+        "Millisecond"
+      ]
+    },
+    "part": {
+      "x-title": "Part",
+      "default": "month",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "extractDate"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "year",
+        "month",
+        "week",
+        "day",
+        "hour",
+        "minute",
+        "second"
+      ],
+      "x-enumNames": [
+        "Year",
+        "Month",
+        "Week",
+        "Day",
+        "Hour",
+        "Minute",
+        "Second"
+      ]
+    }
+  },
+  "x-subtitle": "={{$parameter[\"action\"]}}",
+  "x-icon": "fa:clock",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

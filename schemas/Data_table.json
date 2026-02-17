@@ -1,0 +1,438 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Data table",
+  "description": "Permanently save data across workflow executions in a table",
+  "x-n8n-node-type": "dataTable",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "input",
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "row",
+      "type": "string",
+      "enum": [
+        "row",
+        "table"
+      ],
+      "x-enumNames": [
+        "Row",
+        "Table"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "list",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "table"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "list",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "List",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a new data table",
+        "Delete a data table",
+        "List all data tables",
+        "Update a data table name"
+      ]
+    },
+    "dataTableId": {
+      "x-title": "Data table",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "table"
+          ],
+          "operation": [
+            "delete",
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "name",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "name",
+          "displayName": "By Name",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "matchType": {
+      "x-title": "Must Match",
+      "default": "anyCondition",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "anyCondition",
+        "allConditions"
+      ],
+      "x-enumNames": [
+        "Any Condition",
+        "All Conditions"
+      ]
+    },
+    "filters": {
+      "x-title": "Conditions",
+      "description": "Filter to decide which rows get",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "conditions": {
+          "x-title": "Conditions",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "keyName": {
+                "x-title": "Column",
+                "description": "Choose from the list, or specify using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": "id",
+                "type": "string"
+              },
+              "condition": {
+                "x-title": "Condition",
+                "default": "eq",
+                "type": "string"
+              },
+              "keyValue": {
+                "x-title": "Value",
+                "default": "",
+                "x-displayOptions": {
+                  "hide": {
+                    "condition": [
+                      "isEmpty",
+                      "isNotEmpty",
+                      "isTrue",
+                      "isFalse"
+                    ]
+                  }
+                },
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "table"
+          ],
+          "operation": [
+            "list"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "filterName": {
+          "x-title": "Filter by Name",
+          "description": "Filter data tables by name (case-insensitive)",
+          "default": "",
+          "type": "string"
+        },
+        "sortField": {
+          "x-title": "Sort Field",
+          "description": "Field to sort by",
+          "default": "name",
+          "type": "string",
+          "enum": [
+            "createdAt",
+            "name",
+            "updatedAt"
+          ],
+          "x-enumNames": [
+            "Created",
+            "Name",
+            "Updated"
+          ]
+        },
+        "sortDirection": {
+          "x-title": "Sort Direction",
+          "default": "asc",
+          "type": "string",
+          "enum": [
+            "asc",
+            "desc"
+          ],
+          "x-enumNames": [
+            "Ascending",
+            "Descending"
+          ]
+        }
+      }
+    },
+    "columns": {
+      "x-title": "Columns",
+      "description": "The columns to create in the data table",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "table"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "column": {
+          "x-title": "Column",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Name",
+                "description": "The name of the column",
+                "default": "",
+                "x-required": true,
+                "type": "string"
+              },
+              "type": {
+                "x-title": "Type",
+                "description": "The type of the column",
+                "default": "string",
+                "type": "string",
+                "enum": [
+                  "boolean",
+                  "date",
+                  "number",
+                  "string"
+                ],
+                "x-enumNames": [
+                  "Boolean",
+                  "Date",
+                  "Number",
+                  "String"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "table"
+          ],
+          "operation": [
+            "list"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "table"
+          ],
+          "operation": [
+            "list"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "orderBy": {
+      "x-title": "Order By",
+      "description": "Whether to sort the results by a column",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "orderByColumn": {
+      "x-title": "Order By Column",
+      "description": "Choose from the list, or specify using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "createdAt",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "get"
+          ],
+          "orderBy": [
+            true
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "orderByDirection": {
+      "x-title": "Order By Direction",
+      "description": "Sort direction for the column",
+      "default": "DESC",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ],
+          "operation": [
+            "get"
+          ],
+          "orderBy": [
+            true
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "ASC",
+        "DESC"
+      ],
+      "x-enumNames": [
+        "Ascending",
+        "Descending"
+      ]
+    },
+    "tableName": {
+      "x-title": "Name",
+      "description": "The name of the data table to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "table"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "newName": {
+      "x-title": "New Name",
+      "description": "The new name for the data table",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "table"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"action\"]}}",
+  "x-icon": "fa:table",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

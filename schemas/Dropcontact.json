@@ -1,0 +1,222 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Dropcontact",
+  "description": "Find B2B emails and enrich contacts",
+  "x-n8n-node-type": "dropcontact",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "contact",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "contact"
+      ],
+      "x-enumNames": [
+        "Contact"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "enrich",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "enrich",
+        "fetchRequest"
+      ],
+      "x-enumNames": [
+        "Enrich",
+        "Fetch Request"
+      ],
+      "x-enumDescriptions": [
+        "Find B2B emails and enrich your contact from his name and his website",
+        ""
+      ]
+    },
+    "requestId": {
+      "x-title": "Request ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "fetchRequest"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "email": {
+      "x-title": "Email",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "enrich"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "simplify": {
+      "x-title": "Simplify Output (Faster)",
+      "description": "When off, waits for the contact data before completing. Waiting time can be adjusted with Extend Wait Time option. When on, returns a request_id that can be used later in the Fetch Request operation.",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "enrich"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "enrich"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "num_siren": {
+          "x-title": "Company SIREN Number",
+          "default": "",
+          "type": "string"
+        },
+        "siret": {
+          "x-title": "Company SIRET Code",
+          "default": "",
+          "type": "string"
+        },
+        "company": {
+          "x-title": "Company Name",
+          "default": "",
+          "type": "string"
+        },
+        "country": {
+          "x-title": "Country",
+          "default": "",
+          "type": "string"
+        },
+        "first_name": {
+          "x-title": "First Name",
+          "default": "",
+          "type": "string"
+        },
+        "full_name": {
+          "x-title": "Full Name",
+          "default": "",
+          "type": "string"
+        },
+        "last_name": {
+          "x-title": "Last Name",
+          "default": "",
+          "type": "string"
+        },
+        "linkedin": {
+          "x-title": "LinkedIn Profile",
+          "default": "",
+          "type": "string"
+        },
+        "phone": {
+          "x-title": "Phone Number",
+          "default": "",
+          "type": "string"
+        },
+        "website": {
+          "x-title": "Website",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "enrich"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "waitTime": {
+          "x-title": "Data Fetch Wait Time",
+          "description": "When not simplifying the response, data will be fetched in two steps. This parameter controls how long to wait (in seconds) before trying the second step.",
+          "default": 45,
+          "x-displayOptions": {
+            "show": {
+              "/simplify": [
+                false
+              ]
+            }
+          },
+          "type": "number",
+          "minimum": 1
+        },
+        "siren": {
+          "x-title": "French Company Enrich",
+          "description": "Whether you want the <a href=\"https://en.wikipedia.org/wiki/SIREN_code\" target=\"_blank\">SIREN number</a>, NAF code, TVA number, company address and informations about the company leader. Only applies to french companies.",
+          "default": false,
+          "type": "boolean"
+        },
+        "language": {
+          "x-title": "Language",
+          "description": "Whether the response is in English or French",
+          "default": "en",
+          "type": "string",
+          "enum": [
+            "en",
+            "fr"
+          ],
+          "x-enumNames": [
+            "English",
+            "French"
+          ]
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:dropcontact.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "dropcontactApi",
+      "required": true
+    }
+  ]
+}

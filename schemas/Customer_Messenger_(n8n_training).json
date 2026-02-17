@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Customer Messenger (n8n training)",
+  "description": "Dummy node used for n8n training",
+  "x-n8n-node-type": "n8nTrainingCustomerMessenger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "customerId": {
+      "x-title": "Customer ID",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "message": {
+      "x-title": "Message",
+      "default": "",
+      "x-required": true,
+      "type": "string",
+      "x-rows": 4
+    }
+  },
+  "x-icon": {
+    "light": "file:n8nTrainingCustomerMessenger.svg",
+    "dark": "file:n8nTrainingCustomerMessenger.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

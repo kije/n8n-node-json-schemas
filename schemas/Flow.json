@@ -1,0 +1,510 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Flow",
+  "description": "Consume Flow API",
+  "x-n8n-node-type": "flow",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "task",
+      "type": "string",
+      "enum": [
+        "task"
+      ],
+      "x-enumNames": [
+        "Task"
+      ],
+      "x-enumDescriptions": [
+        "Tasks are units of work that can be private or assigned to a list. Through this endpoint, you can manipulate your tasks in Flow, including creating new ones."
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "update",
+        "get",
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Update",
+        "Get",
+        "Get Many"
+      ],
+      "x-enumDescriptions": [
+        "Create a new task",
+        "Update a task",
+        "Get a task",
+        "Get many tasks"
+      ]
+    },
+    "workspaceId": {
+      "x-title": "Workspace ID",
+      "description": "Create resources under the given workspace",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "The title of the task",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "ownerid": {
+          "x-title": "Owner ID",
+          "description": "The ID of the account to whom this task will be assigned",
+          "default": "",
+          "type": "string"
+        },
+        "listID": {
+          "x-title": "List ID",
+          "description": "Put the new task in a list (\"project\"). Omit this param to have the task be private.",
+          "default": "",
+          "type": "string"
+        },
+        "startsOn": {
+          "x-title": "Starts On",
+          "description": "The date on which the task should start",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "dueOn": {
+          "x-title": "Due On",
+          "description": "The date on which the task should be due",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "mirrorParentSubscribers": {
+          "x-title": "Mirror Parent Subscribers",
+          "description": "Whether this task will be a subtask, and this is true, the parent tasks's subscribers will be mirrored to this one",
+          "default": false,
+          "type": "boolean"
+        },
+        "mirrorParentTags": {
+          "x-title": "Mirror Parent Tags",
+          "description": "Whether this task will be a subtask, and this is true, the parent tasks's tags will be mirrored to this one",
+          "default": false,
+          "type": "boolean"
+        },
+        "noteContent": {
+          "x-title": "Note Content",
+          "description": "Provide the content for the task's note",
+          "default": "",
+          "type": "string"
+        },
+        "noteMimeType": {
+          "x-title": "Note Mime Type",
+          "description": "Identify which markup language is used to format the given note",
+          "default": "text/plain",
+          "type": "string",
+          "enum": [
+            "text/plain",
+            "text/x-markdown",
+            "text/html"
+          ],
+          "x-enumNames": [
+            "text/plain",
+            "text/x-markdown",
+            "text/html"
+          ]
+        },
+        "parentId": {
+          "x-title": "Parent ID",
+          "description": "If provided, this task will become a subtask of the given task",
+          "default": "",
+          "type": "string"
+        },
+        "positionList": {
+          "x-title": "Position List",
+          "description": "Determines the sort order when showing tasks in, or grouped by, a list",
+          "default": 0,
+          "type": "number"
+        },
+        "positionUpcoming": {
+          "x-title": "Position Upcoming",
+          "description": "Determines the sort order when showing tasks grouped by their due_date",
+          "default": 0,
+          "type": "number"
+        },
+        "position": {
+          "x-title": "Position",
+          "description": "Determines the sort order of tasks",
+          "default": 0,
+          "type": "number"
+        },
+        "sectionId": {
+          "x-title": "Section ID",
+          "description": "Specify which section under which to create this task",
+          "default": "",
+          "type": "string"
+        },
+        "tags": {
+          "x-title": "Tags",
+          "description": "A list of tag names to apply to the new task separated by a comma (,)",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "taskId": {
+      "x-title": "Task ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "name": {
+          "x-title": "Name",
+          "description": "The title of the task",
+          "default": "",
+          "type": "string"
+        },
+        "completed": {
+          "x-title": "Completed",
+          "description": "Whether to complete the task",
+          "default": false,
+          "type": "boolean"
+        },
+        "ownerid": {
+          "x-title": "Owner ID",
+          "description": "The ID of the account to whom this task will be assigned",
+          "default": "",
+          "type": "string"
+        },
+        "listID": {
+          "x-title": "List ID",
+          "description": "Put the new task in a list (\"project\"). Omit this param to have the task be private.",
+          "default": "",
+          "type": "string"
+        },
+        "startsOn": {
+          "x-title": "Starts On",
+          "description": "The date on which the task should start",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "dueOn": {
+          "x-title": "Due On",
+          "description": "The date on which the task should be due",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "mirrorParentSubscribers": {
+          "x-title": "Mirror Parent Subscribers",
+          "description": "Whether this task will be a subtask, and this is true, the parent tasks's subscribers will be mirrored to this one",
+          "default": false,
+          "type": "boolean"
+        },
+        "mirrorParentTags": {
+          "x-title": "Mirror Parent Tags",
+          "description": "Whether this task will be a subtask, and this is true, the parent tasks's tags will be mirrored to this one",
+          "default": false,
+          "type": "boolean"
+        },
+        "noteContent": {
+          "x-title": "Note Content",
+          "description": "Provide the content for the task's note",
+          "default": "",
+          "type": "string"
+        },
+        "noteMimeType": {
+          "x-title": "Note Mime Type",
+          "description": "Identify which markup language is used to format the given note",
+          "default": "text/plain",
+          "type": "string",
+          "enum": [
+            "text/plain",
+            "text/x-markdown",
+            "text/html"
+          ],
+          "x-enumNames": [
+            "Text/plain",
+            "text/x-markdown",
+            "Text/html"
+          ]
+        },
+        "parentId": {
+          "x-title": "Parent ID",
+          "description": "If provided, this task will become a subtask of the given task",
+          "default": "",
+          "type": "string"
+        },
+        "positionList": {
+          "x-title": "Position List",
+          "description": "Determines the sort order when showing tasks in, or grouped by, a list",
+          "default": 0,
+          "type": "number"
+        },
+        "positionUpcoming": {
+          "x-title": "Position Upcoming",
+          "description": "Determines the sort order when showing tasks grouped by their due_date",
+          "default": 0,
+          "type": "number"
+        },
+        "position": {
+          "x-title": "Position",
+          "description": "Determines the sort order of tasks",
+          "default": 0,
+          "type": "number"
+        },
+        "sectionId": {
+          "x-title": "Section ID",
+          "description": "Specify which section under which to create this task",
+          "default": "",
+          "type": "string"
+        },
+        "tags": {
+          "x-title": "Tags",
+          "description": "A list of tag names to apply to the new task separated by a comma (,)",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "include": {
+          "x-title": "Include",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "schedule",
+              "files",
+              "file_associations",
+              "parent"
+            ]
+          },
+          "x-enumNames": [
+            "Schedule",
+            "Files",
+            "File Associations",
+            "Parent"
+          ]
+        },
+        "order": {
+          "x-title": "Order",
+          "default": "created_at",
+          "type": "string",
+          "enum": [
+            "account_id",
+            "completed_at",
+            "created_at",
+            "due_on",
+            "list_id",
+            "name",
+            "owner_id",
+            "position",
+            "section_id",
+            "starts_on",
+            "updated_at"
+          ],
+          "x-enumNames": [
+            "Account ID",
+            "Completed At",
+            "Created At",
+            "Due On",
+            "List ID",
+            "Name",
+            "Owner ID",
+            "Position",
+            "Section ID",
+            "Starts On",
+            "Updated At"
+          ]
+        },
+        "workspaceId": {
+          "x-title": "Workspace ID",
+          "description": "Create resources under the given workspace",
+          "default": "",
+          "type": "string"
+        },
+        "createdBefore": {
+          "x-title": "Created Before",
+          "description": "Select resources created before a certain time",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdAfter": {
+          "x-title": "Created After",
+          "description": "Select resources created after a certain time",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "updateBefore": {
+          "x-title": "Update Before",
+          "description": "Select resources updated before a certain time",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "updateAfter": {
+          "x-title": "Update After",
+          "description": "Select resources updated after a certain time",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "deleted": {
+          "x-title": "Deleted",
+          "description": "Whether to select deleted resources",
+          "default": false,
+          "type": "boolean"
+        },
+        "cleared": {
+          "x-title": "Cleared",
+          "description": "Whether to select cleared resources",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:flow.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "flowApi",
+      "required": true
+    }
+  ]
+}

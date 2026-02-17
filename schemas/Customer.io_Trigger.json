@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Customer.io Trigger",
+  "description": "Starts the workflow on a Customer.io update (Beta)",
+  "x-n8n-node-type": "customerIoTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "events": {
+      "x-title": "Events",
+      "description": "The events that can trigger the webhook and whether they are enabled",
+      "default": [],
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "customer.subscribed",
+          "customer.unsubscribed",
+          "email.attempted",
+          "email.bounced",
+          "email.clicked",
+          "email.converted",
+          "email.delivered",
+          "email.drafted",
+          "email.failed",
+          "email.opened",
+          "email.sent",
+          "email.spammed",
+          "push.attempted",
+          "push.bounced",
+          "push.clicked",
+          "push.delivered",
+          "push.drafted",
+          "push.failed",
+          "push.opened",
+          "push.sent",
+          "slack.attempted",
+          "slack.clicked",
+          "slack.drafted",
+          "slack.failed",
+          "slack.sent",
+          "sms.attempted",
+          "sms.bounced",
+          "sms.clicked",
+          "sms.delivered",
+          "sms.drafted",
+          "sms.failed",
+          "sms.sent"
+        ]
+      },
+      "x-enumNames": [
+        "Customer Subscribed",
+        "Customer Unsubscribe",
+        "Email Attempted",
+        "Email Bounced",
+        "Email Clicked",
+        "Email Converted",
+        "Email Delivered",
+        "Email Drafted",
+        "Email Failed",
+        "Email Opened",
+        "Email Sent",
+        "Email Spammed",
+        "Push Attempted",
+        "Push Bounced",
+        "Push Clicked",
+        "Push Delivered",
+        "Push Drafted",
+        "Push Failed",
+        "Push Opened",
+        "Push Sent",
+        "Slack Attempted",
+        "Slack Clicked",
+        "Slack Drafted",
+        "Slack Failed",
+        "Slack Sent",
+        "SMS Attempted",
+        "SMS Bounced",
+        "SMS Clicked",
+        "SMS Delivered",
+        "SMS Drafted",
+        "SMS Failed",
+        "SMS Sent"
+      ]
+    }
+  },
+  "x-icon": {
+    "light": "file:customerio.svg",
+    "dark": "file:customerio.dark.svg"
+  },
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "customerIoApi",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

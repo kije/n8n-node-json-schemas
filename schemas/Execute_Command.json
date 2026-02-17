@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Execute Command",
+  "description": "Executes a command on the host",
+  "x-n8n-node-type": "executeCommand",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "executeOnce": {
+      "x-title": "Execute Once",
+      "description": "Whether to execute only once instead of once for each entry",
+      "default": true,
+      "type": "boolean"
+    },
+    "command": {
+      "x-title": "Command",
+      "description": "The command to execute",
+      "default": "",
+      "x-required": true,
+      "type": "string",
+      "x-rows": 5
+    }
+  },
+  "x-icon": "fa:terminal",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

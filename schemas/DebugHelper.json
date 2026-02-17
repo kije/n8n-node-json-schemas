@@ -1,0 +1,207 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DebugHelper",
+  "description": "Causes problems intentionally and generates useful data for debugging",
+  "x-n8n-node-type": "debugHelper",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "category": {
+      "x-title": "Category",
+      "default": "throwError",
+      "type": "string",
+      "enum": [
+        "doNothing",
+        "throwError",
+        "oom",
+        "randomData"
+      ],
+      "x-enumNames": [
+        "Do Nothing",
+        "Throw Error",
+        "Out Of Memory",
+        "Generate Random Data"
+      ],
+      "x-enumDescriptions": [
+        "Does nothing",
+        "Throws an error with the specified type and message",
+        "Generates a large amount of memory to cause an out of memory error",
+        "Generates random data sets"
+      ]
+    },
+    "throwErrorType": {
+      "x-title": "Error Type",
+      "default": "NodeApiError",
+      "x-displayOptions": {
+        "show": {
+          "category": [
+            "throwError"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "NodeApiError",
+        "NodeOperationError",
+        "Error"
+      ],
+      "x-enumNames": [
+        "NodeApiError",
+        "NodeOperationError",
+        "Error"
+      ]
+    },
+    "throwErrorMessage": {
+      "x-title": "Error Message",
+      "description": "The message to send as part of the error",
+      "default": "Node has thrown an error",
+      "x-displayOptions": {
+        "show": {
+          "category": [
+            "throwError"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "memorySizeValue": {
+      "x-title": "Memory Size to Generate",
+      "description": "The approximate amount of memory to generate. Be generous...",
+      "default": 10,
+      "x-displayOptions": {
+        "show": {
+          "category": [
+            "oom"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "randomDataType": {
+      "x-title": "Data Type",
+      "default": "user",
+      "x-displayOptions": {
+        "show": {
+          "category": [
+            "randomData"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "address",
+        "latLong",
+        "creditCard",
+        "email",
+        "ipv4",
+        "ipv6",
+        "macAddress",
+        "nanoid",
+        "url",
+        "user",
+        "uuid",
+        "semver"
+      ],
+      "x-enumNames": [
+        "Address",
+        "Coordinates",
+        "Credit Card",
+        "Email",
+        "IPv4",
+        "IPv6",
+        "MAC",
+        "NanoIds",
+        "URL",
+        "User Data",
+        "UUID",
+        "Version"
+      ]
+    },
+    "nanoidAlphabet": {
+      "x-title": "NanoId Alphabet",
+      "description": "The alphabet to use for generating the nanoIds",
+      "default": "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      "x-displayOptions": {
+        "show": {
+          "category": [
+            "randomData"
+          ],
+          "randomDataType": [
+            "nanoid"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "nanoidLength": {
+      "x-title": "NanoId Length",
+      "description": "The length of each nanoIds",
+      "default": "16",
+      "x-displayOptions": {
+        "show": {
+          "category": [
+            "randomData"
+          ],
+          "randomDataType": [
+            "nanoid"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "randomDataSeed": {
+      "x-title": "Seed",
+      "description": "If set, seed to use for generating the data (same seed will generate the same data)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "category": [
+            "randomData"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "randomDataCount": {
+      "x-title": "Number of Items to Generate",
+      "description": "The number of random data items to generate into an array",
+      "default": 10,
+      "x-displayOptions": {
+        "show": {
+          "category": [
+            "randomData"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "randomDataSingleArray": {
+      "x-title": "Output as Single Array",
+      "description": "Whether to output a single array instead of multiple items",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "category": [
+            "randomData"
+          ]
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"category\"]}}",
+  "x-icon": {
+    "light": "file:DebugHelper.svg",
+    "dark": "file:DebugHelper.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": []
+}

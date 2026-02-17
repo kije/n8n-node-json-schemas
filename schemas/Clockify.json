@@ -1,0 +1,406 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Clockify",
+  "description": "Consume Clockify REST API",
+  "x-n8n-node-type": "clockify",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "project",
+      "type": "string",
+      "enum": [
+        "client",
+        "project",
+        "tag",
+        "task",
+        "timeEntry",
+        "user",
+        "workspace"
+      ],
+      "x-enumNames": [
+        "Client",
+        "Project",
+        "Tag",
+        "Task",
+        "Time Entry",
+        "User",
+        "Workspace"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "workspace"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Get Many"
+      ],
+      "x-enumDescriptions": [
+        "Get many workspaces"
+      ]
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "user"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "workspaceId": {
+      "x-title": "Workspace Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": [],
+      "x-displayOptions": {
+        "hide": {
+          "resource": [
+            "workspace"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "name": {
+      "x-title": "Task Name",
+      "description": "Name of task to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "clientId": {
+      "x-title": "Client ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "client"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "timeEntry"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "consider-duration-format": {
+          "x-title": "Consider Duration Format",
+          "description": "Whether to return the time entry's duration rounded to minutes or seconds based on duration format (hh:mm or hh:mm:ss) from workspace settings",
+          "default": false,
+          "type": "boolean"
+        },
+        "hydrated": {
+          "x-title": "Hydrated",
+          "description": "Whether to return the time entry's project, task and tags in full and not just their IDs",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "timeEntry"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "billable": {
+          "x-title": "Billable",
+          "default": false,
+          "type": "boolean"
+        },
+        "customFieldsUi": {
+          "x-title": "Custom Fields",
+          "description": "Filter by custom fields",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "customFieldsValues": {
+              "x-title": "Custom Field",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "customFieldId": {
+                    "x-title": "Field Name or ID",
+                    "description": "The ID of the field to add custom field to. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "The value to set on custom field",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": {
+          "x-title": "Description",
+          "default": "",
+          "type": "string"
+        },
+        "end": {
+          "x-title": "End",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "projectId": {
+          "x-title": "Project Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "start": {
+          "x-title": "Start",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "tagIds": {
+          "x-title": "Tag Names or IDs",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "taskId": {
+          "x-title": "Task ID",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "projectId": {
+      "x-title": "Project Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "tagId": {
+      "x-title": "Tag ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "taskId": {
+      "x-title": "Task ID",
+      "description": "ID of task to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "task"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "task"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "is-active": {
+          "x-title": "Is Active",
+          "default": false,
+          "type": "boolean"
+        },
+        "name": {
+          "x-title": "Name",
+          "description": "Text to match in the task name",
+          "default": "",
+          "type": "string"
+        },
+        "sort-column": {
+          "x-title": "Sort Column",
+          "default": "NAME",
+          "type": "string",
+          "enum": [
+            "NAME"
+          ],
+          "x-enumNames": [
+            "Name"
+          ]
+        },
+        "sort-order": {
+          "x-title": "Sort Order",
+          "default": "ASCENDING",
+          "type": "string",
+          "enum": [
+            "ASCENDING",
+            "DESCENDING"
+          ],
+          "x-enumNames": [
+            "Ascending",
+            "Descending"
+          ]
+        }
+      }
+    },
+    "start": {
+      "x-title": "Start",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "timeEntry"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "timeEntryId": {
+      "x-title": "Time Entry ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "timeEntry"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": {
+    "light": "file:clockify.svg",
+    "dark": "file:clockify.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "clockifyApi",
+      "required": true
+    }
+  ]
+}

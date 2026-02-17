@@ -1,0 +1,202 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Disqus",
+  "description": "Access data on Disqus",
+  "x-n8n-node-type": "disqus",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "forum",
+      "type": "string",
+      "enum": [
+        "forum"
+      ],
+      "x-enumNames": [
+        "Forum"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "forum"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "get",
+        "getCategories",
+        "getThreads",
+        "getPosts"
+      ],
+      "x-enumNames": [
+        "Get",
+        "Get All Categories",
+        "Get All Threads",
+        "Get All Posts"
+      ],
+      "x-enumDescriptions": [
+        "Return forum details",
+        "Return a list of categories within a forum",
+        "Return a list of threads within a forum",
+        "Return a list of posts within a forum"
+      ]
+    },
+    "id": {
+      "x-title": "Forum Name",
+      "description": "The short name(aka ID) of the forum to get Threads",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getThreads"
+          ],
+          "resource": [
+            "forum"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getThreads"
+          ],
+          "resource": [
+            "forum"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "related": {
+          "x-title": "Related",
+          "description": "You may specify relations to include with your response",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "author",
+              "forum"
+            ]
+          },
+          "x-enumNames": [
+            "author",
+            "Forum"
+          ]
+        },
+        "include": {
+          "x-title": "Include",
+          "description": "You may specify relations to include with your response",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "closed",
+              "open",
+              "killed"
+            ]
+          },
+          "x-enumNames": [
+            "Closed",
+            "Open",
+            "Killed"
+          ]
+        },
+        "order": {
+          "x-title": "Order",
+          "description": "You may specify order to sort your response",
+          "default": "asc",
+          "type": "string",
+          "enum": [
+            "asc",
+            "desc"
+          ],
+          "x-enumNames": [
+            "ASC",
+            "DESC"
+          ]
+        },
+        "since": {
+          "x-title": "Since",
+          "description": "Unix timestamp (or ISO datetime standard)",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "thread": {
+          "x-title": "Thread",
+          "description": "Looks up a thread by ID. You may pass us the \"ident\" query type instead of an ID by including \"forum\". You may pass us the \"link\" query type to filter by URL. You must pass the \"forum\" if you do not have the Pro API Access addon.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "forum"
+          ],
+          "operation": [
+            "getThreads"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "forum"
+          ],
+          "operation": [
+            "getThreads"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:disqus.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "disqusApi",
+      "required": true
+    }
+  ]
+}

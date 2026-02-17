@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Embeddings Mistral Cloud",
+  "description": "Use Embeddings Mistral Cloud",
+  "x-n8n-node-type": "embeddingsMistralCloud",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "model": {
+      "x-title": "Model",
+      "description": "The model which will compute the embeddings. <a href=\"https://docs.mistral.ai/platform/endpoints/\">Learn more</a>.",
+      "default": "mistral-embed",
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "description": "Additional options to add",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "batchSize": {
+          "x-title": "Batch Size",
+          "description": "Maximum number of documents to send in each request",
+          "default": 512,
+          "type": "number",
+          "maximum": 2048
+        },
+        "stripNewLines": {
+          "x-title": "Strip New Lines",
+          "description": "Whether to strip new lines from the input text",
+          "default": true,
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-icon": "file:mistral.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "ai_embedding"
+  ],
+  "x-credentials": [
+    {
+      "name": "mistralCloudApi",
+      "required": true
+    }
+  ]
+}

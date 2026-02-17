@@ -1,0 +1,168 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Code Tool",
+  "description": "Write a tool in JS or Python",
+  "x-n8n-node-type": "toolCode",
+  "x-n8n-version": [
+    1,
+    1.1,
+    1.2,
+    1.3
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "name": {
+      "x-title": "Name",
+      "description": "The name of the function to be called, could contain letters, numbers, and underscores only",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            1.1
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "description": {
+      "x-title": "Description",
+      "default": "",
+      "type": "string",
+      "x-rows": 3
+    },
+    "language": {
+      "x-title": "Language",
+      "default": "javaScript",
+      "type": "string",
+      "enum": [
+        "javaScript",
+        "python"
+      ],
+      "x-enumNames": [
+        "JavaScript",
+        "Python (Beta)"
+      ]
+    },
+    "jsCode": {
+      "x-title": "JavaScript",
+      "description": "E.g. Converts any text to uppercase",
+      "default": "// Example: convert the incoming query to uppercase and return it\nreturn query.toUpperCase()",
+      "x-displayOptions": {
+        "show": {
+          "language": [
+            "javaScript"
+          ]
+        }
+      },
+      "type": "string",
+      "x-editor": "jsEditor"
+    },
+    "pythonCode": {
+      "x-title": "Python",
+      "description": "E.g. Converts any text to uppercase",
+      "default": "# Example: convert the incoming query to uppercase and return it\nreturn _query.upper()",
+      "x-displayOptions": {
+        "show": {
+          "language": [
+            "python"
+          ]
+        }
+      },
+      "type": "string",
+      "x-editor": "codeNodeEditor"
+    },
+    "specifyInputSchema": {
+      "x-title": "Specify Input Schema",
+      "description": "Whether to specify the schema for the function. This would require the LLM to provide the input in the correct format and would validate it against the schema.",
+      "default": false,
+      "type": "boolean"
+    },
+    "schemaType": {
+      "x-title": "Schema Type",
+      "description": "How to specify the schema for the function",
+      "default": "fromJson",
+      "x-displayOptions": {
+        "show": {
+          "specifyInputSchema": [
+            true
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "fromJson",
+        "manual"
+      ],
+      "x-enumNames": [
+        "Generate From JSON Example",
+        "Define using JSON Schema"
+      ],
+      "x-enumDescriptions": [
+        "Generate a schema from an example JSON object",
+        "Define the JSON schema manually"
+      ]
+    },
+    "jsonSchemaExample": {
+      "x-title": "JSON Example",
+      "description": "Example JSON object to use to generate the schema",
+      "default": "{\n\t\"some_input\": \"some_value\"\n}",
+      "x-displayOptions": {
+        "show": {
+          "specifyInputSchema": [
+            true
+          ],
+          "schemaType": [
+            "fromJson"
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "inputSchema": {
+      "x-title": "Input Schema",
+      "description": "Schema to use for the function",
+      "default": "{\n\"type\": \"object\",\n\"properties\": {\n\t\"some_input\": {\n\t\t\"type\": \"string\",\n\t\t\"description\": \"Some input to the function\"\n\t\t}\n\t}\n}",
+      "x-displayOptions": {
+        "show": {
+          "specifyInputSchema": [
+            true
+          ],
+          "schemaType": [
+            "manual"
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    }
+  },
+  "x-icon": "fa:code",
+  "x-inputs": [],
+  "x-outputs": [
+    "ai_tool"
+  ]
+}

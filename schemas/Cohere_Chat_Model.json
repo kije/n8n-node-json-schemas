@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Cohere Chat Model",
+  "description": "For advanced usage with an AI chain",
+  "x-n8n-node-type": "lmChatCohere",
+  "x-n8n-version": [
+    1
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "model": {
+      "x-title": "Model",
+      "description": "The model which will generate the completion. <a href=\"https://docs.cohere.com/docs/models\">Learn more</a>.",
+      "default": "command-a-03-2025",
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "description": "Additional options to add",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "temperature": {
+          "x-title": "Sampling Temperature",
+          "description": "Controls randomness: Lowering results in less random completions. As the temperature approaches zero, the model will become deterministic and repetitive.",
+          "default": 0.7,
+          "type": "number",
+          "minimum": 0,
+          "maximum": 2,
+          "x-precision": 1
+        },
+        "maxRetries": {
+          "x-title": "Max Retries",
+          "description": "Maximum number of retries to attempt",
+          "default": 2,
+          "type": "number"
+        }
+      }
+    }
+  },
+  "x-icon": {
+    "light": "file:cohere.svg",
+    "dark": "file:cohere.dark.svg"
+  },
+  "x-inputs": [],
+  "x-outputs": [
+    "ai_languageModel"
+  ],
+  "x-credentials": [
+    {
+      "name": "cohereApi",
+      "required": true
+    }
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Compression",
+  "description": "Compress and decompress files",
+  "x-n8n-node-type": "compression",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "operation": {
+      "x-title": "Operation",
+      "default": "decompress",
+      "type": "string",
+      "enum": [
+        "compress",
+        "decompress"
+      ],
+      "x-enumNames": [
+        "Compress",
+        "Decompress"
+      ],
+      "x-enumDescriptions": [
+        "Compress files into a zip or gzip archive",
+        "Decompress zip or gzip archives"
+      ]
+    },
+    "binaryPropertyName": {
+      "x-title": "Input Binary Field(s)",
+      "description": "To process more than one file, use a comma-separated list of the binary fields names",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "decompress"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "outputFormat": {
+      "x-title": "Output Format",
+      "description": "Format of the output",
+      "default": "zip",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "compress"
+          ]
+        },
+        "hide": {
+          "@version": [
+            1
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "gzip",
+        "zip"
+      ],
+      "x-enumNames": [
+        "Gzip",
+        "Zip"
+      ]
+    },
+    "fileName": {
+      "x-title": "File Name",
+      "description": "Name of the output file",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "compress"
+          ],
+          "outputFormat": [
+            "gzip"
+          ]
+        },
+        "hide": {
+          "@version": [
+            1
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "binaryPropertyOutput": {
+      "x-title": "Put Output File in Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "outputFormat": [
+            "gzip"
+          ],
+          "operation": [
+            "compress"
+          ]
+        },
+        "hide": {
+          "@version": [
+            1
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "outputPrefix": {
+      "x-title": "Output Prefix",
+      "description": "Prefix to add to the decompressed files",
+      "default": "file_",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "decompress"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"]}}",
+  "x-icon": "fa:file-archive",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

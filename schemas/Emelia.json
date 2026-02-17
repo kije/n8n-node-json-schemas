@@ -1,0 +1,299 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Emelia",
+  "description": "Consume the Emelia API",
+  "x-n8n-node-type": "emelia",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "campaign",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "campaign",
+        "contactList"
+      ],
+      "x-enumNames": [
+        "Campaign",
+        "Contact List"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contactList"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "add",
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Add",
+        "Get Many"
+      ]
+    },
+    "campaignId": {
+      "x-title": "Campaign Name or ID",
+      "description": "The ID of the campaign to duplicate. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "campaign"
+          ],
+          "operation": [
+            "duplicate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "contactEmail": {
+      "x-title": "Contact Email",
+      "description": "The email of the contact to add to the contact list",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contactList"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contactList"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "customFieldsUi": {
+          "x-title": "Custom Fields",
+          "description": "Filter by custom fields",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "customFieldsValues": {
+              "x-title": "Custom Field",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "fieldName": {
+                    "x-title": "Field Name",
+                    "description": "The name of the field to add custom field to",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "The value to set on custom field",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "firstName": {
+          "x-title": "First Name",
+          "description": "First name of the contact to add",
+          "default": "",
+          "type": "string"
+        },
+        "lastContacted": {
+          "x-title": "Last Contacted",
+          "description": "Last contacted date of the contact to add",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastName": {
+          "x-title": "Last Name",
+          "description": "Last name of the contact to add",
+          "default": "",
+          "type": "string"
+        },
+        "lastOpen": {
+          "x-title": "Last Open",
+          "description": "Last opened date of the contact to add",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastReplied": {
+          "x-title": "Last Replied",
+          "description": "Last replied date of the contact to add",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "mailsSent": {
+          "x-title": "Mails Sent",
+          "description": "Number of emails sent to the contact to add",
+          "default": 0,
+          "type": "number"
+        },
+        "phoneNumber": {
+          "x-title": "Phone Number",
+          "description": "Phone number of the contact to add",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "campaignName": {
+      "x-title": "New Campaign Name",
+      "description": "The name of the new campaign to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "campaign"
+          ],
+          "operation": [
+            "duplicate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contactList"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contactList"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "duplicate"
+          ],
+          "resource": [
+            "campaign"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "copyContacts": {
+          "x-title": "Copy Contacts",
+          "description": "Whether to copy all the contacts from the original campaign",
+          "default": false,
+          "type": "boolean"
+        },
+        "copyProvider": {
+          "x-title": "Copy Email Provider",
+          "description": "Whether to set the same email provider than the original campaign",
+          "default": true,
+          "type": "boolean"
+        },
+        "copyMails": {
+          "x-title": "Copy Email Sequence",
+          "description": "Whether to copy all the steps of the email sequence from the original campaign",
+          "default": true,
+          "type": "boolean"
+        },
+        "copySettings": {
+          "x-title": "Copy Global Settings",
+          "description": "Whether to copy all the general settings from the original campaign",
+          "default": true,
+          "type": "boolean"
+        }
+      }
+    },
+    "contactListId": {
+      "x-title": "Contact List Name or ID",
+      "description": "The ID of the contact list to add the contact to. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contactList"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:emelia.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "emeliaApi",
+      "required": true,
+      "testedBy": "emeliaApiTest"
+    }
+  ]
+}

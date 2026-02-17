@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Embeddings Hugging Face Inference",
+  "description": "Use HuggingFace Inference Embeddings",
+  "x-n8n-node-type": "embeddingsHuggingFaceInference",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "modelName": {
+      "x-title": "Model Name",
+      "description": "The model name to use from HuggingFace library",
+      "default": "sentence-transformers/distilbert-base-nli-mean-tokens",
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "description": "Additional options to add",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "endpointUrl": {
+          "x-title": "Custom Inference Endpoint",
+          "description": "Custom endpoint URL",
+          "default": "",
+          "type": "string"
+        },
+        "provider": {
+          "x-title": "Provider",
+          "default": "auto",
+          "type": "string",
+          "enum": [
+            "black-forest-labs",
+            "cerebras",
+            "cohere",
+            "fal-ai",
+            "featherless-ai",
+            "fireworks-ai",
+            "groq",
+            "hf-inference",
+            "hyperbolic",
+            "nebius",
+            "novita",
+            "nscale",
+            "openai",
+            "ovhcloud",
+            "replicate",
+            "sambanova",
+            "together",
+            "auto"
+          ],
+          "x-enumNames": [
+            "black-forest-labs",
+            "cerebras",
+            "cohere",
+            "fal-ai",
+            "featherless-ai",
+            "fireworks-ai",
+            "groq",
+            "hf-inference",
+            "hyperbolic",
+            "nebius",
+            "novita",
+            "nscale",
+            "openai",
+            "ovhcloud",
+            "replicate",
+            "sambanova",
+            "together",
+            "auto"
+          ]
+        }
+      }
+    }
+  },
+  "x-icon": "file:huggingface.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "ai_embedding"
+  ],
+  "x-credentials": [
+    {
+      "name": "huggingFaceApi",
+      "required": true
+    }
+  ]
+}

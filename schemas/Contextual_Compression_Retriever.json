@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Contextual Compression Retriever",
+  "description": "Enhances document similarity search by contextual compression.",
+  "x-n8n-node-type": "retrieverContextualCompression",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {},
+  "x-icon": "fa:box-open",
+  "x-inputs": [
+    {
+      "displayName": "Model",
+      "maxConnections": 1,
+      "type": "ai_languageModel",
+      "required": true
+    },
+    {
+      "displayName": "Retriever",
+      "maxConnections": 1,
+      "type": "ai_retriever",
+      "required": true
+    }
+  ],
+  "x-outputs": [
+    {
+      "displayName": "Retriever",
+      "maxConnections": 1,
+      "type": "ai_retriever"
+    }
+  ]
+}

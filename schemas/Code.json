@@ -1,0 +1,90 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Code",
+  "description": "Run custom JavaScript or Python code",
+  "x-n8n-node-type": "code",
+  "x-n8n-version": [
+    1,
+    2
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "mode": {
+      "x-title": "Mode",
+      "default": "runOnceForAllItems",
+      "type": "string",
+      "enum": [
+        "runOnceForAllItems",
+        "runOnceForEachItem"
+      ],
+      "x-enumNames": [
+        "Run Once for All Items",
+        "Run Once for Each Item"
+      ],
+      "x-enumDescriptions": [
+        "Run this code only once, no matter how many input items there are",
+        "Run this code as many times as there are input items"
+      ]
+    },
+    "language": {
+      "x-title": "Language",
+      "default": "javaScript",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            1
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "jsCode": {
+      "x-title": "JavaScript",
+      "description": "JavaScript code to execute.<br><br>Tip: You can use luxon vars like <code>$today</code> for dates and <code>$jmespath</code> for querying JSON structures. <a href=\"https://docs.n8n.io/nodes/n8n-nodes-base.function\">Learn more</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            2
+          ],
+          "language": [
+            "javaScript"
+          ],
+          "mode": [
+            "runOnceForEachItem"
+          ]
+        }
+      },
+      "type": "string",
+      "x-editor": "codeNodeEditor"
+    },
+    "pythonCode": {
+      "x-title": "Python",
+      "description": "Python code to execute.<br><br>Tip: You can use built-in methods and variables like <code>_today</code> for dates and <code>_jmespath</code> for querying JSON structures. <a href=\"https://docs.n8n.io/code/builtin/\">Learn more</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "language": [
+            "python",
+            "pythonNative"
+          ],
+          "mode": [
+            "runOnceForEachItem"
+          ]
+        }
+      },
+      "type": "string",
+      "x-editor": "codeNodeEditor"
+    }
+  },
+  "x-icon": "file:code.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

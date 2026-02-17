@@ -1,0 +1,476 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Convert to/from binary data",
+  "description": "Move data between binary and JSON properties",
+  "x-n8n-node-type": "moveBinaryData",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "mode": {
+      "x-title": "Mode",
+      "description": "From and to where data should be moved",
+      "default": "binaryToJson",
+      "type": "string",
+      "enum": [
+        "binaryToJson",
+        "jsonToBinary"
+      ],
+      "x-enumNames": [
+        "Binary to JSON",
+        "JSON to Binary"
+      ],
+      "x-enumDescriptions": [
+        "Move data from Binary to JSON",
+        "Move data from JSON to Binary"
+      ]
+    },
+    "setAllData": {
+      "x-title": "Set All Data",
+      "description": "Whether all JSON data should be replaced with the data retrieved from binary key. Else the data will be written to a single key.",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "binaryToJson"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "sourceKey": {
+      "x-title": "Source Key",
+      "description": "The name of the JSON key to get data from. It is also possible to define deep keys by using dot-notation like for example: \"level1.level2.currentKey\".",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "convertAllData": [
+            false
+          ],
+          "mode": [
+            "jsonToBinary"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "destinationKey": {
+      "x-title": "Destination Key",
+      "description": "The name the binary key to copy data to. It is also possible to define deep keys by using dot-notation like for example: \"level1.level2.newKey\".",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "jsonToBinary"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "convertAllData": {
+      "x-title": "Convert All Data",
+      "description": "Whether all JSON data should be converted to binary. Else only the data of one key will be converted.",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "jsonToBinary"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "addBOM": {
+          "x-title": "Add Byte Order Mark (BOM)",
+          "description": "Whether to add special marker at the start of your text file. This marker helps some programs understand how to read the file correctly.",
+          "default": false,
+          "x-displayOptions": {
+            "show": {
+              "/mode": [
+                "jsonToBinary"
+              ],
+              "encoding": [
+                "utf8",
+                "cesu8",
+                "ucs2"
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "dataIsBase64": {
+          "x-title": "Data Is Base64",
+          "description": "Whether to keep the binary data as base64 string",
+          "default": false,
+          "x-displayOptions": {
+            "hide": {
+              "useRawData": [
+                true
+              ]
+            },
+            "show": {
+              "/mode": [
+                "jsonToBinary"
+              ],
+              "/convertAllData": [
+                false
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "encoding": {
+          "x-title": "Encoding",
+          "description": "Choose the character set to use to encode the data",
+          "default": "utf8",
+          "x-displayOptions": {
+            "show": {
+              "/mode": [
+                "binaryToJson",
+                "jsonToBinary"
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "armscii8",
+            "ascii",
+            "base64",
+            "big5hkscs",
+            "binary",
+            "cesu8",
+            "cp1046",
+            "cp1124",
+            "cp1125",
+            "cp1129",
+            "cp1133",
+            "cp1161",
+            "cp1162",
+            "cp1163",
+            "cp437",
+            "cp720",
+            "cp737",
+            "cp775",
+            "cp808",
+            "cp850",
+            "cp852",
+            "cp855",
+            "cp856",
+            "cp857",
+            "cp858",
+            "cp860",
+            "cp861",
+            "cp862",
+            "cp863",
+            "cp864",
+            "cp865",
+            "cp866",
+            "cp869",
+            "cp922",
+            "cp936",
+            "cp949",
+            "cp950",
+            "eucjp",
+            "gb18030",
+            "gbk",
+            "georgianacademy",
+            "georgianps",
+            "hex",
+            "hproman8",
+            "iso646cn",
+            "iso646jp",
+            "iso88591",
+            "iso885910",
+            "iso885911",
+            "iso885913",
+            "iso885914",
+            "iso885915",
+            "iso885916",
+            "iso88592",
+            "iso88593",
+            "iso88594",
+            "iso88595",
+            "iso88596",
+            "iso88597",
+            "iso88598",
+            "iso88599",
+            "koi8r",
+            "koi8ru",
+            "koi8t",
+            "koi8u",
+            "maccenteuro",
+            "maccroatian",
+            "maccyrillic",
+            "macgreek",
+            "maciceland",
+            "macintosh",
+            "macroman",
+            "macromania",
+            "macthai",
+            "macturkish",
+            "macukraine",
+            "mik",
+            "pt154",
+            "rk1048",
+            "shiftjis",
+            "tcvn",
+            "tis620",
+            "ucs2",
+            "utf16",
+            "utf16be",
+            "utf32",
+            "utf32be",
+            "utf32le",
+            "utf7",
+            "utf7imap",
+            "utf8",
+            "viscii",
+            "windows1250",
+            "windows1251",
+            "windows1252",
+            "windows1253",
+            "windows1254",
+            "windows1255",
+            "windows1256",
+            "windows1257",
+            "windows1258",
+            "windows874"
+          ],
+          "x-enumNames": [
+            "armscii8",
+            "ascii",
+            "base64",
+            "big5hkscs",
+            "binary",
+            "cesu8",
+            "cp1046",
+            "cp1124",
+            "cp1125",
+            "cp1129",
+            "cp1133",
+            "cp1161",
+            "cp1162",
+            "cp1163",
+            "cp437",
+            "cp720",
+            "cp737",
+            "cp775",
+            "cp808",
+            "cp850",
+            "cp852",
+            "cp855",
+            "cp856",
+            "cp857",
+            "cp858",
+            "cp860",
+            "cp861",
+            "cp862",
+            "cp863",
+            "cp864",
+            "cp865",
+            "cp866",
+            "cp869",
+            "cp922",
+            "cp936",
+            "cp949",
+            "cp950",
+            "eucjp",
+            "gb18030",
+            "gbk",
+            "georgianacademy",
+            "georgianps",
+            "hex",
+            "hproman8",
+            "iso646cn",
+            "iso646jp",
+            "iso88591",
+            "iso885910",
+            "iso885911",
+            "iso885913",
+            "iso885914",
+            "iso885915",
+            "iso885916",
+            "iso88592",
+            "iso88593",
+            "iso88594",
+            "iso88595",
+            "iso88596",
+            "iso88597",
+            "iso88598",
+            "iso88599",
+            "koi8r",
+            "koi8ru",
+            "koi8t",
+            "koi8u",
+            "maccenteuro",
+            "maccroatian",
+            "maccyrillic",
+            "macgreek",
+            "maciceland",
+            "macintosh",
+            "macroman",
+            "macromania",
+            "macthai",
+            "macturkish",
+            "macukraine",
+            "mik",
+            "pt154",
+            "rk1048",
+            "shiftjis",
+            "tcvn",
+            "tis620",
+            "ucs2",
+            "utf16",
+            "utf16be",
+            "utf32",
+            "utf32be",
+            "utf32le",
+            "utf7",
+            "utf7imap",
+            "utf8",
+            "viscii",
+            "windows1250",
+            "windows1251",
+            "windows1252",
+            "windows1253",
+            "windows1254",
+            "windows1255",
+            "windows1256",
+            "windows1257",
+            "windows1258",
+            "windows874"
+          ]
+        },
+        "stripBOM": {
+          "x-title": "Strip BOM",
+          "default": true,
+          "x-displayOptions": {
+            "show": {
+              "/mode": [
+                "binaryToJson"
+              ],
+              "encoding": [
+                "utf8",
+                "cesu8",
+                "ucs2"
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "fileName": {
+          "x-title": "File Name",
+          "description": "The file name to set",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/mode": [
+                "jsonToBinary"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "jsonParse": {
+          "x-title": "JSON Parse",
+          "description": "Whether to run JSON parse on the data to get proper object data",
+          "default": false,
+          "x-displayOptions": {
+            "hide": {
+              "keepAsBase64": [
+                true
+              ]
+            },
+            "show": {
+              "/mode": [
+                "binaryToJson"
+              ],
+              "/setAllData": [
+                false
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "keepSource": {
+          "x-title": "Keep Source",
+          "description": "Whether the source key should be kept. By default it will be deleted.",
+          "default": false,
+          "type": "boolean"
+        },
+        "keepAsBase64": {
+          "x-title": "Keep As Base64",
+          "description": "Whether to keep the binary data as base64 string",
+          "default": false,
+          "x-displayOptions": {
+            "hide": {
+              "jsonParse": [
+                true
+              ]
+            },
+            "show": {
+              "/mode": [
+                "binaryToJson"
+              ],
+              "/setAllData": [
+                false
+              ]
+            }
+          },
+          "type": "boolean"
+        },
+        "mimeType": {
+          "x-title": "MIME Type",
+          "description": "The mime-type to set. By default will the mime-type for JSON be set.",
+          "default": "application/json",
+          "x-displayOptions": {
+            "show": {
+              "/mode": [
+                "jsonToBinary"
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "useRawData": {
+          "x-title": "Use Raw Data",
+          "description": "Whether to use data as is and do not JSON.stringify it",
+          "default": false,
+          "x-displayOptions": {
+            "hide": {
+              "dataIsBase64": [
+                true
+              ]
+            },
+            "show": {
+              "/mode": [
+                "jsonToBinary"
+              ]
+            }
+          },
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"mode\"]===\"binaryToJson\" ? \"Binary to JSON\" : \"JSON to Binary\"}}",
+  "x-icon": "fa:exchange-alt",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}
