@@ -1,0 +1,148 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Binary Input Loader",
+  "description": "Use binary data from a previous step in the workflow",
+  "x-n8n-node-type": "documentBinaryInputLoader",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "loader": {
+      "x-title": "Loader Type",
+      "default": "jsonLoader",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "csvLoader",
+        "docxLoader",
+        "epubLoader",
+        "jsonLoader",
+        "pdfLoader",
+        "textLoader"
+      ],
+      "x-enumNames": [
+        "CSV Loader",
+        "Docx Loader",
+        "EPub Loader",
+        "JSON Loader",
+        "PDF Loader",
+        "Text Loader"
+      ],
+      "x-enumDescriptions": [
+        "Load CSV files",
+        "Load Docx documents",
+        "Load EPub files",
+        "Load JSON files",
+        "Load PDF documents",
+        "Load plain text files"
+      ]
+    },
+    "binaryDataKey": {
+      "x-title": "Binary Data Key",
+      "description": "Name of the binary property from which to read the file buffer",
+      "default": "data",
+      "x-required": true,
+      "type": "string"
+    },
+    "splitPages": {
+      "x-title": "Split Pages",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "loader": [
+            "pdfLoader"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "column": {
+      "x-title": "Column",
+      "description": "Column to extract from CSV",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "loader": [
+            "csvLoader"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "separator": {
+      "x-title": "Separator",
+      "description": "Separator to use for CSV",
+      "default": ",",
+      "x-displayOptions": {
+        "show": {
+          "loader": [
+            "csvLoader"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "pointers": {
+      "x-title": "Pointers",
+      "description": "Pointers to extract from JSON, e.g. \"/text\" or \"/text, /meta/title\"",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "loader": [
+            "jsonLoader"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "metadata": {
+          "x-title": "Metadata",
+          "description": "Metadata to add to each document. Could be used for filtering during retrieval",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "metadataValues": {
+              "x-title": "Fields to Set",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "x-title": "Name",
+                    "default": "",
+                    "x-required": true,
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-icon": "file:binary.svg",
+  "x-inputs": [
+    {
+      "displayName": "Text Splitter",
+      "maxConnections": 1,
+      "type": "ai_textSplitter",
+      "required": true
+    }
+  ],
+  "x-outputs": [
+    "ai_document"
+  ]
+}

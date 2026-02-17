@@ -1,0 +1,376 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AWS ELB",
+  "description": "Sends data to AWS ELB API",
+  "x-n8n-node-type": "awsElb",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "iam",
+      "type": "string",
+      "enum": [
+        "iam",
+        "assumeRole"
+      ],
+      "x-enumNames": [
+        "AWS (IAM)",
+        "AWS (Assume Role)"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "loadBalancer",
+      "type": "string",
+      "enum": [
+        "listenerCertificate",
+        "loadBalancer"
+      ],
+      "x-enumNames": [
+        "Listener Certificate",
+        "Load Balancer"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "add",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "listenerCertificate"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "add",
+        "getMany",
+        "remove"
+      ],
+      "x-enumNames": [
+        "Add",
+        "Get Many",
+        "Remove"
+      ],
+      "x-enumDescriptions": [
+        "Add the specified SSL server certificate to the certificate list for the specified HTTPS or TLS listener",
+        "Get many listener certificates",
+        "Remove the specified certificate from the certificate list for the specified HTTPS or TLS listener"
+      ]
+    },
+    "ipAddressType": {
+      "x-title": "IP Address Type",
+      "description": "The type of IP addresses used by the subnets for your load balancer",
+      "default": "ipv4",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "loadBalancer"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "ipv4",
+        "dualstack"
+      ],
+      "x-enumNames": [
+        "Ipv4",
+        "Dualstack"
+      ]
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "This name must be unique per region per account, can have a maximum of 32 characters",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "loadBalancer"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "schema": {
+      "x-title": "Schema",
+      "default": "internet-facing",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "loadBalancer"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "internal",
+        "internet-facing"
+      ],
+      "x-enumNames": [
+        "Internal",
+        "Internet Facing"
+      ]
+    },
+    "type": {
+      "x-title": "Type",
+      "default": "application",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "loadBalancer"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "application",
+        "network"
+      ],
+      "x-enumNames": [
+        "Application",
+        "Network"
+      ]
+    },
+    "subnets": {
+      "x-title": "Subnet ID Names or IDs",
+      "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "loadBalancer"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "loadBalancer"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "securityGroups": {
+          "x-title": "Security Group IDs",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tagsUi": {
+          "x-title": "Tags",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "tagValues": {
+              "x-title": "Tag",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "x-title": "Key",
+                    "description": "The key of the tag",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "The value of the tag",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "loadBalancerId": {
+      "x-title": "Load Balancer ARN Name or ID",
+      "description": "Unique identifier for a particular loadBalancer. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "listenerCertificate"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "listenerCertificate"
+          ],
+          "operation": [
+            "getMany"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "listenerCertificate"
+          ],
+          "operation": [
+            "getMany"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 400
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getMany"
+          ],
+          "resource": [
+            "loadBalancer"
+          ],
+          "returnAll": [
+            true
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "names": {
+          "x-title": "Names",
+          "description": "The names of the load balancers. Multiples can be defined separated by comma.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "listenerId": {
+      "x-title": "Listener ARN Name or ID",
+      "description": "Unique identifier for a particular loadBalancer. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "listenerCertificate"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "certificateId": {
+      "x-title": "Certificate ARN",
+      "description": "Unique identifier for a particular loadBalancer",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "listenerCertificate"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:elb.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "aws",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "iam"
+          ]
+        }
+      }
+    },
+    {
+      "name": "awsAssumeRole",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "assumeRole"
+          ]
+        }
+      }
+    }
+  ]
+}

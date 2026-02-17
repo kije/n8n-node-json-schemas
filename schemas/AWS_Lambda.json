@@ -1,0 +1,140 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AWS Lambda",
+  "description": "Invoke functions on AWS Lambda",
+  "x-n8n-node-type": "awsLambda",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "iam",
+      "type": "string",
+      "enum": [
+        "iam",
+        "assumeRole"
+      ],
+      "x-enumNames": [
+        "AWS (IAM)",
+        "AWS (Assume Role)"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "invoke",
+      "type": "string",
+      "enum": [
+        "invoke"
+      ],
+      "x-enumNames": [
+        "Invoke"
+      ],
+      "x-enumDescriptions": [
+        "Invoke a function"
+      ]
+    },
+    "function": {
+      "x-title": "Function Name or ID",
+      "description": "The function you want to invoke. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "invoke"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [],
+      "x-enumNames": []
+    },
+    "qualifier": {
+      "x-title": "Qualifier",
+      "description": "Specify a version or alias to invoke a published version of the function",
+      "default": "$LATEST",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "invoke"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "invocationType": {
+      "x-title": "Invocation Type",
+      "description": "Specify if the workflow should wait for the function to return the results",
+      "default": "RequestResponse",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "invoke"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "RequestResponse",
+        "Event"
+      ],
+      "x-enumNames": [
+        "Wait for Results",
+        "Continue Workflow"
+      ],
+      "x-enumDescriptions": [
+        "Invoke the function synchronously and wait for the response",
+        "Invoke the function and immediately continue the workflow"
+      ]
+    },
+    "payload": {
+      "x-title": "JSON Input",
+      "description": "The JSON that you want to provide to your Lambda function as input",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "invoke"
+          ]
+        }
+      },
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"function\"]}}",
+  "x-icon": "file:lambda.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "aws",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "iam"
+          ]
+        }
+      }
+    },
+    {
+      "name": "awsAssumeRole",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "assumeRole"
+          ]
+        }
+      }
+    }
+  ]
+}

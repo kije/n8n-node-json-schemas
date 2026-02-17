@@ -1,0 +1,432 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Beeminder",
+  "description": "Consume Beeminder API",
+  "x-n8n-node-type": "beeminder",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "apiToken",
+      "type": "string",
+      "enum": [
+        "apiToken",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "API Token",
+        "OAuth2"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "datapoint",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "charge",
+        "datapoint",
+        "goal",
+        "user"
+      ],
+      "x-enumNames": [
+        "Charge",
+        "Datapoint",
+        "Goal",
+        "User"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "get"
+      ],
+      "x-enumNames": [
+        "Get"
+      ],
+      "x-enumDescriptions": [
+        "Get user information"
+      ]
+    },
+    "goalName": {
+      "x-title": "Goal Name or ID",
+      "description": "The name of the goal. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "goal"
+          ],
+          "operation": [
+            "get",
+            "update",
+            "refresh",
+            "shortCircuit",
+            "stepDown",
+            "cancelStepDown"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "amount": {
+      "x-title": "Amount",
+      "description": "Charge amount in USD",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "charge"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "datapoints": {
+      "x-title": "Datapoints",
+      "description": "Array of datapoint objects to create. Each object should contain value and optionally timestamp, comment, etc.",
+      "default": "[]",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "datapoint"
+          ],
+          "operation": [
+            "createAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "slug": {
+      "x-title": "Goal Slug",
+      "description": "Unique identifier for the goal",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "goal"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "title": {
+      "x-title": "Goal Title",
+      "description": "Human-readable title for the goal",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "goal"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "goal_type": {
+      "x-title": "Goal Type",
+      "description": "Type of goal. <a href=\"https://api.beeminder.com/#attributes-2\">More info here.</a>.",
+      "default": "hustler",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "goal"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "hustler",
+        "biker",
+        "fatloser",
+        "gainer",
+        "inboxer",
+        "drinker",
+        "custom"
+      ],
+      "x-enumNames": [
+        "Hustler",
+        "Biker",
+        "Fatloser",
+        "Gainer",
+        "Inboxer",
+        "Drinker",
+        "Custom"
+      ]
+    },
+    "gunits": {
+      "x-title": "Goal Units",
+      "description": "Units for the goal (e.g., \"hours\", \"pages\", \"pounds\")",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "goal"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "datapoint"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 30,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "datapoint"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 300
+    },
+    "value": {
+      "x-title": "Value",
+      "description": "Datapoint value to send",
+      "default": 1,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "datapoint"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "datapointId": {
+      "x-title": "Datapoint ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "datapoint"
+          ],
+          "operation": [
+            "update",
+            "delete",
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "goal"
+          ],
+          "operation": [
+            "getArchived"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "emaciated": {
+          "x-title": "Emaciated",
+          "description": "Whether to include the goal attributes called road, roadall, and fullroad will be stripped from the goal objects",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "datapoint"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "value": {
+          "x-title": "Value",
+          "description": "Datapoint value to send",
+          "default": 1,
+          "type": "number"
+        },
+        "comment": {
+          "x-title": "Comment",
+          "default": "",
+          "type": "string"
+        },
+        "timestamp": {
+          "x-title": "Timestamp",
+          "description": "Defaults to \"now\" if none is passed in, or the existing timestamp if the datapoint is being updated rather than created",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "datapoint"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "sort": {
+          "x-title": "Sort",
+          "description": "Attribute to sort on",
+          "default": "id",
+          "type": "string"
+        },
+        "page": {
+          "x-title": "Page",
+          "description": "Used to paginate results, 1-indexed, meaning page 1 is the first page",
+          "default": 1,
+          "x-displayOptions": {
+            "show": {
+              "/returnAll": [
+                false
+              ]
+            }
+          },
+          "type": "number",
+          "minimum": 1
+        },
+        "per": {
+          "x-title": "Per Page",
+          "description": "Number of results per page. Default 25. Ignored without page parameter. Must be non-negative",
+          "default": 25,
+          "x-displayOptions": {
+            "show": {
+              "/returnAll": [
+                false
+              ]
+            }
+          },
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:beeminder.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "beeminderApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "apiToken"
+          ]
+        }
+      }
+    },
+    {
+      "name": "beeminderOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

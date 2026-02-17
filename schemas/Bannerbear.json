@@ -1,0 +1,208 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Bannerbear",
+  "description": "Consume Bannerbear API",
+  "x-n8n-node-type": "bannerbear",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "image",
+      "type": "string",
+      "enum": [
+        "image",
+        "template"
+      ],
+      "x-enumNames": [
+        "Image",
+        "Template"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "template"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "get",
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Get",
+        "Get Many"
+      ],
+      "x-enumDescriptions": [
+        "Get a template",
+        "Get many templates"
+      ]
+    },
+    "templateId": {
+      "x-title": "Template ID",
+      "description": "Unique identifier for the template",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "template"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "image"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "metadata": {
+          "x-title": "Metadata",
+          "description": "Metadata that you need to store e.g. ID of a record in your DB",
+          "default": "",
+          "type": "string"
+        },
+        "waitForImage": {
+          "x-title": "Wait for Image",
+          "description": "Whether to wait for the image to be proccesed before returning. If after three tries the images is not ready, an error will be thrown. Number of tries can be increased by setting \"Wait Max Tries\".",
+          "default": false,
+          "type": "boolean"
+        },
+        "waitForImageMaxTries": {
+          "x-title": "Wait Max Tries",
+          "description": "How often it should check if the image is available before it fails",
+          "default": 3,
+          "x-displayOptions": {
+            "show": {
+              "waitForImage": [
+                true
+              ]
+            }
+          },
+          "type": "number",
+          "minimum": 1,
+          "maximum": 10
+        },
+        "webhookUrl": {
+          "x-title": "Webhook URL",
+          "description": "A URL to POST the Image object to upon rendering completed",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "modificationsUi": {
+      "x-title": "Modifications",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "image"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "modificationsValues": {
+          "x-title": "Modification",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "x-title": "Name or ID",
+                "description": "The name of the item you want to change. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                "default": "",
+                "type": "string"
+              },
+              "text": {
+                "x-title": "Text",
+                "description": "Replacement text you want to use",
+                "default": "",
+                "type": "string"
+              },
+              "color": {
+                "x-title": "Color",
+                "description": "Color hex of object",
+                "default": "",
+                "type": "string",
+                "pattern": "^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$",
+                "x-format": "color"
+              },
+              "background": {
+                "x-title": "Background",
+                "description": "Color hex of text background",
+                "default": "",
+                "type": "string",
+                "pattern": "^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$",
+                "x-format": "color"
+              },
+              "imageUrl": {
+                "x-title": "Image URL",
+                "description": "Replacement image URL you want to use (must be publicly viewable)",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "imageId": {
+      "x-title": "Image ID",
+      "description": "Unique identifier for the image",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "image"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:bannerbear.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "bannerbearApi",
+      "required": true
+    }
+  ]
+}

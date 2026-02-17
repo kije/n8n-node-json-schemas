@@ -1,0 +1,545 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Anthropic",
+  "description": "Interact with Anthropic AI models",
+  "x-n8n-node-type": "anthropic",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "text",
+      "type": "string",
+      "enum": [
+        "document",
+        "file",
+        "image",
+        "prompt",
+        "text"
+      ],
+      "x-enumNames": [
+        "Document",
+        "File",
+        "Image",
+        "Prompt",
+        "Text"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "message",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "text"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "message"
+      ],
+      "x-enumNames": [
+        "Message a Model"
+      ],
+      "x-enumDescriptions": [
+        "Create a completion with Anthropic model"
+      ]
+    },
+    "modelId": {
+      "x-title": "Model",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "message"
+          ],
+          "resource": [
+            "text"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "text": {
+      "x-title": "Text Input",
+      "default": "What's in this image?",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "analyze"
+          ],
+          "resource": [
+            "image"
+          ]
+        }
+      },
+      "type": "string",
+      "x-rows": 2
+    },
+    "inputType": {
+      "x-title": "Input Type",
+      "default": "url",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "analyze"
+          ],
+          "resource": [
+            "image"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "url",
+        "binary"
+      ],
+      "x-enumNames": [
+        "Image URL(s)",
+        "Binary File(s)"
+      ]
+    },
+    "documentUrls": {
+      "x-title": "URL(s)",
+      "description": "URL(s) of the document(s) to analyze, multiple URLs can be added separated by comma",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "inputType": [
+            "url"
+          ],
+          "operation": [
+            "analyze"
+          ],
+          "resource": [
+            "document"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "binaryPropertyName": {
+      "x-title": "Attachment Input Data Field Name(s)",
+      "description": "Name of the binary field(s) which contains the file(s) to attach, multiple field names can be added separated by comma",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "addAttachments": [
+            true
+          ],
+          "attachmentsInputType": [
+            "binary"
+          ],
+          "operation": [
+            "message"
+          ],
+          "resource": [
+            "text"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "simplify": {
+      "x-title": "Simplify Output",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "message"
+          ],
+          "resource": [
+            "text"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "message"
+          ],
+          "resource": [
+            "text"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "includeMergedResponse": {
+          "x-title": "Include Merged Response",
+          "description": "Whether to include a single output string merging all text parts of the response",
+          "default": false,
+          "type": "boolean"
+        },
+        "system": {
+          "x-title": "System Message",
+          "default": "",
+          "type": "string"
+        },
+        "codeExecution": {
+          "x-title": "Code Execution",
+          "description": "Whether to enable code execution. Not supported by all models.",
+          "default": false,
+          "type": "boolean"
+        },
+        "webSearch": {
+          "x-title": "Web Search",
+          "description": "Whether to enable web search",
+          "default": false,
+          "type": "boolean"
+        },
+        "maxUses": {
+          "x-title": "Web Search Max Uses",
+          "description": "The maximum number of web search uses per request",
+          "default": 5,
+          "type": "number",
+          "minimum": 0,
+          "x-precision": 0
+        },
+        "allowedDomains": {
+          "x-title": "Web Search Allowed Domains",
+          "description": "Comma-separated list of domains to search. Only domains in this list will be searched. Conflicts with \"Web Search Blocked Domains\".",
+          "default": "",
+          "type": "string"
+        },
+        "blockedDomains": {
+          "x-title": "Web Search Blocked Domains",
+          "description": "Comma-separated list of domains to block from search. Conflicts with \"Web Search Allowed Domains\".",
+          "default": "",
+          "type": "string"
+        },
+        "maxTokens": {
+          "x-title": "Maximum Number of Tokens",
+          "description": "The maximum number of tokens to generate in the completion",
+          "default": 1024,
+          "type": "number",
+          "minimum": 1,
+          "x-precision": 0
+        },
+        "temperature": {
+          "x-title": "Output Randomness (Temperature)",
+          "description": "Controls the randomness of the output. Lowering results in less random completions. As the temperature approaches zero, the model will become deterministic and repetitive",
+          "default": 1,
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "x-precision": 1
+        },
+        "topP": {
+          "x-title": "Output Randomness (Top P)",
+          "description": "The maximum cumulative probability of tokens to consider when sampling",
+          "default": 0.7,
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "x-precision": 1
+        },
+        "topK": {
+          "x-title": "Output Randomness (Top K)",
+          "description": "The maximum number of tokens to consider when sampling",
+          "default": 5,
+          "type": "number",
+          "minimum": 0,
+          "x-precision": 0
+        },
+        "maxToolsIterations": {
+          "x-title": "Max Tool Calls Iterations",
+          "description": "The maximum number of tool iteration cycles the LLM will run before stopping. A single iteration can contain multiple tool calls. Set to 0 for no limit",
+          "default": 15,
+          "type": "number",
+          "minimum": 0,
+          "x-precision": 0
+        }
+      }
+    },
+    "fileId": {
+      "x-title": "File ID",
+      "description": "ID of the file to get metadata for",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "list"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "returnAll": [
+            false
+          ],
+          "operation": [
+            "list"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 1000
+    },
+    "fileUrl": {
+      "x-title": "URL",
+      "description": "URL of the file to upload",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "inputType": [
+            "url"
+          ],
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "imageUrls": {
+      "x-title": "URL(s)",
+      "description": "URL(s) of the image(s) to analyze, multiple URLs can be added separated by comma",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "inputType": [
+            "url"
+          ],
+          "operation": [
+            "analyze"
+          ],
+          "resource": [
+            "image"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "task": {
+      "x-title": "Task",
+      "description": "Description of the prompt's purpose",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "generate"
+          ],
+          "resource": [
+            "prompt"
+          ]
+        }
+      },
+      "type": "string",
+      "x-rows": 2
+    },
+    "messages": {
+      "x-title": "Messages",
+      "default": {
+        "values": [
+          {
+            "content": "",
+            "role": "user"
+          }
+        ]
+      },
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "message"
+          ],
+          "resource": [
+            "text"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "values": {
+          "x-title": "Values",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "content": {
+                "x-title": "Prompt",
+                "description": "The content of the message to be sent",
+                "default": "",
+                "type": "string",
+                "x-rows": 2
+              },
+              "role": {
+                "x-title": "Role",
+                "description": "Role in shaping the model's response, it tells the model how it should behave and interact with the user",
+                "default": "user",
+                "type": "string",
+                "enum": [
+                  "user",
+                  "assistant"
+                ],
+                "x-enumNames": [
+                  "User",
+                  "Assistant"
+                ],
+                "x-enumDescriptions": [
+                  "Send a message as a user and get a response from the model",
+                  "Tell the model to adopt a specific tone or personality"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "addAttachments": {
+      "x-title": "Add Attachments",
+      "description": "Whether to add attachments to the message",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "message"
+          ],
+          "resource": [
+            "text"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "attachmentsInputType": {
+      "x-title": "Attachments Input Type",
+      "description": "The type of input to use for the attachments",
+      "default": "url",
+      "x-displayOptions": {
+        "show": {
+          "addAttachments": [
+            true
+          ],
+          "operation": [
+            "message"
+          ],
+          "resource": [
+            "text"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "url",
+        "binary"
+      ],
+      "x-enumNames": [
+        "URL(s)",
+        "Binary File(s)"
+      ]
+    },
+    "attachmentsUrls": {
+      "x-title": "Attachment URL(s)",
+      "description": "URL(s) of the file(s) to attach, multiple URLs can be added separated by comma",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "addAttachments": [
+            true
+          ],
+          "attachmentsInputType": [
+            "url"
+          ],
+          "operation": [
+            "message"
+          ],
+          "resource": [
+            "text"
+          ]
+        }
+      },
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{ $parameter[\"operation\"] + \": \" + $parameter[\"resource\"] }}",
+  "x-icon": "file:anthropic.svg",
+  "x-inputs": "={{\n\t\t(() => {\n\t\t\tconst resource = $parameter.resource;\n\t  \tconst operation = $parameter.operation;\n\t\t\tif (resource === 'text' && operation === 'message') {\n\t\t\t\treturn [{ type: 'main' }, { type: 'ai_tool', displayName: 'Tools' }];\n\t\t\t}\n\n\t\t\treturn ['main'];\n\t\t})()\n\t}}",
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "anthropicApi",
+      "required": true
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ActiveCampaign Trigger",
+  "description": "Handle ActiveCampaign events via webhooks",
+  "x-n8n-node-type": "activeCampaignTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "events": {
+      "x-title": "Event Names or IDs",
+      "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": []
+      },
+      "x-enumNames": []
+    },
+    "sources": {
+      "x-title": "Source",
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "public",
+          "admin",
+          "api",
+          "system"
+        ]
+      },
+      "x-enumNames": [
+        "Public",
+        "Admin",
+        "Api",
+        "System"
+      ]
+    }
+  },
+  "x-icon": {
+    "light": "file:activeCampaign.svg",
+    "dark": "file:activeCampaign.dark.svg"
+  },
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "activeCampaignApi",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

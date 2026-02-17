@@ -1,0 +1,396 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Action Network",
+  "description": "Consume the Action Network API",
+  "x-n8n-node-type": "actionNetwork",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "attendance",
+      "type": "string",
+      "enum": [
+        "attendance",
+        "event",
+        "person",
+        "personTag",
+        "petition",
+        "signature",
+        "tag"
+      ],
+      "x-enumNames": [
+        "Attendance",
+        "Event",
+        "Person",
+        "Person Tag",
+        "Petition",
+        "Signature",
+        "Tag"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "add",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "personTag"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "add",
+        "remove"
+      ],
+      "x-enumNames": [
+        "Add",
+        "Remove"
+      ]
+    },
+    "personId": {
+      "x-title": "Person ID",
+      "description": "ID of the person to add the tag to",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "personTag"
+          ],
+          "operation": [
+            "add"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "eventId": {
+      "x-title": "Event ID",
+      "description": "ID of the event to retrieve",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "simple": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "attendanceId": {
+      "x-title": "Attendance ID",
+      "description": "ID of the attendance to retrieve",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "attendance"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "originSystem": {
+      "x-title": "Origin System",
+      "description": "Source where the petition originated",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "petition"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "Title of the petition to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "petition"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "signature"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "comments": {
+          "x-title": "Comments",
+          "description": "Comments to leave when signing this petition",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "email_addresses": {
+      "x-title": "Email Address",
+      "description": "Person’s email addresses",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "email_addresses_fields": {
+          "x-title": "Email Addresses Fields",
+          "type": "object",
+          "properties": {
+            "address": {
+              "x-title": "Address",
+              "description": "Person's email address",
+              "default": "",
+              "type": "string"
+            },
+            "primary": {
+              "x-title": "Primary",
+              "description": "Whether this is the person's primary email address",
+              "default": true,
+              "type": "string"
+            },
+            "status": {
+              "x-title": "Status",
+              "description": "Subscription status of this email address",
+              "default": "subscribed",
+              "type": "string",
+              "enum": [
+                "bouncing",
+                "previous bounce",
+                "previous spam complaint",
+                "spam complaint",
+                "subscribed",
+                "unsubscribed"
+              ],
+              "x-enumNames": [
+                "Bouncing",
+                "Previous Bounce",
+                "Previous Spam Complaint",
+                "Spam Complaint",
+                "Subscribed",
+                "Unsubscribed"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "signature"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "comments": {
+          "x-title": "Comments",
+          "description": "Comments to leave when signing this petition",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "petitionId": {
+      "x-title": "Petition ID",
+      "description": "ID of the petition whose signature to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "signature"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "signatureId": {
+      "x-title": "Signature ID",
+      "description": "ID of the signature to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "signature"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "Name of the tag to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "tag"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "tagId": {
+      "x-title": "Tag Name or ID",
+      "description": "ID of the tag whose tagging to delete. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "personTag"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "taggingId": {
+      "x-title": "Tagging Name or ID",
+      "description": "ID of the tagging to remove. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "personTag"
+          ],
+          "operation": [
+            "remove"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"resource\"] + \": \" + $parameter[\"operation\"]}}",
+  "x-icon": "file:actionNetwork.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "actionNetworkApi",
+      "required": true
+    }
+  ]
+}

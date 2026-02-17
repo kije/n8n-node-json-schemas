@@ -1,0 +1,204 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Airtable Trigger",
+  "description": "Starts the workflow when Airtable events occur",
+  "x-n8n-node-type": "airtableTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "airtableApi",
+      "type": "string",
+      "enum": [
+        "airtableApi",
+        "airtableTokenApi",
+        "airtableOAuth2Api"
+      ],
+      "x-enumNames": [
+        "API Key",
+        "Access Token",
+        "OAuth2"
+      ]
+    },
+    "baseId": {
+      "x-title": "Base",
+      "description": "The Airtable Base in which to operate on",
+      "default": {
+        "mode": "url",
+        "value": ""
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "url",
+          "displayName": "By URL",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "tableId": {
+      "x-title": "Table",
+      "default": {
+        "mode": "url",
+        "value": ""
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "url",
+          "displayName": "By URL",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "triggerField": {
+      "x-title": "Trigger Field",
+      "description": "A Created Time or Last Modified Time field that will be used to sort records. If you do not have a Created Time or Last Modified Time field in your schema, please create one, because without this field trigger will not work correctly.",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "downloadAttachments": {
+      "x-title": "Download Attachments",
+      "description": "Whether the attachment fields define in 'Download Fields' will be downloaded",
+      "default": false,
+      "type": "boolean"
+    },
+    "downloadFieldNames": {
+      "x-title": "Download Fields",
+      "description": "Name of the fields of type 'attachment' that should be downloaded. Multiple ones can be defined separated by comma. Case sensitive.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "downloadAttachments": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "fields": {
+          "x-title": "Fields",
+          "description": "Fields to be included in the response. Multiple ones can be set separated by comma. Example: <code>name, id</code>. By default just the trigger field will be included.",
+          "default": "",
+          "type": "string"
+        },
+        "formula": {
+          "x-title": "Formula",
+          "description": "Formulas may involve functions, numeric operations, logical operations, and text operations that operate on fields. More info <a href=\"https://support.airtable.com/hc/en-us/articles/203255215-Formula-Field-Reference\">here</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "viewId": {
+          "x-title": "View ID",
+          "description": "The name or ID of a view in the table. If set, only the records in that view will be returned.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"event\"]}}",
+  "x-icon": "file:airtable.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "airtableApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "airtableApi"
+          ]
+        }
+      }
+    },
+    {
+      "name": "airtableTokenApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "airtableTokenApi"
+          ]
+        }
+      }
+    },
+    {
+      "name": "airtableOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "airtableOAuth2Api"
+          ]
+        }
+      }
+    }
+  ]
+}

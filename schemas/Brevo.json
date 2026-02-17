@@ -1,0 +1,835 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Brevo",
+  "description": "Consume Brevo API",
+  "x-n8n-node-type": "sendInBlue",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "email",
+      "type": "string",
+      "enum": [
+        "contact",
+        "attribute",
+        "email",
+        "sender"
+      ],
+      "x-enumNames": [
+        "Contact",
+        "Contact Attribute",
+        "Email",
+        "Sender"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "send",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "email"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "send",
+        "sendTemplate"
+      ],
+      "x-enumNames": [
+        "Send",
+        "Send Template"
+      ]
+    },
+    "attributeCategory": {
+      "x-title": "Category",
+      "description": "Category of the attribute",
+      "default": "normal",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "attribute"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "calculated",
+        "category",
+        "global",
+        "normal",
+        "transactional"
+      ],
+      "x-enumNames": [
+        "Calculated",
+        "Category",
+        "Global",
+        "Normal",
+        "Transactional"
+      ]
+    },
+    "attributeName": {
+      "x-title": "Name",
+      "description": "Name of the attribute",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "attribute"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "attributeType": {
+      "x-title": "Type",
+      "description": "Attribute Type",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "attribute"
+          ],
+          "operation": [
+            "create"
+          ],
+          "attributeCategory": [
+            "normal"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "boolean",
+        "date",
+        "float",
+        "text"
+      ],
+      "x-enumNames": [
+        "Boolean",
+        "Date",
+        "Float",
+        "Text"
+      ]
+    },
+    "attributeValue": {
+      "x-title": "Value",
+      "description": "Value of the attribute",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "attribute"
+          ],
+          "operation": [
+            "create"
+          ],
+          "attributeCategory": [
+            "global",
+            "calculated"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "attributeCategoryList": {
+      "x-title": "Contact Attribute List",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "attribute"
+          ],
+          "operation": [
+            "create"
+          ],
+          "attributeCategory": [
+            "category"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "categoryEnumeration": {
+          "x-title": "Contact Attributes",
+          "description": "List of values and labels that the attribute can take",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "attributesValues": {
+              "x-title": "Attribute",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "attributeCategoryValue": {
+                    "x-title": "Value ID",
+                    "description": "ID of the value, must be numeric",
+                    "default": 1,
+                    "type": "number"
+                  },
+                  "attributeCategoryLabel": {
+                    "x-title": "Label",
+                    "description": "Label of the value",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "updateAttributeCategory": {
+      "x-title": "Category",
+      "description": "Category of the attribute",
+      "default": "calculated",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "attribute"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "calculated",
+        "category",
+        "global"
+      ],
+      "x-enumNames": [
+        "Calculated",
+        "Category",
+        "Global"
+      ]
+    },
+    "updateAttributeName": {
+      "x-title": "Name",
+      "description": "Name of the existing attribute",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "attribute"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "updateAttributeValue": {
+      "x-title": "Value",
+      "description": "Value of the attribute to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "attribute"
+          ],
+          "operation": [
+            "update"
+          ]
+        },
+        "hide": {
+          "updateAttributeCategory": [
+            "category"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "updateAttributeCategoryList": {
+      "x-title": "Update Fields",
+      "description": "List of the values and labels that the attribute can take",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "attribute"
+          ],
+          "operation": [
+            "update"
+          ],
+          "updateAttributeCategory": [
+            "category"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "updateCategoryEnumeration": {
+          "x-title": "Contact Attributes",
+          "description": "List of values and labels that the attribute can take",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "updateAttributesValues": {
+              "x-title": "Attribute",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "attributeCategoryValue": {
+                    "x-title": "Value",
+                    "description": "ID of the value, must be numeric",
+                    "default": 1,
+                    "type": "number"
+                  },
+                  "attributeCategoryLabel": {
+                    "x-title": "Label",
+                    "description": "Label of the value",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "deleteAttributeCategory": {
+      "x-title": "Category",
+      "description": "Category of the attribute",
+      "default": "normal",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "attribute"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "calculated",
+        "category",
+        "global",
+        "normal",
+        "transactional"
+      ],
+      "x-enumNames": [
+        "Calculated",
+        "Category",
+        "Global",
+        "Normal",
+        "Transactional"
+      ]
+    },
+    "deleteAttributeName": {
+      "x-title": "Name",
+      "description": "Name of the attribute",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "attribute"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 1000
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "Name of the sender",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sender"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "Email of the contact",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "id": {
+      "x-title": "Sender ID",
+      "description": "ID of the sender to delete",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "sender"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "createContactAttributes": {
+      "x-title": "Contact Attributes",
+      "description": "Array of attributes to be added",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "attributesValues": {
+          "x-title": "Attribute",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "fieldName": {
+                "x-title": "Field Name",
+                "default": "",
+                "type": "string"
+              },
+              "fieldValue": {
+                "x-title": "Field Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "sort": {
+          "x-title": "Sort",
+          "description": "Sort the results in the ascending/descending order of record creation",
+          "default": "desc",
+          "type": "string",
+          "enum": [
+            "desc",
+            "asc"
+          ],
+          "x-enumNames": [
+            "DESC",
+            "ASC"
+          ]
+        }
+      }
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "modifiedSince": {
+          "x-title": "Modified Since",
+          "description": "Filter (urlencoded) the contacts modified after a given UTC date-time (YYYY-MM-DDTHH:mm:ss.SSSZ)",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "identifier": {
+      "x-title": "Contact Identifier",
+      "description": "Email (urlencoded) OR ID of the contact OR its SMS attribute value",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "updateAttributes": {
+      "x-title": "Attributes",
+      "description": "Array of attributes to be updated",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "updateAttributesValues": {
+          "x-title": "Attribute",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "fieldName": {
+                "x-title": "Field Name",
+                "default": "",
+                "type": "string"
+              },
+              "fieldValue": {
+                "x-title": "Field Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "upsertAttributes": {
+      "x-title": "Contact Attributes",
+      "description": "Array of attributes to be updated",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "upsertAttributesValues": {
+          "x-title": "Attribute",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "fieldName": {
+                "x-title": "Field Name",
+                "default": "",
+                "type": "string"
+              },
+              "fieldValue": {
+                "x-title": "Field Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "sendHTML": {
+      "x-title": "Send HTML",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "email"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "subject": {
+      "x-title": "Subject",
+      "description": "Subject of the email",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "email"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "textContent": {
+      "x-title": "Text Content",
+      "description": "Text content of the message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "email"
+          ],
+          "operation": [
+            "send"
+          ],
+          "sendHTML": [
+            false
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "htmlContent": {
+      "x-title": "HTML Content",
+      "description": "HTML content of the message",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "email"
+          ],
+          "operation": [
+            "send"
+          ],
+          "sendHTML": [
+            true
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "sender": {
+      "x-title": "Sender",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "email"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "receipients": {
+      "x-title": "Receipients",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "email"
+          ],
+          "operation": [
+            "sendTemplate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "description": "Additional fields to add",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "email"
+          ],
+          "operation": [
+            "sendTemplate"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "emailAttachments": {
+          "x-title": "Attachments",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "attachment": {
+              "x-title": "Attachment Data",
+              "type": "object",
+              "properties": {
+                "binaryPropertyName": {
+                  "x-title": "Input Data Field Name",
+                  "description": "The name of the incoming field containing the binary file data to be processed",
+                  "default": "",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "emailTags": {
+          "x-title": "Email Tags",
+          "description": "Add tags to your emails to find them more easily",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "tags": {
+              "x-title": "Tags",
+              "type": "object",
+              "properties": {
+                "tag": {
+                  "x-title": "Tag",
+                  "default": "",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "templateParameters": {
+          "x-title": "Template Parameters",
+          "description": "Pass a set of attributes to customize the template",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "parameterValues": {
+              "x-title": "Parameters",
+              "type": "object",
+              "properties": {
+                "parameters": {
+                  "x-title": "Parameter",
+                  "description": "Comma-separated key=value pairs",
+                  "default": "",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "templateId": {
+      "x-title": "Template ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "email"
+          ],
+          "operation": [
+            "sendTemplate"
+          ]
+        }
+      },
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:brevo.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "sendInBlueApi",
+      "required": true
+    }
+  ]
+}

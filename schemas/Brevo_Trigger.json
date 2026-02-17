@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Brevo Trigger",
+  "description": "Starts the workflow when Brevo events occur",
+  "x-n8n-node-type": "sendInBlueTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "type": {
+      "x-title": "Resource",
+      "default": "transactional",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "inbound",
+        "marketing",
+        "transactional"
+      ],
+      "x-enumNames": [
+        "Inbound",
+        "Marketing",
+        "Transactional"
+      ]
+    },
+    "events": {
+      "x-title": "Trigger On",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "type": [
+            "inbound"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "inboundEmailProcessed"
+        ]
+      },
+      "x-enumNames": [
+        "Inbound Email Processed"
+      ]
+    }
+  },
+  "x-icon": "file:brevo.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "sendInBlueApi",
+      "required": true,
+      "displayOptions": {
+        "show": {}
+      }
+    }
+  ],
+  "x-webhooks": "true"
+}

@@ -1,0 +1,187 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Clearbit",
+  "description": "Consume Clearbit API",
+  "x-n8n-node-type": "clearbit",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "company",
+      "type": "string",
+      "enum": [
+        "company",
+        "person"
+      ],
+      "x-enumNames": [
+        "Company",
+        "Person"
+      ],
+      "x-enumDescriptions": [
+        "The Company API allows you to look up a company by their domain",
+        "The Person API lets you retrieve social information associated with an email address, such as a person’s name, location and Twitter handle"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "enrich",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "enrich"
+      ],
+      "x-enumNames": [
+        "Enrich"
+      ],
+      "x-enumDescriptions": [
+        "Look up a person and company data based on an email or domain"
+      ]
+    },
+    "domain": {
+      "x-title": "Domain",
+      "description": "The domain to look up",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "enrich"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "enrich"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "company": {
+          "x-title": "Company",
+          "description": "The name of the person’s employer",
+          "default": "",
+          "type": "string"
+        },
+        "companyDomain": {
+          "x-title": "Company Domain",
+          "description": "The domain for the person’s employer",
+          "default": "",
+          "type": "string"
+        },
+        "facebook": {
+          "x-title": "Facebook",
+          "description": "The Facebook URL for the person",
+          "default": "",
+          "type": "string"
+        },
+        "familyName": {
+          "x-title": "Family Name",
+          "description": "Last name of person. If you have this, passing this is strongly recommended to improve match rates.",
+          "default": "",
+          "type": "string"
+        },
+        "givenName": {
+          "x-title": "Given Name",
+          "description": "First name of person",
+          "default": "",
+          "type": "string"
+        },
+        "ipAddress": {
+          "x-title": "IP Address",
+          "description": "IP address of the person. If you have this, passing this is strongly recommended to improve match rates.",
+          "default": "",
+          "type": "string"
+        },
+        "location": {
+          "x-title": "Location",
+          "description": "The city or country where the person resides",
+          "default": "",
+          "type": "string"
+        },
+        "linkedIn": {
+          "x-title": "LinkedIn",
+          "description": "The LinkedIn URL for the person",
+          "default": "",
+          "type": "string"
+        },
+        "twitter": {
+          "x-title": "Twitter",
+          "description": "The Twitter handle for the person",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "Name is the partial name of the company",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "autocomplete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "The email address to look up",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "enrich"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \":\" + $parameter[\"resource\"]}}",
+  "x-icon": "file:clearbit.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "clearbitApi",
+      "required": true
+    }
+  ]
+}

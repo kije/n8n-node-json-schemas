@@ -1,0 +1,159 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ClickUp Trigger",
+  "description": "Handle ClickUp events via webhooks (Beta)",
+  "x-n8n-node-type": "clickUpTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "accessToken",
+      "type": "string",
+      "enum": [
+        "accessToken",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "Access Token",
+        "OAuth2"
+      ]
+    },
+    "team": {
+      "x-title": "Team Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "events": {
+      "x-title": "Events",
+      "default": [],
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "*",
+          "folderCreated",
+          "folderDeleted",
+          "folderUpdated",
+          "goalCreated",
+          "goalDeleted",
+          "goalUpdated",
+          "keyResultCreated",
+          "keyResultDelete",
+          "keyResultUpdated",
+          "listCreated",
+          "listDeleted",
+          "listUpdated",
+          "spaceCreated",
+          "spaceDeleted",
+          "spaceUpdated",
+          "taskAssigneeUpdated",
+          "taskCommentPosted",
+          "taskCommentUpdated",
+          "taskCreated",
+          "taskDeleted",
+          "taskDueDateUpdated",
+          "taskMoved",
+          "taskStatusUpdated",
+          "taskTagUpdated",
+          "taskTimeEstimateUpdated",
+          "taskTimeTrackedUpdated",
+          "taskUpdated"
+        ]
+      },
+      "x-enumNames": [
+        "*",
+        "folder.created",
+        "folder.deleted",
+        "folder.updated",
+        "goal.created",
+        "goal.deleted",
+        "goal.updated",
+        "keyResult.created",
+        "keyResult.deleted",
+        "keyResult.updated",
+        "list.created",
+        "list.deleted",
+        "list.updated",
+        "space.created",
+        "space.deleted",
+        "space.updated",
+        "task.assignee.updated",
+        "task.comment.posted",
+        "task.comment.updated",
+        "task.created",
+        "task.deleted",
+        "task.dueDate.updated",
+        "task.moved",
+        "task.status.updated",
+        "task.tag.updated",
+        "task.timeEstimate.updated",
+        "task.timeTracked.updated",
+        "task.updated"
+      ]
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "folderId": {
+          "x-title": "Folder ID",
+          "default": "",
+          "type": "string"
+        },
+        "listId": {
+          "x-title": "List ID",
+          "default": "",
+          "type": "string"
+        },
+        "spaceId": {
+          "x-title": "Space ID",
+          "default": "",
+          "type": "string"
+        },
+        "taskId": {
+          "x-title": "Task ID",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-icon": "file:clickup.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "clickUpApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "accessToken"
+          ]
+        }
+      }
+    },
+    {
+      "name": "clickUpOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "x-webhooks": "true"
+}

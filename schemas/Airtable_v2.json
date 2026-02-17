@@ -1,0 +1,388 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Airtable",
+  "description": "Read, update, write and delete data from Airtable",
+  "x-n8n-node-type": "airtable",
+  "x-n8n-version": 2,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "airtableTokenApi",
+      "type": "string",
+      "enum": [
+        "airtableTokenApi",
+        "airtableOAuth2Api"
+      ],
+      "x-enumNames": [
+        "Access Token",
+        "OAuth2"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "record",
+      "type": "string",
+      "enum": [
+        "base",
+        "record"
+      ],
+      "x-enumNames": [
+        "Base",
+        "Record"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getMany",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "base"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "getMany",
+        "getSchema"
+      ],
+      "x-enumNames": [
+        "Get Many",
+        "Get Schema"
+      ],
+      "x-enumDescriptions": [
+        "List all the bases",
+        "Get the schema of the tables in a base"
+      ]
+    },
+    "base": {
+      "x-title": "Base",
+      "description": "The Airtable Base to retrieve the schema from",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "base"
+          ],
+          "operation": [
+            "getSchema"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "By URL",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "table": {
+      "x-title": "Table",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "record"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "By URL",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "columns": {
+      "x-title": "Columns",
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "record"
+          ],
+          "operation": [
+            "upsert"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-n8n-type": "resourceMapper"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "base"
+          ],
+          "operation": [
+            "getMany"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "permissionLevel": {
+          "x-title": "Permission Level",
+          "description": "Filter the returned bases by one or more permission levels",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "comment",
+              "create",
+              "edit",
+              "none",
+              "read"
+            ]
+          },
+          "x-enumNames": [
+            "Comment",
+            "Create",
+            "Edit",
+            "None",
+            "Read"
+          ]
+        }
+      }
+    },
+    "id": {
+      "x-title": "Record ID",
+      "description": "ID of the record to get. <a href=\"https://support.airtable.com/docs/record-id\" target=\"_blank\">More info</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "record"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "filterByFormula": {
+      "x-title": "Filter By Formula",
+      "description": "The formula will be evaluated for each record, and if the result is not 0, false, \"\", NaN, [], or #Error! the record will be included in the response. <a href=\"https://support.airtable.com/docs/formula-field-reference\" target=\"_blank\">More info</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "record"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "base"
+          ],
+          "operation": [
+            "getMany"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "returnAll": [
+            false
+          ],
+          "resource": [
+            "base"
+          ],
+          "operation": [
+            "getMany"
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "sort": {
+      "x-title": "Sort",
+      "description": "Defines how the returned records should be ordered",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "record"
+          ],
+          "operation": [
+            "search"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "property": {
+          "x-title": "Property",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "field": {
+                "x-title": "Field",
+                "description": "Name of the field to sort on. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                "default": "",
+                "type": "string"
+              },
+              "direction": {
+                "x-title": "Direction",
+                "description": "The sort direction",
+                "default": "asc",
+                "type": "string",
+                "enum": [
+                  "asc",
+                  "desc"
+                ],
+                "x-enumNames": [
+                  "ASC",
+                  "DESC"
+                ],
+                "x-enumDescriptions": [
+                  "Sort in ascending order (small -> large)",
+                  "Sort in descending order (large -> small)"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{ $parameter[\"operation\"] + \": \" + $parameter[\"resource\"] }}",
+  "x-icon": "file:airtable.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "airtableTokenApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "airtableTokenApi"
+          ]
+        }
+      }
+    },
+    {
+      "name": "airtableOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "airtableOAuth2Api"
+          ]
+        }
+      }
+    }
+  ]
+}

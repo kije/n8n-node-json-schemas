@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Auto-fixing Output Parser",
+  "description": "Deprecated, use structured output parser",
+  "x-n8n-node-type": "outputParserAutofixing",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "prompt": {
+          "x-title": "Retry Prompt",
+          "description": "Prompt template used for fixing the output. Uses placeholders: \"{instructions}\" for parsing rules, \"{completion}\" for the failed attempt, and \"{error}\" for the validation error message.",
+          "default": "Instructions:\n--------------\n{instructions}\n--------------\nCompletion:\n--------------\n{completion}\n--------------\n\nAbove, the Completion did not satisfy the constraints given in the Instructions.\nError:\n--------------\n{error}\n--------------\n\nPlease try again. Please only respond with an answer that satisfies the constraints laid out in the Instructions:",
+          "type": "string",
+          "x-rows": 10
+        }
+      }
+    }
+  },
+  "x-icon": "fa:tools",
+  "x-inputs": [
+    {
+      "displayName": "Model",
+      "maxConnections": 1,
+      "type": "ai_languageModel",
+      "required": true
+    },
+    {
+      "displayName": "Output Parser",
+      "maxConnections": 1,
+      "required": true,
+      "type": "ai_outputParser"
+    }
+  ],
+  "x-outputs": [
+    "ai_outputParser"
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AMQP Trigger",
+  "description": "Listens to AMQP 1.0 Messages",
+  "x-n8n-node-type": "amqpTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "sink": {
+      "x-title": "Queue / Topic",
+      "description": "Name of the queue of topic to listen to",
+      "default": "",
+      "type": "string"
+    },
+    "clientname": {
+      "x-title": "Clientname",
+      "description": "Leave empty for non-durable topic subscriptions or queues",
+      "default": "",
+      "type": "string"
+    },
+    "subscription": {
+      "x-title": "Subscription",
+      "description": "Leave empty for non-durable topic subscriptions or queues",
+      "default": "",
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "containerId": {
+          "x-title": "Container ID",
+          "description": "Will be used to pass to the RHEA Backend as container_id",
+          "default": "",
+          "type": "string"
+        },
+        "jsonConvertByteArrayToString": {
+          "x-title": "Convert Body To String",
+          "description": "Whether to convert JSON Body content ([\"body\"][\"content\"]) from Byte Array to string. Needed for Azure Service Bus.",
+          "default": false,
+          "type": "boolean"
+        },
+        "jsonParseBody": {
+          "x-title": "JSON Parse Body",
+          "description": "Whether to parse the body to an object",
+          "default": false,
+          "type": "boolean"
+        },
+        "pullMessagesNumber": {
+          "x-title": "Messages per Cicle",
+          "description": "Number of messages to pull from the bus for every cicle",
+          "default": 100,
+          "type": "number"
+        },
+        "onlyBody": {
+          "x-title": "Only Body",
+          "description": "Whether to return only the body property",
+          "default": false,
+          "type": "boolean"
+        },
+        "parallelProcessing": {
+          "x-title": "Parallel Processing",
+          "description": "Whether to process messages in parallel",
+          "default": true,
+          "type": "boolean"
+        },
+        "reconnect": {
+          "x-title": "Reconnect",
+          "description": "Whether to automatically reconnect if disconnected",
+          "default": true,
+          "type": "boolean"
+        },
+        "reconnectLimit": {
+          "x-title": "Reconnect Limit",
+          "description": "Maximum number of reconnect attempts",
+          "default": 50,
+          "type": "number"
+        },
+        "sleepTime": {
+          "x-title": "Sleep Time",
+          "description": "Milliseconds to sleep after every cicle",
+          "default": 10,
+          "type": "number"
+        }
+      }
+    }
+  },
+  "x-icon": "file:amqp.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "amqp",
+      "required": true
+    }
+  ]
+}

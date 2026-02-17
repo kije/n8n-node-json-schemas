@@ -1,0 +1,363 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Bubble",
+  "description": "Consume the Bubble Data API",
+  "x-n8n-node-type": "bubble",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "object",
+      "type": "string",
+      "enum": [
+        "object"
+      ],
+      "x-enumNames": [
+        "Object"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "object"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ]
+    },
+    "typeName": {
+      "x-title": "Type Name",
+      "description": "Name of data type of the object to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "object"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "properties": {
+      "x-title": "Properties",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "object"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "property": {
+          "x-title": "Property",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "x-title": "Key",
+                "description": "Field to set for the object to create",
+                "default": "",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "Value to set for the object to create",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "objectId": {
+      "x-title": "Object ID",
+      "description": "ID of the object to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "object"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "object"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "object"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "jsonParameters": {
+      "x-title": "JSON Parameters",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "object"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "object"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "filters": {
+          "x-title": "Filters",
+          "default": {},
+          "x-displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                false
+              ]
+            }
+          },
+          "type": "object",
+          "properties": {
+            "filter": {
+              "x-title": "Filter",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "x-title": "Key",
+                    "description": "Field to set for the object to create",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "constraint_type": {
+                    "x-title": "Constrain",
+                    "default": "",
+                    "type": "string",
+                    "enum": [
+                      "equals",
+                      "not equal",
+                      "is_empty",
+                      "is_not_empty",
+                      "text contains",
+                      "not text contains",
+                      "greater than",
+                      "less than",
+                      "in",
+                      "not in",
+                      "contains",
+                      "not contains",
+                      "empty",
+                      "not empty",
+                      "geographic_search"
+                    ],
+                    "x-enumNames": [
+                      "Equals",
+                      "Not Equal",
+                      "Is Empty",
+                      "Is Not Empty",
+                      "Text Contains",
+                      "Not Text Contains",
+                      "Greater Than",
+                      "Less Than",
+                      "In",
+                      "Not In",
+                      "Contains",
+                      "Not Contains",
+                      "Empty",
+                      "Not Empty",
+                      "Geographic Search"
+                    ],
+                    "x-enumDescriptions": [
+                      "Use to test strict equality, for all field types",
+                      "Use to test strict equality, for all field types",
+                      "Use to test whether a thing's given field is empty, for all field types",
+                      "Use to test whether a thing's given field is not empty, for all field types",
+                      "Use to test if a text field contains a string, for text fields only",
+                      "Use to test if a text field does not contain a string, for text fields only",
+                      "Use to compare a thing's field value relative to a string or number, for text, number, and date fields",
+                      "Use to compare a thing's field value relative to a string or number, for text, number, and date fields",
+                      "Use to test whether a thing's field is in a list, for all field types",
+                      "Use to test whether a thing's field is not in a list, for all field types",
+                      "Use to test whether a list field contains an entry, for list fields only",
+                      "Use to test whether a list field does not contains an entry, for list fields only",
+                      "Use to test whether a list field is empty, for list fields only",
+                      "Use to test whether a list field is not empty, for list fields only",
+                      "Use to test if the current thing is within a radius from a central address. To use this, the value sent with the constraint must have an address and a range. See <a href=\"https://manual.bubble.io/core-resources/api/data-api\">link</a>."
+                    ]
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "Value to set for the object to create",
+                    "default": "",
+                    "x-displayOptions": {
+                      "hide": {
+                        "constraint_type": [
+                          "is_empty",
+                          "is_not_empty",
+                          "empty",
+                          "not empty"
+                        ]
+                      }
+                    },
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "filtersJson": {
+          "x-title": "Filters (JSON)",
+          "description": "Refine the list that is returned by the Data API with search constraints, exactly as you define a search in Bubble. See <a href=\"https://manual.bubble.io/core-resources/api/data-api#search-constraints\">link</a>.",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/jsonParameters": [
+                true
+              ]
+            }
+          },
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "JSON string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "sort": {
+          "x-title": "Sort",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "sortValue": {
+              "x-title": "Sort",
+              "type": "object",
+              "properties": {
+                "sort_field": {
+                  "x-title": "Sort Field",
+                  "description": "Specify the field to use for sorting. Either use a fielddefined for the current typeor use <code>_random_sorting</code> to get the entries in a random order.",
+                  "default": "",
+                  "type": "string"
+                },
+                "descending": {
+                  "x-title": "Descending",
+                  "default": false,
+                  "type": "boolean"
+                },
+                "geo_reference": {
+                  "x-title": "Geo Reference",
+                  "description": "When the field's type is geographic address, you need to add another parameter geo_reference and provide an address as a string",
+                  "default": "",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": {
+    "light": "file:bubble.svg",
+    "dark": "file:bubble.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "bubbleApi",
+      "required": true
+    }
+  ]
+}

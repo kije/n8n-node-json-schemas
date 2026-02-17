@@ -1,0 +1,187 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AWS Comprehend",
+  "description": "Sends data to Amazon Comprehend",
+  "x-n8n-node-type": "awsComprehend",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "iam",
+      "type": "string",
+      "enum": [
+        "iam",
+        "assumeRole"
+      ],
+      "x-enumNames": [
+        "AWS (IAM)",
+        "AWS (Assume Role)"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "description": "The resource to perform",
+      "default": "text",
+      "type": "string",
+      "enum": [
+        "text"
+      ],
+      "x-enumNames": [
+        "Text"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "detectDominantLanguage",
+      "type": "string",
+      "enum": [
+        "detectDominantLanguage",
+        "detectEntities",
+        "detectSentiment"
+      ],
+      "x-enumNames": [
+        "Detect Dominant Language",
+        "Detect Entities",
+        "Detect Sentiment"
+      ],
+      "x-enumDescriptions": [
+        "Identify the dominant language",
+        "Inspects text for named entities, and returns information about them",
+        "Analyse the sentiment of the text"
+      ]
+    },
+    "languageCode": {
+      "x-title": "Language Code",
+      "description": "The language code for text",
+      "default": "en",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "text"
+          ],
+          "operation": [
+            "detectSentiment",
+            "detectEntities"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "ar",
+        "zh",
+        "zh-TW",
+        "en",
+        "fr",
+        "de",
+        "hi",
+        "it",
+        "ja",
+        "ko",
+        "pt",
+        "es"
+      ],
+      "x-enumNames": [
+        "Arabic",
+        "Chinese",
+        "Chinese (T)",
+        "English",
+        "French",
+        "German",
+        "Hindi",
+        "Italian",
+        "Japanese",
+        "Korean",
+        "Portuguese",
+        "Spanish"
+      ]
+    },
+    "text": {
+      "x-title": "Text",
+      "description": "The text to send",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "text"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "simple": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "text"
+          ],
+          "operation": [
+            "detectDominantLanguage"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "text"
+          ],
+          "operation": [
+            "detectEntities"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "endpointArn": {
+          "x-title": "Endpoint Arn",
+          "description": "The Amazon Resource Name of an endpoint that is associated with a custom entity recognition model",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:comprehend.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "aws",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "iam"
+          ]
+        }
+      }
+    },
+    {
+      "name": "awsAssumeRole",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "assumeRole"
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,276 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Basic LLM Chain",
+  "description": "A simple chain to prompt a large language model",
+  "x-n8n-node-type": "chainLlm",
+  "x-n8n-version": [
+    1,
+    1.1,
+    1.2,
+    1.3,
+    1.4,
+    1.5,
+    1.6,
+    1.7,
+    1.8,
+    1.9
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "prompt": {
+      "x-title": "Prompt",
+      "default": "={{ $json.chatInput }}",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            1.3
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "promptType": {
+      "x-title": "Source for Prompt (User Message)",
+      "default": "auto",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.8
+              }
+            }
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "auto",
+        "define"
+      ],
+      "x-enumNames": [
+        "Connected Chat Trigger Node",
+        "Define below"
+      ],
+      "x-enumDescriptions": [
+        "Looks for an input field called 'chatInput' that is coming from a directly connected Chat Trigger",
+        "Use an expression to reference data in previous nodes or enter static text"
+      ]
+    },
+    "text": {
+      "x-title": "Prompt (User Message)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "promptType": [
+            "define"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-rows": 2
+    },
+    "hasOutputParser": {
+      "x-title": "Require Specific Output Format",
+      "default": false,
+      "x-displayOptions": {
+        "hide": {
+          "@version": [
+            1,
+            1.1,
+            1.3
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "needsFallback": {
+      "x-title": "Enable Fallback Model",
+      "default": false,
+      "x-displayOptions": {
+        "hide": {
+          "@version": [
+            1,
+            1.1,
+            1.3
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "messages": {
+      "x-title": "Chat Messages (if Using a Chat Model)",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "messageValues": {
+          "x-title": "Prompt",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "x-title": "Type Name or ID",
+                "default": "SystemMessagePromptTemplate",
+                "type": "string",
+                "enum": [
+                  "AIMessagePromptTemplate",
+                  "SystemMessagePromptTemplate",
+                  "HumanMessagePromptTemplate"
+                ],
+                "x-enumNames": [
+                  "AI",
+                  "System",
+                  "User"
+                ]
+              },
+              "messageType": {
+                "x-title": "Message Type",
+                "default": "text",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "HumanMessagePromptTemplate"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "text",
+                  "imageBinary",
+                  "imageUrl"
+                ],
+                "x-enumNames": [
+                  "Text",
+                  "Image (Binary)",
+                  "Image (URL)"
+                ],
+                "x-enumDescriptions": [
+                  "Simple text message",
+                  "Process the binary input from the previous node",
+                  "Process the image from the specified URL"
+                ]
+              },
+              "binaryImageDataKey": {
+                "x-title": "Image Data Field Name",
+                "description": "The name of the field in the chain's input that contains the binary image file to be processed",
+                "default": "data",
+                "x-displayOptions": {
+                  "show": {
+                    "messageType": [
+                      "imageBinary"
+                    ]
+                  }
+                },
+                "x-required": true,
+                "type": "string"
+              },
+              "imageUrl": {
+                "x-title": "Image URL",
+                "description": "URL to the image to be processed",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "messageType": [
+                      "imageUrl"
+                    ]
+                  }
+                },
+                "x-required": true,
+                "type": "string"
+              },
+              "imageDetail": {
+                "x-title": "Image Details",
+                "description": "Control how the model processes the image and generates its textual understanding",
+                "default": "auto",
+                "x-displayOptions": {
+                  "show": {
+                    "type": [
+                      "HumanMessagePromptTemplate"
+                    ],
+                    "messageType": [
+                      "imageBinary",
+                      "imageUrl"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "auto",
+                  "low",
+                  "high"
+                ],
+                "x-enumNames": [
+                  "Auto",
+                  "Low",
+                  "High"
+                ],
+                "x-enumDescriptions": [
+                  "Model will use the auto setting which will look at the image input size and decide if it should use the low or high setting",
+                  "The model will receive a low-res 512px x 512px version of the image, and represent the image with a budget of 65 tokens. This allows the API to return faster responses and consume fewer input tokens for use cases that do not require high detail.",
+                  "Allows the model to see the low res image and then creates detailed crops of input images as 512px squares based on the input image size. Each of the detailed crops uses twice the token budget (65 tokens) for a total of 129 tokens."
+                ]
+              },
+              "message": {
+                "x-title": "Message",
+                "default": "",
+                "x-displayOptions": {
+                  "hide": {
+                    "messageType": [
+                      "imageBinary",
+                      "imageUrl"
+                    ]
+                  }
+                },
+                "x-required": true,
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "batching": {
+      "x-title": "Batch Processing",
+      "description": "Batch processing options for rate limiting",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.7
+              }
+            }
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "batchSize": {
+          "x-title": "Batch Size",
+          "description": "How many items to process in parallel. This is useful for rate limiting, but might impact the log output ordering.",
+          "default": 5,
+          "type": "number"
+        },
+        "delayBetweenBatches": {
+          "x-title": "Delay Between Batches",
+          "description": "Delay in milliseconds between batches. This is useful for rate limiting.",
+          "default": 0,
+          "type": "number"
+        }
+      }
+    }
+  },
+  "x-icon": "fa:link",
+  "x-inputs": "={{ ((parameter) => { function getInputs(parameters) {\n    const inputs = [\n        { displayName: '', type: 'main' },\n        {\n            displayName: 'Model',\n            maxConnections: 1,\n            type: 'ai_languageModel',\n            required: true,\n        },\n    ];\n    const needsFallback = parameters?.needsFallback;\n    if (needsFallback === true) {\n        inputs.push({\n            displayName: 'Fallback Model',\n            maxConnections: 1,\n            type: 'ai_languageModel',\n            required: true,\n        });\n    }\n    const hasOutputParser = parameters?.hasOutputParser;\n    if (hasOutputParser === undefined || hasOutputParser === true) {\n        inputs.push({\n            displayName: 'Output Parser',\n            type: 'ai_outputParser',\n            maxConnections: 1,\n            required: false,\n        });\n    }\n    return inputs;\n}; return getInputs(parameter) })($parameter) }}",
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": []
+}

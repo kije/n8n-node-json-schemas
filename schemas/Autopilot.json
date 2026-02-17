@@ -1,0 +1,370 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Autopilot",
+  "description": "Consume Autopilot API",
+  "x-n8n-node-type": "autopilot",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "contact",
+      "type": "string",
+      "enum": [
+        "contact",
+        "contactJourney",
+        "contactList",
+        "list"
+      ],
+      "x-enumNames": [
+        "Contact",
+        "Contact Journey",
+        "Contact List",
+        "List"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Get Many"
+      ],
+      "x-enumDescriptions": [
+        "Create a list",
+        "Get many lists"
+      ]
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "Email address of the contact",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upsert"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upsert"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "Company": {
+          "x-title": "Company",
+          "default": "",
+          "type": "string"
+        },
+        "customFieldsUi": {
+          "x-title": "Custom Fields",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "customFieldsValues": {
+              "x-title": "Custom Field",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "x-title": "Key Name or ID",
+                    "description": "User-specified key of user-defined data. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "User-specified value of user-defined data",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "Fax": {
+          "x-title": "Fax",
+          "default": "",
+          "type": "string"
+        },
+        "FirstName": {
+          "x-title": "First Name",
+          "default": "",
+          "type": "string"
+        },
+        "Industry": {
+          "x-title": "Industry",
+          "default": "",
+          "type": "string"
+        },
+        "LastName": {
+          "x-title": "Last Name",
+          "default": "",
+          "type": "string"
+        },
+        "LeadSource": {
+          "x-title": "Lead Source",
+          "default": "",
+          "type": "string"
+        },
+        "LinkedIn": {
+          "x-title": "LinkedIn URL",
+          "default": "",
+          "type": "string"
+        },
+        "autopilotList": {
+          "x-title": "List Name or ID",
+          "description": "List to which this contact will be added on creation. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "MailingCountry": {
+          "x-title": "Mailing Country",
+          "default": "",
+          "type": "string"
+        },
+        "MailingPostalCode": {
+          "x-title": "Mailing Postal Code",
+          "default": "",
+          "type": "string"
+        },
+        "MailingState": {
+          "x-title": "Mailing State",
+          "default": "",
+          "type": "string"
+        },
+        "MailingStreet": {
+          "x-title": "Mailing Street",
+          "default": "",
+          "type": "string"
+        },
+        "MailingCity": {
+          "x-title": "Mailing City",
+          "default": "",
+          "type": "string"
+        },
+        "MobilePhone": {
+          "x-title": "Mobile Phone",
+          "default": "",
+          "type": "string"
+        },
+        "newEmail": {
+          "x-title": "New Email",
+          "description": "If provided, will change the email address of the contact identified by the Email field",
+          "default": "",
+          "type": "string"
+        },
+        "notify": {
+          "x-title": "Notify",
+          "description": "By default Autopilot notifies registered REST hook endpoints for contact_added/contact_updated events when a new contact is added or an existing contact is updated via API. Disable to skip notifications.",
+          "default": true,
+          "type": "boolean"
+        },
+        "NumberOfEmployees": {
+          "x-title": "Number of Employees",
+          "default": 0,
+          "type": "number"
+        },
+        "owner_name": {
+          "x-title": "Owner Name",
+          "default": "",
+          "type": "string"
+        },
+        "Phone": {
+          "x-title": "Phone",
+          "default": "",
+          "type": "string"
+        },
+        "Salutation": {
+          "x-title": "Salutation",
+          "default": "",
+          "type": "string"
+        },
+        "autopilotSessionId": {
+          "x-title": "Session ID",
+          "description": "Used to associate a contact with a session",
+          "default": "",
+          "type": "string"
+        },
+        "Status": {
+          "x-title": "Status",
+          "default": "",
+          "type": "string"
+        },
+        "Title": {
+          "x-title": "Title",
+          "default": "",
+          "type": "string"
+        },
+        "unsubscribed": {
+          "x-title": "Subscribe",
+          "description": "Whether to subscribe or un-subscribe a contact",
+          "default": false,
+          "type": "boolean"
+        },
+        "Website": {
+          "x-title": "Website URL",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "contactId": {
+      "x-title": "Contact ID",
+      "description": "Can be ID or email",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "add",
+            "remove",
+            "exist"
+          ],
+          "resource": [
+            "contactList"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "list"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "triggerId": {
+      "x-title": "Trigger Name or ID",
+      "description": "List ID. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "add"
+          ],
+          "resource": [
+            "contactJourney"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "listId": {
+      "x-title": "List Name or ID",
+      "description": "ID of the list to operate on. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "add",
+            "remove",
+            "exist",
+            "getAll"
+          ],
+          "resource": [
+            "contactList"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "Name of the list to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "list"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:autopilot.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "autopilotApi",
+      "required": true
+    }
+  ]
+}

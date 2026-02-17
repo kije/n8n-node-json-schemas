@@ -1,0 +1,263 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Bitly",
+  "description": "Consume Bitly API",
+  "x-n8n-node-type": "bitly",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "accessToken",
+      "type": "string",
+      "enum": [
+        "accessToken",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "Access Token",
+        "OAuth2"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "link",
+      "type": "string",
+      "enum": [
+        "link"
+      ],
+      "x-enumNames": [
+        "Link"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "link"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "get",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Get",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a link",
+        "Get a link",
+        "Update a link"
+      ]
+    },
+    "longUrl": {
+      "x-title": "Long URL",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "link"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "link"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "domain": {
+          "x-title": "Domain",
+          "default": "bit.ly",
+          "type": "string"
+        },
+        "group": {
+          "x-title": "Group Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "tags": {
+          "x-title": "Tag Names or IDs",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "title": {
+          "x-title": "Title",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "deeplink": {
+      "x-title": "Deeplinks",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "link"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "deeplinkUi": {
+          "x-title": "Deep Link",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "appId": {
+                "x-title": "App ID",
+                "default": "",
+                "type": "string"
+              },
+              "appUriPath": {
+                "x-title": "App URI Path",
+                "default": "",
+                "type": "string"
+              },
+              "installType": {
+                "x-title": "Install Type",
+                "default": "",
+                "type": "string"
+              },
+              "installUrl": {
+                "x-title": "Install URL",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "id": {
+      "x-title": "Bitlink",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "link"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "link"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "archived": {
+          "x-title": "Archived",
+          "default": false,
+          "type": "boolean"
+        },
+        "group": {
+          "x-title": "Group Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "type": "string"
+        },
+        "longUrl": {
+          "x-title": "Long URL",
+          "default": "",
+          "type": "string"
+        },
+        "tags": {
+          "x-title": "Tag Names or IDs",
+          "description": "Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "title": {
+          "x-title": "Title",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:bitly.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "bitlyApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "accessToken"
+          ]
+        }
+      }
+    },
+    {
+      "name": "bitlyOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,249 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AI Agent",
+  "description": "Generates an action plan and executes it. Can use external tools.",
+  "x-n8n-node-type": "agent",
+  "x-n8n-version": 1.5,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "aiAgentStarterCallout": {
+      "x-title": "Tip: Get a feel for agents with our quick <a href=\"https://docs.n8n.io/advanced-ai/intro-tutorial/\" target=\"_blank\">tutorial</a> or see an <a href=\"/templates/1954\" target=\"_blank\">example</a> of how this node works",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "agent": [
+            "conversationalAgent",
+            "toolsAgent"
+          ]
+        }
+      },
+      "type": "string",
+      "x-n8n-type": "callout"
+    },
+    "agent": {
+      "x-title": "Agent",
+      "default": "toolsAgent",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.8
+              }
+            }
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "promptType": {
+      "x-title": "Source for Prompt (User Message)",
+      "default": "auto",
+      "x-displayOptions": {
+        "hide": {
+          "@version": [
+            {
+              "_cnd": {
+                "lte": 1.2
+              }
+            }
+          ]
+        },
+        "show": {
+          "agent": [
+            "sqlAgent"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "auto",
+        "guardrails",
+        "define"
+      ],
+      "x-enumNames": [
+        "Connected Chat Trigger Node",
+        "Connected Guardrails Node",
+        "Define below"
+      ],
+      "x-enumDescriptions": [
+        "Looks for an input field called 'chatInput' that is coming from a directly connected Chat Trigger",
+        "Looks for an input field called 'guardrailsInput' that is coming from a directly connected Guardrails Node",
+        "Use an expression to reference data in previous nodes or enter static text"
+      ]
+    },
+    "text": {
+      "x-title": "Text",
+      "default": "={{ $json.chatInput }}",
+      "x-displayOptions": {
+        "show": {
+          "agent": [
+            "planAndExecuteAgent"
+          ],
+          "@version": [
+            1.2
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "hasOutputParser": {
+      "x-title": "Require Specific Output Format",
+      "default": false,
+      "x-displayOptions": {
+        "hide": {
+          "@version": [
+            {
+              "_cnd": {
+                "lte": 1.2
+              }
+            }
+          ],
+          "agent": [
+            "sqlAgent"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "agent": [
+            "planAndExecuteAgent"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "humanMessageTemplate": {
+          "x-title": "Human Message Template",
+          "description": "The message that will be sent to the agent during each step execution",
+          "default": "Previous steps: {previous_steps}\n\nCurrent objective: {current_step}\n\n{agent_scratchpad}\n\nYou may extract and combine relevant data from your previous steps when responding to me.",
+          "type": "string",
+          "x-rows": 6
+        }
+      }
+    },
+    "dataSource": {
+      "x-title": "Data Source",
+      "description": "SQL database to connect to",
+      "default": "postgres",
+      "x-displayOptions": {
+        "show": {
+          "agent": [
+            "sqlAgent"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "gte": 1.4
+              }
+            }
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "mysql",
+        "postgres",
+        "sqlite"
+      ],
+      "x-enumNames": [
+        "MySQL",
+        "Postgres",
+        "SQLite"
+      ],
+      "x-enumDescriptions": [
+        "Connect to a MySQL database",
+        "Connect to a Postgres database",
+        "Use SQLite by connecting a database file as binary input"
+      ]
+    },
+    "credentials": {
+      "x-title": "Credentials",
+      "default": "",
+      "type": "string",
+      "x-n8n-type": "credentials"
+    },
+    "binaryPropertyName": {
+      "x-title": "Input Binary Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "agent": [
+            "sqlAgent"
+          ],
+          "dataSource": [
+            "sqlite"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "input": {
+      "x-title": "Prompt",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "agent": [
+            "sqlAgent"
+          ],
+          "@version": [
+            {
+              "_cnd": {
+                "lte": 1.2
+              }
+            }
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-rows": 5
+    }
+  },
+  "x-icon": "fa:robot",
+  "x-inputs": "={{\n\t\t\t\t((agent, hasOutputParser) => {\n\t\t\t\t\tfunction getInputs(agent, hasOutputParser) {\n    const getInputData = (inputs) => {\n        const displayNames = {\n            ai_languageModel: 'Model',\n            ai_memory: 'Memory',\n            ai_tool: 'Tool',\n            ai_outputParser: 'Output Parser',\n        };\n        return inputs.map(({ type, filter }) => {\n            const isModelType = type === 'ai_languageModel';\n            let displayName = type in displayNames ? displayNames[type] : undefined;\n            if (isModelType &&\n                ['openAiFunctionsAgent', 'toolsAgent', 'conversationalAgent'].includes(agent)) {\n                displayName = 'Chat Model';\n            }\n            const input = {\n                type,\n                displayName,\n                required: isModelType,\n                maxConnections: ['ai_languageModel', 'ai_memory', 'ai_outputParser'].includes(type)\n                    ? 1\n                    : undefined,\n            };\n            if (filter) {\n                input.filter = filter;\n            }\n            return input;\n        });\n    };\n    let specialInputs = [];\n    if (agent === 'conversationalAgent') {\n        specialInputs = [\n            {\n                type: 'ai_languageModel',\n                filter: {\n                    nodes: [\n                        '@n8n/n8n-nodes-langchain.lmChatAnthropic',\n                        '@n8n/n8n-nodes-langchain.lmChatAwsBedrock',\n                        '@n8n/n8n-nodes-langchain.lmChatGroq',\n                        '@n8n/n8n-nodes-langchain.lmChatLemonade',\n                        '@n8n/n8n-nodes-langchain.lmChatOllama',\n                        '@n8n/n8n-nodes-langchain.lmChatOpenAi',\n                        '@n8n/n8n-nodes-langchain.lmChatGoogleGemini',\n                        '@n8n/n8n-nodes-langchain.lmChatGoogleVertex',\n                        '@n8n/n8n-nodes-langchain.lmChatMistralCloud',\n                        '@n8n/n8n-nodes-langchain.lmChatAzureOpenAi',\n                        '@n8n/n8n-nodes-langchain.lmChatDeepSeek',\n                        '@n8n/n8n-nodes-langchain.lmChatOpenRouter',\n                        '@n8n/n8n-nodes-langchain.lmChatVercelAiGateway',\n                        '@n8n/n8n-nodes-langchain.lmChatXAiGrok',\n                        '@n8n/n8n-nodes-langchain.modelSelector',\n                    ],\n                },\n            },\n            {\n                type: 'ai_memory',\n            },\n            {\n                type: 'ai_tool',\n            },\n            {\n                type: 'ai_outputParser',\n            },\n        ];\n    }\n    else if (agent === 'toolsAgent') {\n        specialInputs = [\n            {\n                type: 'ai_languageModel',\n                filter: {\n                    nodes: [\n                        '@n8n/n8n-nodes-langchain.lmChatAnthropic',\n                        '@n8n/n8n-nodes-langchain.lmChatAzureOpenAi',\n                        '@n8n/n8n-nodes-langchain.lmChatAwsBedrock',\n                        '@n8n/n8n-nodes-langchain.lmChatLemonade',\n                        '@n8n/n8n-nodes-langchain.lmChatMistralCloud',\n                        '@n8n/n8n-nodes-langchain.lmChatOllama',\n                        '@n8n/n8n-nodes-langchain.lmChatOpenAi',\n                        '@n8n/n8n-nodes-langchain.lmChatGroq',\n                        '@n8n/n8n-nodes-langchain.lmChatGoogleVertex',\n                        '@n8n/n8n-nodes-langchain.lmChatGoogleGemini',\n                        '@n8n/n8n-nodes-langchain.lmChatDeepSeek',\n                        '@n8n/n8n-nodes-langchain.lmChatOpenRouter',\n                        '@n8n/n8n-nodes-langchain.lmChatVercelAiGateway',\n                        '@n8n/n8n-nodes-langchain.lmChatXAiGrok',\n                    ],\n                },\n            },\n            {\n                type: 'ai_memory',\n            },\n            {\n                type: 'ai_tool',\n                required: true,\n            },\n            {\n                type: 'ai_outputParser',\n            },\n        ];\n    }\n    else if (agent === 'openAiFunctionsAgent') {\n        specialInputs = [\n            {\n                type: 'ai_languageModel',\n                filter: {\n                    nodes: [\n                        '@n8n/n8n-nodes-langchain.lmChatOpenAi',\n                        '@n8n/n8n-nodes-langchain.lmChatAzureOpenAi',\n                    ],\n                },\n            },\n            {\n                type: 'ai_memory',\n            },\n            {\n                type: 'ai_tool',\n                required: true,\n            },\n            {\n                type: 'ai_outputParser',\n            },\n        ];\n    }\n    else if (agent === 'reActAgent') {\n        specialInputs = [\n            {\n                type: 'ai_languageModel',\n            },\n            {\n                type: 'ai_tool',\n            },\n            {\n                type: 'ai_outputParser',\n            },\n        ];\n    }\n    else if (agent === 'sqlAgent') {\n        specialInputs = [\n            {\n                type: 'ai_languageModel',\n            },\n            {\n                type: 'ai_memory',\n            },\n        ];\n    }\n    else if (agent === 'planAndExecuteAgent') {\n        specialInputs = [\n            {\n                type: 'ai_languageModel',\n            },\n            {\n                type: 'ai_tool',\n            },\n            {\n                type: 'ai_outputParser',\n            },\n        ];\n    }\n    if (hasOutputParser === false) {\n        specialInputs = specialInputs.filter((input) => input.type !== 'ai_outputParser');\n    }\n    return ['main', ...getInputData(specialInputs)];\n};\n\t\t\t\t\treturn getInputs(agent, hasOutputParser)\n\t\t\t\t})($parameter.agent, $parameter.hasOutputParser === undefined || $parameter.hasOutputParser === true)\n\t\t\t}}",
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "mySql",
+      "required": true,
+      "testedBy": "mysqlConnectionTest",
+      "displayOptions": {
+        "show": {
+          "agent": [
+            "sqlAgent"
+          ],
+          "/dataSource": [
+            "mysql"
+          ]
+        }
+      }
+    },
+    {
+      "name": "postgres",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "agent": [
+            "sqlAgent"
+          ],
+          "/dataSource": [
+            "postgres"
+          ]
+        }
+      }
+    }
+  ]
+}

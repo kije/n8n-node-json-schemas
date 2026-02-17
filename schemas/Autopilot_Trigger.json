@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Autopilot Trigger",
+  "description": "Handle Autopilot events via webhooks",
+  "x-n8n-node-type": "autopilotTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "event": {
+      "x-title": "Event",
+      "default": "",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "contactAdded",
+        "contactAddedToList",
+        "contactEnteredSegment",
+        "contactLeftSegment",
+        "contactRemovedFromList",
+        "contactUnsubscribed",
+        "contactUpdated"
+      ],
+      "x-enumNames": [
+        "Contact Added",
+        "Contact Added To List",
+        "Contact Entered Segment",
+        "Contact Left Segment",
+        "Contact Removed From List",
+        "Contact Unsubscribed",
+        "Contact Updated"
+      ]
+    }
+  },
+  "x-subtitle": "={{$parameter[\"event\"]}}",
+  "x-icon": "file:autopilot.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "autopilotApi",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

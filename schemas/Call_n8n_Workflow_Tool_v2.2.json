@@ -1,0 +1,120 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Call n8n Workflow Tool",
+  "description": "Uses another n8n workflow as a tool. Allows packaging any n8n node(s) as a tool.",
+  "x-n8n-node-type": "toolWorkflow",
+  "x-n8n-version": 2.2,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "name": {
+      "x-title": "Name",
+      "description": "The name of the function to be called, could contain letters, numbers, and underscores only",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            {
+              "_cnd": {
+                "lte": 2.1
+              }
+            }
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "description": {
+      "x-title": "Description",
+      "default": "",
+      "type": "string",
+      "x-rows": 3
+    },
+    "source": {
+      "x-title": "Source",
+      "description": "Where to get the workflow to execute from",
+      "default": "database",
+      "type": "string",
+      "enum": [
+        "database",
+        "parameter"
+      ],
+      "x-enumNames": [
+        "Database",
+        "Define Below"
+      ],
+      "x-enumDescriptions": [
+        "Load the workflow from the database by ID",
+        "Pass the JSON code of a workflow"
+      ]
+    },
+    "workflowId": {
+      "x-title": "Workflow",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "database"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-n8n-type": "workflowSelector"
+    },
+    "workflowInputs": {
+      "x-title": "Workflow Inputs",
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "database"
+          ]
+        },
+        "hide": {
+          "workflowId": [
+            ""
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-n8n-type": "resourceMapper"
+    },
+    "workflowJson": {
+      "x-title": "Workflow JSON",
+      "description": "The workflow JSON code to execute",
+      "default": "\n\n\n\n\n\n\n\n\n",
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "parameter"
+          ]
+        }
+      },
+      "x-required": true,
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    }
+  },
+  "x-icon": "fa:network-wired",
+  "x-inputs": [],
+  "x-outputs": [
+    "ai_tool"
+  ]
+}

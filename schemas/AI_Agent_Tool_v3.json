@@ -1,0 +1,107 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AI Agent Tool",
+  "description": "Generates an action plan and executes it. Can use external tools.",
+  "x-n8n-node-type": "agentTool",
+  "x-n8n-version": 3,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "toolDescription": {
+      "x-title": "Description",
+      "description": "Explain to the LLM what this tool does, a good, specific description would allow LLMs to produce expected results much more often",
+      "default": "AI Agent that can call other tools",
+      "x-required": true,
+      "type": "string",
+      "x-rows": 2
+    },
+    "text": {
+      "x-title": "Prompt (User Message)",
+      "default": "",
+      "x-required": true,
+      "type": "string",
+      "x-rows": 2
+    },
+    "hasOutputParser": {
+      "x-title": "Require Specific Output Format",
+      "default": false,
+      "type": "boolean"
+    },
+    "needsFallback": {
+      "x-title": "Enable Fallback Model",
+      "default": false,
+      "type": "boolean"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "systemMessage": {
+          "x-title": "System Message",
+          "description": "The message that will be sent to the agent before the conversation starts",
+          "default": "You are a helpful assistant",
+          "type": "string",
+          "x-rows": 6
+        },
+        "maxIterations": {
+          "x-title": "Max Iterations",
+          "description": "The maximum number of iterations the agent will run before stopping",
+          "default": 10,
+          "type": "number"
+        },
+        "returnIntermediateSteps": {
+          "x-title": "Return Intermediate Steps",
+          "description": "Whether or not the output should include intermediate steps the agent took",
+          "default": false,
+          "type": "boolean"
+        },
+        "passthroughBinaryImages": {
+          "x-title": "Automatically Passthrough Binary Images",
+          "description": "Whether or not binary images should be automatically passed through to the agent as image type messages",
+          "default": true,
+          "type": "boolean"
+        },
+        "enableStreaming": {
+          "x-title": "Enable Streaming",
+          "description": "Whether this agent will stream the response in real-time as it generates text",
+          "default": true,
+          "type": "boolean"
+        },
+        "batching": {
+          "x-title": "Batch Processing",
+          "description": "Batch processing options for rate limiting",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "batchSize": {
+              "x-title": "Batch Size",
+              "description": "How many items to process in parallel. This is useful for rate limiting, but might impact the log output ordering.",
+              "default": 1,
+              "type": "number"
+            },
+            "delayBetweenBatches": {
+              "x-title": "Delay Between Batches",
+              "description": "Delay in milliseconds between batches. This is useful for rate limiting.",
+              "default": 0,
+              "type": "number"
+            }
+          }
+        },
+        "maxTokensFromMemory": {
+          "x-title": "Max Tokens To Read From Memory",
+          "description": "The maximum number of tokens to read from the chat memory history. Set to 0 to read all history.",
+          "default": 0,
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-icon": "fa:robot",
+  "x-inputs": "={{\n\t\t\t\t((hasOutputParser, needsFallback) => {\n\t\t\t\t\tfunction getInputs(hasMainInput, hasOutputParser, needsFallback) {\n    const getInputData = (inputs) => {\n        return inputs.map(({ type, filter, displayName, required }) => {\n            const input = {\n                type,\n                displayName,\n                required,\n                maxConnections: ['ai_languageModel', 'ai_memory', 'ai_outputParser'].includes(type)\n                    ? 1\n                    : undefined,\n            };\n            if (filter) {\n                input.filter = filter;\n            }\n            return input;\n        });\n    };\n    let specialInputs = [\n        {\n            type: 'ai_languageModel',\n            displayName: 'Chat Model',\n            required: true,\n            filter: {\n                excludedNodes: [\n                    '@n8n/n8n-nodes-langchain.lmCohere',\n                    '@n8n/n8n-nodes-langchain.lmOllama',\n                    'n8n/n8n-nodes-langchain.lmOpenAi',\n                    '@n8n/n8n-nodes-langchain.lmOpenHuggingFaceInference',\n                ],\n            },\n        },\n        {\n            type: 'ai_languageModel',\n            displayName: 'Fallback Model',\n            required: true,\n            filter: {\n                excludedNodes: [\n                    '@n8n/n8n-nodes-langchain.lmCohere',\n                    '@n8n/n8n-nodes-langchain.lmOllama',\n                    'n8n/n8n-nodes-langchain.lmOpenAi',\n                    '@n8n/n8n-nodes-langchain.lmOpenHuggingFaceInference',\n                ],\n            },\n        },\n        {\n            displayName: 'Memory',\n            type: 'ai_memory',\n        },\n        {\n            displayName: 'Tool',\n            type: 'ai_tool',\n        },\n        {\n            displayName: 'Output Parser',\n            type: 'ai_outputParser',\n        },\n    ];\n    if (hasOutputParser === false) {\n        specialInputs = specialInputs.filter((input) => input.type !== 'ai_outputParser');\n    }\n    if (needsFallback === false) {\n        specialInputs = specialInputs.filter((input) => input.displayName !== 'Fallback Model');\n    }\n    const mainInputs = hasMainInput ? ['main'] : [];\n    return [...mainInputs, ...getInputData(specialInputs)];\n};\n\t\t\t\t\treturn getInputs(false, hasOutputParser, needsFallback)\n\t\t\t\t})($parameter.hasOutputParser === undefined || $parameter.hasOutputParser === true, $parameter.needsFallback !== undefined && $parameter.needsFallback === true)\n\t\t\t}}",
+  "x-outputs": [
+    "ai_tool"
+  ]
+}

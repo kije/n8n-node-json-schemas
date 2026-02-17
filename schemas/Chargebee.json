@@ -1,0 +1,307 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Chargebee",
+  "description": "Retrieve data from Chargebee API",
+  "x-n8n-node-type": "chargebee",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "invoice",
+      "type": "string",
+      "enum": [
+        "customer",
+        "invoice",
+        "subscription"
+      ],
+      "x-enumNames": [
+        "Customer",
+        "Invoice",
+        "Subscription"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "delete",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "subscription"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "cancel",
+        "delete"
+      ],
+      "x-enumNames": [
+        "Cancel",
+        "Delete"
+      ],
+      "x-enumDescriptions": [
+        "Cancel a subscription",
+        "Delete a subscription"
+      ]
+    },
+    "properties": {
+      "x-title": "Properties",
+      "description": "Properties to set on the new user",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "customer"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "id": {
+          "x-title": "User ID",
+          "description": "ID for the new customer. If not given, this will be auto-generated.",
+          "default": "",
+          "type": "string"
+        },
+        "first_name": {
+          "x-title": "First Name",
+          "description": "The first name of the customer",
+          "default": "",
+          "type": "string"
+        },
+        "last_name": {
+          "x-title": "Last Name",
+          "description": "The last name of the customer",
+          "default": "",
+          "type": "string"
+        },
+        "email": {
+          "x-title": "Email",
+          "description": "The email address of the customer",
+          "default": "",
+          "type": "string"
+        },
+        "phone": {
+          "x-title": "Phone",
+          "description": "The phone number of the customer",
+          "default": "",
+          "type": "string"
+        },
+        "company": {
+          "x-title": "Company",
+          "description": "The company of the customer",
+          "default": "",
+          "type": "string"
+        },
+        "customProperties": {
+          "x-title": "Custom Properties",
+          "description": "Adds a custom property to set also values which have not been predefined",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "property": {
+              "x-title": "Property",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "x-title": "Property Name",
+                    "description": "Name of the property to set",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Property Value",
+                    "description": "Value of the property to set",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "maxResults": {
+      "x-title": "Max Results",
+      "description": "Max. amount of results to return(< 100).",
+      "default": 10,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "list"
+          ],
+          "resource": [
+            "invoice"
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "filters": {
+      "x-title": "Filters",
+      "description": "Filter for invoices",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "list"
+          ],
+          "resource": [
+            "invoice"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "date": {
+          "x-title": "Invoice Date",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "operation": {
+                "x-title": "Operation",
+                "description": "Operation to decide where the data should be mapped to",
+                "default": "after",
+                "type": "string",
+                "enum": [
+                  "is",
+                  "is_not",
+                  "after",
+                  "before"
+                ],
+                "x-enumNames": [
+                  "Is",
+                  "Is Not",
+                  "After",
+                  "Before"
+                ]
+              },
+              "value": {
+                "x-title": "Date",
+                "description": "Query date",
+                "default": "",
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        },
+        "total": {
+          "x-title": "Invoice Amount",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "operation": {
+                "x-title": "Operation",
+                "description": "Operation to decide where the data should be mapped to",
+                "default": "gt",
+                "type": "string",
+                "enum": [
+                  "gte",
+                  "gt",
+                  "is",
+                  "is_not",
+                  "lte",
+                  "lt"
+                ],
+                "x-enumNames": [
+                  "Greater Equal Than",
+                  "Greater Than",
+                  "Is",
+                  "Is Not",
+                  "Less Equal Than",
+                  "Less Than"
+                ]
+              },
+              "value": {
+                "x-title": "Amount",
+                "description": "Query amount",
+                "default": 0,
+                "type": "number",
+                "x-precision": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    "invoiceId": {
+      "x-title": "Invoice ID",
+      "description": "The ID of the invoice to get",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "pdfUrl"
+          ],
+          "resource": [
+            "invoice"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "subscriptionId": {
+      "x-title": "Subscription ID",
+      "description": "The ID of the subscription to delete",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "subscription"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "endOfTerm": {
+      "x-title": "Schedule End of Term",
+      "description": "Whether it will not cancel it directly in will instead schedule the cancelation for the end of the term",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "cancel"
+          ],
+          "resource": [
+            "subscription"
+          ]
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:chargebee.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "chargebeeApi",
+      "required": true
+    }
+  ]
+}

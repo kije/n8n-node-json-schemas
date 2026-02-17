@@ -1,0 +1,384 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Azure Storage",
+  "description": "Interact with Azure Storage API",
+  "x-n8n-node-type": "azureStorage",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "sharedKey",
+      "type": "string",
+      "enum": [
+        "oAuth2",
+        "sharedKey"
+      ],
+      "x-enumNames": [
+        "OAuth2",
+        "Shared Key"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "container",
+      "type": "string",
+      "enum": [
+        "blob",
+        "container"
+      ],
+      "x-enumNames": [
+        "Blob",
+        "Container"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many"
+      ],
+      "x-enumDescriptions": [
+        "Create a container",
+        "Delete a container",
+        "Retrieve data for a specific container",
+        "Retrieve a list of containers"
+      ]
+    },
+    "container": {
+      "x-title": "Container",
+      "description": "Select the container to get",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "By Name",
+          "type": "string"
+        }
+      ]
+    },
+    "blobCreate": {
+      "x-title": "Blob Name",
+      "description": "The name of the new or existing blob",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "blob"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "from": {
+      "x-title": "From",
+      "default": "binary",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "blob"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "binary",
+        "url"
+      ],
+      "x-enumNames": [
+        "Binary",
+        "URL"
+      ]
+    },
+    "binaryPropertyName": {
+      "x-title": "Binary Contents",
+      "description": "The name of the input binary field containing the file to be written",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "blob"
+          ],
+          "operation": [
+            "create"
+          ],
+          "from": [
+            "binary"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "url": {
+      "x-title": "URL",
+      "description": "URL where to read of the blob contents from",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "blob"
+          ],
+          "operation": [
+            "create"
+          ],
+          "from": [
+            "url"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "fields": {
+          "x-title": "Fields",
+          "description": "The fields to add to the output",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "metadata",
+              "deleted",
+              "system"
+            ]
+          },
+          "x-enumNames": [
+            "Metadata",
+            "Deleted",
+            "System"
+          ]
+        },
+        "filter": {
+          "x-title": "Filter",
+          "description": "Filters the results to return only containers with a name that begins with the specified prefix",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "blob": {
+      "x-title": "Blob",
+      "description": "Blob to get",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "blob"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "By Name",
+          "type": "string"
+        }
+      ]
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "containerCreate": {
+      "x-title": "Container Name",
+      "description": "The name of the new container",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": {
+    "light": "file:azureStorage.svg",
+    "dark": "file:azureStorage.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "azureStorageOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    },
+    {
+      "name": "azureStorageSharedKeyApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "sharedKey"
+          ]
+        }
+      }
+    }
+  ]
+}

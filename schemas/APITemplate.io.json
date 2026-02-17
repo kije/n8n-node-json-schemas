@@ -1,0 +1,331 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "APITemplate.io",
+  "description": "Consume the APITemplate.io API",
+  "x-n8n-node-type": "apiTemplateIo",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "image",
+      "type": "string",
+      "enum": [
+        "account",
+        "image",
+        "pdf"
+      ],
+      "x-enumNames": [
+        "Account",
+        "Image",
+        "PDF"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "account"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "get"
+      ],
+      "x-enumNames": [
+        "Get"
+      ]
+    },
+    "imageTemplateId": {
+      "x-title": "Template Name or ID",
+      "description": "ID of the image template to use. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "image"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "pdfTemplateId": {
+      "x-title": "Template Name or ID",
+      "description": "ID of the PDF template to use. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "pdf"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "jsonParameters": {
+      "x-title": "JSON Parameters",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "pdf",
+            "image"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "download": {
+      "x-title": "Download",
+      "description": "Name of the binary property to which to write the data of the read file",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "pdf",
+            "image"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "binaryProperty": {
+      "x-title": "Put Output File in Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "pdf",
+            "image"
+          ],
+          "operation": [
+            "create"
+          ],
+          "download": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "overridesJson": {
+      "x-title": "Overrides (JSON)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "image"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "propertiesJson": {
+      "x-title": "Properties (JSON)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "pdf"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "overridesUi": {
+      "x-title": "Overrides",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "image"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "overrideValues": {
+          "x-title": "Override",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "propertiesUi": {
+                "x-title": "Properties",
+                "default": {},
+                "type": "object",
+                "properties": {
+                  "propertyValues": {
+                    "x-title": "Property",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "key": {
+                          "x-title": "Key",
+                          "description": "Name of the property",
+                          "default": "",
+                          "type": "string"
+                        },
+                        "value": {
+                          "x-title": "Value",
+                          "description": "Value to the property",
+                          "default": "",
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "propertiesUi": {
+      "x-title": "Properties",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "pdf"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "propertyValues": {
+          "x-title": "Property",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "x-title": "Key",
+                "description": "Name of the property",
+                "default": "",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "Value to the property",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "pdf",
+            "image"
+          ],
+          "download": [
+            true
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "fileName": {
+          "x-title": "File Name",
+          "description": "The name of the downloaded image/pdf. It has to include the extension. For example: report.pdf",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:apiTemplateIo.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "apiTemplateIoApi",
+      "required": true
+    }
+  ]
+}

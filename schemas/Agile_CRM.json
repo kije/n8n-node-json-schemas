@@ -1,0 +1,599 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Agile CRM",
+  "description": "Consume Agile CRM API",
+  "x-n8n-node-type": "agileCrm",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "contact",
+      "type": "string",
+      "enum": [
+        "company",
+        "contact",
+        "deal"
+      ],
+      "x-enumNames": [
+        "Company",
+        "Contact",
+        "Deal"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a new deal",
+        "Delete a deal",
+        "Get a deal",
+        "Get many deals",
+        "Update deal properties"
+      ]
+    },
+    "contactId": {
+      "x-title": "Contact ID",
+      "description": "Unique identifier for a particular contact",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "contact"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 20,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "filterType": {
+      "x-title": "Filter",
+      "default": "none",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "none",
+        "manual",
+        "json"
+      ],
+      "x-enumNames": [
+        "None",
+        "Build Manually",
+        "JSON"
+      ]
+    },
+    "matchType": {
+      "x-title": "Must Match",
+      "default": "anyFilter",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "manual"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "anyFilter",
+        "allFilters"
+      ],
+      "x-enumNames": [
+        "Any Filter",
+        "All Filters"
+      ]
+    },
+    "simple": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "manual"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "conditions": {
+          "x-title": "Conditions",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "field": {
+                "x-title": "Field",
+                "description": "Any searchable field",
+                "default": "",
+                "type": "string"
+              },
+              "condition_type": {
+                "x-title": "Condition Type",
+                "default": "EQUALS",
+                "type": "string",
+                "enum": [
+                  "AFTER",
+                  "BEFORE",
+                  "BETWEEN",
+                  "EQUALS",
+                  "LAST",
+                  "NOTEQUALS",
+                  "ON"
+                ],
+                "x-enumNames": [
+                  "After",
+                  "Before",
+                  "Between",
+                  "Equals",
+                  "Last",
+                  "Not Equal",
+                  "On"
+                ]
+              },
+              "value": {
+                "x-title": "Value",
+                "default": "",
+                "type": "string"
+              },
+              "value2": {
+                "x-title": "Value 2",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "condition_type": [
+                      "BETWEEN"
+                    ]
+                  }
+                },
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "filterJson": {
+      "x-title": "Filters (JSON)",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "filterType": [
+            "json"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "sort": {
+          "x-title": "Sort",
+          "default": [],
+          "type": "object",
+          "properties": {
+            "sort": {
+              "x-title": "Sort",
+              "type": "object",
+              "properties": {
+                "direction": {
+                  "x-title": "Direction",
+                  "description": "The sorting direction",
+                  "default": "ASC",
+                  "type": "string",
+                  "enum": [
+                    "ASC",
+                    "DESC"
+                  ],
+                  "x-enumNames": [
+                    "Ascending",
+                    "Descending"
+                  ]
+                },
+                "field": {
+                  "x-title": "Field",
+                  "description": "The sorting field",
+                  "default": "",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "jsonParameters": {
+      "x-title": "JSON Parameters",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "additionalFieldsJson": {
+      "x-title": "Additional Fields",
+      "description": "Object of values to set as described <a href=\"https://github.com/agilecrm/rest-api#1-deals---companies-api\">here</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "update"
+          ],
+          "jsonParameters": [
+            true
+          ]
+        }
+      },
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "update"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "expectedValue": {
+          "x-title": "Expected Value",
+          "description": "Expected Value of deal",
+          "default": "",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "name": {
+          "x-title": "Name",
+          "description": "Name of deal",
+          "default": "",
+          "type": "string"
+        },
+        "probability": {
+          "x-title": "Probability",
+          "description": "Expected Value of deal",
+          "default": 50,
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "contactIds": {
+          "x-title": "Contact IDs",
+          "description": "Unique contact identifiers",
+          "default": [],
+          "type": "string"
+        },
+        "customData": {
+          "x-title": "Custom Data",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "customProperty": {
+              "x-title": "Property",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "x-title": "Name",
+                    "description": "Property name",
+                    "default": "",
+                    "x-required": true,
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "Property value",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "companyId": {
+      "x-title": "Company ID",
+      "description": "Unique identifier for a particular company",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "company"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "dealId": {
+      "x-title": "Deal ID",
+      "description": "ID of deal to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "closeDate": {
+      "x-title": "Close Date",
+      "description": "Closing date of deal",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "expectedValue": {
+      "x-title": "Expected Value",
+      "description": "Expected Value of deal",
+      "default": 1,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1000000000000
+    },
+    "milestone": {
+      "x-title": "Milestone",
+      "description": "Milestone of deal",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "Name of deal",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "probability": {
+      "x-title": "Probability",
+      "description": "Expected probability",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "deal"
+          ],
+          "operation": [
+            "create"
+          ],
+          "jsonParameters": [
+            false
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:agilecrm.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "agileCrmApi",
+      "required": true
+    }
+  ]
+}

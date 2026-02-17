@@ -1,0 +1,142 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Azure OpenAI Chat Model",
+  "description": "For advanced usage with an AI chain",
+  "x-n8n-node-type": "lmChatAzureOpenAi",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "azureOpenAiApi",
+      "type": "string",
+      "enum": [
+        "azureOpenAiApi",
+        "azureEntraCognitiveServicesOAuth2Api"
+      ],
+      "x-enumNames": [
+        "API Key",
+        "Azure Entra ID (OAuth2)"
+      ]
+    },
+    "model": {
+      "x-title": "Model (Deployment) Name",
+      "description": "The name of the model(deployment) to use (e.g., gpt-4, gpt-35-turbo)",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "description": "Additional options to add",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "frequencyPenalty": {
+          "x-title": "Frequency Penalty",
+          "description": "Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim",
+          "default": 0,
+          "type": "number",
+          "minimum": -2,
+          "maximum": 2,
+          "x-precision": 1
+        },
+        "maxTokens": {
+          "x-title": "Maximum Number of Tokens",
+          "description": "The maximum number of tokens to generate in the completion. Most models have a context length of 2048 tokens (except for the newest models, which support 32,768). Use -1 for default.",
+          "default": -1,
+          "type": "number",
+          "maximum": 128000
+        },
+        "responseFormat": {
+          "x-title": "Response Format",
+          "default": "text",
+          "type": "string",
+          "enum": [
+            "text",
+            "json_object"
+          ],
+          "x-enumNames": [
+            "Text",
+            "JSON"
+          ],
+          "x-enumDescriptions": [
+            "Regular text response",
+            "Enables JSON mode, which should guarantee the message the model generates is valid JSON"
+          ]
+        },
+        "presencePenalty": {
+          "x-title": "Presence Penalty",
+          "description": "Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics",
+          "default": 0,
+          "type": "number",
+          "minimum": -2,
+          "maximum": 2,
+          "x-precision": 1
+        },
+        "temperature": {
+          "x-title": "Sampling Temperature",
+          "description": "Controls randomness: Lowering results in less random completions. As the temperature approaches zero, the model will become deterministic and repetitive.",
+          "default": 0.7,
+          "type": "number",
+          "minimum": 0,
+          "maximum": 2,
+          "x-precision": 1
+        },
+        "timeout": {
+          "x-title": "Timeout (Ms)",
+          "description": "Maximum amount of time a request is allowed to take in milliseconds",
+          "default": 60000,
+          "type": "number"
+        },
+        "maxRetries": {
+          "x-title": "Max Retries",
+          "description": "Maximum number of retries to attempt on failure",
+          "default": 2,
+          "type": "number"
+        },
+        "topP": {
+          "x-title": "Top P",
+          "description": "Controls diversity via nucleus sampling: 0.5 means half of all likelihood-weighted options are considered. We generally recommend altering this or temperature but not both.",
+          "default": 1,
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "x-precision": 1
+        }
+      }
+    }
+  },
+  "x-icon": "file:azure.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "ai_languageModel"
+  ],
+  "x-credentials": [
+    {
+      "name": "azureOpenAiApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "azureOpenAiApi"
+          ]
+        }
+      }
+    },
+    {
+      "name": "azureEntraCognitiveServicesOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "azureEntraCognitiveServicesOAuth2Api"
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,218 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CircleCI",
+  "description": "Consume CircleCI API",
+  "x-n8n-node-type": "circleCi",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "pipeline",
+      "type": "string",
+      "enum": [
+        "pipeline"
+      ],
+      "x-enumNames": [
+        "Pipeline"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "pipeline"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "get",
+        "getAll",
+        "trigger"
+      ],
+      "x-enumNames": [
+        "Get",
+        "Get Many",
+        "Trigger"
+      ],
+      "x-enumDescriptions": [
+        "Get a pipeline",
+        "Get many pipelines",
+        "Trigger a pipeline"
+      ]
+    },
+    "vcs": {
+      "x-title": "Provider",
+      "description": "Source control system",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get",
+            "getAll",
+            "trigger"
+          ],
+          "resource": [
+            "pipeline"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "bitbucket",
+        "github"
+      ],
+      "x-enumNames": [
+        "Bitbucket",
+        "GitHub"
+      ]
+    },
+    "projectSlug": {
+      "x-title": "Project Slug",
+      "description": "Project slug in the form org-name/repo-name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get",
+            "getAll",
+            "trigger"
+          ],
+          "resource": [
+            "pipeline"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "pipelineNumber": {
+      "x-title": "Pipeline Number",
+      "description": "The number of the pipeline",
+      "default": 1,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "pipeline"
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "pipeline"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "pipeline"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "pipeline"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "branch": {
+          "x-title": "Branch",
+          "description": "The name of a vcs branch",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "pipeline"
+          ],
+          "operation": [
+            "trigger"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "branch": {
+          "x-title": "Branch",
+          "description": "The branch where the pipeline ran. The HEAD commit on this branch was used for the pipeline. Note that branch and tag are mutually exclusive.",
+          "default": "",
+          "type": "string"
+        },
+        "tag": {
+          "x-title": "Tag",
+          "description": "The tag used by the pipeline. The commit that this tag points to was used for the pipeline. Note that branch and tag are mutually exclusive",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": {
+    "light": "file:circleCi.svg",
+    "dark": "file:circleCi.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "circleCiApi",
+      "required": true
+    }
+  ]
+}

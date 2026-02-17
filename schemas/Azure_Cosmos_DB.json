@@ -1,0 +1,398 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Azure Cosmos DB",
+  "description": "Interact with Azure Cosmos DB API",
+  "x-n8n-node-type": "azureCosmosDb",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "container",
+      "type": "string",
+      "enum": [
+        "container",
+        "item"
+      ],
+      "x-enumNames": [
+        "Container",
+        "Item"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "query",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Execute Query",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a new item",
+        "Delete an existing item",
+        "Retrieve an item",
+        "Retrieve a list of items",
+        "",
+        "Update an existing item"
+      ]
+    },
+    "containerCreate": {
+      "x-title": "ID",
+      "description": "Unique identifier for the new container",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "partitionKey": {
+      "x-title": "Partition Key",
+      "description": "The partition key is used to automatically distribute data across partitions for scalability. Choose a property in your JSON document that has a wide range of values and evenly distributes request volume.",
+      "default": "{\n\t\"paths\": [\n\t\t\"/id\"\n\t],\n\t\"kind\": \"Hash\",\n\t\"version\": 2\n}",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "container"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "hide": {
+          "container": [
+            ""
+          ],
+          "item": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "partitionKey": {
+          "x-title": "Partition Key",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "container": {
+      "x-title": "Container",
+      "description": "Select the container you want to use",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From list",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        }
+      ]
+    },
+    "simple": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "query"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "returnAll": [
+            false
+          ],
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "customProperties": {
+      "x-title": "Item Contents",
+      "description": "The item contents as a JSON object",
+      "default": "{}",
+      "x-displayOptions": {
+        "hide": {
+          "container": [
+            ""
+          ],
+          "item": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "item": {
+      "x-title": "Item",
+      "description": "Select the item to be updated",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "hide": {
+          "container": [
+            ""
+          ]
+        },
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From list",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        }
+      ]
+    },
+    "query": {
+      "x-title": "Query",
+      "description": "The SQL query to execute. Use $1, $2, $3, etc., to reference the 'Query Parameters' set in the options below.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "query"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-editor": "sqlEditor"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "item"
+          ],
+          "operation": [
+            "query"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "queryOptions": {
+          "x-title": "Query Options",
+          "type": "object",
+          "properties": {
+            "queryParameters": {
+              "x-title": "Query Parameters",
+              "description": "Comma-separated list of values used as query parameters. Use $1, $2, $3, etc., in your query.",
+              "default": "",
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{ $parameter[\"operation\"] + \": \" + $parameter[\"resource\"] }}",
+  "x-icon": {
+    "light": "file:AzureCosmosDb.svg",
+    "dark": "file:AzureCosmosDb.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "microsoftAzureCosmosDbSharedKeyApi",
+      "required": true
+    }
+  ]
+}

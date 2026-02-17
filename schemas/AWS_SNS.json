@@ -1,0 +1,200 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AWS SNS",
+  "description": "Sends data to AWS SNS",
+  "x-n8n-node-type": "awsSns",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "iam",
+      "type": "string",
+      "enum": [
+        "iam",
+        "assumeRole"
+      ],
+      "x-enumNames": [
+        "AWS (IAM)",
+        "AWS (Assume Role)"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "publish",
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "publish"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Publish"
+      ],
+      "x-enumDescriptions": [
+        "Create a topic",
+        "Delete a topic",
+        "Publish a message to a topic"
+      ]
+    },
+    "name": {
+      "x-title": "Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "displayName": {
+          "x-title": "Display Name",
+          "description": "The display name to use for a topic with SMS subscriptions",
+          "default": "",
+          "type": "string"
+        },
+        "fifoTopic": {
+          "x-title": "Fifo Topic",
+          "description": "Whether the topic you want to create is a FIFO (first-in-first-out) topic",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "topic": {
+      "x-title": "Topic",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "publish",
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "url",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "url",
+          "displayName": "By URL",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "displayName": "ID",
+          "type": "string"
+        }
+      ]
+    },
+    "subject": {
+      "x-title": "Subject",
+      "description": "Subject when the message is delivered to email endpoints",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "publish"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "message": {
+      "x-title": "Message",
+      "description": "The message you want to send",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "publish"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"topic\"]}}",
+  "x-icon": "file:sns.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "aws",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "iam"
+          ]
+        }
+      }
+    },
+    {
+      "name": "awsAssumeRole",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "assumeRole"
+          ]
+        }
+      }
+    }
+  ]
+}

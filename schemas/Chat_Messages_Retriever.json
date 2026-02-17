@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Chat Messages Retriever",
+  "description": "Retrieve chat messages from memory and use them in the workflow",
+  "x-n8n-node-type": "memoryChatRetriever",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "simplifyOutput": {
+      "x-title": "Simplify Output",
+      "description": "Whether to simplify the output to only include the sender and the text",
+      "default": true,
+      "type": "boolean"
+    }
+  },
+  "x-icon": "fa:database",
+  "x-inputs": [
+    "main",
+    {
+      "displayName": "Memory",
+      "maxConnections": 1,
+      "type": "ai_memory",
+      "required": true
+    }
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

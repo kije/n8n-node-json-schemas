@@ -1,0 +1,666 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AWS Cognito",
+  "description": "Sends data to AWS Cognito",
+  "x-n8n-node-type": "awsCognito",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "user",
+      "type": "string",
+      "enum": [
+        "group",
+        "user",
+        "userPool"
+      ],
+      "x-enumNames": [
+        "Group",
+        "User",
+        "User Pool"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "userPool"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "get"
+      ],
+      "x-enumNames": [
+        "Get"
+      ]
+    },
+    "userPool": {
+      "x-title": "User Pool",
+      "description": "Select the user pool to retrieve",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "userPool"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From list",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        }
+      ]
+    },
+    "newGroupName": {
+      "x-title": "Group Name",
+      "description": "The name of the new group to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "messageAction": {
+          "x-title": "Message Action",
+          "default": "RESEND",
+          "type": "string",
+          "enum": [
+            "RESEND",
+            "SUPPRESS"
+          ],
+          "x-enumNames": [
+            "Resend",
+            "Suppress"
+          ],
+          "x-enumDescriptions": [
+            "Resend the invitation message to a user that already exists and reset the expiration limit on the user's account",
+            "Suppress sending the message"
+          ]
+        },
+        "forceAliasCreation": {
+          "x-title": "Force Alias Creation",
+          "description": "Whether this parameter is used only if the phone_number_verified or email_verified attribute is set to true. Otherwise, it is ignored. If set to true, and the phone number or email address specified in the UserAttributes parameter already exists as an alias with a different user, the alias will be migrated. If set to false, an AliasExistsException error is thrown if the alias already exists.",
+          "default": false,
+          "type": "boolean"
+        },
+        "userAttributes": {
+          "x-title": "User Attributes",
+          "description": "Attributes to update for the user",
+          "default": {
+            "attributes": []
+          },
+          "x-required": true,
+          "type": "object",
+          "properties": {
+            "attributes": {
+              "x-title": "Attributes",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "attributeType": {
+                    "x-title": "Attribute Type",
+                    "default": "standard",
+                    "type": "string",
+                    "enum": [
+                      "standard",
+                      "custom"
+                    ],
+                    "x-enumNames": [
+                      "Standard Attribute",
+                      "Custom Attribute"
+                    ]
+                  },
+                  "standardName": {
+                    "x-title": "Standard Attribute",
+                    "default": "address",
+                    "x-displayOptions": {
+                      "show": {
+                        "attributeType": [
+                          "standard"
+                        ]
+                      }
+                    },
+                    "type": "string",
+                    "enum": [
+                      "address",
+                      "birthdate",
+                      "email",
+                      "email_verified",
+                      "family_name",
+                      "gender",
+                      "given_name",
+                      "locale",
+                      "middle_name",
+                      "name",
+                      "nickname",
+                      "phone_number",
+                      "phone_number_verified",
+                      "preferred_username",
+                      "profilepicture",
+                      "updated_at",
+                      "sub",
+                      "website",
+                      "zoneinfo"
+                    ],
+                    "x-enumNames": [
+                      "Address",
+                      "Birthdate",
+                      "Email",
+                      "Email Verified",
+                      "Family Name",
+                      "Gender",
+                      "Given Name",
+                      "Locale",
+                      "Middle Name",
+                      "Name",
+                      "Nickname",
+                      "Phone Number",
+                      "Phone Number Verified",
+                      "Preferred Username",
+                      "Profile Picture",
+                      "Updated At",
+                      "User Sub",
+                      "Website",
+                      "Zone Info"
+                    ]
+                  },
+                  "customName": {
+                    "x-title": "Custom Attribute Name",
+                    "description": "The name of the custom attribute (must start with \"custom:\")",
+                    "default": "",
+                    "x-displayOptions": {
+                      "show": {
+                        "attributeType": [
+                          "custom"
+                        ]
+                      }
+                    },
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "The value of the attribute",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "desiredDeliveryMediums": {
+          "x-title": "Desired Delivery Mediums",
+          "description": "Specify how to send the welcome message",
+          "default": [
+            "SMS"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "SMS",
+              "EMAIL"
+            ]
+          },
+          "x-enumNames": [
+            "SMS",
+            "Email"
+          ]
+        },
+        "temporaryPasswordOptions": {
+          "x-title": "Temporary Password",
+          "description": "The user's temporary password that will be valid only once. If not set, Amazon Cognito will automatically generate one for you.",
+          "default": "",
+          "type": "string",
+          "format": "password"
+        }
+      }
+    },
+    "group": {
+      "x-title": "Group",
+      "description": "Select the group you want to remove the user from",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "removeFromGroup"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "groupName"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From list",
+          "type": "list"
+        },
+        {
+          "name": "groupName",
+          "displayName": "By Name",
+          "type": "string"
+        }
+      ]
+    },
+    "includeUsers": {
+      "x-title": "Include Users",
+      "description": "Whether to include a list of users in the group",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "returnAll": [
+            false
+          ],
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number",
+      "minimum": 1,
+      "maximum": 60
+    },
+    "newUserName": {
+      "x-title": "User Name",
+      "description": "Depending on the user pool settings, this parameter requires the username, the email, or the phone number. No whitespace is allowed.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "user": {
+      "x-title": "User",
+      "description": "Select the user you want to remove from the group",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "removeFromGroup"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        }
+      ]
+    },
+    "simple": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "userPool"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "filter": {
+          "x-title": "Filter",
+          "type": "object",
+          "properties": {
+            "attribute": {
+              "x-title": "Attribute",
+              "description": "The attribute to search for",
+              "default": "email",
+              "type": "string",
+              "enum": [
+                "cognito:user_status",
+                "email",
+                "family_name",
+                "given_name",
+                "name",
+                "phone_number",
+                "preferred_username",
+                "status",
+                "sub",
+                "username"
+              ],
+              "x-enumNames": [
+                "Cognito User Status",
+                "Email",
+                "Family Name",
+                "Given Name",
+                "Name",
+                "Phone Number",
+                "Preferred Username",
+                "Status (Enabled)",
+                "Sub",
+                "Username"
+              ]
+            },
+            "value": {
+              "x-title": "Value",
+              "description": "The value of the attribute to search for",
+              "default": "",
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "userAttributes": {
+      "x-title": "User Attributes",
+      "description": "Attributes to update for the user",
+      "default": {
+        "attributes": []
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "user"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "attributes": {
+          "x-title": "Attributes",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "attributeType": {
+                "x-title": "Attribute Type",
+                "default": "standard",
+                "type": "string",
+                "enum": [
+                  "standard",
+                  "custom"
+                ],
+                "x-enumNames": [
+                  "Standard Attribute",
+                  "Custom Attribute"
+                ]
+              },
+              "standardName": {
+                "x-title": "Standard Attribute",
+                "default": "address",
+                "x-displayOptions": {
+                  "show": {
+                    "attributeType": [
+                      "standard"
+                    ]
+                  }
+                },
+                "type": "string",
+                "enum": [
+                  "address",
+                  "birthdate",
+                  "email",
+                  "family_name",
+                  "gender",
+                  "given_name",
+                  "locale",
+                  "middle_name",
+                  "name",
+                  "nickname",
+                  "phone_number",
+                  "preferred_username",
+                  "profilepicture",
+                  "updated_at",
+                  "sub",
+                  "website",
+                  "zoneinfo"
+                ],
+                "x-enumNames": [
+                  "Address",
+                  "Birthdate",
+                  "Email",
+                  "Family Name",
+                  "Gender",
+                  "Given Name",
+                  "Locale",
+                  "Middle Name",
+                  "Name",
+                  "Nickname",
+                  "Phone Number",
+                  "Preferred Username",
+                  "Profile Picture",
+                  "Updated At",
+                  "User Sub",
+                  "Website",
+                  "Zone Info"
+                ]
+              },
+              "customName": {
+                "x-title": "Custom Attribute Name",
+                "description": "The name of the custom attribute (must start with \"custom:\")",
+                "default": "",
+                "x-displayOptions": {
+                  "show": {
+                    "attributeType": [
+                      "custom"
+                    ]
+                  }
+                },
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "description": "The value of the attribute",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": {
+    "light": "file:cognito.svg",
+    "dark": "file:cognito.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "aws",
+      "required": true
+    }
+  ]
+}

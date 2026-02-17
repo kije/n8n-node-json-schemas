@@ -1,0 +1,408 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Bitwarden",
+  "description": "Consume the Bitwarden API",
+  "x-n8n-node-type": "bitwarden",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "collection",
+      "type": "string",
+      "enum": [
+        "collection",
+        "event",
+        "group",
+        "member"
+      ],
+      "x-enumNames": [
+        "Collection",
+        "Event",
+        "Group",
+        "Member"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getGroups",
+        "getAll",
+        "update",
+        "updateGroups"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Groups",
+        "Get Many",
+        "Update",
+        "Update Groups"
+      ]
+    },
+    "collectionId": {
+      "x-title": "Collection ID",
+      "description": "The identifier of the collection",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "collection"
+          ],
+          "operation": [
+            "delete",
+            "get",
+            "update"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 10,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "type": {
+          "x-title": "Type",
+          "default": {},
+          "type": "string",
+          "enum": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "x-enumNames": [
+            "Owner",
+            "Admin",
+            "User",
+            "Manager"
+          ]
+        },
+        "collections": {
+          "x-title": "Collection Names or IDs",
+          "description": "The collections to assign to this member. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "externalId": {
+          "x-title": "External ID",
+          "description": "The external identifier to set to this member",
+          "default": "",
+          "type": "string"
+        },
+        "accessAll": {
+          "x-title": "Access All",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "event"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "actingUserId": {
+          "x-title": "Acting User ID",
+          "description": "The unique identifier of the acting user",
+          "default": "",
+          "type": "string"
+        },
+        "end": {
+          "x-title": "End Date",
+          "description": "The end date for the search",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "itemID": {
+          "x-title": "Item ID",
+          "description": "The unique identifier of the item that the event describes",
+          "default": "",
+          "type": "string"
+        },
+        "start": {
+          "x-title": "Start Date",
+          "description": "The start date for the search",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "groupId": {
+      "x-title": "Group ID",
+      "description": "The identifier of the group",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "delete",
+            "get",
+            "getMembers",
+            "update",
+            "updateMembers"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "The name of the group to create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "accessAll": {
+      "x-title": "Access All",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "collections": {
+          "x-title": "Collection Names or IDs",
+          "description": "The collections to assign to this member. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "externalId": {
+          "x-title": "External ID",
+          "description": "The external identifier to set to this member",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "memberIds": {
+      "x-title": "Member IDs",
+      "description": "Comma-separated list of IDs of members to set in a group",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "group"
+          ],
+          "operation": [
+            "updateMembers"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "memberId": {
+      "x-title": "Member ID",
+      "description": "The identifier of the member",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "delete",
+            "get",
+            "getGroups",
+            "update",
+            "updateGroups"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "type": {
+      "x-title": "Type",
+      "default": 2,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "x-enumNames": [
+        "Owner",
+        "Admin",
+        "User",
+        "Manager"
+      ]
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "The email of the member to update",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "groupIds": {
+      "x-title": "Group IDs",
+      "description": "Comma-separated list of IDs of groups to set for a member",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "member"
+          ],
+          "operation": [
+            "updateGroups"
+          ]
+        }
+      },
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:bitwarden.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "bitwardenApi",
+      "required": true
+    }
+  ]
+}

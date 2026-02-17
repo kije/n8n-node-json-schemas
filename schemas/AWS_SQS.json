@@ -1,0 +1,255 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AWS SQS",
+  "description": "Sends messages to AWS SQS",
+  "x-n8n-node-type": "awsSqs",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "iam",
+      "type": "string",
+      "enum": [
+        "iam",
+        "assumeRole"
+      ],
+      "x-enumNames": [
+        "AWS (IAM)",
+        "AWS (Assume Role)"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "sendMessage",
+      "type": "string",
+      "enum": [
+        "sendMessage"
+      ],
+      "x-enumNames": [
+        "Send Message"
+      ],
+      "x-enumDescriptions": [
+        "Send a message to a queue"
+      ]
+    },
+    "queue": {
+      "x-title": "Queue Name or ID",
+      "description": "Queue to send a message to. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "sendMessage"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [],
+      "x-enumNames": []
+    },
+    "queueType": {
+      "x-title": "Queue Type",
+      "default": "standard",
+      "type": "string",
+      "enum": [
+        "fifo",
+        "standard"
+      ],
+      "x-enumNames": [
+        "FIFO",
+        "Standard"
+      ],
+      "x-enumDescriptions": [
+        "FIFO SQS queue",
+        "Standard SQS queue"
+      ]
+    },
+    "sendInputData": {
+      "x-title": "Send Input Data",
+      "description": "Whether to send the data the node receives as JSON to SQS",
+      "default": true,
+      "type": "boolean"
+    },
+    "message": {
+      "x-title": "Message",
+      "description": "Message to send to the queue",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "sendMessage"
+          ],
+          "sendInputData": [
+            false
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "messageGroupId": {
+      "x-title": "Message Group ID",
+      "description": "Tag that specifies that a message belongs to a specific message group. Applies only to FIFO (first-in-first-out) queues.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "queueType": [
+            "fifo"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "sendMessage"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "delaySeconds": {
+          "x-title": "Delay Seconds",
+          "description": "How long, in seconds, to delay a message for",
+          "default": 0,
+          "x-displayOptions": {
+            "show": {
+              "/queueType": [
+                "standard"
+              ]
+            }
+          },
+          "type": "number",
+          "minimum": 0,
+          "maximum": 900
+        },
+        "messageAttributes": {
+          "x-title": "Message Attributes",
+          "description": "Attributes to set",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "binary": {
+              "x-title": "Binary",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "x-title": "Name",
+                    "description": "Name of the attribute",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "dataPropertyName": {
+                    "x-title": "Property Name",
+                    "description": "Name of the binary property which contains the data for the message attribute",
+                    "default": "data",
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "number": {
+              "x-title": "Number",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "x-title": "Name",
+                    "description": "Name of the attribute",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "Number value of the attribute",
+                    "default": 0,
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            "string": {
+              "x-title": "String",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "x-title": "Name",
+                    "description": "Name of the attribute",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "String value of attribute",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "messageDeduplicationId": {
+          "x-title": "Message Deduplication ID",
+          "description": "Token used for deduplication of sent messages. Applies only to FIFO (first-in-first-out) queues.",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/queueType": [
+                "fifo"
+              ]
+            }
+          },
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"]}}",
+  "x-icon": "file:sqs.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "aws",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "iam"
+          ]
+        }
+      }
+    },
+    {
+      "name": "awsAssumeRole",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "assumeRole"
+          ]
+        }
+      }
+    }
+  ]
+}

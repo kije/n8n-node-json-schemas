@@ -1,0 +1,206 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Chat Memory Manager",
+  "description": "Manage chat messages memory and use it in the workflow",
+  "x-n8n-node-type": "memoryManager",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "mode": {
+      "x-title": "Operation Mode",
+      "default": "load",
+      "type": "string",
+      "enum": [
+        "load",
+        "insert",
+        "delete"
+      ],
+      "x-enumNames": [
+        "Get Many Messages",
+        "Insert Messages",
+        "Delete Messages"
+      ],
+      "x-enumDescriptions": [
+        "Retrieve chat messages from connected memory",
+        "Insert chat messages into connected memory",
+        "Delete chat messages from connected memory"
+      ]
+    },
+    "insertMode": {
+      "x-title": "Insert Mode",
+      "description": "Choose how new messages are inserted into the memory",
+      "default": "insert",
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "insert"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "insert",
+        "override"
+      ],
+      "x-enumNames": [
+        "Insert Messages",
+        "Override All Messages"
+      ],
+      "x-enumDescriptions": [
+        "Add messages alongside existing ones",
+        "Replace the current memory with new messages"
+      ]
+    },
+    "deleteMode": {
+      "x-title": "Delete Mode",
+      "description": "How messages are deleted from memory",
+      "default": "lastN",
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "delete"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "lastN",
+        "all"
+      ],
+      "x-enumNames": [
+        "Last N",
+        "All Messages"
+      ],
+      "x-enumDescriptions": [
+        "Delete the last N messages",
+        "Clear all messages from memory"
+      ]
+    },
+    "messages": {
+      "x-title": "Chat Messages",
+      "description": "Chat messages to insert into memory",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "insert"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "messageValues": {
+          "x-title": "Message",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "x-title": "Type Name or ID",
+                "default": "system",
+                "type": "string",
+                "enum": [
+                  "ai",
+                  "system",
+                  "user"
+                ],
+                "x-enumNames": [
+                  "AI",
+                  "System",
+                  "User"
+                ]
+              },
+              "message": {
+                "x-title": "Message",
+                "default": "",
+                "x-required": true,
+                "type": "string"
+              },
+              "hideFromUI": {
+                "x-title": "Hide Message in Chat",
+                "description": "Whether to hide the message from the chat UI",
+                "default": false,
+                "x-required": true,
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "lastMessagesCount": {
+      "x-title": "Messages Count",
+      "description": "The amount of last messages to delete",
+      "default": 2,
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "delete"
+          ],
+          "deleteMode": [
+            "lastN"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "simplifyOutput": {
+      "x-title": "Simplify Output",
+      "description": "Whether to simplify the output to only include the sender and the text",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "load"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "mode": [
+            "load"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "groupMessages": {
+          "x-title": "Group Messages",
+          "description": "Whether to group messages into a single item or return each message as a separate item",
+          "default": true,
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "x-icon": "fa:database",
+  "x-inputs": [
+    {
+      "displayName": "",
+      "type": "main"
+    },
+    {
+      "displayName": "Memory",
+      "type": "ai_memory",
+      "required": true,
+      "maxConnections": 1
+    }
+  ],
+  "x-outputs": [
+    {
+      "displayName": "",
+      "type": "main"
+    }
+  ]
+}

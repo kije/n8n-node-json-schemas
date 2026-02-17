@@ -1,0 +1,334 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AWS Certificate Manager",
+  "description": "Sends data to AWS Certificate Manager",
+  "x-n8n-node-type": "awsCertificateManager",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "iam",
+      "type": "string",
+      "enum": [
+        "iam",
+        "assumeRole"
+      ],
+      "x-enumNames": [
+        "AWS (IAM)",
+        "AWS (Assume Role)"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "certificate",
+      "type": "string",
+      "enum": [
+        "certificate"
+      ],
+      "x-enumNames": [
+        "Certificate"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "renew",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "certificate"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "delete",
+        "get",
+        "getMany",
+        "getMetadata",
+        "renew"
+      ],
+      "x-enumNames": [
+        "Delete",
+        "Get",
+        "Get Many",
+        "Get Metadata",
+        "Renew"
+      ],
+      "x-enumDescriptions": [
+        "Delete a certificate",
+        "Get a certificate",
+        "Get many certificates",
+        "Get certificate metadata",
+        "Renew a certificate"
+      ]
+    },
+    "certificateArn": {
+      "x-title": "Certificate ARN",
+      "description": "String that contains the ARN of the ACM certificate to be renewed. This must be of the form: arn:aws:acm:region:123456789012:certificate/12345678-1234-1234-1234-123456789012.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "certificate"
+          ],
+          "operation": [
+            "renew",
+            "get",
+            "delete",
+            "getMetadata"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "bucketName": {
+      "x-title": "Bucket Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "certificate"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "certificateKey": {
+      "x-title": "Certificate Key",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "certificate"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getMany"
+          ],
+          "resource": [
+            "certificate"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getMany"
+          ],
+          "resource": [
+            "certificate"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "certificate"
+          ],
+          "operation": [
+            "getMany"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "certificateStatuses": {
+          "x-title": "Certificate Statuses",
+          "description": "Filter the certificate list by status value",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "EXPIRED",
+              "FAILED",
+              "INACTIVE",
+              "ISSUED",
+              "PENDING_VALIDATION",
+              "REVOKED",
+              "VALIDATION_TIMED_OUT"
+            ]
+          },
+          "x-enumNames": [
+            "Expired",
+            "Failed",
+            "Inactive",
+            "Issued",
+            "Pending Validation",
+            "Revoked",
+            "Validation Timed Out"
+          ]
+        },
+        "extendedKeyUsage": {
+          "x-title": "Extended Key Usage",
+          "description": "Specify one or more ExtendedKeyUsage extension values",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "ANY",
+              "CODE_SIGNING",
+              "CUSTOM",
+              "EMAIL_PROTECTION",
+              "IPSEC_END_SYSTEM",
+              "IPSEC_TUNNEL",
+              "IPSEC_USER",
+              "NONE",
+              "OCSP_SIGNING",
+              "TIME_STAMPING",
+              "TLS_WEB_CLIENT_AUTHENTICATION",
+              "TLS_WEB_SERVER_AUTHENTICATION"
+            ]
+          },
+          "x-enumNames": [
+            "Any",
+            "Code Signing",
+            "Custom",
+            "Email Protection",
+            "IPSEC End System",
+            "IPSEC Tunnel",
+            "IPSEC User",
+            "None",
+            "OCSP Signing",
+            "Time Stamping",
+            "TLS Web Client Authentication",
+            "TLS Web Server Authentication"
+          ]
+        },
+        "keyTypes": {
+          "x-title": "Key Types",
+          "description": "Specify one or more algorithms that can be used to generate key pairs",
+          "default": [
+            "RSA_2048"
+          ],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "EC_prime256v1",
+              "EC_secp384r1",
+              "EC_secp521r1",
+              "RSA_1024",
+              "RSA_2048",
+              "RSA_4096"
+            ]
+          },
+          "x-enumNames": [
+            "EC Prime256v1",
+            "EC Secp384r1",
+            "EC Secp521r1",
+            "RSA 1024",
+            "RSA 2048",
+            "RSA 4096"
+          ]
+        },
+        "keyUsage": {
+          "x-title": "Key Usage",
+          "description": "Specify one or more KeyUsage extension values",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "ANY",
+              "CERTIFICATE_SIGNING",
+              "CRL_SIGNING",
+              "CUSTOM",
+              "DATA_ENCIPHERMENT",
+              "DECIPHER_ONLY",
+              "DIGITAL_SIGNATURE",
+              "ENCIPHER_ONLY",
+              "KEY_AGREEMENT",
+              "KEY_ENCIPHERMENT",
+              "NON_REPUDIATION"
+            ]
+          },
+          "x-enumNames": [
+            "Any",
+            "Certificate Signing",
+            "CRL Signing",
+            "Custom",
+            "Data Encipherment",
+            "Decipher Only",
+            "Digital Signature",
+            "Encipher Only",
+            "Key Agreement",
+            "Key Encipherment",
+            "Non Repudiation"
+          ]
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:acm.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "aws",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "iam"
+          ]
+        }
+      }
+    },
+    {
+      "name": "awsAssumeRole",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "assumeRole"
+          ]
+        }
+      }
+    }
+  ]
+}

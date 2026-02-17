@@ -1,0 +1,134 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Brandfetch",
+  "description": "Consume Brandfetch API",
+  "x-n8n-node-type": "Brandfetch",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "operation": {
+      "x-title": "Operation",
+      "default": "logo",
+      "type": "string",
+      "enum": [
+        "color",
+        "company",
+        "font",
+        "industry",
+        "logo"
+      ],
+      "x-enumNames": [
+        "Color",
+        "Company",
+        "Font",
+        "Industry",
+        "Logo"
+      ],
+      "x-enumDescriptions": [
+        "Return a company's colors",
+        "Return a company's data",
+        "Return a company's fonts",
+        "Return a company's industry",
+        "Return a company's logo & icon"
+      ]
+    },
+    "domain": {
+      "x-title": "Domain",
+      "description": "The domain name of the company",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "download": {
+      "x-title": "Download",
+      "description": "Name of the binary property to which to write the data of the read file",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "logo"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "imageTypes": {
+      "x-title": "Image Type",
+      "default": [
+        "logo",
+        "icon"
+      ],
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "logo"
+          ],
+          "download": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "icon",
+          "logo"
+        ]
+      },
+      "x-enumNames": [
+        "Icon",
+        "Logo"
+      ]
+    },
+    "imageFormats": {
+      "x-title": "Image Format",
+      "description": "The image format in which the logo should be returned as",
+      "default": [
+        "png"
+      ],
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "logo"
+          ],
+          "download": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "png",
+          "svg"
+        ]
+      },
+      "x-enumNames": [
+        "PNG",
+        "SVG"
+      ]
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"]}}",
+  "x-icon": "file:brandfetch.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "brandfetchApi",
+      "required": true
+    }
+  ]
+}

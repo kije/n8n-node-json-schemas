@@ -1,0 +1,1264 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ActiveCampaign",
+  "description": "Create and edit data in ActiveCampaign",
+  "x-n8n-node-type": "activeCampaign",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "contact",
+      "type": "string",
+      "enum": [
+        "account",
+        "accountContact",
+        "connection",
+        "contact",
+        "contactList",
+        "contactTag",
+        "deal",
+        "ecommerceCustomer",
+        "ecommerceOrder",
+        "ecommerceOrderProducts",
+        "list",
+        "tag"
+      ],
+      "x-enumNames": [
+        "Account",
+        "Account Contact",
+        "Connection",
+        "Contact",
+        "Contact List",
+        "Contact Tag",
+        "Deal",
+        "E-Commerce Customer",
+        "E-Commerce Order",
+        "E-Commerce Order Product",
+        "List",
+        "Tag"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "ecommerceOrderProducts"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "getAll",
+        "getByProductId",
+        "getByOrderId"
+      ],
+      "x-enumNames": [
+        "Get Many",
+        "Get by Product ID",
+        "Get by Order ID"
+      ],
+      "x-enumDescriptions": [
+        "Get data of many order products",
+        "Get data of a ordered product",
+        "Get data of an order's products"
+      ]
+    },
+    "tagType": {
+      "x-title": "Type",
+      "description": "Tag-type of the new tag",
+      "default": "contact",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "tag"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "contact",
+        "template"
+      ],
+      "x-enumNames": [
+        "Contact",
+        "Template"
+      ],
+      "x-enumDescriptions": [
+        "Tag contact",
+        "Tag template"
+      ]
+    },
+    "name": {
+      "x-title": "Account Name",
+      "description": "The name associated with the account in the external service. Often this will be a company name (e.g., \"My Toystore, Inc.\").",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "connection"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "ecommerceCustomer"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "acceptsMarketing": {
+          "x-title": "Accepts Marketing",
+          "description": "Whether customer has opt-ed in to marketing communications",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "tagId": {
+      "x-title": "Tag Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "add"
+          ],
+          "resource": [
+            "contactTag"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "description": "The fields to update",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "ecommerceCustomer"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "connectionid": {
+          "x-title": "Service ID",
+          "description": "The ID of the connection object for the service where the customer originates",
+          "default": "",
+          "type": "string"
+        },
+        "externalid": {
+          "x-title": "Customer ID",
+          "description": "The ID of the customer in the external service",
+          "default": "",
+          "type": "string"
+        },
+        "email": {
+          "x-title": "Customer Email",
+          "description": "The email address of the customer",
+          "default": "",
+          "type": "string"
+        },
+        "acceptsMarketing": {
+          "x-title": "Accepts Marketing",
+          "description": "Whether customer has opt-ed in to marketing communications",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "ecommerceOrderProducts"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "ecommerceOrderProducts"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "simple": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "ecommerceOrderProducts"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "contactId": {
+      "x-title": "Contact ID",
+      "description": "ID of the contact to get",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "contactTagId": {
+      "x-title": "Contact Tag ID",
+      "description": "ID of the contact tag to delete",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "remove"
+          ],
+          "resource": [
+            "contactTag"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "listId": {
+      "x-title": "List ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "remove"
+          ],
+          "resource": [
+            "contactList"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "accountId": {
+      "x-title": "Account ID",
+      "description": "ID of the account to get",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "account"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "account"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "search": {
+          "x-title": "Search",
+          "description": "Search by name",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "account": {
+      "x-title": "Account ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "accountContact"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "contact": {
+      "x-title": "Deal's Contact ID",
+      "description": "The ID of the deal's contact",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "deal"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "accountContactId": {
+      "x-title": "Account Contact ID",
+      "description": "Account ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "accountContact"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "email": {
+      "x-title": "Customer Email",
+      "description": "The email address of the customer",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "ecommerceCustomer"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "updateIfExists": {
+      "x-title": "Update if Exists",
+      "description": "Whether to update user if it exists already. If not set and user exists it will error instead.",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "contact"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "title": {
+      "x-title": "Title",
+      "description": "The title of the deal",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "deal"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "value": {
+      "x-title": "Deal Value",
+      "description": "The value of the deal in cents",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "deal"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "currency": {
+      "x-title": "Order Currency",
+      "description": "The currency of the order (3-digit ISO code, e.g., \"USD\")",
+      "default": "eur",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "ecommerceOrder"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "eur",
+        "usd",
+        "gbp",
+        "chf",
+        "cny",
+        "",
+        "aed",
+        "afn",
+        "all",
+        "amd",
+        "ang",
+        "aoa",
+        "ars",
+        "aud",
+        "awg",
+        "azn",
+        "bam",
+        "bbd",
+        "bdt",
+        "bgn",
+        "bhd",
+        "bif",
+        "bmd",
+        "bnd",
+        "bob",
+        "brl",
+        "bsd",
+        "btc",
+        "btn",
+        "bwp",
+        "byn",
+        "bzd",
+        "cad",
+        "cdf",
+        "clf",
+        "clp",
+        "cnh",
+        "cop",
+        "crc",
+        "cuc",
+        "cup",
+        "cve",
+        "czk",
+        "djf",
+        "dkk",
+        "dop",
+        "dzd",
+        "egp",
+        "ern",
+        "etb",
+        "fjd",
+        "fkp",
+        "gel",
+        "ggp",
+        "ghs",
+        "gip",
+        "gmd",
+        "gnf",
+        "gtq",
+        "gyd",
+        "hkd",
+        "hnl",
+        "hrk",
+        "htg",
+        "huf",
+        "idr",
+        "ils",
+        "imp",
+        "inr",
+        "iqd",
+        "irr",
+        "isk",
+        "jep",
+        "jmd",
+        "jod",
+        "jpy",
+        "kes",
+        "kgs",
+        "khr",
+        "kmf",
+        "kpw",
+        "krw",
+        "kwd",
+        "kyd",
+        "kzt",
+        "lak",
+        "lbp",
+        "lkr",
+        "lrd",
+        "lsl",
+        "lyd",
+        "mad",
+        "mdl",
+        "mga",
+        "mkd",
+        "mmk",
+        "mnt",
+        "mop",
+        "mro",
+        "mru",
+        "mur",
+        "mvr",
+        "mwk",
+        "mxn",
+        "myr",
+        "mzn",
+        "nad",
+        "ngn",
+        "nio",
+        "nok",
+        "npr",
+        "nzd",
+        "omr",
+        "pab",
+        "pen",
+        "pgk",
+        "php",
+        "pkr",
+        "pln",
+        "pyg",
+        "qar",
+        "ron",
+        "rsd",
+        "rub",
+        "rwf",
+        "sar",
+        "sbd",
+        "scr",
+        "sdg",
+        "sek",
+        "sgd",
+        "shp",
+        "sll",
+        "sos",
+        "srd",
+        "ssp",
+        "std",
+        "stn",
+        "svc",
+        "syp",
+        "szl",
+        "thb",
+        "tjs",
+        "tmt",
+        "tnd",
+        "top",
+        "try",
+        "ttd",
+        "twd",
+        "tzs",
+        "uah",
+        "ugx",
+        "uyu",
+        "uzs",
+        "vef",
+        "vnd",
+        "vuv",
+        "wst",
+        "xaf",
+        "xag",
+        "xau",
+        "xcd",
+        "xdr",
+        "xof",
+        "xpd",
+        "xpf",
+        "xpt",
+        "yer",
+        "zar",
+        "zmw",
+        "zwl"
+      ],
+      "x-enumNames": [
+        "Euro",
+        "United States Dollar",
+        "British Pound Sterling",
+        "Swiss Franc",
+        "Renminbi",
+        "--------",
+        "United Arab Emirates Dirham",
+        "Afghan Afghani",
+        "Albanian Lek",
+        "Armenian Dram",
+        "Netherlands Antillean Guilder",
+        "Angolan Kwanza",
+        "Argentine Peso",
+        "Australian Dollar",
+        "Aruban Florin",
+        "Azerbaijani Manat",
+        "Bosnia-Herzegovina Convertible Mark",
+        "Barbadian Dollar",
+        "Bangladeshi Taka",
+        "Bulgarian Lev",
+        "Bahraini Dinar",
+        "Burundian Franc",
+        "Bermudan Dollar",
+        "Brunei Dollar",
+        "Bolivian Boliviano",
+        "Brazilian Real",
+        "Bahamian Dollar",
+        "Bitcoin",
+        "Bhutanese Ngultrum",
+        "Botswanan Pula",
+        "Belarusian Ruble",
+        "Belize Dollar",
+        "Canadian Dollar",
+        "Congolese Franc",
+        "Chilean Unit of Account (UF)",
+        "Chilean Peso",
+        "Chinese Yuan (Offshore)",
+        "Colombian Peso",
+        "Costa Rican Colón",
+        "Cuban Convertible Peso",
+        "Cuban Peso",
+        "Cape Verdean Escudo",
+        "Czech Republic Koruna",
+        "Djiboutian Franc",
+        "Danish Krone",
+        "Dominican Peso",
+        "Algerian Dinar",
+        "Egyptian Pound",
+        "Eritrean Nakfa",
+        "Ethiopian Birr",
+        "Fijian Dollar",
+        "Falkland Islands Pound",
+        "Georgian Lari",
+        "Guernsey Pound",
+        "Ghanaian Cedi",
+        "Gibraltar Pound",
+        "Gambian Dalasi",
+        "Guinean Franc",
+        "Guatemalan Quetzal",
+        "Guyanaese Dollar",
+        "Hong Kong Dollar",
+        "Honduran Lempira",
+        "Croatian Kuna",
+        "Haitian Gourde",
+        "Hungarian Forint",
+        "Indonesian Rupiah",
+        "Israeli New Sheqel",
+        "Manx Pound",
+        "Indian Rupee",
+        "Iraqi Dinar",
+        "Iranian Rial",
+        "Icelandic Króna",
+        "Jersey Pound",
+        "Jamaican Dollar",
+        "Jordanian Dinar",
+        "Japanese Yen",
+        "Kenyan Shilling",
+        "Kyrgystani Som",
+        "Cambodian Riel",
+        "Comorian Franc",
+        "North Korean Won",
+        "South Korean Won",
+        "Kuwaiti Dinar",
+        "Cayman Islands Dollar",
+        "Kazakhstani Tenge",
+        "Laotian Kip",
+        "Lebanese Pound",
+        "Sri Lankan Rupee",
+        "Liberian Dollar",
+        "Lesotho Loti",
+        "Libyan Dinar",
+        "Moroccan Dirham",
+        "Moldovan Leu",
+        "Malagasy Ariary",
+        "Macedonian Denar",
+        "Myanma Kyat",
+        "Mongolian Tugrik",
+        "Macanese Pataca",
+        "Mauritanian Ouguiya (Pre-2018)",
+        "Mauritanian Ouguiya",
+        "Mauritian Rupee",
+        "Maldivian Rufiyaa",
+        "Malawian Kwacha",
+        "Mexican Peso",
+        "Malaysian Ringgit",
+        "Mozambican Metical",
+        "Namibian Dollar",
+        "Nigerian Naira",
+        "Nicaraguan Córdoba",
+        "Norwegian Krone",
+        "Nepalese Rupee",
+        "New Zealand Dollar",
+        "Omani Rial",
+        "Panamanian Balboa",
+        "Peruvian Nuevo Sol",
+        "Papua New Guinean Kina",
+        "Philippine Peso",
+        "Pakistani Rupee",
+        "Polish Zloty",
+        "Paraguayan Guarani",
+        "Qatari Rial",
+        "Romanian Leu",
+        "Serbian Dinar",
+        "Russian Ruble",
+        "Rwandan Franc",
+        "Saudi Riyal",
+        "Solomon Islands Dollar",
+        "Seychellois Rupee",
+        "Sudanese Pound",
+        "Swedish Krona",
+        "Singapore Dollar",
+        "Saint Helena Pound",
+        "Sierra Leonean Leone",
+        "Somali Shilling",
+        "Surinamese Dollar",
+        "South Sudanese Pound",
+        "São Tomé and Príncipe Dobra (Pre-2018)",
+        "São Tomé and Príncipe Dobra",
+        "Salvadoran Colón",
+        "Syrian Pound",
+        "Swazi Lilangeni",
+        "Thai Baht",
+        "Tajikistani Somoni",
+        "Turkmenistani Manat",
+        "Tunisian Dinar",
+        "Tongan Pa'anga",
+        "Turkish Lira",
+        "Trinidad and Tobago Dollar",
+        "New Taiwan Dollar",
+        "Tanzanian Shilling",
+        "Ukrainian Hryvnia",
+        "Ugandan Shilling",
+        "Uruguayan Peso",
+        "Uzbekistan Som",
+        "Venezuelan Bolívar Fuerte",
+        "Vietnamese Dong",
+        "Vanuatu Vatu",
+        "Samoan Tala",
+        "CFA Franc BEAC",
+        "Silver Ounce",
+        "Gold Ounce",
+        "East Caribbean Dollar",
+        "Special Drawing Rights",
+        "CFA Franc BCEAO",
+        "Palladium Ounce",
+        "CFP Franc",
+        "Platinum Ounce",
+        "Yemeni Rial",
+        "South African Rand",
+        "Zambian Kwacha",
+        "Zimbabwean Dollar"
+      ]
+    },
+    "group": {
+      "x-title": "Deal Pipeline ID",
+      "description": "The pipeline ID of the deal",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "deal"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "stage": {
+      "x-title": "Deal Stage ID",
+      "description": "The stage ID of the deal",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "deal"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "owner": {
+      "x-title": "Deal Owner ID",
+      "description": "The owner ID of the deal",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "deal"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "dealId": {
+      "x-title": "Deal ID",
+      "description": "The ID of the deal note",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "updateNote"
+          ],
+          "resource": [
+            "deal"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "dealNote": {
+      "x-title": "Deal Note",
+      "description": "The content of the deal note",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "updateNote"
+          ],
+          "resource": [
+            "deal"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "dealNoteId": {
+      "x-title": "Deal Note ID",
+      "description": "The ID of the deal note",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "updateNote"
+          ],
+          "resource": [
+            "deal"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "service": {
+      "x-title": "Service",
+      "description": "The name of the service",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "connection"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "externalid": {
+      "x-title": "Customer ID",
+      "description": "The ID of the customer in the external service",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "ecommerceCustomer"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "logoUrl": {
+      "x-title": "Logo URL",
+      "description": "The URL to a logo image for the external service",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "connection"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "linkUrl": {
+      "x-title": "Link URL",
+      "description": "The URL to a page where the integration with the external service can be managed in the third-party's website",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "connection"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "connectionId": {
+      "x-title": "Connection ID",
+      "description": "ID of the connection to get",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "connection"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "externalcheckoutid": {
+      "x-title": "External Checkout ID",
+      "description": "The ID of the cart in the external service. ONLY REQUIRED IF EXTERNALID IS NOT INCLUDED.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "ecommerceOrder"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "source": {
+      "x-title": "Order Source",
+      "description": "The order source code (0 - will not trigger automations, 1 - will trigger automations)",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "ecommerceOrder"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "totalPrice": {
+      "x-title": "Total Price",
+      "description": "The total price of the order in cents, including tax and shipping charges. (i.e. $456.78 => 45678). Must be greater than or equal to zero.",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "ecommerceOrder"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "connectionid": {
+      "x-title": "Service ID",
+      "description": "The ID of the connection object for the service where the customer originates",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "ecommerceCustomer"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "customerid": {
+      "x-title": "Customer ID",
+      "description": "The ID of the customer associated with this order",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "ecommerceOrder"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "externalCreatedDate": {
+      "x-title": "Creation Date",
+      "description": "The date the order was placed",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "ecommerceOrder"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "abandonedDate": {
+      "x-title": "Abandoning Date",
+      "description": "The date the cart was abandoned. REQUIRED ONLY IF INCLUDING EXTERNALCHECKOUTID.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "ecommerceOrder"
+          ]
+        }
+      },
+      "type": "string",
+      "format": "date-time"
+    },
+    "orderProducts": {
+      "x-title": "Products",
+      "description": "All ordered products",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "ecommerceOrder"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "name": {
+          "x-title": "Name",
+          "description": "The name of the product",
+          "default": "",
+          "type": "string"
+        },
+        "price": {
+          "x-title": "Price",
+          "description": "The price of the product, in cents. (i.e. $456.78 => 45678). Must be greater than or equal to zero.",
+          "default": 0,
+          "type": "number"
+        },
+        "quantity": {
+          "x-title": "Product Quantity",
+          "description": "The quantity ordered",
+          "default": 0,
+          "type": "number"
+        },
+        "externalid": {
+          "x-title": "Product External ID",
+          "description": "The ID of the product in the external service",
+          "default": "",
+          "type": "string"
+        },
+        "category": {
+          "x-title": "Product Category",
+          "description": "The category of the product",
+          "default": "",
+          "type": "string"
+        },
+        "sku": {
+          "x-title": "SKU",
+          "description": "The SKU for the product",
+          "default": "",
+          "type": "string"
+        },
+        "description": {
+          "x-title": "Description",
+          "description": "The description of the product",
+          "default": "",
+          "type": "string"
+        },
+        "imageUrl": {
+          "x-title": "Image URL",
+          "description": "An Image URL that displays an image of the product",
+          "default": "",
+          "type": "string"
+        },
+        "productUrl": {
+          "x-title": "Product URL",
+          "description": "A URL linking to the product in your store",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "orderId": {
+      "x-title": "Order ID",
+      "description": "The ID of the order whose products you'd like returned",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getByOrderId"
+          ],
+          "resource": [
+            "ecommerceOrderProducts"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "ecommerceCustomerId": {
+      "x-title": "Customer ID",
+      "description": "ID of the E-commerce customer to get",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "ecommerceCustomer"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "number"
+    },
+    "procuctId": {
+      "x-title": "Product ID",
+      "description": "The ID of the product you'd like returned",
+      "default": 0,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getByProductId"
+          ],
+          "resource": [
+            "ecommerceOrderProducts"
+          ]
+        }
+      },
+      "type": "number"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": {
+    "light": "file:activeCampaign.svg",
+    "dark": "file:activeCampaign.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "activeCampaignApi",
+      "required": true
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Calendly Trigger",
+  "description": "Starts the workflow when Calendly events occur",
+  "x-n8n-node-type": "calendlyTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "apiKey",
+      "type": "string",
+      "enum": [
+        "oAuth2",
+        "apiKey"
+      ],
+      "x-enumNames": [
+        "OAuth2 (recommended)",
+        "API Key or Personal Access Token"
+      ]
+    },
+    "scope": {
+      "x-title": "Scope",
+      "default": "user",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "organization",
+        "user"
+      ],
+      "x-enumNames": [
+        "Organization",
+        "User"
+      ],
+      "x-enumDescriptions": [
+        "Triggers the webhook for all subscribed events within the organization",
+        "Triggers the webhook for subscribed events that belong to the current user"
+      ]
+    },
+    "events": {
+      "x-title": "Events",
+      "default": [],
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "invitee.created",
+          "invitee.canceled"
+        ]
+      },
+      "x-enumNames": [
+        "Event Created",
+        "Event Canceled"
+      ]
+    }
+  },
+  "x-icon": "file:calendly.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "calendlyApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "apiKey"
+          ]
+        }
+      }
+    },
+    {
+      "name": "calendlyOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "x-webhooks": "true"
+}

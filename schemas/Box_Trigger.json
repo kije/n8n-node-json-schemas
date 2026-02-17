@@ -1,0 +1,131 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Box Trigger",
+  "description": "Starts the workflow when Box events occur",
+  "x-n8n-node-type": "boxTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "events": {
+      "x-title": "Events",
+      "description": "The events to listen to",
+      "default": [],
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "COLLABORATION.ACCEPTED",
+          "COLLABORATION.CREATED",
+          "COLLABORATION.REJECTED",
+          "COLLABORATION.REMOVED",
+          "COLLABORATION.UPDATED",
+          "COMMENT.CREATED",
+          "COMMENT.DELETED",
+          "COMMENT.UPDATED",
+          "FILE.COPIED",
+          "FILE.DELETED",
+          "FILE.DOWNLOADED",
+          "FILE.LOCKED",
+          "FILE.MOVED",
+          "FILE.PREVIEWED",
+          "FILE.RENAMED",
+          "FILE.RESTORED",
+          "FILE.TRASHED",
+          "FILE.UNLOCKED",
+          "FILE.UPLOADED",
+          "FOLDER.COPIED",
+          "FOLDER.CREATED",
+          "FOLDER.DELETED",
+          "FOLDER.DOWNLOADED",
+          "FOLDER.MOVED",
+          "FOLDER.RENAMED",
+          "FOLDER.RESTORED",
+          "FOLDER.TRASHED",
+          "METADATA_INSTANCE.CREATED",
+          "METADATA_INSTANCE.DELETED",
+          "METADATA_INSTANCE.UPDATED",
+          "SHARED_LINK.CREATED",
+          "SHARED_LINK.DELETED",
+          "SHARED_LINK.UPDATED",
+          "TASK_ASSIGNMENT.CREATED",
+          "TASK_ASSIGNMENT.UPDATED",
+          "WEBHOOK.DELETED"
+        ]
+      },
+      "x-enumNames": [
+        "Collaboration Accepted",
+        "Collaboration Created",
+        "Collaboration Rejected",
+        "Collaboration Removed",
+        "Collaboration Updated",
+        "Comment Created",
+        "Comment Deleted",
+        "Comment Updated",
+        "File Copied",
+        "File Deleted",
+        "File Downloaded",
+        "File Locked",
+        "File Moved",
+        "File Previewed",
+        "File Renamed",
+        "File Restored",
+        "File Trashed",
+        "File Unlocked",
+        "File Uploaded",
+        "Folder Copied",
+        "Folder Created",
+        "Folder Deleted",
+        "Folder Downloaded",
+        "Folder Moved",
+        "Folder Renamed",
+        "Folder Restored",
+        "Folder Trashed",
+        "Metadata Instance Created",
+        "Metadata Instance Deleted",
+        "Metadata Instance Updated",
+        "Sharedlink Created",
+        "Sharedlink Deleted",
+        "Sharedlink Updated",
+        "Task Assignment Created",
+        "Task Assignment Updated",
+        "Webhook Deleted"
+      ]
+    },
+    "targetType": {
+      "x-title": "Target Type",
+      "description": "The type of item to trigger a webhook",
+      "default": "",
+      "type": "string",
+      "enum": [
+        "file",
+        "folder"
+      ],
+      "x-enumNames": [
+        "File",
+        "Folder"
+      ]
+    },
+    "targetId": {
+      "x-title": "Target ID",
+      "description": "The ID of the item to trigger a webhook",
+      "default": "",
+      "type": "string"
+    }
+  },
+  "x-icon": "file:box.png",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "boxOAuth2Api",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

@@ -1,0 +1,394 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Baserow",
+  "description": "Consume the Baserow API",
+  "x-n8n-node-type": "baserow",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "row",
+      "type": "string",
+      "enum": [
+        "row"
+      ],
+      "x-enumNames": [
+        "Row"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "getAll",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "row"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a row",
+        "Delete a row",
+        "Retrieve a row",
+        "Retrieve many rows",
+        "Update a row"
+      ]
+    },
+    "databaseId": {
+      "x-title": "Database Name or ID",
+      "description": "Database to operate on. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "tableId": {
+      "x-title": "Table Name or ID",
+      "description": "Table to operate on. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-required": true,
+      "type": "string"
+    },
+    "rowId": {
+      "x-title": "Row ID",
+      "description": "ID of the row to delete",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "dataToSend": {
+      "x-title": "Data to Send",
+      "description": "Whether to insert the input data this node receives in the new row",
+      "default": "defineBelow",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "update"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "autoMapInputData",
+        "defineBelow"
+      ],
+      "x-enumNames": [
+        "Auto-Map Input Data to Columns",
+        "Define Below for Each Column"
+      ],
+      "x-enumDescriptions": [
+        "Use when node input properties match destination column names",
+        "Set the value for each destination column"
+      ]
+    },
+    "inputsToIgnore": {
+      "x-title": "Inputs to Ignore",
+      "description": "List of input properties to avoid sending, separated by commas. Leave empty to send all properties.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "update"
+          ],
+          "dataToSend": [
+            "autoMapInputData"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "fieldsUi": {
+      "x-title": "Fields to Send",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create",
+            "update"
+          ],
+          "dataToSend": [
+            "defineBelow"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "fieldValues": {
+          "x-title": "Field",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "fieldId": {
+                "x-title": "Field Name or ID",
+                "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+                "default": "",
+                "type": "string"
+              },
+              "fieldValue": {
+                "x-title": "Field Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 50,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "additionalOptions": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "filters": {
+          "x-title": "Filters",
+          "description": "Filter rows based on comparison operators",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "fields": {
+              "x-title": "Field",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "x-title": "Field Name or ID",
+                    "description": "Field to compare. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "operator": {
+                    "x-title": "Filter",
+                    "description": "Operator to compare field and value with",
+                    "default": "equal",
+                    "type": "string",
+                    "enum": [
+                      "contains",
+                      "contains_not",
+                      "date_after",
+                      "date_before",
+                      "date_equal",
+                      "date_equals_month",
+                      "date_equals_today",
+                      "date_equals_year",
+                      "date_not_equal",
+                      "equal",
+                      "filename_contains",
+                      "higher_than",
+                      "empty",
+                      "not_empty",
+                      "boolean",
+                      "link_row_has_not",
+                      "link_row_has",
+                      "lower_than",
+                      "not_equal",
+                      "single_select_equal",
+                      "single_select_not_equal"
+                    ],
+                    "x-enumNames": [
+                      "Contains",
+                      "Contains Not",
+                      "Date After Date",
+                      "Date Before Date",
+                      "Date Equal",
+                      "Date Equals Month",
+                      "Date Equals Today",
+                      "Date Equals Year",
+                      "Date Not Equal",
+                      "Equal",
+                      "Filename Contains",
+                      "Higher Than",
+                      "Is Empty",
+                      "Is Not Empty",
+                      "Is True",
+                      "Link Row Does Not Have",
+                      "Link Row Has",
+                      "Lower Than",
+                      "Not Equal",
+                      "Single Select Equal",
+                      "Single Select Not Equal"
+                    ],
+                    "x-enumDescriptions": [
+                      "Field contains value",
+                      "Field does not contain value",
+                      "Field after this date. Format: 'YYYY-MM-DD'.",
+                      "Field before this date. Format: 'YYYY-MM-DD'.",
+                      "Field is date. Format: 'YYYY-MM-DD'.",
+                      "Field in this month. Format: string.",
+                      "Field is today. Format: string.",
+                      "Field in this year. Format: string.",
+                      "Field is not date. Format: 'YYYY-MM-DD'.",
+                      "Field is equal to value",
+                      "Field filename contains value",
+                      "Field is higher than value",
+                      "Field is empty",
+                      "Field is not empty",
+                      "Boolean field is true",
+                      "Field does not have link ID",
+                      "Field has link ID",
+                      "Field is lower than value",
+                      "Field is not equal to value",
+                      "Field selected option is value",
+                      "Field selected option is not value"
+                    ]
+                  },
+                  "value": {
+                    "x-title": "Value",
+                    "description": "Value to compare to",
+                    "default": "",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "filterType": {
+          "x-title": "Filter Type",
+          "description": "This works only if two or more filters are provided. Defaults to <code>AND</code>",
+          "default": "AND",
+          "type": "string",
+          "enum": [
+            "AND",
+            "OR"
+          ],
+          "x-enumNames": [
+            "AND",
+            "OR"
+          ],
+          "x-enumDescriptions": [
+            "Indicates that the rows must match all the provided filters",
+            "Indicates that the rows only have to match one of the filters"
+          ]
+        },
+        "search": {
+          "x-title": "Search Term",
+          "description": "Text to match (can be in any column)",
+          "default": "",
+          "type": "string"
+        },
+        "order": {
+          "x-title": "Sorting",
+          "description": "Set the sort order of the result rows",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "fields": {
+              "x-title": "Field",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "x-title": "Field Name or ID",
+                    "description": "Field name to sort by. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+                    "default": "",
+                    "type": "string"
+                  },
+                  "direction": {
+                    "x-title": "Direction",
+                    "description": "Sort direction, either ascending or descending",
+                    "default": "",
+                    "type": "string",
+                    "enum": [
+                      "",
+                      "-"
+                    ],
+                    "x-enumNames": [
+                      "ASC",
+                      "DESC"
+                    ],
+                    "x-enumDescriptions": [
+                      "Sort in ascending order",
+                      "Sort in descending order"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \":\" + $parameter[\"resource\"]}}",
+  "x-icon": "file:baserow.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "baserowApi",
+      "required": true
+    }
+  ]
+}

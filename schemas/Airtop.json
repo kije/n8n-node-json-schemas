@@ -1,0 +1,1586 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Airtop",
+  "description": "Scrape and control any site with Airtop",
+  "x-n8n-node-type": "airtop",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "session",
+      "type": "string",
+      "enum": [
+        "agent",
+        "extraction",
+        "file",
+        "interaction",
+        "session",
+        "window"
+      ],
+      "x-enumNames": [
+        "Agent",
+        "Extraction",
+        "File",
+        "Interaction",
+        "Session",
+        "Window"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "click",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "click",
+        "fill",
+        "hover",
+        "scroll",
+        "type"
+      ],
+      "x-enumNames": [
+        "Click an Element",
+        "Fill Form",
+        "Hover on an Element",
+        "Scroll",
+        "Type"
+      ],
+      "x-enumDescriptions": [
+        "Execute a click on an element given a description",
+        "Fill a form with the provided information",
+        "Execute a hover action on an element given a description",
+        "Execute a scroll action on the page",
+        "Execute a Type action on an element given a description"
+      ]
+    },
+    "agentId": {
+      "x-title": "Agent",
+      "description": "The Airtop agent to run. Visit <a href=\"https://portal.airtop.ai/agents\" target=\"_blank\">Airtop Agents</a> for more information.",
+      "default": {
+        "mode": "list",
+        "value": ""
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "agent"
+          ],
+          "operation": [
+            "run"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "__rl": {
+          "type": "boolean",
+          "const": true
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "list",
+            "id"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mode",
+        "value"
+      ],
+      "x-modes": [
+        {
+          "name": "list",
+          "displayName": "From List",
+          "type": "list"
+        },
+        {
+          "name": "id",
+          "displayName": "By ID",
+          "type": "string"
+        }
+      ]
+    },
+    "agentParameters": {
+      "x-title": "Agent Parameters",
+      "default": {
+        "mappingMode": "defineBelow",
+        "value": null
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "agent"
+          ],
+          "operation": [
+            "run"
+          ]
+        },
+        "hide": {
+          "agentId": [
+            ""
+          ]
+        }
+      },
+      "type": "string",
+      "x-n8n-type": "resourceMapper"
+    },
+    "awaitExecution": {
+      "x-title": "Await Agent",
+      "description": "Whether to wait for the agent to complete its execution",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "agent"
+          ],
+          "operation": [
+            "run"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "timeout": {
+      "x-title": "Timeout",
+      "description": "Timeout in seconds to wait for the agent to finish",
+      "default": 600,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "agent"
+          ],
+          "operation": [
+            "run"
+          ],
+          "awaitExecution": [
+            true
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "profileName": {
+      "x-title": "Profile Name",
+      "description": "The name of the Airtop profile to load or create",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "extraction"
+          ],
+          "sessionMode": [
+            "new"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "saveProfileOnTermination": {
+      "x-title": "Save Profile",
+      "description": "Whether to automatically save the <a href=\"https://docs.airtop.ai/guides/how-to/saving-a-profile\" target=\"_blank\">Airtop profile</a> for this session upon termination",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "record": {
+      "x-title": "Record Session",
+      "description": "Whether to record the browser session. <a href=\"https://docs.airtop.ai/guides/how-to/recording-a-session\" target=\"_blank\">More details</a>.",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "timeoutMinutes": {
+      "x-title": "Idle Timeout",
+      "description": "Minutes to wait before the session is terminated due to inactivity",
+      "default": 10,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "number"
+    },
+    "proxy": {
+      "x-title": "Proxy",
+      "description": "Choose how to configure the proxy for this session",
+      "default": "none",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "none",
+        "integrated",
+        "proxyUrl"
+      ],
+      "x-enumNames": [
+        "None",
+        "Integrated",
+        "Proxy URL"
+      ],
+      "x-enumDescriptions": [
+        "No proxy will be used",
+        "Use Airtop-provided proxy",
+        "Use a proxy URL to configure the proxy"
+      ]
+    },
+    "proxyConfig": {
+      "x-title": "Proxy Configuration",
+      "description": "The Airtop-provided configuration to use for the proxy",
+      "default": {
+        "country": "US",
+        "sticky": true
+      },
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "create"
+          ],
+          "proxy": [
+            "integrated"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "country": {
+          "x-title": "Country",
+          "description": "The country to use for the proxy. Not all countries are guaranteed to provide a proxy. Learn more <a href=\"https://docs.airtop.ai/api-reference/airtop-api/sessions/create#request.body.configuration.proxy.Proxy.Airtop-Proxy-Configuration.country\" target=\"_blank\">here</a>.",
+          "default": "US",
+          "type": "string",
+          "enum": [
+            "AF",
+            "AX",
+            "AL",
+            "DZ",
+            "AS",
+            "AD",
+            "AO",
+            "AI",
+            "AQ",
+            "AG",
+            "AR",
+            "AM",
+            "AW",
+            "AU",
+            "AT",
+            "AZ",
+            "BS",
+            "BH",
+            "BD",
+            "BB",
+            "BY",
+            "BE",
+            "BZ",
+            "BJ",
+            "BM",
+            "BT",
+            "BO",
+            "BQ",
+            "BA",
+            "BW",
+            "BV",
+            "BR",
+            "IO",
+            "BN",
+            "BG",
+            "BF",
+            "BI",
+            "CV",
+            "KH",
+            "CM",
+            "CA",
+            "KY",
+            "CF",
+            "TD",
+            "CL",
+            "CN",
+            "CX",
+            "CC",
+            "CO",
+            "KM",
+            "CG",
+            "CD",
+            "CK",
+            "CR",
+            "CI",
+            "HR",
+            "CU",
+            "CW",
+            "CY",
+            "CZ",
+            "DK",
+            "DJ",
+            "DM",
+            "DO",
+            "EC",
+            "EG",
+            "SV",
+            "GQ",
+            "ER",
+            "EE",
+            "SZ",
+            "ET",
+            "FK",
+            "FO",
+            "FJ",
+            "FI",
+            "FR",
+            "GF",
+            "PF",
+            "TF",
+            "GA",
+            "GM",
+            "GE",
+            "DE",
+            "GH",
+            "GI",
+            "GR",
+            "GL",
+            "GD",
+            "GP",
+            "GU",
+            "GT",
+            "GG",
+            "GN",
+            "GW",
+            "GY",
+            "HT",
+            "HM",
+            "VA",
+            "HN",
+            "HK",
+            "HU",
+            "IS",
+            "IN",
+            "ID",
+            "IR",
+            "IQ",
+            "IE",
+            "IM",
+            "IL",
+            "IT",
+            "JM",
+            "JP",
+            "JE",
+            "JO",
+            "KZ",
+            "KE",
+            "KI",
+            "KP",
+            "KR",
+            "KW",
+            "KG",
+            "LA",
+            "LV",
+            "LB",
+            "LS",
+            "LR",
+            "LY",
+            "LI",
+            "LT",
+            "LU",
+            "MO",
+            "MG",
+            "MW",
+            "MY",
+            "MV",
+            "ML",
+            "MT",
+            "MH",
+            "MQ",
+            "MR",
+            "MU",
+            "YT",
+            "MX",
+            "FM",
+            "MD",
+            "MC",
+            "MN",
+            "ME",
+            "MS",
+            "MA",
+            "MZ",
+            "MM",
+            "NA",
+            "NR",
+            "NP",
+            "NL",
+            "NC",
+            "NZ",
+            "NI",
+            "NE",
+            "NG",
+            "NU",
+            "NF",
+            "MK",
+            "MP",
+            "NO",
+            "OM",
+            "PK",
+            "PW",
+            "PS",
+            "PA",
+            "PG",
+            "PY",
+            "PE",
+            "PH",
+            "PN",
+            "PL",
+            "PT",
+            "PR",
+            "QA",
+            "RE",
+            "RO",
+            "RU",
+            "RW",
+            "BL",
+            "SH",
+            "KN",
+            "LC",
+            "MF",
+            "PM",
+            "VC",
+            "WS",
+            "SM",
+            "ST",
+            "SA",
+            "SN",
+            "RS",
+            "SC",
+            "SL",
+            "SG",
+            "SX",
+            "SK",
+            "SI",
+            "SB",
+            "SO",
+            "ZA",
+            "GS",
+            "SS",
+            "ES",
+            "LK",
+            "SD",
+            "SR",
+            "SJ",
+            "SE",
+            "CH",
+            "SY",
+            "TW",
+            "TJ",
+            "TZ",
+            "TH",
+            "TL",
+            "TG",
+            "TK",
+            "TO",
+            "TT",
+            "TN",
+            "TR",
+            "TM",
+            "TC",
+            "TV",
+            "UG",
+            "UA",
+            "AE",
+            "GB",
+            "UM",
+            "US",
+            "UY",
+            "UZ",
+            "VU",
+            "VE",
+            "VN",
+            "VG",
+            "VI",
+            "WF",
+            "EH",
+            "YE",
+            "ZM",
+            "ZW"
+          ],
+          "x-enumNames": [
+            "Afghanistan",
+            "Aland Islands",
+            "Albania",
+            "Algeria",
+            "American Samoa",
+            "Andorra",
+            "Angola",
+            "Anguilla",
+            "Antarctica",
+            "Antigua and Barbuda",
+            "Argentina",
+            "Armenia",
+            "Aruba",
+            "Australia",
+            "Austria",
+            "Azerbaijan",
+            "Bahamas",
+            "Bahrain",
+            "Bangladesh",
+            "Barbados",
+            "Belarus",
+            "Belgium",
+            "Belize",
+            "Benin",
+            "Bermuda",
+            "Bhutan",
+            "Bolivia, Plurinational State Of",
+            "Bonaire, Sint Eustatius and Saba",
+            "Bosnia and Herzegovina",
+            "Botswana",
+            "Bouvet Island",
+            "Brazil",
+            "British Indian Ocean Territory",
+            "Brunei Darussalam",
+            "Bulgaria",
+            "Burkina Faso",
+            "Burundi",
+            "Cabo Verde",
+            "Cambodia",
+            "Cameroon",
+            "Canada",
+            "Cayman Islands",
+            "Central African Republic",
+            "Chad",
+            "Chile",
+            "China",
+            "Christmas Island",
+            "Cocos (Keeling) Islands",
+            "Colombia",
+            "Comoros",
+            "Congo",
+            "Congo, Democratic Republic of The",
+            "Cook Islands",
+            "Costa Rica",
+            "Cote d'Ivoire",
+            "Croatia",
+            "Cuba",
+            "Curaçao",
+            "Cyprus",
+            "Czechia",
+            "Denmark",
+            "Djibouti",
+            "Dominica",
+            "Dominican Republic",
+            "Ecuador",
+            "Egypt",
+            "El Salvador",
+            "Equatorial Guinea",
+            "Eritrea",
+            "Estonia",
+            "Eswatini",
+            "Ethiopia",
+            "Falkland Islands (Malvinas)",
+            "Faroe Islands",
+            "Fiji",
+            "Finland",
+            "France",
+            "French Guiana",
+            "French Polynesia",
+            "French Southern Territories",
+            "Gabon",
+            "Gambia",
+            "Georgia",
+            "Germany",
+            "Ghana",
+            "Gibraltar",
+            "Greece",
+            "Greenland",
+            "Grenada",
+            "Guadeloupe",
+            "Guam",
+            "Guatemala",
+            "Guernsey",
+            "Guinea",
+            "Guinea-Bissau",
+            "Guyana",
+            "Haiti",
+            "Heard Island and McDonald Islands",
+            "Holy See",
+            "Honduras",
+            "Hong Kong",
+            "Hungary",
+            "Iceland",
+            "India",
+            "Indonesia",
+            "Iran, Islamic Republic Of",
+            "Iraq",
+            "Ireland",
+            "Isle of Man",
+            "Israel",
+            "Italy",
+            "Jamaica",
+            "Japan",
+            "Jersey",
+            "Jordan",
+            "Kazakhstan",
+            "Kenya",
+            "Kiribati",
+            "Korea, Democratic People's Republic Of",
+            "Korea, Republic Of",
+            "Kuwait",
+            "Kyrgyzstan",
+            "Lao People's Democratic Republic",
+            "Latvia",
+            "Lebanon",
+            "Lesotho",
+            "Liberia",
+            "Libya",
+            "Liechtenstein",
+            "Lithuania",
+            "Luxembourg",
+            "Macao",
+            "Madagascar",
+            "Malawi",
+            "Malaysia",
+            "Maldives",
+            "Mali",
+            "Malta",
+            "Marshall Islands",
+            "Martinique",
+            "Mauritania",
+            "Mauritius",
+            "Mayotte",
+            "Mexico",
+            "Micronesia, Federated States Of",
+            "Moldova, Republic Of",
+            "Monaco",
+            "Mongolia",
+            "Montenegro",
+            "Montserrat",
+            "Morocco",
+            "Mozambique",
+            "Myanmar",
+            "Namibia",
+            "Nauru",
+            "Nepal",
+            "Netherlands, Kingdom of The",
+            "New Caledonia",
+            "New Zealand",
+            "Nicaragua",
+            "Niger",
+            "Nigeria",
+            "Niue",
+            "Norfolk Island",
+            "North Macedonia",
+            "Northern Mariana Islands",
+            "Norway",
+            "Oman",
+            "Pakistan",
+            "Palau",
+            "Palestine, State Of",
+            "Panama",
+            "Papua New Guinea",
+            "Paraguay",
+            "Peru",
+            "Philippines",
+            "Pitcairn",
+            "Poland",
+            "Portugal",
+            "Puerto Rico",
+            "Qatar",
+            "Réunion",
+            "Romania",
+            "Russian Federation",
+            "Rwanda",
+            "Saint Barthelemy",
+            "Saint Helena, Ascension and Tristan Da Cunha",
+            "Saint Kitts and Nevis",
+            "Saint Lucia",
+            "Saint Martin (French Part)",
+            "Saint Pierre and Miquelon",
+            "Saint Vincent and the Grenadines",
+            "Samoa",
+            "San Marino",
+            "Sao Tome and Principe",
+            "Saudi Arabia",
+            "Senegal",
+            "Serbia",
+            "Seychelles",
+            "Sierra Leone",
+            "Singapore",
+            "Sint Maarten (Dutch Part)",
+            "Slovakia",
+            "Slovenia",
+            "Solomon Islands",
+            "Somalia",
+            "South Africa",
+            "South Georgia and the South Sandwich Islands",
+            "South Sudan",
+            "Spain",
+            "Sri Lanka",
+            "Sudan",
+            "Suriname",
+            "Svalbard and Jan Mayen",
+            "Sweden",
+            "Switzerland",
+            "Syrian Arab Republic",
+            "Taiwan, Province of China",
+            "Tajikistan",
+            "Tanzania, United Republic Of",
+            "Thailand",
+            "Timor-Leste",
+            "Togo",
+            "Tokelau",
+            "Tonga",
+            "Trinidad and Tobago",
+            "Tunisia",
+            "Turkey",
+            "Turkmenistan",
+            "Turks and Caicos Islands",
+            "Tuvalu",
+            "Uganda",
+            "Ukraine",
+            "United Arab Emirates",
+            "United Kingdom of Great Britain and Northern Ireland",
+            "United States Minor Outlying Islands",
+            "United States of America",
+            "Uruguay",
+            "Uzbekistan",
+            "Vanuatu",
+            "Venezuela, Bolivarian Republic Of",
+            "Viet Nam",
+            "Virgin Islands (British)",
+            "Virgin Islands (U.S.)",
+            "Wallis and Futuna",
+            "Western Sahara",
+            "Yemen",
+            "Zambia",
+            "Zimbabwe"
+          ]
+        },
+        "sticky": {
+          "x-title": "Keep Same IP",
+          "description": "Whether to try to maintain the same IP address for the duration of the session. Airtop can guarantee that the same IP address will be available for up to a maximum of 30 minutes.",
+          "default": true,
+          "type": "boolean"
+        }
+      }
+    },
+    "proxyUrl": {
+      "x-title": "Proxy URL",
+      "description": "The URL of the proxy to use",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "session"
+          ],
+          "operation": [
+            "create"
+          ],
+          "proxy": [
+            "proxyUrl"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "click",
+            "hover",
+            "type",
+            "scroll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "visualScope": {
+          "x-title": "Visual Scope",
+          "description": "Defines the strategy for visual analysis of the current window",
+          "default": "auto",
+          "type": "string",
+          "enum": [
+            "auto",
+            "viewport",
+            "page",
+            "scan"
+          ],
+          "x-enumNames": [
+            "Auto",
+            "Viewport",
+            "Page",
+            "Scan"
+          ],
+          "x-enumDescriptions": [
+            "Provides the simplest out-of-the-box experience for most web pages",
+            "For analysis of the current browser view only",
+            "For analysis of the entire page",
+            "For a full page analysis on sites that have compatibility issues with 'Page' mode"
+          ]
+        },
+        "waitForNavigation": {
+          "x-title": "Wait Until Event After Navigation",
+          "description": "The condition to wait for the navigation to complete after an interaction (click, type or hover). Defaults to 'Fully Loaded'.",
+          "default": "load",
+          "type": "string",
+          "enum": [
+            "load",
+            "domcontentloaded",
+            "networkidle0",
+            "networkidle2"
+          ],
+          "x-enumNames": [
+            "Fully Loaded (Slower)",
+            "DOM Only Loaded (Faster)",
+            "All Network Activity Has Stopped",
+            "Most Network Activity Has Stopped"
+          ]
+        }
+      }
+    },
+    "sessionId": {
+      "x-title": "Session ID",
+      "description": "The ID of the <a href=\"https://docs.airtop.ai/guides/how-to/creating-a-session\" target=\"_blank\">Session</a> to use",
+      "default": "={{ $json[\"sessionId\"] }}",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "windowId": {
+      "x-title": "Window ID",
+      "description": "The ID of the <a href=\"https://docs.airtop.ai/guides/how-to/creating-a-session#windows\" target=\"_blank\">Window</a> to use",
+      "default": "={{ $json[\"windowId\"] }}",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "url": {
+      "x-title": "URL",
+      "description": "URL to load in the window",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "extraction"
+          ],
+          "sessionMode": [
+            "new"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "getLiveView": {
+      "x-title": "Get Live View",
+      "description": "Whether to get the URL of the window's <a href=\"https://docs.airtop.ai/guides/how-to/creating-a-live-view\" target=\"_blank\">Live View</a>",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "includeNavigationBar": {
+      "x-title": "Include Navigation Bar",
+      "description": "Whether to include the navigation bar in the Live View. When enabled, the navigation bar will be visible allowing you to navigate between pages.",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ],
+          "operation": [
+            "create"
+          ],
+          "getLiveView": [
+            true
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "screenResolution": {
+      "x-title": "Screen Resolution",
+      "description": "The screen resolution of the Live View. Setting a resolution will force the window to open at that specific size.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ],
+          "operation": [
+            "create"
+          ],
+          "getLiveView": [
+            true
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "disableResize": {
+      "x-title": "Disable Resize",
+      "description": "Whether to disable the window from being resized in the Live View",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ],
+          "operation": [
+            "create"
+          ],
+          "getLiveView": [
+            true
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "outputImageAsBinary": {
+      "x-title": "Output Binary Image",
+      "description": "Whether to output the image as a binary file instead of a base64 encoded string",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "window"
+          ],
+          "operation": [
+            "takeScreenshot"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "fileId": {
+      "x-title": "File ID",
+      "description": "ID of the file to load into the session",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "load"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "outputBinaryFile": {
+      "x-title": "Output Binary File",
+      "description": "Whether to output the file in binary format if the file is ready for download",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "getMany"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 10,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "getMany"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 100
+    },
+    "sessionIds": {
+      "x-title": "Session IDs",
+      "description": "Comma-separated list of <a href=\"https://docs.airtop.ai/api-reference/airtop-api/sessions/create\" target=\"_blank\">Session IDs</a> to filter files by. When empty, all files from all sessions will be returned.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "getMany"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "outputSingleItem": {
+      "x-title": "Output Files in Single Item",
+      "description": "Whether to output one item containing all files or output each file as a separate item",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "getMany"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "elementDescription": {
+      "x-title": "Element Description",
+      "description": "A specific description of the element to execute the interaction on",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "type"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "includeHiddenElements": {
+      "x-title": "Include Hidden Elements",
+      "description": "Whether to include hidden elements in the interaction",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "triggerFileInputParameter": [
+            true
+          ],
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "fileName": {
+      "x-title": "File Name",
+      "description": "Name for the file to upload. For a session, all files loaded should have <b>unique names</b>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "fileType": {
+      "x-title": "File Type",
+      "description": "Choose the type of file to upload. Defaults to 'Customer Upload'.",
+      "default": "customer_upload",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "browser_download",
+        "screenshot",
+        "video",
+        "customer_upload"
+      ],
+      "x-enumNames": [
+        "Browser Download",
+        "Screenshot",
+        "Video",
+        "Customer Upload"
+      ]
+    },
+    "source": {
+      "x-title": "Source",
+      "description": "Source of the file to upload",
+      "default": "url",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "url",
+        "binary"
+      ],
+      "x-enumNames": [
+        "URL",
+        "Binary"
+      ]
+    },
+    "binaryPropertyName": {
+      "x-title": "Binary Property",
+      "description": "Name of the binary property containing the file data",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "source": [
+            "binary"
+          ],
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "triggerFileInputParameter": {
+      "x-title": "Trigger File Input",
+      "description": "Whether to automatically trigger the file input dialog in the current window. If disabled, the file will only be uploaded to the session without opening the file input dialog.",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "file"
+          ],
+          "operation": [
+            "upload"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "sessionMode": {
+      "x-title": "Session Mode",
+      "description": "Choose between creating a new session or using an existing one",
+      "default": "existing",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "extraction"
+          ],
+          "operation": [
+            "getPaginated",
+            "query",
+            "scrape"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "new",
+        "existing"
+      ],
+      "x-enumNames": [
+        "Automatically Create Session",
+        "Use Existing Session"
+      ],
+      "x-enumDescriptions": [
+        "Automatically create a new session and window for this operation",
+        "Use an existing session and window for this operation"
+      ]
+    },
+    "autoTerminateSession": {
+      "x-title": "Auto-Terminate Session",
+      "description": "Whether to terminate the session after the operation is complete. When disabled, you must manually terminate the session. By default, idle sessions timeout after 10 minutes",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "extraction"
+          ],
+          "sessionMode": [
+            "new"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "prompt": {
+      "x-title": "Prompt",
+      "description": "The prompt to query the page content",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "extraction"
+          ],
+          "operation": [
+            "query"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-rows": 4
+    },
+    "clickType": {
+      "x-title": "Click Type",
+      "description": "The type of click to perform. Defaults to left click.",
+      "default": "click",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "click"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "click",
+        "doubleClick",
+        "rightClick"
+      ],
+      "x-enumNames": [
+        "Left Click",
+        "Double Click",
+        "Right Click"
+      ]
+    },
+    "formData": {
+      "x-title": "Form Data",
+      "description": "The information to fill into the form written in natural language",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "fill"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "x-rows": 4
+    },
+    "scrollingMode": {
+      "x-title": "Scroll Mode",
+      "description": "Choose the mode of scrolling",
+      "default": "automatic",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "scroll"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "automatic",
+        "manual"
+      ],
+      "x-enumNames": [
+        "Automatic",
+        "Manual"
+      ],
+      "x-enumDescriptions": [
+        "Describe with natural language the element to scroll to",
+        "Define the direction and amount to scroll by"
+      ]
+    },
+    "scrollToElement": {
+      "x-title": "Element Description",
+      "description": "A natural language description of the element to scroll to",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "scroll"
+          ],
+          "scrollingMode": [
+            "automatic"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "scrollToEdge": {
+      "x-title": "Scroll To Edge",
+      "description": "The direction to scroll to. When 'Scroll By' is defined, 'Scroll To Edge' action will be executed first, then 'Scroll By' action.",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "scroll"
+          ],
+          "scrollingMode": [
+            "manual"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "edgeValues": {
+          "x-title": "Page Edges",
+          "type": "object",
+          "properties": {
+            "yAxis": {
+              "x-title": "Vertically",
+              "default": "",
+              "type": "string",
+              "enum": [
+                "",
+                "top",
+                "bottom"
+              ],
+              "x-enumNames": [
+                "Empty",
+                "Top",
+                "Bottom"
+              ]
+            },
+            "xAxis": {
+              "x-title": "Horizontally",
+              "default": "",
+              "type": "string",
+              "enum": [
+                "",
+                "left",
+                "right"
+              ],
+              "x-enumNames": [
+                "Empty",
+                "Left",
+                "Right"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "scrollBy": {
+      "x-title": "Scroll By",
+      "description": "The amount to scroll by. When 'Scroll To Edge' is defined, 'Scroll By' action will be executed after 'Scroll To Edge'.",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "scroll"
+          ],
+          "scrollingMode": [
+            "manual"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "scrollValues": {
+          "x-title": "Scroll Values",
+          "description": "The amount in pixels or percentage to scroll by",
+          "type": "object",
+          "properties": {
+            "yAxis": {
+              "x-title": "Vertically",
+              "default": "",
+              "type": "string"
+            },
+            "xAxis": {
+              "x-title": "Horizontally",
+              "default": "",
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "scrollWithin": {
+      "x-title": "Scrollable Area",
+      "description": "Scroll within an element on the page",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "scroll"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "text": {
+      "x-title": "Text",
+      "description": "The text to type into the browser window",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "type"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "pressEnterKey": {
+      "x-title": "Press Enter Key",
+      "description": "Whether to press the Enter key after typing the text",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "interaction"
+          ],
+          "operation": [
+            "type"
+          ]
+        }
+      },
+      "type": "boolean"
+    }
+  },
+  "x-subtitle": "={{ $parameter[\"operation\"] + \": \" + $parameter[\"resource\"] }}",
+  "x-icon": "file:airtop.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "airtopApi",
+      "required": true
+    }
+  ]
+}

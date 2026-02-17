@@ -1,0 +1,324 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AWS Transcribe",
+  "description": "Sends data to AWS Transcribe",
+  "x-n8n-node-type": "awsTranscribe",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "transcriptionJob",
+      "type": "string",
+      "enum": [
+        "transcriptionJob"
+      ],
+      "x-enumNames": [
+        "Transcription Job"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many"
+      ],
+      "x-enumDescriptions": [
+        "Create a transcription job",
+        "Delete a transcription job",
+        "Get a transcription job",
+        "Get many transcription jobs"
+      ]
+    },
+    "transcriptionJobName": {
+      "x-title": "Job Name",
+      "description": "The name of the job",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "transcriptionJob"
+          ],
+          "operation": [
+            "create",
+            "get",
+            "delete"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "mediaFileUri": {
+      "x-title": "Media File URI",
+      "description": "The S3 object location of the input media file",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "transcriptionJob"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "detectLanguage": {
+      "x-title": "Detect Language",
+      "description": "Whether to set this field to true to enable automatic language identification",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "transcriptionJob"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "languageCode": {
+      "x-title": "Language",
+      "description": "Language used in the input media file",
+      "default": "en-US",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "transcriptionJob"
+          ],
+          "operation": [
+            "create"
+          ],
+          "detectLanguage": [
+            false
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "en-US",
+        "en-GB",
+        "de-DE",
+        "en-IN",
+        "en-IE",
+        "ru-RU",
+        "es-ES"
+      ],
+      "x-enumNames": [
+        "American English",
+        "British English",
+        "German",
+        "Indian English",
+        "Irish English",
+        "Russian",
+        "Spanish"
+      ]
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "channelIdentification": {
+          "x-title": "Channel Identification",
+          "description": "Instructs Amazon Transcribe to process each audiochannel separately and then merge the transcription output of each channel into a single transcription. You can't set both Max Speaker Labels and Channel Identification in the same request. If you set both, your request returns a BadRequestException.",
+          "default": false,
+          "type": "boolean"
+        },
+        "maxAlternatives": {
+          "x-title": "Max Alternatives",
+          "description": "The number of alternative transcriptions that the service should return",
+          "default": 2,
+          "type": "number",
+          "minimum": 2,
+          "maximum": 10
+        },
+        "maxSpeakerLabels": {
+          "x-title": "Max Speaker Labels",
+          "description": "The maximum number of speakers to identify in the input audio. If there are more speakers in the audio than this number, multiple speakers are identified as a single speaker.",
+          "default": 2,
+          "type": "number",
+          "minimum": 2,
+          "maximum": 10
+        },
+        "vocabularyName": {
+          "x-title": "Vocabulary Name",
+          "description": "Name of vocabulary to use when processing the transcription job",
+          "default": "",
+          "type": "string"
+        },
+        "vocabularyFilterName": {
+          "x-title": "Vocabulary Filter Name",
+          "description": "The name of the vocabulary filter to use when transcribing the audio. The filter that you specify must have the same language code as the transcription job.",
+          "default": "",
+          "type": "string"
+        },
+        "vocabularyFilterMethod": {
+          "x-title": "Vocabulary Filter Method",
+          "description": "<p>Set to mask to remove filtered text from the transcript and replace it with three asterisks (\"***\") as placeholder text.</p><p>Set to remove to remove filtered text from the transcript without using placeholder text. Set to tag to mark the word in the transcription output that matches the vocabulary filter. When you set the filter method to tag, the words matching your vocabulary filter are not masked or removed.</p>",
+          "default": "remove",
+          "type": "string",
+          "enum": [
+            "remove",
+            "mask",
+            "tag"
+          ],
+          "x-enumNames": [
+            "Remove",
+            "Mask",
+            "Tag"
+          ]
+        }
+      }
+    },
+    "returnTranscript": {
+      "x-title": "Return Transcript",
+      "description": "By default, the response only contains metadata about the transcript. Enable this option to retrieve the transcript instead.",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "transcriptionJob"
+          ],
+          "operation": [
+            "get"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "simple": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "transcriptionJob"
+          ],
+          "operation": [
+            "get"
+          ],
+          "returnTranscript": [
+            true
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "transcriptionJob"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 20,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "transcriptionJob"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "filters": {
+      "x-title": "Filters",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "transcriptionJob"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "jobNameContains": {
+          "x-title": "Job Name Contains",
+          "description": "Return only transcription jobs whose name contains the specified string",
+          "default": "",
+          "type": "string"
+        },
+        "status": {
+          "x-title": "Status",
+          "description": "Return only transcription jobs with the specified status",
+          "default": "COMPLETED",
+          "type": "string",
+          "enum": [
+            "COMPLETED",
+            "FAILED",
+            "IN_PROGRESS",
+            "QUEUED"
+          ],
+          "x-enumNames": [
+            "Completed",
+            "Failed",
+            "In Progress",
+            "Queued"
+          ]
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:transcribe.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "aws",
+      "required": true
+    }
+  ]
+}

@@ -1,0 +1,379 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Affinity",
+  "description": "Consume Affinity API",
+  "x-n8n-node-type": "affinity",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "organization",
+      "type": "string",
+      "enum": [
+        "list",
+        "listEntry",
+        "organization",
+        "person"
+      ],
+      "x-enumNames": [
+        "List",
+        "List Entry",
+        "Organization",
+        "Person"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a person",
+        "Delete a person",
+        "Get a person",
+        "Get many persons",
+        "Update a person"
+      ]
+    },
+    "listId": {
+      "x-title": "List Name or ID",
+      "description": "The unique ID of the list that contains the specified list_entry_id. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "listEntry"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 5,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 10
+    },
+    "entityId": {
+      "x-title": "Entity ID",
+      "description": "The unique ID of the entity (person, organization, or opportunity) to add to this list",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "listEntry"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "organizations": {
+          "x-title": "Organization Names or IDs",
+          "description": "Organizations that the person is associated with. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "listEntryId": {
+      "x-title": "List Entry ID",
+      "description": "The unique ID of the list entry object to be deleted",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "listEntry"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "The name of the organization",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "domain": {
+      "x-title": "Domain",
+      "description": "The domain name of the organization",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "organizationId": {
+      "x-title": "Organization ID",
+      "description": "Unique identifier for the organization",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "organization"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "x-title": "First Name",
+          "description": "The first name of the person",
+          "default": "",
+          "type": "string"
+        },
+        "lastName": {
+          "x-title": "Last Name",
+          "description": "The last name of the person",
+          "default": "",
+          "type": "string"
+        },
+        "organizations": {
+          "x-title": "Organization Names or IDs",
+          "description": "Organizations that the person is associated with. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "term": {
+          "x-title": "Term",
+          "description": "A string used to search all the persons in your team’s address book. This could be an email address, a first name or a last name.",
+          "default": "",
+          "type": "string"
+        },
+        "withInteractionDates": {
+          "x-title": "With Interaction Dates",
+          "description": "Whether interaction dates will be present on the returned resources",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "firstName": {
+      "x-title": "First Name",
+      "description": "The first name of the person",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "lastName": {
+      "x-title": "Last Name",
+      "description": "The last name of the person",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "emails": {
+      "x-title": "Emails",
+      "description": "The email addresses of the person",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "personId": {
+      "x-title": "Person ID",
+      "description": "Unique identifier for the person",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "person"
+          ],
+          "operation": [
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": {
+    "light": "file:affinity.svg",
+    "dark": "file:affinity.dark.svg"
+  },
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "affinityApi",
+      "required": true
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Cal.com Trigger",
+  "description": "Handle Cal.com events via webhooks",
+  "x-n8n-node-type": "calTrigger",
+  "x-n8n-version": [
+    1,
+    2
+  ],
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "events": {
+      "x-title": "Events",
+      "default": [],
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "BOOKING_CANCELLED",
+          "BOOKING_CREATED",
+          "BOOKING_RESCHEDULED",
+          "MEETING_ENDED"
+        ]
+      },
+      "x-enumNames": [
+        "Booking Cancelled",
+        "Booking Created",
+        "Booking Rescheduled",
+        "Meeting Ended"
+      ]
+    },
+    "version": {
+      "x-title": "API Version",
+      "default": 2,
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            2
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        1,
+        2
+      ],
+      "x-enumNames": [
+        "Before v2.0",
+        "v2.0 Onwards"
+      ]
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "appId": {
+          "x-title": "App ID",
+          "description": "The ID of the App to monitor",
+          "default": "",
+          "type": "string"
+        },
+        "eventTypeId": {
+          "x-title": "EventType Name or ID",
+          "description": "The EventType to monitor. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "payloadTemplate": {
+          "x-title": "Payload Template",
+          "description": "Template to customize the webhook payload",
+          "default": "",
+          "type": "string",
+          "x-rows": 4
+        }
+      }
+    }
+  },
+  "x-subtitle": "=Events: {{$parameter[\"events\"].join(\", \")}}",
+  "x-icon": {
+    "light": "file:cal.svg",
+    "dark": "file:cal.dark.svg"
+  },
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "calApi",
+      "required": true
+    }
+  ],
+  "x-webhooks": "true"
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AI Transform",
+  "description": "Modify data based on instructions written in plain english",
+  "x-n8n-node-type": "aiTransform",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "instructions": {
+      "x-title": "Instructions",
+      "description": "Provide instructions on how you want to transform the data, then click 'Generate code'. Use dot notation to refer to nested fields (e.g. address.street).",
+      "default": "",
+      "type": "string",
+      "x-n8n-type": "button"
+    },
+    "codeGeneratedForPrompt": {
+      "x-title": "Code Generated For Prompt",
+      "default": "",
+      "type": "string"
+    },
+    "jsCode": {
+      "x-title": "Generated JavaScript",
+      "default": "",
+      "type": "string",
+      "x-editor": "jsEditor"
+    }
+  },
+  "x-icon": "file:aitransform.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ]
+}

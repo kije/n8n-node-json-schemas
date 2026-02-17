@@ -1,0 +1,471 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AWS SES",
+  "description": "Sends data to AWS SES",
+  "x-n8n-node-type": "awsSes",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "output"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "iam",
+      "type": "string",
+      "enum": [
+        "iam",
+        "assumeRole"
+      ],
+      "x-enumNames": [
+        "AWS (IAM)",
+        "AWS (Assume Role)"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "email",
+      "type": "string",
+      "enum": [
+        "customVerificationEmail",
+        "email",
+        "template"
+      ],
+      "x-enumNames": [
+        "Custom Verification Email",
+        "Email",
+        "Template"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "template"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "getAll",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Get Many",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a template",
+        "Delete a template",
+        "Get a template",
+        "Get many templates",
+        "Update a template"
+      ]
+    },
+    "fromEmailAddress": {
+      "x-title": "From Email",
+      "description": "The email address that the custom verification email is sent from",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customVerificationEmail"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "templateName": {
+      "x-title": "Template Name",
+      "description": "The name of the template",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "template"
+          ],
+          "operation": [
+            "update",
+            "create",
+            "get",
+            "delete"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "templateContent": {
+      "x-title": "Template Content",
+      "description": "The content of the custom verification email. The total size of the email must be less than 10 MB. The message body may contain HTML",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customVerificationEmail"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "templateSubject": {
+      "x-title": "Template Subject",
+      "description": "The subject line of the custom verification email",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customVerificationEmail"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "successRedirectionURL": {
+      "x-title": "Success Redirection URL",
+      "description": "The URL that the recipient of the verification email is sent to if his or her address is successfully verified",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customVerificationEmail"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "failureRedirectionURL": {
+      "x-title": "Failure Redirection URL",
+      "description": "The URL that the recipient of the verification email is sent to if his or her address is not successfully verified",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customVerificationEmail"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "The email address to verify",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "customVerificationEmail"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "template"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "textPart": {
+          "x-title": "Text Part",
+          "description": "The email body that will be visible to recipients whose email clients do not display HTML",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "template"
+          ],
+          "operation": [
+            "update"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "textPart": {
+          "x-title": "Text Part",
+          "description": "The email body that will be visible to recipients whose email clients do not display HTML",
+          "default": "",
+          "type": "string"
+        },
+        "subjectPart": {
+          "x-title": "Subject Part",
+          "description": "The subject line of the email",
+          "default": "",
+          "type": "string"
+        },
+        "htmlPart": {
+          "x-title": "Html Part",
+          "description": "The HTML body of the email",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "template"
+          ],
+          "operation": [
+            "getAll"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 20,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "template"
+          ],
+          "operation": [
+            "getAll"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1
+    },
+    "isBodyHtml": {
+      "x-title": "Is Body HTML",
+      "description": "Whether body is HTML or simple text",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "email"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "subject": {
+      "x-title": "Subject",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "email"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "body": {
+      "x-title": "Body",
+      "description": "The message to be sent",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "email"
+          ],
+          "operation": [
+            "send"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "fromEmail": {
+      "x-title": "From Email",
+      "description": "Email address of the sender",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "email"
+          ],
+          "operation": [
+            "sendTemplate"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "toAddresses": {
+      "x-title": "To Addresses",
+      "description": "Email addresses of the recipients",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "email"
+          ],
+          "operation": [
+            "sendTemplate"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "templateDataUi": {
+      "x-title": "Template Data",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "email"
+          ],
+          "operation": [
+            "sendTemplate"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "templateDataValues": {
+          "x-title": "Data",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "x-title": "Key",
+                "default": "",
+                "type": "string"
+              },
+              "value": {
+                "x-title": "Value",
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "subjectPart": {
+      "x-title": "Subject Part",
+      "description": "The subject line of the email",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "template"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "htmlPart": {
+      "x-title": "Html Part",
+      "description": "The HTML body of the email",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "template"
+          ],
+          "operation": [
+            "create"
+          ]
+        }
+      },
+      "type": "string"
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:ses.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "aws",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "iam"
+          ]
+        }
+      }
+    },
+    {
+      "name": "awsAssumeRole",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "assumeRole"
+          ]
+        }
+      }
+    }
+  ]
+}

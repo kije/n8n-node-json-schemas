@@ -1,0 +1,87 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AMQP Sender",
+  "description": "Sends a raw-message via AMQP 1.0, executed once per item",
+  "x-n8n-node-type": "amqp",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "sink": {
+      "x-title": "Queue / Topic",
+      "description": "Name of the queue of topic to publish to",
+      "default": "",
+      "type": "string"
+    },
+    "headerParametersJson": {
+      "x-title": "Headers",
+      "description": "Header parameters as JSON (flat object). Sent as application_properties in amqp-message meta info.",
+      "default": "",
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "JSON string"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        }
+      ]
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "type": "object",
+      "properties": {
+        "containerId": {
+          "x-title": "Container ID",
+          "description": "Will be used to pass to the RHEA Backend as container_id",
+          "default": "",
+          "type": "string"
+        },
+        "dataAsObject": {
+          "x-title": "Data as Object",
+          "description": "Whether to send the data as an object",
+          "default": false,
+          "type": "boolean"
+        },
+        "reconnect": {
+          "x-title": "Reconnect",
+          "description": "Whether to automatically reconnect if disconnected",
+          "default": true,
+          "type": "boolean"
+        },
+        "reconnectLimit": {
+          "x-title": "Reconnect Limit",
+          "description": "Maximum number of reconnect attempts",
+          "default": 50,
+          "type": "number"
+        },
+        "sendOnlyProperty": {
+          "x-title": "Send Property",
+          "description": "The only property to send. If empty the whole item will be sent.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "x-icon": "file:amqp.svg",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "amqp",
+      "required": true,
+      "testedBy": "amqpConnectionTest"
+    }
+  ]
+}

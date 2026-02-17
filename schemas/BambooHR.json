@@ -1,0 +1,1203 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BambooHR",
+  "description": "Consume BambooHR API",
+  "x-n8n-node-type": "bambooHr",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "transform"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "employee",
+      "type": "string",
+      "enum": [
+        "companyReport",
+        "employee",
+        "employeeDocument",
+        "file"
+      ],
+      "x-enumNames": [
+        "Company Report",
+        "Employee",
+        "Employee Document",
+        "File"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "get",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "companyReport"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "get"
+      ],
+      "x-enumNames": [
+        "Get"
+      ],
+      "x-enumDescriptions": [
+        "Get a company report"
+      ]
+    },
+    "synced": {
+      "x-title": "Synced with Trax Payroll",
+      "description": "Whether the employee to create was added to a pay schedule synced with Trax Payroll",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "employee"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "firstName": {
+      "x-title": "First Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "update"
+          ],
+          "synced": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "lastName": {
+      "x-title": "Last Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "update"
+          ],
+          "synced": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "address": {
+      "x-title": "Address",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "create"
+          ],
+          "synced": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "value": {
+          "x-title": "Address",
+          "type": "object",
+          "properties": {
+            "address1": {
+              "x-title": "Line 1",
+              "default": "",
+              "type": "string"
+            },
+            "address2": {
+              "x-title": "Line 2",
+              "default": "",
+              "type": "string"
+            },
+            "city": {
+              "x-title": "City",
+              "default": "",
+              "type": "string"
+            },
+            "state": {
+              "x-title": "State",
+              "description": "The full name of the state/province",
+              "default": "",
+              "type": "string"
+            },
+            "country": {
+              "x-title": "Country",
+              "description": "The name of the country. Must exist in the BambooHr country list.",
+              "default": "",
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "dateOfBirth": {
+      "x-title": "Date of Birth",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "update"
+          ],
+          "synced": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "department": {
+      "x-title": "Department Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "update"
+          ],
+          "synced": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "division": {
+      "x-title": "Division Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "update"
+          ],
+          "synced": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "employeeNumber": {
+      "x-title": "Employee Number",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "update"
+          ],
+          "synced": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "exempt": {
+      "x-title": "FLSA Overtime Status",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "update"
+          ],
+          "synced": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "exempt",
+        "non-exempt"
+      ],
+      "x-enumNames": [
+        "Exempt",
+        "Non-Exempt"
+      ]
+    },
+    "gender": {
+      "x-title": "Gender",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "update"
+          ],
+          "synced": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "female",
+        "male"
+      ],
+      "x-enumNames": [
+        "Female",
+        "Male"
+      ]
+    },
+    "hireDate": {
+      "x-title": "Hire Date",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "update"
+          ],
+          "synced": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "format": "date-time"
+    },
+    "location": {
+      "x-title": "Location Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "update"
+          ],
+          "synced": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "maritalStatus": {
+      "x-title": "Marital Status",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "update"
+          ],
+          "synced": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "single",
+        "married",
+        "domesticPartnership"
+      ],
+      "x-enumNames": [
+        "Single",
+        "Married",
+        "Domestic Partnership"
+      ]
+    },
+    "mobilePhone": {
+      "x-title": "Mobile Phone",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "update"
+          ],
+          "synced": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "paidPer": {
+      "x-title": "Pay Per",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "update"
+          ],
+          "synced": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "hour",
+        "day",
+        "week",
+        "month",
+        "quater",
+        "year"
+      ],
+      "x-enumNames": [
+        "Hour",
+        "Day",
+        "Week",
+        "Month",
+        "Quater",
+        "Year"
+      ]
+    },
+    "payRate": {
+      "x-title": "Pay Rate",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "update"
+          ],
+          "synced": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "value": {
+          "x-title": "Pay Rate",
+          "type": "object",
+          "properties": {
+            "value": {
+              "x-title": "Value",
+              "default": "",
+              "type": "string"
+            },
+            "currency": {
+              "x-title": "Currency",
+              "default": "",
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "payType": {
+      "x-title": "Pay Type",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "update"
+          ],
+          "synced": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "commission",
+        "contract",
+        "daily",
+        "exceptionHourly",
+        "hourly",
+        "monthly",
+        "pieceRate",
+        "proRata",
+        "salary",
+        "weekly"
+      ],
+      "x-enumNames": [
+        "Commission",
+        "Contract",
+        "Daily",
+        "Exception Hourly",
+        "Hourly",
+        "Monthly",
+        "Piece Rate",
+        "Pro Rata",
+        "Salary",
+        "Weekly"
+      ]
+    },
+    "preferredName": {
+      "x-title": "Preferred Name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "update"
+          ],
+          "synced": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "ssn": {
+      "x-title": "Social Security Number",
+      "description": "A standard United States Social Security number, with dashes",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "update"
+          ],
+          "synced": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "employee"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "address": {
+          "x-title": "Address",
+          "default": {},
+          "x-displayOptions": {
+            "show": {
+              "/synced": [
+                false
+              ]
+            }
+          },
+          "type": "object",
+          "properties": {
+            "value": {
+              "x-title": "Address",
+              "type": "object",
+              "properties": {
+                "address1": {
+                  "x-title": "Line 1",
+                  "default": "",
+                  "type": "string"
+                },
+                "address2": {
+                  "x-title": "Line 2",
+                  "default": "",
+                  "type": "string"
+                },
+                "city": {
+                  "x-title": "City",
+                  "default": "",
+                  "type": "string"
+                },
+                "state": {
+                  "x-title": "State",
+                  "description": "The full name of the state/province",
+                  "default": "",
+                  "type": "string"
+                },
+                "country": {
+                  "x-title": "Country",
+                  "description": "The name of the country. Must exist in the BambooHr country list.",
+                  "default": "",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "dateOfBirth": {
+          "x-title": "Date of Birth",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/synced": [
+                false
+              ]
+            }
+          },
+          "type": "string",
+          "format": "date-time"
+        },
+        "department": {
+          "x-title": "Department Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/synced": [
+                false
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "division": {
+          "x-title": "Division Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/synced": [
+                false
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "employeeNumber": {
+          "x-title": "Employee Number",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/synced": [
+                false
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "exempt": {
+          "x-title": "FLSA Overtime Status",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/synced": [
+                false
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "exempt",
+            "non-exempt"
+          ],
+          "x-enumNames": [
+            "Exempt",
+            "Non-Exempt"
+          ]
+        },
+        "gender": {
+          "x-title": "Gender",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/synced": [
+                false
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "female",
+            "male"
+          ],
+          "x-enumNames": [
+            "Female",
+            "Male"
+          ]
+        },
+        "hireDate": {
+          "x-title": "Hire Date",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/synced": [
+                false
+              ]
+            }
+          },
+          "type": "string",
+          "format": "date-time"
+        },
+        "location": {
+          "x-title": "Location Name or ID",
+          "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/synced": [
+                false
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "maritalStatus": {
+          "x-title": "Marital Status",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/synced": [
+                false
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "single",
+            "married",
+            "domesticPartnership"
+          ],
+          "x-enumNames": [
+            "Single",
+            "Married",
+            "Domestic Partnership"
+          ]
+        },
+        "mobilePhone": {
+          "x-title": "Mobile Phone",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/synced": [
+                false
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "paidPer": {
+          "x-title": "Pay Per",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/synced": [
+                false
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "hour",
+            "day",
+            "week",
+            "month",
+            "quater",
+            "year"
+          ],
+          "x-enumNames": [
+            "Hour",
+            "Day",
+            "Week",
+            "Month",
+            "Quater",
+            "Year"
+          ]
+        },
+        "payRate": {
+          "x-title": "Pay Rate",
+          "default": {},
+          "x-displayOptions": {
+            "show": {
+              "/synced": [
+                false
+              ]
+            }
+          },
+          "type": "object",
+          "properties": {
+            "value": {
+              "x-title": "Pay Rate",
+              "type": "object",
+              "properties": {
+                "value": {
+                  "x-title": "Value",
+                  "default": "",
+                  "type": "string"
+                },
+                "currency": {
+                  "x-title": "Currency",
+                  "default": "",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "payType": {
+          "x-title": "Pay Type",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/synced": [
+                false
+              ]
+            }
+          },
+          "type": "string",
+          "enum": [
+            "commission",
+            "contract",
+            "daily",
+            "exceptionHourly",
+            "hourly",
+            "monthly",
+            "pieceRate",
+            "proRata",
+            "salary",
+            "weekly"
+          ],
+          "x-enumNames": [
+            "Commission",
+            "Contract",
+            "Daily",
+            "Exception Hourly",
+            "Hourly",
+            "Monthly",
+            "Piece Rate",
+            "Pro Rata",
+            "Salary",
+            "Weekly"
+          ]
+        },
+        "preferredName": {
+          "x-title": "Preferred Name",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/synced": [
+                false
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "ssn": {
+          "x-title": "Social Security Number",
+          "description": "A standard United States Social Security number, with dashes",
+          "default": "",
+          "x-displayOptions": {
+            "show": {
+              "/synced": [
+                false
+              ]
+            }
+          },
+          "type": "string"
+        },
+        "workEmail": {
+          "x-title": "Work Email",
+          "default": "",
+          "type": "string"
+        },
+        "workPhone": {
+          "x-title": "Work Phone",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "employeeId": {
+      "x-title": "Employee ID",
+      "description": "ID of the employee",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "employeeDocument"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "companyReport"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "fd": {
+          "x-title": "Duplicate Field Filtering",
+          "description": "Whether to apply the standard duplicate field filtering or not",
+          "default": true,
+          "type": "boolean"
+        },
+        "onlyCurrent": {
+          "x-title": "Only Current",
+          "description": "Whether to hide future dated values from the history table fields or not",
+          "default": true,
+          "type": "boolean"
+        }
+      }
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 5,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "file"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 1000
+    },
+    "addasasress": {
+      "x-title": "Address",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "employee"
+          ],
+          "operation": [
+            "update"
+          ],
+          "synced": [
+            true
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "object",
+      "properties": {
+        "value": {
+          "x-title": "Address",
+          "type": "object",
+          "properties": {
+            "address1": {
+              "x-title": "Line 1",
+              "default": "",
+              "type": "string"
+            },
+            "address2": {
+              "x-title": "Line 2",
+              "default": "",
+              "type": "string"
+            },
+            "city": {
+              "x-title": "City",
+              "default": "",
+              "type": "string"
+            },
+            "state": {
+              "x-title": "State",
+              "description": "The full name of the state/province",
+              "default": "",
+              "type": "string"
+            },
+            "country": {
+              "x-title": "Country",
+              "description": "The name of the country. Must exist in the BambooHr country list.",
+              "default": "",
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "categoryId": {
+          "x-title": "Category Name or ID",
+          "description": "Move the file to a different category. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+          "default": "",
+          "type": "string"
+        },
+        "name": {
+          "x-title": "Name",
+          "description": "New name of the file",
+          "default": "",
+          "type": "string"
+        },
+        "shareWithEmployee": {
+          "x-title": "Share with Employee",
+          "description": "Whether this file is shared or not",
+          "default": true,
+          "type": "boolean"
+        }
+      }
+    },
+    "fileId": {
+      "x-title": "File ID",
+      "description": "ID of the file",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "output": {
+      "x-title": "Put Output In Field",
+      "description": "The name of the output field to put the binary file data in",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "companyReport"
+          ]
+        },
+        "hide": {
+          "format": [
+            "JSON"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "simplifyOutput": {
+      "x-title": "Simplify",
+      "description": "Whether to return a simplified version of the response instead of the raw data",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "getAll"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "categoryId": {
+      "x-title": "Category Name or ID",
+      "description": "Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "binaryPropertyName": {
+      "x-title": "Input Data Field Name",
+      "description": "The name of the input field containing the binary file data to be uploaded. Supported file types: PNG, JPEG.",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "reportId": {
+      "x-title": "Report ID",
+      "description": "ID of the report. You can get the report number by hovering over the report name on the reports page and grabbing the ID.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "companyReport"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "format": {
+      "x-title": "Format",
+      "description": "The output format for the report",
+      "default": "JSON",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "get"
+          ],
+          "resource": [
+            "companyReport"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "CSV",
+        "JSON",
+        "PDF",
+        "XLS",
+        "XML"
+      ],
+      "x-enumNames": [
+        "CSV",
+        "JSON",
+        "PDF",
+        "XLS",
+        "XML"
+      ]
+    }
+  },
+  "x-subtitle": "={{$parameter[\"resource\"] + \": \" + $parameter[\"operation\"]}}",
+  "x-icon": "file:bambooHr.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "bambooHrApi",
+      "required": true,
+      "testedBy": "bambooHrApiCredentialTest"
+    }
+  ]
+}

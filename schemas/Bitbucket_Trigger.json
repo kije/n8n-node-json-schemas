@@ -1,0 +1,129 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Bitbucket Trigger",
+  "description": "Handle Bitbucket events via webhooks",
+  "x-n8n-node-type": "bitbucketTrigger",
+  "x-n8n-version": [
+    1,
+    1.1
+  ],
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "accessToken",
+      "x-displayOptions": {
+        "show": {
+          "@version": [
+            1.1
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "password",
+        "accessToken"
+      ],
+      "x-enumNames": [
+        "Password (Deprecated)",
+        "Access Token"
+      ]
+    },
+    "resource": {
+      "x-title": "Resource",
+      "default": "workspace",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "repository",
+        "workspace"
+      ],
+      "x-enumNames": [
+        "Repository",
+        "Workspace"
+      ]
+    },
+    "workspace": {
+      "x-title": "Workspace Name or ID",
+      "description": "The repository of which to listen to the events. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "workspace",
+            "repository"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "events": {
+      "x-title": "Event Names or IDs",
+      "description": "The events to listen to. Choose from the list, or specify IDs using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": [],
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "repository"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": []
+      },
+      "x-enumNames": []
+    },
+    "repository": {
+      "x-title": "Repository Name or ID",
+      "description": "The repository of which to listen to the events. Choose from the list, or specify an ID using an <a href=\"https://docs.n8n.io/code/expressions/\">expression</a>.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "repository"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    }
+  },
+  "x-icon": "file:bitbucket.svg",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "bitbucketApi",
+      "required": true,
+      "testedBy": "bitbucketApiTest",
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "password"
+          ]
+        }
+      }
+    },
+    {
+      "name": "bitbucketAccessTokenApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "accessToken"
+          ]
+        }
+      }
+    }
+  ],
+  "x-webhooks": "true"
+}

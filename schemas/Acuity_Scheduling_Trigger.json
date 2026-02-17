@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Acuity Scheduling Trigger",
+  "description": "Handle Acuity Scheduling events via webhooks",
+  "x-n8n-node-type": "acuitySchedulingTrigger",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "trigger"
+  ],
+  "type": "object",
+  "properties": {
+    "authentication": {
+      "x-title": "Authentication",
+      "default": "apiKey",
+      "type": "string",
+      "enum": [
+        "apiKey",
+        "oAuth2"
+      ],
+      "x-enumNames": [
+        "API Key",
+        "OAuth2"
+      ]
+    },
+    "event": {
+      "x-title": "Event",
+      "default": "",
+      "x-required": true,
+      "type": "string",
+      "enum": [
+        "appointment.canceled",
+        "appointment.changed",
+        "appointment.rescheduled",
+        "appointment.scheduled",
+        "order.completed"
+      ],
+      "x-enumNames": [
+        "appointment.canceled",
+        "appointment.changed",
+        "appointment.rescheduled",
+        "appointment.scheduled",
+        "order.completed"
+      ],
+      "x-enumDescriptions": [
+        "Is called whenever an appointment is canceled",
+        "Is called when the appointment is changed in any way",
+        "Is called when the appointment is rescheduled to a new time",
+        "Is called once when an appointment is initially booked",
+        "Is called when an order is completed"
+      ]
+    },
+    "resolveData": {
+      "x-title": "Resolve Data",
+      "description": "By default does the webhook-data only contain the ID of the object. If this option gets activated, it will resolve the data automatically.",
+      "default": true,
+      "type": "boolean"
+    }
+  },
+  "x-icon": "file:acuityScheduling.png",
+  "x-inputs": [],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "acuitySchedulingApi",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "apiKey"
+          ]
+        }
+      }
+    },
+    {
+      "name": "acuitySchedulingOAuth2Api",
+      "required": true,
+      "displayOptions": {
+        "show": {
+          "authentication": [
+            "oAuth2"
+          ]
+        }
+      }
+    }
+  ],
+  "x-webhooks": "true"
+}

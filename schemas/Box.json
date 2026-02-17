@@ -1,0 +1,765 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Box",
+  "description": "Consume Box API",
+  "x-n8n-node-type": "box",
+  "x-n8n-version": 1,
+  "x-n8n-group": [
+    "input"
+  ],
+  "type": "object",
+  "properties": {
+    "resource": {
+      "x-title": "Resource",
+      "default": "file",
+      "type": "string",
+      "enum": [
+        "file",
+        "folder"
+      ],
+      "x-enumNames": [
+        "File",
+        "Folder"
+      ]
+    },
+    "operation": {
+      "x-title": "Operation",
+      "default": "create",
+      "x-displayOptions": {
+        "show": {
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "create",
+        "delete",
+        "get",
+        "search",
+        "share",
+        "update"
+      ],
+      "x-enumNames": [
+        "Create",
+        "Delete",
+        "Get",
+        "Search",
+        "Share",
+        "Update"
+      ],
+      "x-enumDescriptions": [
+        "Create a folder",
+        "Delete a folder",
+        "Get a folder",
+        "Search files",
+        "Share a folder",
+        "Update folder"
+      ]
+    },
+    "fileId": {
+      "x-title": "File ID",
+      "description": "The ID of the file to share",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "share"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "parentId": {
+      "x-title": "Parent ID",
+      "description": "ID of the folder you want to create the new folder in. if not defined it will be created on the root folder.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "additionalFields": {
+      "x-title": "Additional Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "contet_types": {
+          "x-title": "Content Types",
+          "description": "Limits search results to items with the given content types. Content types are defined as a comma-separated lists of Box recognized content types.",
+          "default": "",
+          "type": "string"
+        },
+        "createdRangeUi": {
+          "x-title": "Created At Range",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "createdRangeValuesUi": {
+              "x-title": "Range",
+              "type": "object",
+              "properties": {
+                "from": {
+                  "x-title": "From",
+                  "default": "",
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "to": {
+                  "x-title": "To",
+                  "default": "",
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          }
+        },
+        "direction": {
+          "x-title": "Direction",
+          "description": "Defines the direction in which search results are ordered. Default value is DESC.",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "ASC",
+            "DESC"
+          ],
+          "x-enumNames": [
+            "ASC",
+            "DESC"
+          ]
+        },
+        "fields": {
+          "x-title": "Fields",
+          "description": "A comma-separated list of attributes to include in the response. This can be used to request fields that are not normally returned in a standard response.",
+          "default": "",
+          "type": "string"
+        },
+        "file_extensions": {
+          "x-title": "File Extensions",
+          "description": "Limits search results to a comma-separated list of file extensions",
+          "default": "",
+          "type": "string"
+        },
+        "ancestor_folder_ids": {
+          "x-title": "Folder IDs",
+          "description": "Limits search results to items within the given list of folders. Folders are defined as a comma-separated lists of folder IDs.",
+          "default": "",
+          "type": "string"
+        },
+        "scope": {
+          "x-title": "Scope",
+          "description": "Limits search results to a user scope",
+          "default": "",
+          "type": "string",
+          "enum": [
+            "user_content",
+            "enterprise_content"
+          ],
+          "x-enumNames": [
+            "User Content",
+            "Enterprise Content"
+          ]
+        },
+        "size_range": {
+          "x-title": "Size Range",
+          "description": "Limits search results to items within a given file size range. File size ranges are defined as comma-separated byte sizes.",
+          "default": "",
+          "type": "string"
+        },
+        "sort": {
+          "x-title": "Sort",
+          "description": "Returns the results ordered in descending order by date at which the item was last modified",
+          "default": "relevance",
+          "type": "string",
+          "enum": [
+            "relevance",
+            "modified_at"
+          ],
+          "x-enumNames": [
+            "Relevance",
+            "Modified At"
+          ]
+        },
+        "trash_content": {
+          "x-title": "Trash Content",
+          "description": "Controls if search results include the trash",
+          "default": "non_trashed_only",
+          "type": "string",
+          "enum": [
+            "non_trashed_only",
+            "trashed_only"
+          ],
+          "x-enumNames": [
+            "Non Trashed Only",
+            "Trashed Only"
+          ]
+        },
+        "updatedRangeUi": {
+          "x-title": "Update At Range",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "updatedRangeValuesUi": {
+              "x-title": "Range",
+              "type": "object",
+              "properties": {
+                "from": {
+                  "x-title": "From",
+                  "default": "",
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "to": {
+                  "x-title": "To",
+                  "default": "",
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          }
+        },
+        "owner_user_ids": {
+          "x-title": "User IDs",
+          "description": "Limits search results to items owned by the given list of owners. Owners are defined as a comma-separated list of user IDs.",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "binaryPropertyName": {
+      "x-title": "Input Binary Field",
+      "default": "data",
+      "x-displayOptions": {
+        "show": {
+          "binaryData": [
+            true
+          ],
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "query": {
+      "x-title": "Query",
+      "description": "The string to search for. This query is matched against item names, descriptions, text content of files, and various other fields of the different item types.",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "returnAll": {
+      "x-title": "Return All",
+      "description": "Whether to return all results or only up to a given limit",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "limit": {
+      "x-title": "Limit",
+      "description": "Max number of results to return",
+      "default": 100,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "search"
+          ],
+          "resource": [
+            "folder"
+          ],
+          "returnAll": [
+            false
+          ]
+        }
+      },
+      "type": "number",
+      "minimum": 1,
+      "maximum": 500
+    },
+    "accessibleBy": {
+      "x-title": "Accessible By",
+      "description": "The type of object the file will be shared with",
+      "default": "user",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "share"
+          ],
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "user",
+        "group"
+      ],
+      "x-enumNames": [
+        "User",
+        "Group"
+      ]
+    },
+    "useEmail": {
+      "x-title": "Use Email",
+      "description": "Whether identify the user by email or ID",
+      "default": true,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "share"
+          ],
+          "resource": [
+            "folder"
+          ],
+          "accessibleBy": [
+            "user"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "email": {
+      "x-title": "Email",
+      "description": "The user's email address to share the folder with",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "share"
+          ],
+          "resource": [
+            "folder"
+          ],
+          "accessibleBy": [
+            "user"
+          ],
+          "useEmail": [
+            true
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "userId": {
+      "x-title": "User ID",
+      "description": "The user's ID to share the folder with",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "share"
+          ],
+          "resource": [
+            "folder"
+          ],
+          "accessibleBy": [
+            "user"
+          ],
+          "useEmail": [
+            false
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "groupId": {
+      "x-title": "Group ID",
+      "description": "The group's ID to share the folder with",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "share"
+          ],
+          "resource": [
+            "folder"
+          ],
+          "accessibleBy": [
+            "group"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "role": {
+      "x-title": "Role",
+      "description": "The level of access granted",
+      "default": "editor",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "share"
+          ],
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "type": "string",
+      "enum": [
+        "coOwner",
+        "editor",
+        "previewer",
+        "previewerUploader",
+        "uploader",
+        "viewer",
+        "viewerUploader"
+      ],
+      "x-enumNames": [
+        "Co-Owner",
+        "Editor",
+        "Previewer",
+        "Previewer Uploader",
+        "Uploader",
+        "Viewer",
+        "Viewer Uploader"
+      ],
+      "x-enumDescriptions": [
+        "A Co-owner has all of functional read/write access that an editor does",
+        "An editor has full read/write access to a folder or file",
+        "A previewer has limited read access",
+        "This access level is a combination of Previewer and Uploader",
+        "An uploader has limited write access",
+        "A viewer has read access to a folder or file",
+        "This access level is a combination of Viewer and Uploader"
+      ]
+    },
+    "options": {
+      "x-title": "Options",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "share"
+          ],
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "can_view_path": {
+          "x-title": "Can View Path",
+          "description": "Whether the invited users can see the entire parent path to the associated folder. The user will not gain privileges in any parent folder and therefore cannot see content the user is not collaborated on.",
+          "default": false,
+          "type": "boolean"
+        },
+        "expires_at": {
+          "x-title": "Expires At",
+          "description": "Set the expiration date for the collaboration. At this date, the collaboration will be automatically removed from the item.",
+          "default": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "fields": {
+          "x-title": "Fields",
+          "description": "A comma-separated list of attributes to include in the response. This can be used to request fields that are not normally returned in a standard response.",
+          "default": "",
+          "type": "string"
+        },
+        "notify": {
+          "x-title": "Notify",
+          "description": "Whether if users should receive email notification for the action performed",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "fileName": {
+      "x-title": "File Name",
+      "description": "The name the file should be saved as",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "type": "string"
+    },
+    "binaryData": {
+      "x-title": "Binary File",
+      "description": "Whether the data to upload should be taken from binary field",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "boolean"
+    },
+    "fileContent": {
+      "x-title": "File Content",
+      "description": "The text content of the file",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "binaryData": [
+            false
+          ],
+          "operation": [
+            "upload"
+          ],
+          "resource": [
+            "file"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "name": {
+      "x-title": "Name",
+      "description": "Folder's name",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "create"
+          ],
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "folderId": {
+      "x-title": "Folder ID",
+      "default": "",
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "x-required": true,
+      "type": "string"
+    },
+    "recursive": {
+      "x-title": "Recursive",
+      "description": "Whether to delete a folder that is not empty by recursively deleting the folder and all of its content",
+      "default": false,
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "delete"
+          ],
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "type": "boolean"
+    },
+    "updateFields": {
+      "x-title": "Update Fields",
+      "default": {},
+      "x-displayOptions": {
+        "show": {
+          "operation": [
+            "update"
+          ],
+          "resource": [
+            "folder"
+          ]
+        }
+      },
+      "type": "object",
+      "properties": {
+        "can_non_owners_invite": {
+          "x-title": "Can Non-Owners Invite",
+          "description": "Whether users who are not the owner of the folder can invite new collaborators to the folder",
+          "default": false,
+          "type": "boolean"
+        },
+        "can_non_owners_view_collaborators": {
+          "x-title": "Can Non-Owners View Colaborators",
+          "description": "Whether to restrict collaborators who are not the owner of this folder from viewing other collaborations on this folder",
+          "default": false,
+          "type": "boolean"
+        },
+        "description": {
+          "x-title": "Description",
+          "description": "The optional description of this folder",
+          "default": "",
+          "type": "string"
+        },
+        "fields": {
+          "x-title": "Fields",
+          "description": "A comma-separated list of attributes to include in the response. This can be used to request fields that are not normally returned in a standard response.",
+          "default": "",
+          "type": "string"
+        },
+        "is_collaboration_restricted_to_enterprise": {
+          "x-title": "Is Collaboration Restricted To Enterprise",
+          "description": "Whether new invites to this folder are restricted to users within the enterprise. This does not affect existing collaborations.",
+          "default": false,
+          "type": "boolean"
+        },
+        "name": {
+          "x-title": "Name",
+          "description": "The optional new name for this folder",
+          "default": "",
+          "type": "string"
+        },
+        "parentId": {
+          "x-title": "Parent ID",
+          "description": "The parent folder for this folder. Use this to move the folder or to restore it out of the trash.",
+          "default": "",
+          "type": "string"
+        },
+        "shared_link": {
+          "x-title": "Shared Link",
+          "description": "Share link information",
+          "default": {},
+          "type": "object",
+          "properties": {
+            "access": {
+              "x-title": "Access",
+              "default": "open",
+              "type": "string",
+              "enum": [
+                "collaborators",
+                "company",
+                "open"
+              ],
+              "x-enumNames": [
+                "Collaborators",
+                "Company",
+                "Open"
+              ],
+              "x-enumDescriptions": [
+                "Only those who have been invited to the folder",
+                "Only people within the company",
+                "Anyone with the link"
+              ]
+            },
+            "password": {
+              "x-title": "Password",
+              "description": "The password required to access the shared link. Set the password to null to remove it.",
+              "default": "",
+              "x-displayOptions": {
+                "show": {
+                  "access": [
+                    "open"
+                  ]
+                }
+              },
+              "type": "string",
+              "format": "password"
+            },
+            "permissions": {
+              "x-title": "Permissions",
+              "default": {},
+              "type": "object",
+              "properties": {
+                "can_download": {
+                  "x-title": "Can Download",
+                  "description": "Whether the shared link allows for downloading of files",
+                  "default": false,
+                  "type": "boolean"
+                },
+                "unshared_at": {
+                  "x-title": "Unshared At",
+                  "description": "The timestamp at which this shared link will expire",
+                  "default": "",
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "vanity_name": {
+                  "x-title": "Vanity Name",
+                  "description": "Defines a custom vanity name to use in the shared link URL, for example https://app.box.com/v/my-shared-link",
+                  "default": "",
+                  "type": "string"
+                }
+              }
+            },
+            "tags": {
+              "x-title": "Tags",
+              "description": "The tags for this item. These tags are shown in the Box web app and mobile apps next to an item.",
+              "default": "",
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-subtitle": "={{$parameter[\"operation\"] + \": \" + $parameter[\"resource\"]}}",
+  "x-icon": "file:box.png",
+  "x-inputs": [
+    "main"
+  ],
+  "x-outputs": [
+    "main"
+  ],
+  "x-credentials": [
+    {
+      "name": "boxOAuth2Api",
+      "required": true
+    }
+  ]
+}
